@@ -1,0 +1,28 @@
+# Secrets — never commit
+.env
+.env.local
+.env*.local
+
+# Server-side data: exclude runtime state, KEEP clinically-governed inputs
+/data/*
+!/data/calibration/
+!/data/knowledge/
+/data/knowledge/staging/
+!/data/recursive-learning/
+/data/recursive-learning/*results*
+/data/recursive-learning/*telemetry*
+/data/recursive-learning/anomalies*
+/data/recursive-learning/offline-training-pack-*
+!/data/recursive-learning/offline-training-pack-paul-round7/
+
+# Build & deps
+/node_modules/
+/.next/
+tsconfig.tsbuildinfo
+
+# OS
+.DS_Store
+.vercel
+
+# Codex local npm cache
+.codex-npm-cache/

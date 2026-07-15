@@ -1,0 +1,37 @@
+{
+  "createdAt": "2026-07-14T21:28:29.576Z",
+  "source": "data/recursive-learning/approved-training-paul-round7.jsonl",
+  "rows": 26,
+  "trainRows": 20,
+  "holdoutRows": 6,
+  "minRowsForRealTraining": 25,
+  "readyForSmokeDryRun": true,
+  "readyForRealTraining": true,
+  "trainingAllowed": false,
+  "recommendedUse": "Offline experiment only; still requires full juror gates before any shadow mode.",
+  "modelRole": "Extractor calibration only. The model must not choose the final care level.",
+  "hardSafetyLimits": [
+    "Emergency hard stops remain deterministic and pre-model.",
+    "Deterministic route engine remains the care-level authority.",
+    "No model output can weaken ER or emergency safety floors.",
+    "Promotion requires zero under-triage on the 45-case and 240-case gates."
+  ],
+  "suggestedNextDataGoal": {
+    "minimumApprovedRows": 25,
+    "preferredApprovedRowsBeforeRealTraining": 100,
+    "neededPatterns": [
+      "clarify instead of assuming severity",
+      "mild eye symptoms without red flags",
+      "mechanical back pain without red flags",
+      "urgent-care sore throat without emergency signs",
+      "safe over-triage examples from real user sessions after review"
+    ]
+  },
+  "files": {
+    "preferenceTrain": "preferences.train.jsonl",
+    "preferenceHoldout": "preferences.holdout.jsonl",
+    "sftSmokeTrain": "sft-smoke.train.jsonl",
+    "sftSmokeHoldout": "sft-smoke.holdout.jsonl",
+    "readme": "README.md"
+  }
+}

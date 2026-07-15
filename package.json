@@ -1,0 +1,51 @@
+{
+  "name": "carevo-triage-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "eval": "npx -y tsx scripts/eval-engine.ts",
+    "trials": "npx -y tsx scripts/simulate-patients.ts",
+    "dataset:eval": "npx -y tsx scripts/run-clinical-dataset.ts",
+    "ree:coroner": "sucrase-node scripts/ree/coroner.ts",
+    "ree:architect": "sucrase-node scripts/ree/architect.ts",
+    "ree:juror": "sucrase-node scripts/ree/juror.ts",
+    "ree:prepare-training": "sucrase-node scripts/ree/prepare-training-from-benchmark.ts",
+    "ree:apply-review": "sucrase-node scripts/ree/apply-review-decisions.ts",
+    "ree:export-preferences": "sucrase-node scripts/ree/export-approved-preference-rows.ts",
+    "ree:create-training-pack": "sucrase-node scripts/ree/create-offline-training-pack.ts",
+    "ree:check-training-pack": "sucrase-node scripts/ree/check-training-pack.ts",
+    "ree:smoke-train": "sucrase-node scripts/ree/smoke-train-offline.ts",
+    "ree:import-mimic-demo": "sucrase-node scripts/ree/import-mimic-ed-demo.ts",
+    "ree:prepare-mimic-review": "sucrase-node scripts/ree/prepare-mimic-review.ts",
+    "ree:import-synthetic-500": "sucrase-node scripts/ree/import-synthetic-triage-500.ts",
+    "ree:merge-preferences": "sucrase-node scripts/ree/merge-preference-rows.ts",
+    "ree:readiness": "sucrase-node scripts/ree/readiness.ts",
+    "pages:build": "npx @cloudflare/next-on-pages",
+    "pages:deploy": "npm run pages:build && wrangler pages deploy",
+    "pages:preview": "npm run pages:build && wrangler pages dev"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.110.0",
+    "next": "^16.2.10",
+    "openai": "^4.52.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "xss": "^1.0.15",
+    "zod": "^3.25.76"
+  },
+  "overrides": {
+    "postcss": "^8.5.16"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10",
+    "postcss": "^8.5.16",
+    "tailwindcss": "^3",
+    "typescript": "^5"
+  }
+}

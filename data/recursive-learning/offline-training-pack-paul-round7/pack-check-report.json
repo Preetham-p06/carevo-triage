@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "packDir": "data/recursive-learning/offline-training-pack-paul-round7",
+  "rows": 26,
+  "trainRows": 20,
+  "holdoutRows": 6,
+  "missingFiles": [],
+  "malformed": [],
+  "readyForSmokeDryRun": true,
+  "readyForRealTraining": true,
+  "trainingAllowed": false,
+  "realTrainingBlockedCorrectly": true
+}

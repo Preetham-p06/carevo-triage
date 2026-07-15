@@ -1,0 +1,174 @@
+{
+  "version": "carevo-calibration-2026-07-15.1",
+  "promotedAt": "2026-07-15T01:26:59.531Z",
+  "promotedBy": "promote-calibration.ts (manual --confirm)",
+  "reviewedBy": "Paul (clinical reviewer, 2026-07-14 batch)",
+  "sourceArtifact": "data/recursive-learning/offline-training-pack-paul-round7/smoke-calibration-artifact.json",
+  "patterns": [
+    {
+      "name": "home_allergic_rhinitis_without_infection_flags",
+      "target": "home_care",
+      "requiredAny": [
+        "sneezing",
+        "nasal itching",
+        "seasonal congestion",
+        "stuffy nose",
+        "runny nose",
+        "nasal congestion"
+      ],
+      "supporting": [
+        "eye itching",
+        "without fever",
+        "no fever",
+        "no facial pain",
+        "no sinus",
+        "no ear pain",
+        "no colored"
+      ],
+      "boundaryTerms": [
+        "fever",
+        "facial pain",
+        "severe headache",
+        "trouble breathing",
+        "short of breath",
+        "sinus pain",
+        "purulent",
+        "green discharge",
+        "yellow discharge",
+        "ear pain"
+      ],
+      "safetyBoundary": "Do not apply if fever, acute facial pain, severe headache, breathing trouble, or other infection red flags are present.",
+      "learnedFrom": [
+        "case-0181",
+        "case-0185",
+        "case-0186",
+        "case-0190",
+        "case-0191",
+        "case-0195",
+        "case-0196"
+      ]
+    },
+    {
+      "name": "home_mild_eye_irritation_without_vision_or_trauma_flags",
+      "target": "home_care",
+      "requiredAny": [
+        "red eyes",
+        "stuck shut",
+        "eyelid swelling",
+        "pink eye",
+        "itchy eyes",
+        "watery eyes",
+        "eye irritation"
+      ],
+      "supporting": [
+        "no vision change",
+        "no trauma",
+        "no severe eye pain",
+        "no pain",
+        "no photophobia"
+      ],
+      "boundaryTerms": [
+        "sudden eye pain",
+        "photophobia",
+        "light sensitivity",
+        "blurred vision",
+        "blurry vision",
+        "vision loss",
+        "vision change",
+        "trauma",
+        "injury",
+        "contact lens",
+        "severe pain",
+        "halos"
+      ],
+      "safetyBoundary": "Do not apply if sudden eye pain, photophobia, blurred vision, vision loss, trauma, contact lens complication, or severe pain is present.",
+      "learnedFrom": [
+        "case-0205",
+        "case-0210",
+        "case-0215"
+      ]
+    },
+    {
+      "name": "home_rash_without_infection_flags",
+      "target": "home_care",
+      "requiredAny": [
+        "chronic dry itchy flexural skin",
+        "dry itchy flexural skin",
+        "minor rash",
+        "eczema"
+      ],
+      "supporting": [
+        "hay fever",
+        "no fever",
+        "no pus",
+        "no red streaks",
+        "no severe pain",
+        "no spreading",
+        "atopic",
+        "stable"
+      ],
+      "boundaryTerms": [
+        "fever",
+        "pus",
+        "spreading",
+        "red streak",
+        "streaking",
+        "severe pain",
+        "immunocompromised",
+        "chemo",
+        "transplant",
+        "systemic",
+        "blister",
+        "open sore"
+      ],
+      "safetyBoundary": "Do not apply if fever, pus that is present, rapidly spreading redness, red streaking, severe pain, systemic illness, or immune compromise is present.",
+      "learnedFrom": [
+        "case-0204",
+        "case-0209",
+        "case-0214"
+      ]
+    },
+    {
+      "name": "home_mechanical_back_pain_without_neuro_flags",
+      "target": "home_care",
+      "requiredAny": [
+        "low back pain",
+        "lifting boxes",
+        "back pain after",
+        "back soreness",
+        "back stiffness",
+        "back aching",
+        "back tightness"
+      ],
+      "supporting": [
+        "no leg pain",
+        "denies leg pain",
+        "no weakness",
+        "no fever",
+        "denies fever",
+        "no bladder",
+        "no bowel"
+      ],
+      "boundaryTerms": [
+        "weakness",
+        "foot drop",
+        "bladder",
+        "bowel",
+        "saddle",
+        "numbness",
+        "tingling",
+        "fever",
+        "trauma",
+        "accident",
+        "fall from",
+        "cancer",
+        "injection drug",
+        "iv drug"
+      ],
+      "safetyBoundary": "Do not apply if weakness, foot drop, bowel/bladder changes, saddle numbness, fever, major trauma, cancer history, or injection drug use is present.",
+      "learnedFrom": [
+        "case-0224"
+      ]
+    }
+  ]
+}

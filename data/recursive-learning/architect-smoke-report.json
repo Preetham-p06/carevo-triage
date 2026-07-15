@@ -1,0 +1,8 @@
+{
+  "input": "data/recursive-learning/anomalies-smoke.jsonl",
+  "output": "data/recursive-learning/dpo-candidates-smoke.jsonl",
+  "candidates": 1,
+  "mode": "dry_run",
+  "model": null,
+  "safety": "Candidates are training inputs only. Juror gate and human review required before promotion."
+}

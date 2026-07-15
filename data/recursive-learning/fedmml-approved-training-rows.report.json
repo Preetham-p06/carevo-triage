@@ -1,0 +1,32 @@
+{
+  "createdAt": "2026-07-11",
+  "source": "olaflaitinen/fedmml-ed-triage (CC BY 4.0)",
+  "totalRows": 230,
+  "trainingAllowed": false,
+  "offlineTrainingPrepReady": true,
+  "approvalBasis": "ESI-labeled synthetic dataset filtered by automated safety check. Not individual-case human review.",
+  "esiDistribution": {
+    "ESI 3": 46,
+    "ESI 4": 139,
+    "ESI 5": 45
+  },
+  "careLevelDistribution": {
+    "home_care": 45,
+    "primary_care": 139,
+    "urgent_care": 46
+  },
+  "complaintCounts": {
+    "Minor rash": 22,
+    "Cold symptoms": 25,
+    "Chronic pain stable": 23,
+    "Cough": 24,
+    "Rash": 22,
+    "Minor injury": 22,
+    "Sprain": 23,
+    "Mild abdominal discomfort": 23,
+    "Laceration requiring sutures": 23,
+    "Back pain": 23
+  },
+  "safetyFilter": "Automated regex scan rejected vignettes containing cardiac, stroke, respiratory, or other high-acuity language not negated in the vignette.",
+  "nextStep": "Merge with approved-training-prep-reviewed-high-priority.jsonl and regenerate training pack."
+}

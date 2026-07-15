@@ -1,0 +1,23 @@
+{
+  "input": "data/recursive-learning/synthetic-240-results-clean-rerun-2.jsonl",
+  "output": "data/recursive-learning/training-candidates-overtriage-240.jsonl",
+  "totalRows": 240,
+  "exact": 155,
+  "over": 85,
+  "under": 0,
+  "errors": 0,
+  "candidates": 85,
+  "priorityCounts": {
+    "medium": 71,
+    "high": 14
+  },
+  "expectedLevelCounts": {
+    "er": 50,
+    "urgent_care": 18,
+    "home_care": 17
+  },
+  "readyForOfflineTrainingPrep": true,
+  "promotionAllowed": false,
+  "nextReviewStep": "Review high-priority candidates first, then convert approved rows into the training format for the chosen local model.",
+  "safety": "These rows are candidates only and must not change live routing without human review and juror gates."
+}

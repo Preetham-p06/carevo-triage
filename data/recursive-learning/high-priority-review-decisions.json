@@ -1,0 +1,603 @@
+{
+  "reviewedAt": "2026-07-11",
+  "reviewSource": "Comprehensive case-by-case clinical triage analyses provided by Preetham; medium-priority batch rejected \u2014 all 50 remaining cases are ACS/stroke/PE/anaphylaxis/GI-bleed where Emergency routing is clinically correct per ACEP/AHA/ASA guidelines",
+  "summary": "Updated review approves benign and non-emergency over-triage rows for offline extractor calibration, rejects the acute foot-drop back-pain case, and holds sudden eye-pain and severe dizziness bundles for clinician review.",
+  "globalLearningGoal": "Teach the extractor to bind negative qualifiers to red-flag terms and distinguish time-sensitive urgent-care cases from ER cases. If the patient says no fever, no pus, no red streaks, no severe pain, no vision change, no trauma, no weakness, or similar, those denied features must not drive escalation.",
+  "decisions": [
+    {
+      "caseNumber": 1,
+      "id": "case-0102",
+      "decision": "approve",
+      "reviewerTarget": "urgent_care",
+      "reviewerNote": "Clear urgent-care sore throat pattern; do not escalate to emergency without airway, dehydration, sepsis, or severe toxicity signs."
+    },
+    {
+      "caseNumber": 2,
+      "id": "case-0171",
+      "decision": "reject",
+      "reviewerTarget": "er",
+      "reviewerNote": "Reject for training. New foot drop is a focal motor deficit and should remain ER-level for immediate imaging or neurosurgical evaluation."
+    },
+    {
+      "caseNumber": 3,
+      "id": "case-0200",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Multi-year seasonal sneezing, nasal itching, eye itching, and congestion without fever or facial pain is a clean home-care allergic-rhinitis example."
+    },
+    {
+      "caseNumber": 4,
+      "id": "case-0204",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Chronic flexural itchy dry skin with atopic history and explicit denial of fever, pus, red streaks, and severe pain is a clean home-care eczema-style example."
+    },
+    {
+      "caseNumber": 5,
+      "id": "case-0205",
+      "decision": "approve",
+      "reviewerTarget": "not_er",
+      "reviewerNote": "Reviewer said this is definitely not ER. Use as uncertainty/over-severity training, not as permission to lower true eye red flags."
+    },
+    {
+      "caseNumber": 6,
+      "id": "case-0208",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "One day of localized mildly tender eyelid swelling without trauma or vision change is a clean home-care stye/chalazion-style example."
+    },
+    {
+      "caseNumber": 7,
+      "id": "case-0209",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Approved duplicate-family row because the updated review calls this negation-binding pattern a core extractor learning target."
+    },
+    {
+      "caseNumber": 8,
+      "id": "case-0214",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Approved duplicate-family row because repeated eczema-with-denied-infection wording helps stress negation handling."
+    },
+    {
+      "caseNumber": 9,
+      "id": "case-0215",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Watery red eyes stuck shut after a cold with no vision change, trauma, or severe pain is a benign eye-route calibration row."
+    },
+    {
+      "caseNumber": 10,
+      "id": "case-0218",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Localized eyelid swelling without vision or trauma red flags is approved for calibration away from emergency routing."
+    },
+    {
+      "caseNumber": 11,
+      "id": "case-0219",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Approved duplicate-family row because the updated review explicitly identifies eczema-with-denied-infection wording as an important learning pattern."
+    },
+    {
+      "caseNumber": 12,
+      "id": "case-0224",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Reviewer said most likely home care. Good example of mechanical back pain without red flags."
+    },
+    {
+      "caseNumber": 13,
+      "id": "case-0234",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Mechanical low back pain after lifting with no leg pain, weakness, or fever is a clean home-care calibration row."
+    },
+    {
+      "caseNumber": 14,
+      "id": "case-0239",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Mechanical low back pain with denied red flags is approved to teach conservative extraction when weakness and fever are explicitly absent."
+    },
+    {
+      "caseNumber": 15,
+      "id": "case-0107",
+      "decision": "approve",
+      "reviewerTarget": "urgent_care",
+      "reviewerNote": "Pediatric strep-pattern sore throat with fever, exudates, and enlarged nodes should be urgent care when stridor, drooling, inability to manage secretions, respiratory distress, dehydration, and systemic toxicity are absent."
+    },
+    {
+      "caseNumber": 16,
+      "id": "case-0112",
+      "decision": "approve",
+      "reviewerTarget": "urgent_care",
+      "reviewerNote": "Same pediatric strep-pattern case in triage-intake wording. Approve to suppress unnecessary ER escalation across text structures."
+    },
+    {
+      "caseNumber": 17,
+      "id": "case-0117",
+      "decision": "approve",
+      "reviewerTarget": "urgent_care",
+      "reviewerNote": "Same pediatric strep-pattern case in family-member wording. Approve as urgent care, not ER, absent airway or systemic red flags."
+    },
+    {
+      "caseNumber": 18,
+      "id": "case-0108",
+      "decision": "approve",
+      "reviewerTarget": "urgent_care",
+      "reviewerNote": "Pediatric acute otitis media pattern with fever, poor eating, restless sleep, and abnormal eardrum should be urgent care unless toxicity, severe dehydration, or mastoiditis signs are present."
+    },
+    {
+      "caseNumber": 19,
+      "id": "case-0109",
+      "decision": "approve",
+      "reviewerTarget": "urgent_care",
+      "reviewerNote": "Child with ear pain, fever, and trouble sleeping after congestion is a same-day urgent-care pattern, not ER, absent toxicity, severe dehydration, mastoid swelling, or neurologic red flags."
+    },
+    {
+      "caseNumber": 20,
+      "id": "case-0118",
+      "decision": "approve",
+      "reviewerTarget": "urgent_care",
+      "reviewerNote": "Toddler acute otitis media pattern in family-member wording. Approve for urgent care while preserving ER escalation for dehydration, toxicity, mastoiditis, or neurologic signs."
+    },
+    {
+      "caseNumber": 21,
+      "id": "case-0137",
+      "decision": "approve",
+      "reviewerTarget": "urgent_care",
+      "reviewerNote": "Unilateral burning pain followed by vesicular rash in an older adult is time-sensitive urgent care for shingles-style treatment, not ER, unless eye, facial, neurologic, or systemic signs are present."
+    },
+    {
+      "caseNumber": 22,
+      "id": "case-0140",
+      "decision": "approve",
+      "reviewerTarget": "urgent_care",
+      "reviewerNote": "Localized painful swollen finger with pus around the nail and local spreading redness is urgent care for possible drainage/antibiotics, not ER, unless rapidly ascending streaks, crepitus, necrotizing signs, or systemic toxicity are present."
+    },
+    {
+      "caseNumber": 23,
+      "id": "case-0190",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Years of seasonal sneezing, nasal itching, eye itching, and congestion without fever or facial pain is uncomplicated allergic rhinitis and should stay home care."
+    },
+    {
+      "caseNumber": 24,
+      "id": "case-0223",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Vomited twice after a heavy meal, can keep fluids down, no blood, no fever, and mild stomach upset is a clean home-care GI example."
+    },
+    {
+      "caseNumber": 25,
+      "id": "case-0228",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Same mild vomiting case in patient-says wording. Approve for home care when fluids are tolerated and blood, fever, severe pain, and dehydration signs are absent."
+    },
+    {
+      "caseNumber": 26,
+      "id": "case-0233",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Same mild vomiting case in triage-intake wording. Approve to reinforce low acuity across lexical structures."
+    },
+    {
+      "caseNumber": 27,
+      "id": "case-0238",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Same mild vomiting case in family-member wording. Approve as optional thirteenth row for home-care calibration."
+    },
+    {
+      "caseNumber": 28,
+      "id": "case-0164",
+      "decision": "needs_clinician",
+      "reviewerTarget": null,
+      "reviewerNote": "Hold sudden eye pain, light sensitivity, and blurred vision bundle because acute glaucoma or uveitis must not be downscaled automatically."
+    },
+    {
+      "caseNumber": 29,
+      "id": "case-0169",
+      "decision": "needs_clinician",
+      "reviewerTarget": null,
+      "reviewerNote": "Hold duplicate sudden eye pain bundle for clinician review; do not train downscaling on this pattern yet."
+    },
+    {
+      "caseNumber": 30,
+      "id": "case-0174",
+      "decision": "needs_clinician",
+      "reviewerTarget": null,
+      "reviewerNote": "Hold duplicate sudden eye pain bundle for clinician review; preserve defensive floor."
+    },
+    {
+      "caseNumber": 31,
+      "id": "case-0179",
+      "decision": "needs_clinician",
+      "reviewerTarget": null,
+      "reviewerNote": "Hold duplicate sudden eye pain bundle for clinician review; preserve defensive floor."
+    },
+    {
+      "caseNumber": 32,
+      "id": "case-0165",
+      "decision": "needs_clinician",
+      "reviewerTarget": null,
+      "reviewerNote": "Hold severe spinning dizziness bundle because central versus peripheral vestibular causes require more nuanced clinical logic."
+    },
+    {
+      "caseNumber": 33,
+      "id": "case-0170",
+      "decision": "needs_clinician",
+      "reviewerTarget": null,
+      "reviewerNote": "Hold duplicate severe spinning dizziness bundle for clinician review; do not train downscaling on this pattern yet."
+    },
+    {
+      "caseNumber": 34,
+      "id": "case-0175",
+      "decision": "needs_clinician",
+      "reviewerTarget": null,
+      "reviewerNote": "Hold duplicate severe spinning dizziness bundle for clinician review; preserve safety."
+    },
+    {
+      "caseNumber": 35,
+      "id": "case-0180",
+      "decision": "needs_clinician",
+      "reviewerTarget": null,
+      "reviewerNote": "Hold duplicate severe spinning dizziness bundle for clinician review; preserve safety."
+    },
+    {
+      "caseNumber": 36,
+      "id": "case-0001",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Classic ACS presentation (crushing/squeezing chest pressure with diaphoresis, nausea, radiation) warrants 911 activation by ACEP and AHA guidelines. Carevo calling Emergency is clinically correct. Downgrading to ER-only routing could delay reperfusion and cause harm."
+    },
+    {
+      "caseNumber": 37,
+      "id": "case-0002",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Classic ACS presentation (crushing/squeezing chest pressure with diaphoresis, nausea, radiation) warrants 911 activation by ACEP and AHA guidelines. Carevo calling Emergency is clinically correct. Downgrading to ER-only routing could delay reperfusion and cause harm."
+    },
+    {
+      "caseNumber": 38,
+      "id": "case-0003",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Classic ACS presentation (crushing/squeezing chest pressure with diaphoresis, nausea, radiation) warrants 911 activation by ACEP and AHA guidelines. Carevo calling Emergency is clinically correct. Downgrading to ER-only routing could delay reperfusion and cause harm."
+    },
+    {
+      "caseNumber": 39,
+      "id": "case-0004",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Classic ACS presentation (crushing/squeezing chest pressure with diaphoresis, nausea, radiation) warrants 911 activation by ACEP and AHA guidelines. Carevo calling Emergency is clinically correct. Downgrading to ER-only routing could delay reperfusion and cause harm."
+    },
+    {
+      "caseNumber": 40,
+      "id": "case-0005",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Classic ACS presentation (crushing/squeezing chest pressure with diaphoresis, nausea, radiation) warrants 911 activation by ACEP and AHA guidelines. Carevo calling Emergency is clinically correct. Downgrading to ER-only routing could delay reperfusion and cause harm."
+    },
+    {
+      "caseNumber": 41,
+      "id": "case-0006",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Classic ACS presentation (crushing/squeezing chest pressure with diaphoresis, nausea, radiation) warrants 911 activation by ACEP and AHA guidelines. Carevo calling Emergency is clinically correct. Downgrading to ER-only routing could delay reperfusion and cause harm."
+    },
+    {
+      "caseNumber": 42,
+      "id": "case-0007",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Classic ACS presentation (crushing/squeezing chest pressure with diaphoresis, nausea, radiation) warrants 911 activation by ACEP and AHA guidelines. Carevo calling Emergency is clinically correct. Downgrading to ER-only routing could delay reperfusion and cause harm."
+    },
+    {
+      "caseNumber": 43,
+      "id": "case-0008",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Classic ACS presentation (crushing/squeezing chest pressure with diaphoresis, nausea, radiation) warrants 911 activation by ACEP and AHA guidelines. Carevo calling Emergency is clinically correct. Downgrading to ER-only routing could delay reperfusion and cause harm."
+    },
+    {
+      "caseNumber": 44,
+      "id": "case-0009",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Classic ACS presentation (crushing/squeezing chest pressure with diaphoresis, nausea, radiation) warrants 911 activation by ACEP and AHA guidelines. Carevo calling Emergency is clinically correct. Downgrading to ER-only routing could delay reperfusion and cause harm."
+    },
+    {
+      "caseNumber": 45,
+      "id": "case-0010",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Classic ACS presentation (crushing/squeezing chest pressure with diaphoresis, nausea, radiation) warrants 911 activation by ACEP and AHA guidelines. Carevo calling Emergency is clinically correct. Downgrading to ER-only routing could delay reperfusion and cause harm."
+    },
+    {
+      "caseNumber": 46,
+      "id": "case-0011",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Classic ACS presentation (crushing/squeezing chest pressure with diaphoresis, nausea, radiation) warrants 911 activation by ACEP and AHA guidelines. Carevo calling Emergency is clinically correct. Downgrading to ER-only routing could delay reperfusion and cause harm."
+    },
+    {
+      "caseNumber": 47,
+      "id": "case-0012",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Classic ACS presentation (crushing/squeezing chest pressure with diaphoresis, nausea, radiation) warrants 911 activation by ACEP and AHA guidelines. Carevo calling Emergency is clinically correct. Downgrading to ER-only routing could delay reperfusion and cause harm."
+    },
+    {
+      "caseNumber": 48,
+      "id": "case-0013",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Classic ACS presentation (crushing/squeezing chest pressure with diaphoresis, nausea, radiation) warrants 911 activation by ACEP and AHA guidelines. Carevo calling Emergency is clinically correct. Downgrading to ER-only routing could delay reperfusion and cause harm."
+    },
+    {
+      "caseNumber": 49,
+      "id": "case-0014",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Classic ACS presentation (crushing/squeezing chest pressure with diaphoresis, nausea, radiation) warrants 911 activation by ACEP and AHA guidelines. Carevo calling Emergency is clinically correct. Downgrading to ER-only routing could delay reperfusion and cause harm."
+    },
+    {
+      "caseNumber": 50,
+      "id": "case-0015",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Classic ACS presentation (crushing/squeezing chest pressure with diaphoresis, nausea, radiation) warrants 911 activation by ACEP and AHA guidelines. Carevo calling Emergency is clinically correct. Downgrading to ER-only routing could delay reperfusion and cause harm."
+    },
+    {
+      "caseNumber": 51,
+      "id": "case-0016",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Classic ACS presentation (crushing/squeezing chest pressure with diaphoresis, nausea, radiation) warrants 911 activation by ACEP and AHA guidelines. Carevo calling Emergency is clinically correct. Downgrading to ER-only routing could delay reperfusion and cause harm."
+    },
+    {
+      "caseNumber": 52,
+      "id": "case-0017",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Classic ACS presentation (crushing/squeezing chest pressure with diaphoresis, nausea, radiation) warrants 911 activation by ACEP and AHA guidelines. Carevo calling Emergency is clinically correct. Downgrading to ER-only routing could delay reperfusion and cause harm."
+    },
+    {
+      "caseNumber": 53,
+      "id": "case-0018",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Classic ACS presentation (crushing/squeezing chest pressure with diaphoresis, nausea, radiation) warrants 911 activation by ACEP and AHA guidelines. Carevo calling Emergency is clinically correct. Downgrading to ER-only routing could delay reperfusion and cause harm."
+    },
+    {
+      "caseNumber": 54,
+      "id": "case-0019",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Classic ACS presentation (crushing/squeezing chest pressure with diaphoresis, nausea, radiation) warrants 911 activation by ACEP and AHA guidelines. Carevo calling Emergency is clinically correct. Downgrading to ER-only routing could delay reperfusion and cause harm."
+    },
+    {
+      "caseNumber": 55,
+      "id": "case-0020",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Classic ACS presentation (crushing/squeezing chest pressure with diaphoresis, nausea, radiation) warrants 911 activation by ACEP and AHA guidelines. Carevo calling Emergency is clinically correct. Downgrading to ER-only routing could delay reperfusion and cause harm."
+    },
+    {
+      "caseNumber": 56,
+      "id": "case-0021",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Sudden focal neurologic deficit (facial droop, one-sided weakness, slurred speech, vision loss) meets FAST criteria. 911 is mandatory per AHA/ASA stroke guidelines \u2014 pre-hospital notification activates the stroke team and is time-critical for tPA eligibility. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 57,
+      "id": "case-0022",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Sudden focal neurologic deficit (facial droop, one-sided weakness, slurred speech, vision loss) meets FAST criteria. 911 is mandatory per AHA/ASA stroke guidelines \u2014 pre-hospital notification activates the stroke team and is time-critical for tPA eligibility. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 58,
+      "id": "case-0023",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Sudden focal neurologic deficit (facial droop, one-sided weakness, slurred speech, vision loss) meets FAST criteria. 911 is mandatory per AHA/ASA stroke guidelines \u2014 pre-hospital notification activates the stroke team and is time-critical for tPA eligibility. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 59,
+      "id": "case-0025",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Sudden focal neurologic deficit (facial droop, one-sided weakness, slurred speech, vision loss) meets FAST criteria. 911 is mandatory per AHA/ASA stroke guidelines \u2014 pre-hospital notification activates the stroke team and is time-critical for tPA eligibility. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 60,
+      "id": "case-0026",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Sudden focal neurologic deficit (facial droop, one-sided weakness, slurred speech, vision loss) meets FAST criteria. 911 is mandatory per AHA/ASA stroke guidelines \u2014 pre-hospital notification activates the stroke team and is time-critical for tPA eligibility. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 61,
+      "id": "case-0027",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Sudden focal neurologic deficit (facial droop, one-sided weakness, slurred speech, vision loss) meets FAST criteria. 911 is mandatory per AHA/ASA stroke guidelines \u2014 pre-hospital notification activates the stroke team and is time-critical for tPA eligibility. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 62,
+      "id": "case-0028",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Sudden focal neurologic deficit (facial droop, one-sided weakness, slurred speech, vision loss) meets FAST criteria. 911 is mandatory per AHA/ASA stroke guidelines \u2014 pre-hospital notification activates the stroke team and is time-critical for tPA eligibility. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 63,
+      "id": "case-0029",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Sudden focal neurologic deficit (facial droop, one-sided weakness, slurred speech, vision loss) meets FAST criteria. 911 is mandatory per AHA/ASA stroke guidelines \u2014 pre-hospital notification activates the stroke team and is time-critical for tPA eligibility. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 64,
+      "id": "case-0030",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Sudden focal neurologic deficit (facial droop, one-sided weakness, slurred speech, vision loss) meets FAST criteria. 911 is mandatory per AHA/ASA stroke guidelines \u2014 pre-hospital notification activates the stroke team and is time-critical for tPA eligibility. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 65,
+      "id": "case-0031",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Sudden focal neurologic deficit (facial droop, one-sided weakness, slurred speech, vision loss) meets FAST criteria. 911 is mandatory per AHA/ASA stroke guidelines \u2014 pre-hospital notification activates the stroke team and is time-critical for tPA eligibility. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 66,
+      "id": "case-0032",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Sudden focal neurologic deficit (facial droop, one-sided weakness, slurred speech, vision loss) meets FAST criteria. 911 is mandatory per AHA/ASA stroke guidelines \u2014 pre-hospital notification activates the stroke team and is time-critical for tPA eligibility. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 67,
+      "id": "case-0033",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Sudden focal neurologic deficit (facial droop, one-sided weakness, slurred speech, vision loss) meets FAST criteria. 911 is mandatory per AHA/ASA stroke guidelines \u2014 pre-hospital notification activates the stroke team and is time-critical for tPA eligibility. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 68,
+      "id": "case-0034",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Sudden focal neurologic deficit (facial droop, one-sided weakness, slurred speech, vision loss) meets FAST criteria. 911 is mandatory per AHA/ASA stroke guidelines \u2014 pre-hospital notification activates the stroke team and is time-critical for tPA eligibility. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 69,
+      "id": "case-0035",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Sudden focal neurologic deficit (facial droop, one-sided weakness, slurred speech, vision loss) meets FAST criteria. 911 is mandatory per AHA/ASA stroke guidelines \u2014 pre-hospital notification activates the stroke team and is time-critical for tPA eligibility. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 70,
+      "id": "case-0036",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Sudden focal neurologic deficit (facial droop, one-sided weakness, slurred speech, vision loss) meets FAST criteria. 911 is mandatory per AHA/ASA stroke guidelines \u2014 pre-hospital notification activates the stroke team and is time-critical for tPA eligibility. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 71,
+      "id": "case-0037",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Sudden focal neurologic deficit (facial droop, one-sided weakness, slurred speech, vision loss) meets FAST criteria. 911 is mandatory per AHA/ASA stroke guidelines \u2014 pre-hospital notification activates the stroke team and is time-critical for tPA eligibility. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 72,
+      "id": "case-0038",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Sudden focal neurologic deficit (facial droop, one-sided weakness, slurred speech, vision loss) meets FAST criteria. 911 is mandatory per AHA/ASA stroke guidelines \u2014 pre-hospital notification activates the stroke team and is time-critical for tPA eligibility. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 73,
+      "id": "case-0039",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Sudden focal neurologic deficit (facial droop, one-sided weakness, slurred speech, vision loss) meets FAST criteria. 911 is mandatory per AHA/ASA stroke guidelines \u2014 pre-hospital notification activates the stroke team and is time-critical for tPA eligibility. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 74,
+      "id": "case-0040",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Sudden focal neurologic deficit (facial droop, one-sided weakness, slurred speech, vision loss) meets FAST criteria. 911 is mandatory per AHA/ASA stroke guidelines \u2014 pre-hospital notification activates the stroke team and is time-critical for tPA eligibility. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 75,
+      "id": "case-0045",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Post-surgical acute dyspnea with pleuritic chest pain and calf swelling is high-probability PE. Hemodynamic instability is possible. 911 and immediate transport to ER by EMS is appropriate \u2014 self-transport is unsafe. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 76,
+      "id": "case-0050",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Post-surgical acute dyspnea with pleuritic chest pain and calf swelling is high-probability PE. Hemodynamic instability is possible. 911 and immediate transport to ER by EMS is appropriate \u2014 self-transport is unsafe. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 77,
+      "id": "case-0055",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Post-surgical acute dyspnea with pleuritic chest pain and calf swelling is high-probability PE. Hemodynamic instability is possible. 911 and immediate transport to ER by EMS is appropriate \u2014 self-transport is unsafe. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 78,
+      "id": "case-0060",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Post-surgical acute dyspnea with pleuritic chest pain and calf swelling is high-probability PE. Hemodynamic instability is possible. 911 and immediate transport to ER by EMS is appropriate \u2014 self-transport is unsafe. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 79,
+      "id": "case-0084",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Anaphylaxis with airway involvement (lip/tongue swelling, breathing difficulty) requires epinephrine and 911 \u2014 not self-transport to ER. GI hemorrhage with hemodynamic symptoms (dizziness when standing, melena) similarly warrants EMS transport. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 80,
+      "id": "case-0088",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Anaphylaxis with airway involvement (lip/tongue swelling, breathing difficulty) requires epinephrine and 911 \u2014 not self-transport to ER. GI hemorrhage with hemodynamic symptoms (dizziness when standing, melena) similarly warrants EMS transport. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 81,
+      "id": "case-0089",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Anaphylaxis with airway involvement (lip/tongue swelling, breathing difficulty) requires epinephrine and 911 \u2014 not self-transport to ER. GI hemorrhage with hemodynamic symptoms (dizziness when standing, melena) similarly warrants EMS transport. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 82,
+      "id": "case-0093",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Anaphylaxis with airway involvement (lip/tongue swelling, breathing difficulty) requires epinephrine and 911 \u2014 not self-transport to ER. GI hemorrhage with hemodynamic symptoms (dizziness when standing, melena) similarly warrants EMS transport. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 83,
+      "id": "case-0094",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Anaphylaxis with airway involvement (lip/tongue swelling, breathing difficulty) requires epinephrine and 911 \u2014 not self-transport to ER. GI hemorrhage with hemodynamic symptoms (dizziness when standing, melena) similarly warrants EMS transport. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 84,
+      "id": "case-0098",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Anaphylaxis with airway involvement (lip/tongue swelling, breathing difficulty) requires epinephrine and 911 \u2014 not self-transport to ER. GI hemorrhage with hemodynamic symptoms (dizziness when standing, melena) similarly warrants EMS transport. Emergency routing is correct."
+    },
+    {
+      "caseNumber": 85,
+      "id": "case-0099",
+      "decision": "reject",
+      "reviewerTarget": "emergency",
+      "reviewerNote": "Reject for training. Anaphylaxis with airway involvement (lip/tongue swelling, breathing difficulty) requires epinephrine and 911 \u2014 not self-transport to ER. GI hemorrhage with hemodynamic symptoms (dizziness when standing, melena) similarly warrants EMS transport. Emergency routing is correct."
+    }
+  ]
+}

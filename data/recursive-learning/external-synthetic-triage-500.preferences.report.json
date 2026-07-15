@@ -1,0 +1,24 @@
+{
+  "source": "https://huggingface.co/datasets/syntech-ai/medical-triage-500/raw/main/medical_triage_500.jsonl",
+  "rawOut": "/Users/preethamprabhu/Documents/Claude/Projects/Carevo/triage-web/data/recursive-learning/external-synthetic-triage-500.raw.jsonl",
+  "output": "/Users/preethamprabhu/Documents/Claude/Projects/Carevo/triage-web/data/recursive-learning/external-synthetic-triage-500.preferences.jsonl",
+  "rows": 500,
+  "preferenceRows": 500,
+  "sourceUrgencyCounts": {
+    "immediate": 230,
+    "urgent": 195,
+    "routine": 75
+  },
+  "mappedCareLevelCounts": {
+    "emergency": 224,
+    "urgent_care": 98,
+    "er": 103,
+    "home_care": 75
+  },
+  "license": "cc-by-nc-4.0",
+  "commercialUseAllowed": false,
+  "offlineExperimentOnly": true,
+  "trainingAllowed": false,
+  "promotionAllowed": false,
+  "safety": "Use only for offline REE experiments and benchmark expansion unless commercial permission is granted."
+}

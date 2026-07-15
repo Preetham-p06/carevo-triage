@@ -1,0 +1,46 @@
+{
+  "promotionReady": true,
+  "reason": "All configured gates passed with zero under-triage and zero provider errors.",
+  "steps": [
+    {
+      "name": "typecheck",
+      "ok": true,
+      "status": 0,
+      "stdoutTail": "",
+      "stderrTail": ""
+    },
+    {
+      "name": "engine_eval",
+      "ok": true,
+      "status": 0,
+      "stdoutTail": "\nCarevo Route Engine — eval\n  Cases:            104\n  Exact match:      84 (81%)\n  Acceptable:       104 (100%)\n  Under-triaged:    0\n  SAFETY FAILURES:  0 (red-flag cases under-triaged)\n\nEVOI interview policy:\n  ✓ P1 vague cardiac → asks first, targets redFlag:chest_pressure\n  ✓ P2 fully-known mild case → decides immediately (conf 0.54)\n  ✓ P3 out of budget → decides (confident: 0.79)\n  ✓ P4 ER red flag present → interview stops immediately\n  ✓ P5 mental-health case → never probes suicidal ideation\n  ✓ P7 emergency tiers: bare chest pain interviews, ACS wording hard-stops\n  ✓ P7b neuro presentation → asks focused red-flag ladder (redFlag:one_sided_weakness)\n  ✓ P8 infant-fever backstop: deterministic detection, no LLM dependency\n  ✓ P9 softened self-harm phrasing reaches the crisis flow\n  ✓ P6 combination rule fires without any reported red flag\n  ✓ P10 severe-dehydration backstop: cant-keep-fluids-down + vomiting/orthostatic detected\n\nKnowledge retrieval:\n  ✓ R1 cardiac → AHA warning signs (doc.aha.heart#1, score 1)\n  ✓ R2 infant fever → pediatric chunks (doc.aap.infant#1, doc.aap.fever#1)\n  ✓ R3 content-type isolation holds (self_care → doc.nih.dehydration#2)\n  ✓ R4 pregnancy → ACOG guidance\n  ✓ R5 provenance complete on every retrieved chunk\n  ✓ R6 retrieval deterministic\n\nKnowledge graph consistency:\n  100 nodes · 153 edges · 18 chunks · 24 rules · warning-signs coverage 10/11 systems\n  ⚠ system \"cardiac\" has no self_care chunk\n  ⚠ system \"respiratory\" has no self_care chunk\n  ⚠ system \"msk\" has no self_care chunk\n  ⚠ system \"skin\" has no self_care chunk\n  ⚠ system \"urinary\" has no self_care chunk\n  ⚠ system \"gyn\" has no self_care chunk\n  ⚠ …and 3 more warnings\n  ✓ no wiring errors (every red flag floors, every screen routes, every citation resolves)\n\nProperty-based safety (feature grid):\n  grid points: 704 · checks: 528 severity + 2112 red-flag + 2112 risk-modifier = 4752\n  ✓ severity monotonicity holds everywhere\n  ✓ red-flag dominance holds everywhere\n  ✓ risk modifiers never lower acuity\n\nPASS\n",
+      "stderrTail": ""
+    },
+    {
+      "name": "dataset_multiturn_eval",
+      "ok": true,
+      "status": 0,
+      "stdoutTail": "",
+      "stderrTail": ""
+    }
+  ],
+  "datasetOutput": "/Users/preethamprabhu/Documents/Claude/Projects/Carevo/triage-web/data/recursive-learning/juror-dataset-2026-07-14T01-00-46-103Z.jsonl",
+  "datasetSummary": {
+    "total": 45,
+    "scored": 45,
+    "counts": {
+      "exact": 37,
+      "over": 8
+    },
+    "exactAccuracyPct": 82.2,
+    "safeOrExactPct": 100,
+    "underTriageCount": 0
+  },
+  "requirements": {
+    "typecheck": true,
+    "engineEval": true,
+    "zeroUnderTriage": true,
+    "zeroProviderErrors": true,
+    "humanApprovalStillRequired": true
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "source": "data/recursive-learning/sample-telemetry.jsonl",
+  "scanned": 2,
+  "anomalies": 1,
+  "tooManyTurns": 1,
+  "overTriageReview": 0,
+  "output": "data/recursive-learning/anomalies-smoke.jsonl"
+}

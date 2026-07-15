@@ -1,0 +1,1007 @@
+{
+  "createdAt": "2026-07-13T15:39:51.618Z",
+  "source": "/Users/preethamprabhu/Documents/Claude/Projects/Carevo/triage-web/data/recursive-learning/mimic-ed-demo-candidates.jsonl",
+  "summary": "Pending review decisions for external ED demo candidates. Nothing in this file is approved by default.",
+  "decisions": [
+    {
+      "id": "mimic-ed-demo-30115213",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 1,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-30701739",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 2,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-33978784",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 3,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-35470228",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 4,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-36185653",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 5,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-36678718",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 6,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-36715666",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 7,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-38213541",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 8,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-38676365",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 9,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-38926302",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 10,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-33678912",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 11,
+      "suggestedCareLevel": "emergency",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-36180820",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 12,
+      "suggestedCareLevel": "emergency",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-37036523",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 13,
+      "suggestedCareLevel": "emergency",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-37977734",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 14,
+      "suggestedCareLevel": "emergency",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-39430108",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 15,
+      "suggestedCareLevel": "emergency",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-30272878",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 16,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-30683757",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 17,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-30915333",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 18,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-32587478",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 19,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-35224843",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 20,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-37321464",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 21,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-37887480",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 22,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-39297781",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 23,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-39467106",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 24,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-38433139",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 25,
+      "suggestedCareLevel": "emergency",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-31200743",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 26,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-31824062",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 27,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-38319705",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 28,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-31660580",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 29,
+      "suggestedCareLevel": "emergency",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-34391979",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 30,
+      "suggestedCareLevel": "emergency",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-38797992",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 31,
+      "suggestedCareLevel": "emergency",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-39738665",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 32,
+      "suggestedCareLevel": "emergency",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-30390242",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 33,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-32991451",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 34,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-33211001",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 35,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-36132883",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 36,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-37145382",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 37,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-37206743",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 38,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-38449411",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 39,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-30094124",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 40,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-30279522",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 41,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-30324772",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 42,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-31121963",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 43,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-31254712",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 44,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-31283645",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 45,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-31353849",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 46,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-31628990",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 47,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-32287800",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 48,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-32822973",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 49,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-33032677",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 50,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-33222885",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 51,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-34205403",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 52,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-34236274",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 53,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-34951841",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 54,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-35205519",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 55,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-35357090",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 56,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-35716124",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 57,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-36381328",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 58,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-36686656",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 59,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-36976997",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 60,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-37323830",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 61,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-37330786",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 62,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-37802225",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 63,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-37953392",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 64,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-38260469",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 65,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-38488295",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 66,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-38849383",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 67,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-38967799",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 68,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-39266792",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 69,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-39348852",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 70,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-39394858",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 71,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-39621946",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 72,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-39898790",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 73,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-39968716",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 74,
+      "suggestedCareLevel": "er",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-31023359",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 75,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-31153288",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 76,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-31226423",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 77,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-31270431",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 78,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-31320010",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 79,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-31764136",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 80,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-32034003",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 81,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-32259573",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 82,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-32840887",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 83,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-33256413",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 84,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-33693488",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 85,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-34604678",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 86,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-35156583",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 87,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-35203396",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 88,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-35353291",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 89,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-35547415",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 90,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-35933027",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 91,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-36200931",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 92,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-36316394",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 93,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-36323598",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 94,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-37578680",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 95,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-37593892",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 96,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-38237602",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 97,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-38687872",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 98,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-39028384",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 99,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    },
+    {
+      "id": "mimic-ed-demo-39202185",
+      "source": "mimic-iv-ed-demo-2.2",
+      "reviewRank": 100,
+      "suggestedCareLevel": "urgent_care",
+      "reviewerCareLevel": null,
+      "decision": "pending",
+      "reviewerNotes": "",
+      "safeForTrainingPrep": false
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "total": 45,
+  "scored": 45,
+  "counts": {
+    "over": 22,
+    "UNDER": 6,
+    "exact": 17
+  },
+  "exactAccuracyPct": 37.8,
+  "safeOrExactPct": 86.7,
+  "underTriageCount": 6
+}

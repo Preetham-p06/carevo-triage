@@ -1,0 +1,20 @@
+{
+  "input": "/Users/preethamprabhu/Documents/Claude/Projects/Carevo/triage-web/data/recursive-learning/mimic-ed-demo-candidates.jsonl",
+  "outputMd": "/Users/preethamprabhu/Documents/Claude/Projects/Carevo/triage-web/data/recursive-learning/MIMIC-ED-DEMO-TOP-REVIEW-QUEUE.md",
+  "outputJson": "/Users/preethamprabhu/Documents/Claude/Projects/Carevo/triage-web/data/recursive-learning/mimic-ed-demo-review-decisions.template.json",
+  "totalCandidates": 222,
+  "queuedForReview": 100,
+  "queueCounts": {
+    "er": 54,
+    "emergency": 10,
+    "urgent_care": 36
+  },
+  "allCandidateCounts": {
+    "urgent_care": 41,
+    "er": 171,
+    "emergency": 10
+  },
+  "trainingAllowed": false,
+  "promotionAllowed": false,
+  "nextStep": "Fill reviewerCareLevel, decision, and reviewerNotes for clear rows only. Then run a converter for approved rows."
+}

@@ -1,0 +1,18 @@
+{
+  "candidates": "data/recursive-learning/training-candidates-round7.jsonl",
+  "decisions": "data/recursive-learning/review-decisions-paul-round7.json",
+  "output": "data/recursive-learning/approved-training-paul-round7.jsonl",
+  "reviewedAt": "2026-07-14",
+  "reviewSource": "Paul (clinical reviewer) — round-7 gate over-triage batch, reviewed via Carevo-Review-Cases-for-Paul.xlsx",
+  "globalLearningGoal": "Reduce over-escalation of clearly low-acuity presentations when red flags are explicitly denied or absent, while never lowering ambiguous ocular or vestibular presentations below ER.",
+  "decisionCounts": {
+    "approve": 26,
+    "reject": 6
+  },
+  "approvedRows": 26,
+  "missing": [],
+  "trainingAllowed": false,
+  "offlineTrainingPrepReady": true,
+  "nextStep": "Convert approved rows into the final provider-specific SFT/DPO format after confirming the chosen local model and training toolchain.",
+  "safety": "Rows are approved for offline training preparation only. They do not promote a model or alter live routing."
+}

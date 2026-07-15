@@ -1,0 +1,23 @@
+{
+  "input": "data/recursive-learning/synthetic-240-results-round7-gate-2026-07-14.jsonl",
+  "output": "data/recursive-learning/training-candidates-round7.jsonl",
+  "totalRows": 240,
+  "exact": 152,
+  "over": 88,
+  "under": 0,
+  "errors": 0,
+  "candidates": 88,
+  "priorityCounts": {
+    "medium": 71,
+    "high": 17
+  },
+  "expectedLevelCounts": {
+    "er": 56,
+    "urgent_care": 6,
+    "home_care": 26
+  },
+  "readyForOfflineTrainingPrep": true,
+  "promotionAllowed": false,
+  "nextReviewStep": "Review high-priority candidates first, then convert approved rows into the training format for the chosen local model.",
+  "safety": "These rows are candidates only and must not change live routing without human review and juror gates."
+}

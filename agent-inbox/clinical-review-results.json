@@ -1,0 +1,4468 @@
+{
+  "issueCounts": {
+    "none": 81,
+    "over-triage": 6,
+    "missing-rule": 10,
+    "under-triage": 3
+  },
+  "results": [
+    {
+      "c": {
+        "id": "CP01",
+        "group": "chest pain",
+        "description": "67M crushing chest pressure, sweating, nausea, started 20 minutes ago.",
+        "f": {
+          "system": "cardiac",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [
+            "chest_pressure"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "67M crushing chest pressure, sweating, nausea, started 20 minutes ago."
+        },
+        "risk": {
+          "modifiers": [
+            "age_over_65"
+          ]
+        },
+        "expected": "emergency",
+        "accept": [],
+        "redFlagsPresent": [
+          "chest_pressure"
+        ],
+        "why": "Classic ACS symptoms should not wait for interview.",
+        "shouldTrigger": "classifyEmergency immediate / cx.chest_pressure_acute"
+      },
+      "output": "emergency",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "safety.keyword_emergency"
+      ],
+      "factors": [
+        "Immediate emergency keyword net"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "CP02",
+        "group": "chest pain",
+        "description": "42F chest tightness for two days, worse climbing stairs, no sweating.",
+        "f": {
+          "system": "cardiac",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "2to7d",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "chest_pressure"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "42F chest tightness for two days, worse climbing stairs, no sweating."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "chest_pressure"
+        ],
+        "why": "Confirmed pressure is ER even without classic 911 wording.",
+        "shouldTrigger": "rf.chest_pressure"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.chest_pressure"
+      ],
+      "factors": [
+        "Red flag: chest pressure",
+        "Significant symptoms"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "CP03",
+        "group": "chest pain",
+        "description": "29M chest pain only when pressing the ribs after lifting weights.",
+        "f": {
+          "system": "msk",
+          "severity": 1,
+          "suddenOnset": false,
+          "duration": "6to48h",
+          "worsening": false,
+          "functionalImpact": 1,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "29M chest pain only when pressing the ribs after lifting weights."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "telehealth",
+        "accept": [
+          "home_care",
+          "primary_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Musculoskeletal chest wall pain should not blanket 911.",
+        "shouldTrigger": "model"
+      },
+      "output": "telehealth",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Moderate symptoms"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "CP04",
+        "group": "chest pain",
+        "description": "75F vague chest heaviness and fatigue with history of heart disease.",
+        "f": {
+          "system": "cardiac",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "6to48h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "75F vague chest heaviness and fatigue with history of heart disease."
+        },
+        "risk": {
+          "modifiers": [
+            "age_over_65",
+            "heart_disease"
+          ]
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [],
+        "why": "Older cardiac patient with significant symptoms needs ER floor.",
+        "shouldTrigger": "cx.cardiac_highrisk"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "cx.cardiac_highrisk"
+      ],
+      "factors": [
+        "Kept at the safer level for consistency with similar presentations",
+        "Significant cardiac-system symptoms in a patient with known heart disease or age 65+",
+        "Heart condition history",
+        "Significant symptoms",
+        "Age 65+"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "CP05",
+        "group": "chest pain",
+        "description": "35M sharp chest pain after coughing, mild, breathing fine.",
+        "f": {
+          "system": "respiratory",
+          "severity": 1,
+          "suddenOnset": false,
+          "duration": "6to48h",
+          "worsening": false,
+          "functionalImpact": 1,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "35M sharp chest pain after coughing, mild, breathing fine."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "telehealth",
+        "accept": [
+          "primary_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Mild pleuritic/cough-associated pain can start virtual/PCP.",
+        "shouldTrigger": "model"
+      },
+      "output": "telehealth",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Moderate symptoms"
+      ],
+      "questions": [
+        "redFlag:breathing_difficulty",
+        "redFlag:chest_pressure"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "CP06",
+        "group": "chest pain",
+        "description": "60M chest pain spreading to left arm with dizziness.",
+        "f": {
+          "system": "cardiac",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [
+            "chest_pressure",
+            "fainting_or_confusion"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "60M chest pain spreading to left arm with dizziness."
+        },
+        "risk": {
+          "modifiers": [
+            "age_over_65"
+          ]
+        },
+        "expected": "emergency",
+        "accept": [],
+        "redFlagsPresent": [
+          "chest_pressure",
+          "fainting_or_confusion"
+        ],
+        "why": "Radiation plus dizziness is a 911 presentation.",
+        "shouldTrigger": "classifyEmergency immediate / cx.chest_pressure_acute"
+      },
+      "output": "emergency",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "safety.keyword_emergency"
+      ],
+      "factors": [
+        "Immediate emergency keyword net"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "CP07",
+        "group": "chest pain",
+        "description": "50F burning chest discomfort after spicy food, mild, for a week.",
+        "f": {
+          "system": "gi",
+          "severity": 1,
+          "suddenOnset": false,
+          "duration": "over7d",
+          "worsening": false,
+          "functionalImpact": 1,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "50F burning chest discomfort after spicy food, mild, for a week."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "primary_care",
+        "accept": [
+          "telehealth"
+        ],
+        "redFlagsPresent": [],
+        "why": "Persistent non-red-flag chest/upper GI symptoms need PCP follow-up.",
+        "shouldTrigger": "model"
+      },
+      "output": "telehealth",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Moderate symptoms"
+      ],
+      "questions": [
+        "redFlag:uncontrolled_bleeding",
+        "redFlag:severe_dehydration"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "CP08",
+        "group": "chest pain",
+        "description": "70M chest discomfort and shortness of breath at rest.",
+        "f": {
+          "system": "cardiac",
+          "severity": 2,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "breathing_difficulty",
+            "chest_pressure"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "70M chest discomfort and shortness of breath at rest."
+        },
+        "risk": {
+          "modifiers": [
+            "age_over_65"
+          ]
+        },
+        "expected": "emergency",
+        "accept": [],
+        "redFlagsPresent": [
+          "breathing_difficulty",
+          "chest_pressure"
+        ],
+        "why": "Chest symptoms plus dyspnea at rest should be treated as emergency.",
+        "shouldTrigger": "classifyEmergency immediate / cx.chest_pressure_acute"
+      },
+      "output": "emergency",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "safety.keyword_emergency"
+      ],
+      "factors": [
+        "Immediate emergency keyword net"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "CP09",
+        "group": "chest pain",
+        "description": "46F intermittent palpitations and mild chest fluttering for months.",
+        "f": {
+          "system": "cardiac",
+          "severity": 1,
+          "suddenOnset": false,
+          "duration": "over7d",
+          "worsening": false,
+          "functionalImpact": 1,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "46F intermittent palpitations and mild chest fluttering for months."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "primary_care",
+        "accept": [
+          "telehealth"
+        ],
+        "redFlagsPresent": [],
+        "why": "Stable chronic palpitations need outpatient evaluation.",
+        "shouldTrigger": "model"
+      },
+      "output": "telehealth",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Moderate symptoms"
+      ],
+      "questions": [
+        "redFlag:chest_pressure",
+        "redFlag:breathing_difficulty",
+        "redFlag:fainting_or_confusion"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "SB01",
+        "group": "shortness of breath",
+        "description": "58M says he can't breathe and lips look blue.",
+        "f": {
+          "system": "respiratory",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [
+            "breathing_difficulty"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "58M says he can't breathe and lips look blue."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "emergency",
+        "accept": [],
+        "redFlagsPresent": [
+          "breathing_difficulty"
+        ],
+        "why": "Severe dyspnea/cyanosis should call 911.",
+        "shouldTrigger": "classifyEmergency immediate"
+      },
+      "output": "emergency",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "safety.keyword_emergency"
+      ],
+      "factors": [
+        "Immediate emergency keyword net"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "SB02",
+        "group": "shortness of breath",
+        "description": "33F asthma, wheezing, trouble breathing while sitting still.",
+        "f": {
+          "system": "respiratory",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": true,
+          "functionalImpact": 2,
+          "redFlags": [
+            "breathing_difficulty"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "33F asthma, wheezing, trouble breathing while sitting still."
+        },
+        "risk": {
+          "modifiers": [
+            "lung_condition"
+          ]
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "breathing_difficulty"
+        ],
+        "why": "Rest dyspnea with lung disease needs ER-level care.",
+        "shouldTrigger": "rf.breathing_difficulty"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.breathing_difficulty"
+      ],
+      "factors": [
+        "Red flag: breathing difficulty",
+        "Significant symptoms",
+        "Getting worse",
+        "Existing lung condition"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "SB03",
+        "group": "shortness of breath",
+        "description": "25M winded after exercise, better with rest, no chest pain.",
+        "f": {
+          "system": "respiratory",
+          "severity": 0,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 0,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "25M winded after exercise, better with rest, no chest pain."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "home_care",
+        "accept": [
+          "telehealth"
+        ],
+        "redFlagsPresent": [],
+        "why": "Benign exertional breathlessness can self-care.",
+        "shouldTrigger": "model"
+      },
+      "output": "home_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Mild symptoms"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "SB04",
+        "group": "shortness of breath",
+        "description": "68F new shortness of breath walking across room, swelling legs.",
+        "f": {
+          "system": "respiratory",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "2to7d",
+          "worsening": true,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "68F new shortness of breath walking across room, swelling legs."
+        },
+        "risk": {
+          "modifiers": [
+            "age_over_65",
+            "heart_disease"
+          ]
+        },
+        "expected": "urgent_care",
+        "accept": [
+          "er"
+        ],
+        "redFlagsPresent": [],
+        "why": "Older patient with worsening dyspnea needs same-day evaluation.",
+        "shouldTrigger": "model/risk"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Significant symptoms",
+        "Limiting daily activity",
+        "Getting worse",
+        "Age 65+"
+      ],
+      "questions": [
+        "redFlag:breathing_difficulty",
+        "redFlag:chest_pressure"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "SB05",
+        "group": "shortness of breath",
+        "description": "40M panic attack feeling short of breath but speaking full sentences, no chest pain.",
+        "f": {
+          "system": "mental",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "40M panic attack feeling short of breath but speaking full sentences, no chest pain."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "primary_care",
+        "accept": [
+          "telehealth"
+        ],
+        "redFlagsPresent": [],
+        "why": "Non-crisis anxiety dyspnea should avoid urgent-care over-triage.",
+        "shouldTrigger": "mental model"
+      },
+      "output": "urgent_care",
+      "pass": false,
+      "issue": "over-triage",
+      "fired": [],
+      "factors": [
+        "Significant symptoms",
+        "Limiting daily activity"
+      ],
+      "questions": [],
+      "note": "over-triage: expected primary_care (accept telehealth), got urgent_care"
+    },
+    {
+      "c": {
+        "id": "SB06",
+        "group": "shortness of breath",
+        "description": "72M COPD, fever, worsening cough, more short of breath than usual.",
+        "f": {
+          "system": "respiratory",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "2to7d",
+          "worsening": true,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": true,
+          "summary": "72M COPD, fever, worsening cough, more short of breath than usual."
+        },
+        "risk": {
+          "modifiers": [
+            "age_over_65",
+            "lung_condition"
+          ]
+        },
+        "expected": "urgent_care",
+        "accept": [
+          "er"
+        ],
+        "redFlagsPresent": [],
+        "why": "High-risk respiratory infection needs same-day assessment.",
+        "shouldTrigger": "model/risk"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Significant symptoms",
+        "High fever",
+        "Limiting daily activity",
+        "Getting worse"
+      ],
+      "questions": [
+        "redFlag:breathing_difficulty",
+        "redFlag:chest_pressure"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "SB07",
+        "group": "shortness of breath",
+        "description": "19F sudden sharp chest pain and shortness of breath after long flight.",
+        "f": {
+          "system": "respiratory",
+          "severity": 2,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "breathing_difficulty"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "19F sudden sharp chest pain and shortness of breath after long flight."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "breathing_difficulty"
+        ],
+        "why": "Possible PE-type story should be ER-level.",
+        "shouldTrigger": "rf.breathing_difficulty"
+      },
+      "output": "emergency",
+      "pass": false,
+      "issue": "over-triage",
+      "fired": [
+        "safety.keyword_emergency"
+      ],
+      "factors": [
+        "Immediate emergency keyword net"
+      ],
+      "questions": [],
+      "note": "over-triage: expected er, got emergency"
+    },
+    {
+      "c": {
+        "id": "SB08",
+        "group": "shortness of breath",
+        "description": "55M smoke inhalation from house fire, coughing and hoarse.",
+        "f": {
+          "system": "respiratory",
+          "severity": 2,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "breathing_difficulty"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "55M smoke inhalation from house fire, coughing and hoarse."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "breathing_difficulty"
+        ],
+        "why": "Inhalation injury can worsen quickly.",
+        "shouldTrigger": "rf.breathing_difficulty"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.breathing_difficulty"
+      ],
+      "factors": [
+        "Red flag: breathing difficulty",
+        "Sudden onset",
+        "Significant symptoms"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "AB01",
+        "group": "abdominal pain",
+        "description": "31F sudden severe right lower abdominal pain, worsening, cannot stand straight.",
+        "f": {
+          "system": "gi",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": true,
+          "functionalImpact": 3,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "31F sudden severe right lower abdominal pain, worsening, cannot stand straight."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [
+          "urgent_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Severe focal worsening abdominal pain may need imaging/surgery.",
+        "shouldTrigger": "model + cx.sudden_severe_worsening"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "cx.sudden_severe_worsening"
+      ],
+      "factors": [
+        "Severe, sudden-onset, worsening symptoms with major functional impact",
+        "Severe symptoms",
+        "Unable to function normally",
+        "Sudden onset",
+        "Getting worse"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "AB02",
+        "group": "abdominal pain",
+        "description": "45M mild stomach cramps after questionable food, diarrhea, drinking fluids.",
+        "f": {
+          "system": "gi",
+          "severity": 1,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 1,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "45M mild stomach cramps after questionable food, diarrhea, drinking fluids."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "telehealth",
+        "accept": [
+          "home_care",
+          "primary_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Mild GI illness without dehydration can start virtual/home.",
+        "shouldTrigger": "model"
+      },
+      "output": "telehealth",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Moderate symptoms"
+      ],
+      "questions": [
+        "redFlag:uncontrolled_bleeding",
+        "redFlag:severe_dehydration"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "AB03",
+        "group": "abdominal pain",
+        "description": "70F abdominal pain, confused and dizzy when standing.",
+        "f": {
+          "system": "gi",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "6to48h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "fainting_or_confusion"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "70F abdominal pain, confused and dizzy when standing."
+        },
+        "risk": {
+          "modifiers": [
+            "age_over_65"
+          ]
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "fainting_or_confusion"
+        ],
+        "why": "Elderly confusion/dizziness with abdominal pain needs ER.",
+        "shouldTrigger": "rf.fainting_or_confusion"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.fainting_or_confusion"
+      ],
+      "factors": [
+        "Red flag: fainting or confusion",
+        "Significant symptoms",
+        "Age 65+"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "AB04",
+        "group": "abdominal pain",
+        "description": "28M vomiting all day, no urination, dizzy standing.",
+        "f": {
+          "system": "gi",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "6to48h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "severe_dehydration"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "28M vomiting all day, no urination, dizzy standing."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "urgent_care",
+        "accept": [
+          "er"
+        ],
+        "redFlagsPresent": [
+          "severe_dehydration"
+        ],
+        "why": "Severe dehydration needs same-day fluids assessment.",
+        "shouldTrigger": "rf.severe_dehydration"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.severe_dehydration"
+      ],
+      "factors": [
+        "Red flag: severe dehydration",
+        "Significant symptoms",
+        "Limiting daily activity"
+      ],
+      "questions": [
+        "redFlag:uncontrolled_bleeding"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "AB05",
+        "group": "abdominal pain",
+        "description": "52M black tarry stools and abdominal pain.",
+        "f": {
+          "system": "gi",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "6to48h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "uncontrolled_bleeding"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "52M black tarry stools and abdominal pain."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "uncontrolled_bleeding"
+        ],
+        "why": "GI bleeding signs warrant ER.",
+        "shouldTrigger": "rf.uncontrolled_bleeding"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.uncontrolled_bleeding"
+      ],
+      "factors": [
+        "Red flag: uncontrolled bleeding",
+        "Significant symptoms"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "AB06",
+        "group": "abdominal pain",
+        "description": "24F pelvic pain and positive pregnancy test, no bleeding.",
+        "f": {
+          "system": "gyn",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "24F pelvic pain and positive pregnancy test, no bleeding."
+        },
+        "risk": {
+          "modifiers": [
+            "pregnant"
+          ]
+        },
+        "expected": "urgent_care",
+        "accept": [
+          "er"
+        ],
+        "redFlagsPresent": [],
+        "why": "Pregnancy pelvic pain needs prompt evaluation even without bleeding.",
+        "shouldTrigger": "cx.pregnancy_abdo"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "cx.pregnancy_abdo"
+      ],
+      "factors": [
+        "Significant abdominal/pelvic symptoms during pregnancy",
+        "Significant symptoms",
+        "Limiting daily activity",
+        "Pregnancy"
+      ],
+      "questions": [
+        "redFlag:pregnancy_bleeding_or_pain"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "AB07",
+        "group": "abdominal pain",
+        "description": "60M severe tearing abdominal/back pain, sudden onset.",
+        "f": {
+          "system": "gi",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "60M severe tearing abdominal/back pain, sudden onset."
+        },
+        "risk": {
+          "modifiers": [
+            "age_over_65"
+          ]
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [],
+        "why": "Tearing severe abdominal/back pain should be ER-level.",
+        "shouldTrigger": "model + risk"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Severe symptoms",
+        "Unable to function normally",
+        "Sudden onset",
+        "Age 65+"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "AB08",
+        "group": "abdominal pain",
+        "description": "35F recurrent mild heartburn for weeks.",
+        "f": {
+          "system": "gi",
+          "severity": 1,
+          "suddenOnset": false,
+          "duration": "over7d",
+          "worsening": false,
+          "functionalImpact": 1,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "35F recurrent mild heartburn for weeks."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "primary_care",
+        "accept": [
+          "telehealth"
+        ],
+        "redFlagsPresent": [],
+        "why": "Persistent but mild symptoms need outpatient follow-up.",
+        "shouldTrigger": "model"
+      },
+      "output": "telehealth",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Moderate symptoms"
+      ],
+      "questions": [
+        "redFlag:uncontrolled_bleeding",
+        "redFlag:severe_dehydration"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "AB09",
+        "group": "abdominal pain",
+        "description": "40M severe testicular pain and lower belly pain started suddenly.",
+        "f": {
+          "system": "gyn",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "40M severe testicular pain and lower belly pain started suddenly."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [
+          "urgent_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Time-sensitive genital/abdominal pain should be ER-level.",
+        "shouldTrigger": "model"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Severe symptoms",
+        "Unable to function normally",
+        "Sudden onset"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "HA01",
+        "group": "headache",
+        "description": "44F worst headache of life, thunderclap onset seconds ago.",
+        "f": {
+          "system": "neuro",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [
+            "worst_headache_of_life"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "44F worst headache of life, thunderclap onset seconds ago."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "worst_headache_of_life"
+        ],
+        "why": "Thunderclap headache requires ER.",
+        "shouldTrigger": "rf.worst_headache_of_life"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.worst_headache_of_life"
+      ],
+      "factors": [
+        "Red flag: worst headache of life",
+        "Severe symptoms",
+        "Unable to function normally",
+        "Sudden onset"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "HA02",
+        "group": "headache",
+        "description": "36M mild tension headache after computer work, better with rest.",
+        "f": {
+          "system": "neuro",
+          "severity": 0,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 0,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "36M mild tension headache after computer work, better with rest."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "home_care",
+        "accept": [
+          "telehealth"
+        ],
+        "redFlagsPresent": [],
+        "why": "Mild uncomplicated headache can self-care.",
+        "shouldTrigger": "model"
+      },
+      "output": "home_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Mild symptoms"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "HA03",
+        "group": "headache",
+        "description": "29F fever, stiff neck, severe headache.",
+        "f": {
+          "system": "neuro",
+          "severity": 3,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [
+            "stiff_neck_with_fever"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": true,
+          "summary": "29F fever, stiff neck, severe headache."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "stiff_neck_with_fever"
+        ],
+        "why": "Meningitis-pattern symptoms need ER.",
+        "shouldTrigger": "rf.stiff_neck_with_fever"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.stiff_neck_with_fever"
+      ],
+      "factors": [
+        "Red flag: stiff neck with fever",
+        "Severe symptoms",
+        "Unable to function normally",
+        "High fever"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "HA04",
+        "group": "headache",
+        "description": "55M new headache with slurred speech and face droop.",
+        "f": {
+          "system": "neuro",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [
+            "one_sided_weakness"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "55M new headache with slurred speech and face droop."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "emergency",
+        "accept": [],
+        "redFlagsPresent": [
+          "one_sided_weakness"
+        ],
+        "why": "Stroke signs need 911.",
+        "shouldTrigger": "classifyEmergency immediate / rf.one_sided_weakness"
+      },
+      "output": "emergency",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "safety.keyword_emergency"
+      ],
+      "factors": [
+        "Immediate emergency keyword net"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "HA05",
+        "group": "headache",
+        "description": "62F headache after hitting head, now confused.",
+        "f": {
+          "system": "neuro",
+          "severity": 2,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "fainting_or_confusion"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "62F headache after hitting head, now confused."
+        },
+        "risk": {
+          "modifiers": [
+            "age_over_65"
+          ]
+        },
+        "expected": "emergency",
+        "accept": [
+          "er"
+        ],
+        "redFlagsPresent": [
+          "fainting_or_confusion"
+        ],
+        "why": "Head injury plus confusion in older adult is emergency transport.",
+        "shouldTrigger": "classifyEmergency immediate"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.fainting_or_confusion"
+      ],
+      "factors": [
+        "Red flag: fainting or confusion",
+        "Kept at the safer level for consistency with similar presentations",
+        "Sudden onset",
+        "Significant symptoms",
+        "Age 65+"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "HA06",
+        "group": "headache",
+        "description": "40F migraine like prior migraines, moderate, nausea, no neuro symptoms.",
+        "f": {
+          "system": "neuro",
+          "severity": 1,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 1,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "40F migraine like prior migraines, moderate, nausea, no neuro symptoms."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "primary_care",
+        "accept": [
+          "telehealth",
+          "urgent_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Known moderate migraine can start outpatient/telehealth.",
+        "shouldTrigger": "model"
+      },
+      "output": "telehealth",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Moderate symptoms"
+      ],
+      "questions": [
+        "redFlag:one_sided_weakness",
+        "redFlag:worst_headache_of_life",
+        "redFlag:fainting_or_confusion"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "HA07",
+        "group": "headache",
+        "description": "23M headache after carbon monoxide alarm went off, family also nauseated.",
+        "f": {
+          "system": "neuro",
+          "severity": 2,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "23M headache after carbon monoxide alarm went off, family also nauseated."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [],
+        "why": "CO exposure concern needs emergency evaluation.",
+        "shouldTrigger": "missing deterministic exposure rule"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "missing-rule",
+      "fired": [],
+      "factors": [
+        "Kept at the safer level for consistency with similar presentations",
+        "Sudden onset",
+        "Significant symptoms"
+      ],
+      "questions": [
+        "redFlag:one_sided_weakness",
+        "redFlag:worst_headache_of_life",
+        "redFlag:fainting_or_confusion"
+      ],
+      "note": "missing-rule"
+    },
+    {
+      "c": {
+        "id": "HA08",
+        "group": "headache",
+        "description": "71F new persistent headache for two weeks, mild vision blur.",
+        "f": {
+          "system": "neuro",
+          "severity": 1,
+          "suddenOnset": false,
+          "duration": "over7d",
+          "worsening": false,
+          "functionalImpact": 1,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "71F new persistent headache for two weeks, mild vision blur."
+        },
+        "risk": {
+          "modifiers": [
+            "age_over_65"
+          ]
+        },
+        "expected": "primary_care",
+        "accept": [
+          "urgent_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "New headache in older adult needs outpatient evaluation soon.",
+        "shouldTrigger": "model"
+      },
+      "output": "telehealth",
+      "pass": false,
+      "issue": "under-triage",
+      "fired": [],
+      "factors": [
+        "Moderate symptoms"
+      ],
+      "questions": [
+        "redFlag:one_sided_weakness",
+        "redFlag:worst_headache_of_life",
+        "redFlag:fainting_or_confusion"
+      ],
+      "note": "under-triage: expected primary_care (accept urgent_care), got telehealth"
+    },
+    {
+      "c": {
+        "id": "FV01",
+        "group": "fever",
+        "description": "Adult fever 101, mild aches, drinking fine for one day.",
+        "f": {
+          "system": "general",
+          "severity": 1,
+          "suddenOnset": false,
+          "duration": "6to48h",
+          "worsening": false,
+          "functionalImpact": 1,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": true,
+          "summary": "Adult fever 101, mild aches, drinking fine for one day."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "telehealth",
+        "accept": [
+          "urgent_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Uncomplicated adult fever can start virtual care.",
+        "shouldTrigger": "model"
+      },
+      "output": "telehealth",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Moderate symptoms"
+      ],
+      "questions": [
+        "redFlag:fainting_or_confusion",
+        "redFlag:breathing_difficulty"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "FV02",
+        "group": "fever",
+        "description": "Adult fever 104 with shaking chills and weakness.",
+        "f": {
+          "system": "general",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": true,
+          "summary": "Adult fever 104 with shaking chills and weakness."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "urgent_care",
+        "accept": [
+          "er"
+        ],
+        "redFlagsPresent": [],
+        "why": "High fever with systemic symptoms needs same-day evaluation.",
+        "shouldTrigger": "flag:highFever"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Significant symptoms",
+        "High fever",
+        "Limiting daily activity"
+      ],
+      "questions": [
+        "redFlag:fainting_or_confusion",
+        "redFlag:breathing_difficulty"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "FV03",
+        "group": "fever",
+        "description": "Fever with stiff neck and confusion.",
+        "f": {
+          "system": "neuro",
+          "severity": 3,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [
+            "stiff_neck_with_fever",
+            "fainting_or_confusion"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": true,
+          "summary": "Fever with stiff neck and confusion."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "stiff_neck_with_fever",
+          "fainting_or_confusion"
+        ],
+        "why": "Possible meningitis/sepsis features require ER.",
+        "shouldTrigger": "rf.stiff_neck_with_fever"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.fainting_or_confusion",
+        "rf.stiff_neck_with_fever"
+      ],
+      "factors": [
+        "Red flag: stiff neck with fever",
+        "Red flag: fainting or confusion",
+        "Severe symptoms",
+        "Unable to function normally",
+        "High fever"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "FV04",
+        "group": "fever",
+        "description": "Fever and rash with face and lip swelling after antibiotics.",
+        "f": {
+          "system": "skin",
+          "severity": 2,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "allergic_swelling"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": true,
+          "summary": "Fever and rash with face and lip swelling after antibiotics."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "allergic_swelling"
+        ],
+        "why": "Allergic swelling can threaten airway.",
+        "shouldTrigger": "rf.allergic_swelling"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.allergic_swelling"
+      ],
+      "factors": [
+        "Red flag: allergic swelling",
+        "Sudden onset",
+        "Significant symptoms",
+        "High fever"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "FV05",
+        "group": "fever",
+        "description": "Fever for 8 days, low energy, no red flags.",
+        "f": {
+          "system": "general",
+          "severity": 1,
+          "suddenOnset": false,
+          "duration": "over7d",
+          "worsening": false,
+          "functionalImpact": 1,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": true,
+          "summary": "Fever for 8 days, low energy, no red flags."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "primary_care",
+        "accept": [
+          "urgent_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Persistent fever needs clinician evaluation.",
+        "shouldTrigger": "model"
+      },
+      "output": "primary_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Kept at the safer level for consistency with similar presentations",
+        "Moderate symptoms"
+      ],
+      "questions": [
+        "redFlag:fainting_or_confusion",
+        "redFlag:breathing_difficulty"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "FV06",
+        "group": "fever",
+        "description": "Fever with severe dehydration, cannot keep fluids down.",
+        "f": {
+          "system": "gi",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "6to48h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "severe_dehydration"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": true,
+          "summary": "Fever with severe dehydration, cannot keep fluids down."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "urgent_care",
+        "accept": [
+          "er"
+        ],
+        "redFlagsPresent": [
+          "severe_dehydration"
+        ],
+        "why": "Dehydration needs same-day assessment.",
+        "shouldTrigger": "rf.severe_dehydration"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.severe_dehydration"
+      ],
+      "factors": [
+        "Red flag: severe dehydration",
+        "Significant symptoms",
+        "High fever",
+        "Limiting daily activity"
+      ],
+      "questions": [
+        "redFlag:uncontrolled_bleeding"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "FV07",
+        "group": "fever",
+        "description": "Post-op fever two days after surgery, worsening pain at incision.",
+        "f": {
+          "system": "skin",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "2to7d",
+          "worsening": true,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": true,
+          "highFever": true,
+          "summary": "Post-op fever two days after surgery, worsening pain at incision."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "urgent_care",
+        "accept": [
+          "er"
+        ],
+        "redFlagsPresent": [],
+        "why": "Post-procedure infection concern needs same-day assessment.",
+        "shouldTrigger": "model + openWound"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Significant symptoms",
+        "Open wound (may need stitches)",
+        "High fever",
+        "Limiting daily activity"
+      ],
+      "questions": [
+        "redFlag:allergic_swelling",
+        "redFlag:uncontrolled_bleeding"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "FV08",
+        "group": "fever",
+        "description": "Fever with purple non-blanching rash and looks very ill.",
+        "f": {
+          "system": "skin",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": true,
+          "summary": "Fever with purple non-blanching rash and looks very ill."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [],
+        "why": "Toxic fever/rash pattern should be ER-level.",
+        "shouldTrigger": "missing rash toxicity red flag"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "missing-rule",
+      "fired": [],
+      "factors": [
+        "Severe symptoms",
+        "Unable to function normally",
+        "Sudden onset",
+        "High fever"
+      ],
+      "questions": [],
+      "note": "missing-rule"
+    },
+    {
+      "c": {
+        "id": "PD01",
+        "group": "pediatric symptoms",
+        "description": "2-month-old baby fever 100.8, fussy but awake.",
+        "f": {
+          "system": "general",
+          "severity": 1,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 1,
+          "redFlags": [
+            "infant_under_3mo_fever"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": true,
+          "summary": "2-month-old baby fever 100.8, fussy but awake."
+        },
+        "risk": {
+          "modifiers": [
+            "age_under_2"
+          ]
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "infant_under_3mo_fever"
+        ],
+        "why": "Infant under 3 months with fever needs ER.",
+        "shouldTrigger": "detectInfantFever / rf.infant_under_3mo_fever"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.infant_under_3mo_fever"
+      ],
+      "factors": [
+        "Red flag: infant under 3mo fever",
+        "High fever"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "PD02",
+        "group": "pediatric symptoms",
+        "description": "18-month-old fever 104, drinking some, no stiff neck.",
+        "f": {
+          "system": "ent",
+          "severity": 1,
+          "suddenOnset": false,
+          "duration": "6to48h",
+          "worsening": false,
+          "functionalImpact": 1,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": true,
+          "summary": "18-month-old fever 104, drinking some, no stiff neck."
+        },
+        "risk": {
+          "modifiers": [
+            "age_under_2"
+          ]
+        },
+        "expected": "urgent_care",
+        "accept": [],
+        "redFlagsPresent": [],
+        "why": "Toddler high fever should be same-day urgent care.",
+        "shouldTrigger": "cx.toddler_high_fever"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "cx.toddler_high_fever"
+      ],
+      "factors": [
+        "High fever in a child under 2",
+        "High fever",
+        "Very young child"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "PD03",
+        "group": "pediatric symptoms",
+        "description": "5-year-old barking cough, mild, breathing fine.",
+        "f": {
+          "system": "respiratory",
+          "severity": 1,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 1,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "5-year-old barking cough, mild, breathing fine."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "telehealth",
+        "accept": [
+          "primary_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Mild pediatric cough without respiratory distress can start virtual.",
+        "shouldTrigger": "model"
+      },
+      "output": "telehealth",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Moderate symptoms"
+      ],
+      "questions": [
+        "redFlag:breathing_difficulty",
+        "redFlag:chest_pressure"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "PD04",
+        "group": "pediatric symptoms",
+        "description": "Child is drooling and cannot swallow, noisy breathing.",
+        "f": {
+          "system": "ent",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [
+            "breathing_difficulty"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Child is drooling and cannot swallow, noisy breathing."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "emergency",
+        "accept": [],
+        "redFlagsPresent": [
+          "breathing_difficulty"
+        ],
+        "why": "Airway compromise signs need 911.",
+        "shouldTrigger": "classifyEmergency immediate"
+      },
+      "output": "er",
+      "pass": false,
+      "issue": "under-triage",
+      "fired": [
+        "rf.breathing_difficulty"
+      ],
+      "factors": [
+        "Red flag: breathing difficulty",
+        "Severe symptoms",
+        "Unable to function normally",
+        "Sudden onset"
+      ],
+      "questions": [],
+      "note": "under-triage: expected emergency, got er"
+    },
+    {
+      "c": {
+        "id": "PD05",
+        "group": "pediatric symptoms",
+        "description": "8-year-old ankle injury cannot bear weight, swollen.",
+        "f": {
+          "system": "msk",
+          "severity": 2,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": true,
+          "openWound": false,
+          "highFever": false,
+          "summary": "8-year-old ankle injury cannot bear weight, swollen."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "urgent_care",
+        "accept": [],
+        "redFlagsPresent": [],
+        "why": "Possible fracture needs imaging.",
+        "shouldTrigger": "flag:possibleFracture"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Possible fracture (needs imaging)",
+        "Significant symptoms",
+        "Limiting daily activity",
+        "Sudden onset"
+      ],
+      "questions": [
+        "redFlag:uncontrolled_bleeding"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "PD06",
+        "group": "pediatric symptoms",
+        "description": "Child vomiting, dry mouth, no urine all day.",
+        "f": {
+          "system": "gi",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "6to48h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "severe_dehydration"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Child vomiting, dry mouth, no urine all day."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "urgent_care",
+        "accept": [
+          "er"
+        ],
+        "redFlagsPresent": [
+          "severe_dehydration"
+        ],
+        "why": "Pediatric dehydration needs same-day care.",
+        "shouldTrigger": "rf.severe_dehydration"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.severe_dehydration"
+      ],
+      "factors": [
+        "Red flag: severe dehydration",
+        "Significant symptoms",
+        "Limiting daily activity"
+      ],
+      "questions": [
+        "redFlag:uncontrolled_bleeding"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "PD07",
+        "group": "pediatric symptoms",
+        "description": "Teen says they want to die and have pills.",
+        "f": {
+          "system": "mental",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [
+            "suicidal_thoughts"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Teen says they want to die and have pills."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "suicidal_thoughts"
+        ],
+        "why": "Self-harm with means needs crisis/ER path.",
+        "shouldTrigger": "detectSelfHarm / rf.suicidal_thoughts"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "safety.self_harm_988"
+      ],
+      "factors": [
+        "Self-harm language detected"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "PD08",
+        "group": "pediatric symptoms",
+        "description": "Baby under 1 year with fall from couch, acting normal.",
+        "f": {
+          "system": "neuro",
+          "severity": 1,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 0,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Baby under 1 year with fall from couch, acting normal."
+        },
+        "risk": {
+          "modifiers": [
+            "age_under_2"
+          ]
+        },
+        "expected": "urgent_care",
+        "accept": [
+          "primary_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Infant head trauma should be same-day clinician assessment.",
+        "shouldTrigger": "missing infant head injury modifier"
+      },
+      "output": "er",
+      "pass": false,
+      "issue": "over-triage",
+      "fired": [],
+      "factors": [
+        "Sudden onset"
+      ],
+      "questions": [],
+      "note": "over-triage: expected urgent_care (accept primary_care), got er"
+    },
+    {
+      "c": {
+        "id": "PG01",
+        "group": "pregnancy",
+        "description": "Pregnant 10 weeks, vaginal bleeding and one-sided pelvic pain.",
+        "f": {
+          "system": "gyn",
+          "severity": 2,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "pregnancy_bleeding_or_pain"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Pregnant 10 weeks, vaginal bleeding and one-sided pelvic pain."
+        },
+        "risk": {
+          "modifiers": [
+            "pregnant"
+          ]
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "pregnancy_bleeding_or_pain"
+        ],
+        "why": "Bleeding/pain in pregnancy needs ER.",
+        "shouldTrigger": "rf.pregnancy_bleeding_or_pain"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.pregnancy_bleeding_or_pain"
+      ],
+      "factors": [
+        "Red flag: pregnancy bleeding or pain",
+        "Sudden onset",
+        "Significant symptoms"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "PG02",
+        "group": "pregnancy",
+        "description": "Pregnant 30 weeks, severe headache and vision spots.",
+        "f": {
+          "system": "neuro",
+          "severity": 3,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "sudden_vision_loss"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Pregnant 30 weeks, severe headache and vision spots."
+        },
+        "risk": {
+          "modifiers": [
+            "pregnant"
+          ]
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "sudden_vision_loss"
+        ],
+        "why": "Possible preeclampsia-type symptoms need ER.",
+        "shouldTrigger": "rf.sudden_vision_loss"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.sudden_vision_loss"
+      ],
+      "factors": [
+        "Red flag: sudden vision loss",
+        "Severe symptoms"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "PG03",
+        "group": "pregnancy",
+        "description": "Pregnant 24 weeks, mild nausea for two days, keeping fluids.",
+        "f": {
+          "system": "gi",
+          "severity": 1,
+          "suddenOnset": false,
+          "duration": "2to7d",
+          "worsening": false,
+          "functionalImpact": 1,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Pregnant 24 weeks, mild nausea for two days, keeping fluids."
+        },
+        "risk": {
+          "modifiers": [
+            "pregnant"
+          ]
+        },
+        "expected": "telehealth",
+        "accept": [
+          "primary_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Mild pregnancy nausea can start with telehealth/OB call.",
+        "shouldTrigger": "model"
+      },
+      "output": "telehealth",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Moderate symptoms"
+      ],
+      "questions": [
+        "redFlag:uncontrolled_bleeding",
+        "redFlag:severe_dehydration"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "PG04",
+        "group": "pregnancy",
+        "description": "Pregnant 28 weeks, cannot keep fluids down and dizzy standing.",
+        "f": {
+          "system": "gi",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "6to48h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "severe_dehydration"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Pregnant 28 weeks, cannot keep fluids down and dizzy standing."
+        },
+        "risk": {
+          "modifiers": [
+            "pregnant"
+          ]
+        },
+        "expected": "urgent_care",
+        "accept": [
+          "er"
+        ],
+        "redFlagsPresent": [
+          "severe_dehydration"
+        ],
+        "why": "Dehydration in pregnancy needs same-day care.",
+        "shouldTrigger": "rf.severe_dehydration"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.severe_dehydration",
+        "cx.pregnancy_abdo"
+      ],
+      "factors": [
+        "Red flag: severe dehydration",
+        "Significant abdominal/pelvic symptoms during pregnancy",
+        "Significant symptoms",
+        "Limiting daily activity",
+        "Pregnancy"
+      ],
+      "questions": [
+        "redFlag:uncontrolled_bleeding"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "PG05",
+        "group": "pregnancy",
+        "description": "Pregnant, chest pressure and shortness of breath.",
+        "f": {
+          "system": "cardiac",
+          "severity": 2,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "chest_pressure",
+            "breathing_difficulty"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Pregnant, chest pressure and shortness of breath."
+        },
+        "risk": {
+          "modifiers": [
+            "pregnant"
+          ]
+        },
+        "expected": "emergency",
+        "accept": [],
+        "redFlagsPresent": [
+          "chest_pressure",
+          "breathing_difficulty"
+        ],
+        "why": "Pregnancy plus ACS/PE symptoms should be emergency.",
+        "shouldTrigger": "classifyEmergency immediate / cx.chest_pressure_acute"
+      },
+      "output": "emergency",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "safety.keyword_emergency"
+      ],
+      "factors": [
+        "Immediate emergency keyword net"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "PG06",
+        "group": "pregnancy",
+        "description": "Postpartum 5 days, heavy bleeding soaking pads.",
+        "f": {
+          "system": "gyn",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [
+            "uncontrolled_bleeding"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Postpartum 5 days, heavy bleeding soaking pads."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "uncontrolled_bleeding"
+        ],
+        "why": "Heavy postpartum bleeding needs ER.",
+        "shouldTrigger": "rf.uncontrolled_bleeding"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.uncontrolled_bleeding"
+      ],
+      "factors": [
+        "Red flag: uncontrolled bleeding",
+        "Severe symptoms",
+        "Unable to function normally",
+        "Sudden onset"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "PG07",
+        "group": "pregnancy",
+        "description": "Pregnant with significant abdominal pain, no bleeding.",
+        "f": {
+          "system": "gi",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Pregnant with significant abdominal pain, no bleeding."
+        },
+        "risk": {
+          "modifiers": [
+            "pregnant"
+          ]
+        },
+        "expected": "urgent_care",
+        "accept": [
+          "er"
+        ],
+        "redFlagsPresent": [],
+        "why": "Pregnancy abdominal pain needs prompt evaluation.",
+        "shouldTrigger": "cx.pregnancy_abdo"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "cx.pregnancy_abdo"
+      ],
+      "factors": [
+        "Significant abdominal/pelvic symptoms during pregnancy",
+        "Significant symptoms",
+        "Limiting daily activity",
+        "Pregnancy"
+      ],
+      "questions": [
+        "redFlag:uncontrolled_bleeding"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "PG08",
+        "group": "pregnancy",
+        "description": "Pregnant with decreased fetal movement today.",
+        "f": {
+          "system": "gyn",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Pregnant with decreased fetal movement today."
+        },
+        "risk": {
+          "modifiers": [
+            "pregnant"
+          ]
+        },
+        "expected": "er",
+        "accept": [
+          "urgent_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Decreased fetal movement should not wait for routine care.",
+        "shouldTrigger": "missing pregnancy fetal movement rule"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "missing-rule",
+      "fired": [
+        "cx.pregnancy_abdo"
+      ],
+      "factors": [
+        "Significant abdominal/pelvic symptoms during pregnancy",
+        "Significant symptoms",
+        "Limiting daily activity",
+        "Pregnancy"
+      ],
+      "questions": [
+        "redFlag:pregnancy_bleeding_or_pain"
+      ],
+      "note": "missing-rule"
+    },
+    {
+      "c": {
+        "id": "EL01",
+        "group": "elderly patients",
+        "description": "82F new confusion and fever.",
+        "f": {
+          "system": "general",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "fainting_or_confusion"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": true,
+          "summary": "82F new confusion and fever."
+        },
+        "risk": {
+          "modifiers": [
+            "age_over_65"
+          ]
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "fainting_or_confusion"
+        ],
+        "why": "New confusion in elder can be sepsis/stroke/metabolic emergency.",
+        "shouldTrigger": "rf.fainting_or_confusion"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.fainting_or_confusion"
+      ],
+      "factors": [
+        "Red flag: fainting or confusion",
+        "Significant symptoms",
+        "Age 65+",
+        "High fever"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "EL02",
+        "group": "elderly patients",
+        "description": "76M sudden one-sided weakness and slurred speech.",
+        "f": {
+          "system": "neuro",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [
+            "one_sided_weakness"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "76M sudden one-sided weakness and slurred speech."
+        },
+        "risk": {
+          "modifiers": [
+            "age_over_65"
+          ]
+        },
+        "expected": "emergency",
+        "accept": [],
+        "redFlagsPresent": [
+          "one_sided_weakness"
+        ],
+        "why": "Stroke signs need 911.",
+        "shouldTrigger": "classifyEmergency immediate / rf.one_sided_weakness"
+      },
+      "output": "emergency",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "safety.keyword_emergency"
+      ],
+      "factors": [
+        "Immediate emergency keyword net"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "EL03",
+        "group": "elderly patients",
+        "description": "80F fell, hip pain, cannot stand.",
+        "f": {
+          "system": "msk",
+          "severity": 2,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [],
+          "possibleFracture": true,
+          "openWound": false,
+          "highFever": false,
+          "summary": "80F fell, hip pain, cannot stand."
+        },
+        "risk": {
+          "modifiers": [
+            "age_over_65"
+          ]
+        },
+        "expected": "er",
+        "accept": [
+          "urgent_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Hip fracture concern often needs ER transport.",
+        "shouldTrigger": "missing elderly hip fracture ER floor"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "missing-rule",
+      "fired": [],
+      "factors": [
+        "Possible fracture (needs imaging)",
+        "Significant symptoms",
+        "Unable to function normally",
+        "Sudden onset"
+      ],
+      "questions": [
+        "redFlag:uncontrolled_bleeding"
+      ],
+      "note": "missing-rule"
+    },
+    {
+      "c": {
+        "id": "EL04",
+        "group": "elderly patients",
+        "description": "69M mild cough for three days, no fever, breathing fine.",
+        "f": {
+          "system": "respiratory",
+          "severity": 1,
+          "suddenOnset": false,
+          "duration": "2to7d",
+          "worsening": false,
+          "functionalImpact": 1,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "69M mild cough for three days, no fever, breathing fine."
+        },
+        "risk": {
+          "modifiers": [
+            "age_over_65"
+          ]
+        },
+        "expected": "telehealth",
+        "accept": [
+          "primary_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Mild respiratory symptoms can start telehealth.",
+        "shouldTrigger": "model"
+      },
+      "output": "telehealth",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Moderate symptoms"
+      ],
+      "questions": [
+        "redFlag:breathing_difficulty",
+        "redFlag:chest_pressure"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "EL05",
+        "group": "elderly patients",
+        "description": "73F fainted once and now feels weak.",
+        "f": {
+          "system": "neuro",
+          "severity": 2,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "fainting_or_confusion"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "73F fainted once and now feels weak."
+        },
+        "risk": {
+          "modifiers": [
+            "age_over_65"
+          ]
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "fainting_or_confusion"
+        ],
+        "why": "Syncope in elder needs ER evaluation.",
+        "shouldTrigger": "rf.fainting_or_confusion"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.fainting_or_confusion"
+      ],
+      "factors": [
+        "Red flag: fainting or confusion",
+        "Kept at the safer level for consistency with similar presentations",
+        "Sudden onset",
+        "Significant symptoms",
+        "Age 65+"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "EL06",
+        "group": "elderly patients",
+        "description": "85M cannot get out of bed, suddenly much weaker, no focal symptoms.",
+        "f": {
+          "system": "general",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": true,
+          "functionalImpact": 3,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "85M cannot get out of bed, suddenly much weaker, no focal symptoms."
+        },
+        "risk": {
+          "modifiers": [
+            "age_over_65"
+          ]
+        },
+        "expected": "er",
+        "accept": [
+          "urgent_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Sudden inability to function in elder can be occult emergency.",
+        "shouldTrigger": "missing elderly acute weakness rule"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "missing-rule",
+      "fired": [
+        "cx.sudden_severe_worsening"
+      ],
+      "factors": [
+        "Severe, sudden-onset, worsening symptoms with major functional impact",
+        "Severe symptoms",
+        "Unable to function normally",
+        "Sudden onset",
+        "Getting worse"
+      ],
+      "questions": [],
+      "note": "missing-rule"
+    },
+    {
+      "c": {
+        "id": "EL07",
+        "group": "elderly patients",
+        "description": "90F urinary burning, mild, no fever or confusion.",
+        "f": {
+          "system": "urinary",
+          "severity": 1,
+          "suddenOnset": false,
+          "duration": "6to48h",
+          "worsening": false,
+          "functionalImpact": 1,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "90F urinary burning, mild, no fever or confusion."
+        },
+        "risk": {
+          "modifiers": [
+            "age_over_65"
+          ]
+        },
+        "expected": "primary_care",
+        "accept": [
+          "telehealth",
+          "urgent_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Older adult UTI symptoms should be clinician-directed soon.",
+        "shouldTrigger": "model"
+      },
+      "output": "telehealth",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Moderate symptoms"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "EL08",
+        "group": "elderly patients",
+        "description": "78M chest discomfort, diabetic, says it feels like indigestion.",
+        "f": {
+          "system": "cardiac",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "78M chest discomfort, diabetic, says it feels like indigestion."
+        },
+        "risk": {
+          "modifiers": [
+            "age_over_65",
+            "diabetes"
+          ]
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [],
+        "why": "Atypical cardiac symptoms in high-risk elder need ER.",
+        "shouldTrigger": "cx.cardiac_highrisk"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "cx.cardiac_highrisk"
+      ],
+      "factors": [
+        "Kept at the safer level for consistency with similar presentations",
+        "Significant cardiac-system symptoms in a patient with known heart disease or age 65+",
+        "Significant symptoms",
+        "Age 65+"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "IC01",
+        "group": "immunocompromised patients",
+        "description": "Chemo patient temperature 100.5 with chills.",
+        "f": {
+          "system": "general",
+          "severity": 1,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 1,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Chemo patient temperature 100.5 with chills."
+        },
+        "risk": {
+          "modifiers": [
+            "immunocompromised",
+            "active_chemo"
+          ]
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [],
+        "why": "Any fever on active chemo is febrile neutropenia risk.",
+        "shouldTrigger": "detectFeverMention + cx.chemo_fever"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "cx.chemo_fever",
+        "cx.immunocompromised_fever"
+      ],
+      "factors": [
+        "ANY fever during active chemotherapy",
+        "High fever in an immunocompromised patient",
+        "High fever",
+        "Weakened immune system"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "IC02",
+        "group": "immunocompromised patients",
+        "description": "Kidney transplant patient fever 102 and cough.",
+        "f": {
+          "system": "respiratory",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": true,
+          "summary": "Kidney transplant patient fever 102 and cough."
+        },
+        "risk": {
+          "modifiers": [
+            "immunocompromised"
+          ]
+        },
+        "expected": "urgent_care",
+        "accept": [
+          "er"
+        ],
+        "redFlagsPresent": [],
+        "why": "Immunocompromised fever needs same-day care.",
+        "shouldTrigger": "cx.immunocompromised_fever"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "cx.immunocompromised_fever"
+      ],
+      "factors": [
+        "High fever in an immunocompromised patient",
+        "Significant symptoms",
+        "High fever",
+        "Limiting daily activity",
+        "Weakened immune system"
+      ],
+      "questions": [
+        "redFlag:breathing_difficulty",
+        "redFlag:chest_pressure"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "IC03",
+        "group": "immunocompromised patients",
+        "description": "Chemo patient sore throat, no fever, mild.",
+        "f": {
+          "system": "ent",
+          "severity": 1,
+          "suddenOnset": false,
+          "duration": "6to48h",
+          "worsening": false,
+          "functionalImpact": 1,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Chemo patient sore throat, no fever, mild."
+        },
+        "risk": {
+          "modifiers": [
+            "immunocompromised",
+            "active_chemo"
+          ]
+        },
+        "expected": "primary_care",
+        "accept": [
+          "telehealth",
+          "urgent_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Active chemo with infectious symptoms merits clinician contact.",
+        "shouldTrigger": "model/risk"
+      },
+      "output": "er",
+      "pass": false,
+      "issue": "over-triage",
+      "fired": [
+        "cx.chemo_fever",
+        "cx.immunocompromised_fever"
+      ],
+      "factors": [
+        "ANY fever during active chemotherapy",
+        "High fever in an immunocompromised patient",
+        "High fever",
+        "Weakened immune system"
+      ],
+      "questions": [],
+      "note": "over-triage: expected primary_care (accept telehealth/urgent_care), got er"
+    },
+    {
+      "c": {
+        "id": "IC04",
+        "group": "immunocompromised patients",
+        "description": "HIV patient severe headache and stiff neck with fever.",
+        "f": {
+          "system": "neuro",
+          "severity": 3,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [
+            "stiff_neck_with_fever"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": true,
+          "summary": "HIV patient severe headache and stiff neck with fever."
+        },
+        "risk": {
+          "modifiers": [
+            "immunocompromised"
+          ]
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "stiff_neck_with_fever"
+        ],
+        "why": "Meningitis concern in immunocompromised patient.",
+        "shouldTrigger": "rf.stiff_neck_with_fever"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.stiff_neck_with_fever",
+        "cx.immunocompromised_fever"
+      ],
+      "factors": [
+        "Red flag: stiff neck with fever",
+        "High fever in an immunocompromised patient",
+        "Severe symptoms",
+        "Unable to function normally",
+        "High fever"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "IC05",
+        "group": "immunocompromised patients",
+        "description": "Chemo patient has red swollen port site and fever.",
+        "f": {
+          "system": "skin",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": true,
+          "highFever": true,
+          "summary": "Chemo patient has red swollen port site and fever."
+        },
+        "risk": {
+          "modifiers": [
+            "immunocompromised",
+            "active_chemo"
+          ]
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [],
+        "why": "Possible line infection on chemo needs ER.",
+        "shouldTrigger": "cx.chemo_fever"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "cx.chemo_fever",
+        "cx.immunocompromised_fever"
+      ],
+      "factors": [
+        "ANY fever during active chemotherapy",
+        "High fever in an immunocompromised patient",
+        "Significant symptoms",
+        "High fever",
+        "Weakened immune system"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "IC06",
+        "group": "immunocompromised patients",
+        "description": "Steroid patient mild rash, no fever, itchy for a week.",
+        "f": {
+          "system": "skin",
+          "severity": 1,
+          "suddenOnset": false,
+          "duration": "over7d",
+          "worsening": false,
+          "functionalImpact": 1,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Steroid patient mild rash, no fever, itchy for a week."
+        },
+        "risk": {
+          "modifiers": [
+            "immunocompromised"
+          ]
+        },
+        "expected": "primary_care",
+        "accept": [
+          "telehealth"
+        ],
+        "redFlagsPresent": [],
+        "why": "Persistent rash with immune risk needs outpatient review.",
+        "shouldTrigger": "model/risk"
+      },
+      "output": "telehealth",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Moderate symptoms"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "IC07",
+        "group": "immunocompromised patients",
+        "description": "Transplant patient vomiting, dizzy standing, no urine.",
+        "f": {
+          "system": "gi",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "6to48h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "severe_dehydration"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Transplant patient vomiting, dizzy standing, no urine."
+        },
+        "risk": {
+          "modifiers": [
+            "immunocompromised"
+          ]
+        },
+        "expected": "urgent_care",
+        "accept": [
+          "er"
+        ],
+        "redFlagsPresent": [
+          "severe_dehydration"
+        ],
+        "why": "Dehydration in immune-risk patient needs same-day care.",
+        "shouldTrigger": "rf.severe_dehydration"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.severe_dehydration"
+      ],
+      "factors": [
+        "Red flag: severe dehydration",
+        "Significant symptoms",
+        "Limiting daily activity",
+        "Weakened immune system"
+      ],
+      "questions": [
+        "redFlag:uncontrolled_bleeding"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "IC08",
+        "group": "immunocompromised patients",
+        "description": "Chemo patient short of breath at rest.",
+        "f": {
+          "system": "respiratory",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "breathing_difficulty"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Chemo patient short of breath at rest."
+        },
+        "risk": {
+          "modifiers": [
+            "immunocompromised",
+            "active_chemo"
+          ]
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "breathing_difficulty"
+        ],
+        "why": "Rest dyspnea on chemo is ER-level.",
+        "shouldTrigger": "rf.breathing_difficulty"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.breathing_difficulty"
+      ],
+      "factors": [
+        "Red flag: breathing difficulty",
+        "Significant symptoms",
+        "Weakened immune system"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "MH01",
+        "group": "mental health crisis",
+        "description": "I do not want to be here anymore.",
+        "f": {
+          "system": "mental",
+          "severity": 3,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [
+            "suicidal_thoughts"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "I do not want to be here anymore."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "suicidal_thoughts"
+        ],
+        "why": "Softened self-harm language needs crisis flow.",
+        "shouldTrigger": "detectSelfHarm"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "safety.self_harm_988"
+      ],
+      "factors": [
+        "Self-harm language detected"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "MH02",
+        "group": "mental health crisis",
+        "description": "I have pills and I am thinking of ending it all.",
+        "f": {
+          "system": "mental",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [
+            "suicidal_thoughts"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "I have pills and I am thinking of ending it all."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "suicidal_thoughts"
+        ],
+        "why": "Self-harm with means needs crisis/ER path.",
+        "shouldTrigger": "detectSelfHarm"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "safety.self_harm_988"
+      ],
+      "factors": [
+        "Self-harm language detected"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "MH03",
+        "group": "mental health crisis",
+        "description": "Panic attacks for weeks, not suicidal, cannot sleep.",
+        "f": {
+          "system": "mental",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "over7d",
+          "worsening": true,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Panic attacks for weeks, not suicidal, cannot sleep."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "primary_care",
+        "accept": [
+          "telehealth"
+        ],
+        "redFlagsPresent": [],
+        "why": "Severe non-crisis anxiety should avoid urgent care.",
+        "shouldTrigger": "mental model"
+      },
+      "output": "er",
+      "pass": false,
+      "issue": "over-triage",
+      "fired": [
+        "safety.self_harm_988"
+      ],
+      "factors": [
+        "Self-harm language detected"
+      ],
+      "questions": [],
+      "note": "over-triage: expected primary_care (accept telehealth), got er"
+    },
+    {
+      "c": {
+        "id": "MH04",
+        "group": "mental health crisis",
+        "description": "Hearing voices telling me to hurt someone.",
+        "f": {
+          "system": "mental",
+          "severity": 3,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Hearing voices telling me to hurt someone."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [],
+        "why": "Danger to others / psychosis needs urgent crisis evaluation.",
+        "shouldTrigger": "missing homicidal/psychosis crisis rule"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "missing-rule",
+      "fired": [],
+      "factors": [
+        "Severe symptoms",
+        "Unable to function normally"
+      ],
+      "questions": [],
+      "note": "missing-rule"
+    },
+    {
+      "c": {
+        "id": "MH05",
+        "group": "mental health crisis",
+        "description": "Depressed for months, passive death wishes, no plan.",
+        "f": {
+          "system": "mental",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "over7d",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Depressed for months, passive death wishes, no plan."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "primary_care",
+        "accept": [
+          "telehealth",
+          "er"
+        ],
+        "redFlagsPresent": [],
+        "why": "Passive non-imminent depression needs timely mental health care.",
+        "shouldTrigger": "model"
+      },
+      "output": "primary_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Significant symptoms",
+        "Limiting daily activity"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "MH06",
+        "group": "mental health crisis",
+        "description": "Manic, awake for 4 days, reckless spending, not suicidal.",
+        "f": {
+          "system": "mental",
+          "severity": 3,
+          "suddenOnset": false,
+          "duration": "2to7d",
+          "worsening": true,
+          "functionalImpact": 3,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Manic, awake for 4 days, reckless spending, not suicidal."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [
+          "urgent_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Severe mania can require emergency psychiatric evaluation.",
+        "shouldTrigger": "missing mania crisis rule"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "missing-rule",
+      "fired": [
+        "safety.self_harm_988"
+      ],
+      "factors": [
+        "Self-harm language detected"
+      ],
+      "questions": [],
+      "note": "missing-rule"
+    },
+    {
+      "c": {
+        "id": "MH07",
+        "group": "mental health crisis",
+        "description": "Anxiety racing thoughts, sleep poor, no self-harm.",
+        "f": {
+          "system": "mental",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "over7d",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Anxiety racing thoughts, sleep poor, no self-harm."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "primary_care",
+        "accept": [
+          "telehealth"
+        ],
+        "redFlagsPresent": [],
+        "why": "Non-crisis anxiety should be outpatient.",
+        "shouldTrigger": "mental model"
+      },
+      "output": "er",
+      "pass": false,
+      "issue": "over-triage",
+      "fired": [
+        "safety.self_harm_988"
+      ],
+      "factors": [
+        "Self-harm language detected"
+      ],
+      "questions": [],
+      "note": "over-triage: expected primary_care (accept telehealth), got er"
+    },
+    {
+      "c": {
+        "id": "MH08",
+        "group": "mental health crisis",
+        "description": "Alcohol withdrawal, shaking, confused, possible seizure.",
+        "f": {
+          "system": "mental",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [
+            "fainting_or_confusion"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Alcohol withdrawal, shaking, confused, possible seizure."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "emergency",
+        "accept": [
+          "er"
+        ],
+        "redFlagsPresent": [
+          "fainting_or_confusion"
+        ],
+        "why": "Withdrawal seizure/confusion needs emergency response.",
+        "shouldTrigger": "classifyEmergency immediate"
+      },
+      "output": "emergency",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "safety.keyword_emergency"
+      ],
+      "factors": [
+        "Immediate emergency keyword net"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "WD01",
+        "group": "wounds/burns/rashes",
+        "description": "Deep kitchen knife cut, bleeding will not stop with pressure.",
+        "f": {
+          "system": "skin",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "uncontrolled_bleeding"
+          ],
+          "possibleFracture": false,
+          "openWound": true,
+          "highFever": false,
+          "summary": "Deep kitchen knife cut, bleeding will not stop with pressure."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "emergency",
+        "accept": [],
+        "redFlagsPresent": [
+          "uncontrolled_bleeding"
+        ],
+        "why": "Uncontrolled bleeding should call 911.",
+        "shouldTrigger": "classifyEmergency immediate"
+      },
+      "output": "er",
+      "pass": false,
+      "issue": "under-triage",
+      "fired": [
+        "rf.uncontrolled_bleeding"
+      ],
+      "factors": [
+        "Red flag: uncontrolled bleeding",
+        "Severe symptoms",
+        "Sudden onset"
+      ],
+      "questions": [],
+      "note": "under-triage: expected emergency, got er"
+    },
+    {
+      "c": {
+        "id": "WD02",
+        "group": "wounds/burns/rashes",
+        "description": "Small clean cut may need stitches, bleeding controlled.",
+        "f": {
+          "system": "skin",
+          "severity": 1,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 1,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": true,
+          "highFever": false,
+          "summary": "Small clean cut may need stitches, bleeding controlled."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "urgent_care",
+        "accept": [],
+        "redFlagsPresent": [],
+        "why": "Potential sutures need urgent care.",
+        "shouldTrigger": "flag:openWound"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Kept at the safer level for consistency with similar presentations",
+        "Open wound (may need stitches)",
+        "Sudden onset"
+      ],
+      "questions": [
+        "redFlag:allergic_swelling",
+        "redFlag:uncontrolled_bleeding"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "WD03",
+        "group": "wounds/burns/rashes",
+        "description": "Diabetic foot blister now open and red.",
+        "f": {
+          "system": "skin",
+          "severity": 1,
+          "suddenOnset": false,
+          "duration": "2to7d",
+          "worsening": true,
+          "functionalImpact": 1,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": true,
+          "highFever": false,
+          "summary": "Diabetic foot blister now open and red."
+        },
+        "risk": {
+          "modifiers": [
+            "diabetes"
+          ]
+        },
+        "expected": "urgent_care",
+        "accept": [],
+        "redFlagsPresent": [],
+        "why": "Diabetic open wound needs same-day care.",
+        "shouldTrigger": "cx.diabetic_wound"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "cx.diabetic_wound"
+      ],
+      "factors": [
+        "Kept at the safer level for consistency with similar presentations",
+        "Open wound in a diabetic patient",
+        "Open wound (may need stitches)",
+        "Getting worse",
+        "Diabetes history"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "WD04",
+        "group": "wounds/burns/rashes",
+        "description": "Face/lip swelling and hives after peanuts.",
+        "f": {
+          "system": "skin",
+          "severity": 2,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "allergic_swelling"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Face/lip swelling and hives after peanuts."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "allergic_swelling"
+        ],
+        "why": "Allergic swelling may threaten airway.",
+        "shouldTrigger": "rf.allergic_swelling"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.allergic_swelling"
+      ],
+      "factors": [
+        "Red flag: allergic swelling",
+        "Sudden onset",
+        "Significant symptoms"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "WD05",
+        "group": "wounds/burns/rashes",
+        "description": "Mild itchy rash for two weeks, no fever.",
+        "f": {
+          "system": "skin",
+          "severity": 0,
+          "suddenOnset": false,
+          "duration": "over7d",
+          "worsening": false,
+          "functionalImpact": 0,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Mild itchy rash for two weeks, no fever."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "telehealth",
+        "accept": [
+          "home_care",
+          "primary_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Mild chronic rash can start telehealth.",
+        "shouldTrigger": "model"
+      },
+      "output": "home_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Mild symptoms"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "WD06",
+        "group": "wounds/burns/rashes",
+        "description": "Large burn with blisters across hand.",
+        "f": {
+          "system": "skin",
+          "severity": 2,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Large burn with blisters across hand."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "urgent_care",
+        "accept": [
+          "er"
+        ],
+        "redFlagsPresent": [],
+        "why": "Blistering hand burn needs same-day evaluation.",
+        "shouldTrigger": "model"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Significant symptoms",
+        "Limiting daily activity",
+        "Sudden onset"
+      ],
+      "questions": [
+        "redFlag:allergic_swelling",
+        "redFlag:uncontrolled_bleeding"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "WD07",
+        "group": "wounds/burns/rashes",
+        "description": "Chemical burn to face, pain and redness.",
+        "f": {
+          "system": "skin",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Chemical burn to face, pain and redness."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [
+          "urgent_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Chemical facial burns can threaten eyes/airway.",
+        "shouldTrigger": "missing chemical burn red flag"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "missing-rule",
+      "fired": [],
+      "factors": [
+        "Severe symptoms",
+        "Unable to function normally",
+        "Sudden onset"
+      ],
+      "questions": [],
+      "note": "missing-rule"
+    },
+    {
+      "c": {
+        "id": "WD08",
+        "group": "wounds/burns/rashes",
+        "description": "Red streaking from wound with fever.",
+        "f": {
+          "system": "skin",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "2to7d",
+          "worsening": true,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": true,
+          "highFever": true,
+          "summary": "Red streaking from wound with fever."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "urgent_care",
+        "accept": [
+          "er"
+        ],
+        "redFlagsPresent": [],
+        "why": "Cellulitis/lymphangitis pattern needs same-day care.",
+        "shouldTrigger": "model + openWound"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Significant symptoms",
+        "Open wound (may need stitches)",
+        "High fever",
+        "Limiting daily activity"
+      ],
+      "questions": [
+        "redFlag:allergic_swelling",
+        "redFlag:uncontrolled_bleeding"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "WD09",
+        "group": "wounds/burns/rashes",
+        "description": "Tick bite, small red spot, no fever.",
+        "f": {
+          "system": "skin",
+          "severity": 0,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 0,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Tick bite, small red spot, no fever."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "telehealth",
+        "accept": [
+          "home_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Low-risk bite question can start telehealth.",
+        "shouldTrigger": "model"
+      },
+      "output": "home_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Mild symptoms"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "EY01",
+        "group": "eye symptoms",
+        "description": "Sudden painless loss of vision in one eye.",
+        "f": {
+          "system": "neuro",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [
+            "sudden_vision_loss"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Sudden painless loss of vision in one eye."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "sudden_vision_loss"
+        ],
+        "why": "Sudden vision loss is ER-level.",
+        "shouldTrigger": "rf.sudden_vision_loss"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.sudden_vision_loss"
+      ],
+      "factors": [
+        "Red flag: sudden vision loss",
+        "Severe symptoms",
+        "Unable to function normally",
+        "Sudden onset"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "EY02",
+        "group": "eye symptoms",
+        "description": "Chemical splashed in eye, burning and blurry vision.",
+        "f": {
+          "system": "skin",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [
+            "sudden_vision_loss"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Chemical splashed in eye, burning and blurry vision."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "sudden_vision_loss"
+        ],
+        "why": "Chemical eye injury requires emergency eye care.",
+        "shouldTrigger": "rf.sudden_vision_loss"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.sudden_vision_loss"
+      ],
+      "factors": [
+        "Red flag: sudden vision loss",
+        "Severe symptoms",
+        "Unable to function normally",
+        "Sudden onset"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "EY03",
+        "group": "eye symptoms",
+        "description": "Mild pink eye, itchy, no vision changes.",
+        "f": {
+          "system": "ent",
+          "severity": 0,
+          "suddenOnset": false,
+          "duration": "6to48h",
+          "worsening": false,
+          "functionalImpact": 0,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Mild pink eye, itchy, no vision changes."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "telehealth",
+        "accept": [
+          "home_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Mild conjunctivitis can start telehealth.",
+        "shouldTrigger": "model"
+      },
+      "output": "home_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Mild symptoms"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "EY04",
+        "group": "eye symptoms",
+        "description": "Eye pain with halos around lights and vomiting.",
+        "f": {
+          "system": "neuro",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Eye pain with halos around lights and vomiting."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [
+          "urgent_care"
+        ],
+        "redFlagsPresent": [],
+        "why": "Acute glaucoma pattern needs ER/urgent ophthalmology.",
+        "shouldTrigger": "missing eye pain/halos red flag"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "missing-rule",
+      "fired": [],
+      "factors": [
+        "Severe symptoms",
+        "Unable to function normally",
+        "Sudden onset"
+      ],
+      "questions": [],
+      "note": "missing-rule"
+    },
+    {
+      "c": {
+        "id": "EY05",
+        "group": "eye symptoms",
+        "description": "Contact lens wearer, painful red eye and light sensitivity.",
+        "f": {
+          "system": "ent",
+          "severity": 2,
+          "suddenOnset": false,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Contact lens wearer, painful red eye and light sensitivity."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "urgent_care",
+        "accept": [
+          "er"
+        ],
+        "redFlagsPresent": [],
+        "why": "Contact lens keratitis risk needs same-day care.",
+        "shouldTrigger": "missing contact lens eye rule"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "missing-rule",
+      "fired": [],
+      "factors": [
+        "Significant symptoms",
+        "Limiting daily activity"
+      ],
+      "questions": [
+        "redFlag:breathing_difficulty",
+        "redFlag:stiff_neck_with_fever"
+      ],
+      "note": "missing-rule"
+    },
+    {
+      "c": {
+        "id": "EY06",
+        "group": "eye symptoms",
+        "description": "Foreign body sensation after metal grinding.",
+        "f": {
+          "system": "ent",
+          "severity": 2,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Foreign body sensation after metal grinding."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "urgent_care",
+        "accept": [
+          "er"
+        ],
+        "redFlagsPresent": [],
+        "why": "Possible corneal foreign body needs same-day evaluation.",
+        "shouldTrigger": "model"
+      },
+      "output": "urgent_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Significant symptoms",
+        "Limiting daily activity",
+        "Sudden onset"
+      ],
+      "questions": [
+        "redFlag:breathing_difficulty",
+        "redFlag:stiff_neck_with_fever"
+      ],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "EY07",
+        "group": "eye symptoms",
+        "description": "New floaters and flashes like curtain over vision.",
+        "f": {
+          "system": "neuro",
+          "severity": 2,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 2,
+          "redFlags": [
+            "sudden_vision_loss"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "New floaters and flashes like curtain over vision."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "sudden_vision_loss"
+        ],
+        "why": "Retinal detachment symptoms need ER/urgent ophthalmology.",
+        "shouldTrigger": "rf.sudden_vision_loss"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.sudden_vision_loss"
+      ],
+      "factors": [
+        "Red flag: sudden vision loss",
+        "Kept at the safer level for consistency with similar presentations",
+        "Sudden onset",
+        "Significant symptoms"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "EY08",
+        "group": "eye symptoms",
+        "description": "Eyelid stye, mild soreness for three days.",
+        "f": {
+          "system": "ent",
+          "severity": 0,
+          "suddenOnset": false,
+          "duration": "2to7d",
+          "worsening": false,
+          "functionalImpact": 0,
+          "redFlags": [],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Eyelid stye, mild soreness for three days."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "home_care",
+        "accept": [
+          "telehealth"
+        ],
+        "redFlagsPresent": [],
+        "why": "Mild stye can self-care.",
+        "shouldTrigger": "model"
+      },
+      "output": "home_care",
+      "pass": true,
+      "issue": "none",
+      "fired": [],
+      "factors": [
+        "Mild symptoms"
+      ],
+      "questions": [],
+      "note": "pass"
+    },
+    {
+      "c": {
+        "id": "EY09",
+        "group": "eye symptoms",
+        "description": "Eye trauma from ball, vision blurry and severe pain.",
+        "f": {
+          "system": "neuro",
+          "severity": 3,
+          "suddenOnset": true,
+          "duration": "under6h",
+          "worsening": false,
+          "functionalImpact": 3,
+          "redFlags": [
+            "sudden_vision_loss"
+          ],
+          "possibleFracture": false,
+          "openWound": false,
+          "highFever": false,
+          "summary": "Eye trauma from ball, vision blurry and severe pain."
+        },
+        "risk": {
+          "modifiers": []
+        },
+        "expected": "er",
+        "accept": [],
+        "redFlagsPresent": [
+          "sudden_vision_loss"
+        ],
+        "why": "Eye trauma with vision change needs ER.",
+        "shouldTrigger": "rf.sudden_vision_loss"
+      },
+      "output": "er",
+      "pass": true,
+      "issue": "none",
+      "fired": [
+        "rf.sudden_vision_loss"
+      ],
+      "factors": [
+        "Red flag: sudden vision loss",
+        "Severe symptoms",
+        "Unable to function normally",
+        "Sudden onset"
+      ],
+      "questions": [],
+      "note": "pass"
+    }
+  ]
+}

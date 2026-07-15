@@ -1,0 +1,9 @@
+{
+  "input": "/sessions/fervent-funny-mendel/mnt/Carevo/triage-web/data/recursive-learning/approved-training-prep-reviewed-high-priority.jsonl",
+  "output": "/sessions/fervent-funny-mendel/mnt/Carevo/triage-web/data/recursive-learning/dpo-preference-approved-high-priority.jsonl",
+  "rows": 26,
+  "format": "dpo_style_prompt_chosen_rejected_jsonl",
+  "trainingAllowed": false,
+  "use": "Offline extractor calibration experiment only.",
+  "nextStep": "Choose the local model/trainer, run a dry training job, then evaluate against 45-case and 240-case gates before any shadow mode."
+}

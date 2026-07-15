@@ -1,0 +1,31 @@
+{
+  "inputs": [
+    "/Users/preethamprabhu/Documents/Claude/Projects/Carevo/triage-web/data/recursive-learning/dpo-preference-approved-high-priority.jsonl",
+    "/Users/preethamprabhu/Documents/Claude/Projects/Carevo/triage-web/data/recursive-learning/external-synthetic-triage-500.preferences.jsonl"
+  ],
+  "output": "/Users/preethamprabhu/Documents/Claude/Projects/Carevo/triage-web/data/recursive-learning/ree-experimental-combined.preferences.jsonl",
+  "rows": 526,
+  "duplicateIds": [],
+  "datasetCounts": {
+    "Home-care GI and routine patterns": 7,
+    "Home-care skin, eye, and mouth patterns": 8,
+    "Home-care upper respiratory patterns": 2,
+    "syntech-ai/medical-triage-500": 500,
+    "Urgent skin and wound patterns": 2,
+    "Urgent sore throat and ear symptoms": 7
+  },
+  "targetCounts": {
+    "home_care": 91,
+    "not_er": 1,
+    "emergency": 224,
+    "urgent_care": 107,
+    "er": 103
+  },
+  "containsNoncommercial": true,
+  "containsExternalSynthetic": true,
+  "commercialUseAllowed": false,
+  "offlineExperimentOnly": true,
+  "trainingAllowed": false,
+  "promotionAllowed": false,
+  "safety": "Merged pack is for offline REE experiments only when it includes noncommercial or external synthetic rows."
+}

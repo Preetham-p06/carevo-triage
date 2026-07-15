@@ -1,0 +1,38 @@
+{
+  "zipPath": "/Users/preethamprabhu/Downloads/mimic-iv-ed-demo-2.2.zip",
+  "output": "/Users/preethamprabhu/Documents/Claude/Projects/Carevo/triage-web/data/recursive-learning/mimic-ed-demo-candidates.jsonl",
+  "reviewMd": "/Users/preethamprabhu/Documents/Claude/Projects/Carevo/triage-web/data/recursive-learning/MIMIC-ED-DEMO-REVIEW-CANDIDATES.md",
+  "sourceRows": {
+    "triage": 222,
+    "stays": 222
+  },
+  "candidates": 222,
+  "suggestedCareLevelCounts": {
+    "urgent_care": 41,
+    "er": 171,
+    "emergency": 10
+  },
+  "sourceAcuityCounts": {
+    "1": 18,
+    "2": 97,
+    "3": 90,
+    "4": 2,
+    "missing": 15
+  },
+  "confidenceCounts": {
+    "low": 65,
+    "medium": 157
+  },
+  "dispositionCounts": {
+    "HOME": 60,
+    "ADMITTED": 150,
+    "OTHER": 2,
+    "TRANSFER": 5,
+    "ELOPED": 1,
+    "LEFT WITHOUT BEING SEEN": 2,
+    "LEFT AGAINST MEDICAL ADVICE": 2
+  },
+  "trainingAllowed": false,
+  "promotionAllowed": false,
+  "nextStep": "Review candidates manually, approve only clear rows, then convert approved rows into REE preference rows."
+}

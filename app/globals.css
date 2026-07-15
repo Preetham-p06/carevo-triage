@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  background: #ffffff;
+  overflow-x: hidden;
+}
+
+/* Accessible focus states — visible for keyboard nav, styled to brand */
+:focus-visible {
+  outline: 3px solid #0891b2;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Marketing routes use large display layouts; keep their Tailwind output warm in dev. */
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .marketing-reveal {
+    animation: carevo-fade-up 700ms ease both;
+  }
+
+  .marketing-reveal-delay-1 {
+    animation: carevo-fade-up 760ms ease 90ms both;
+  }
+
+  .marketing-reveal-delay-2 {
+    animation: carevo-fade-up 820ms ease 170ms both;
+  }
+
+  .scroll-reveal {
+    animation: carevo-fade-up both;
+    animation-timeline: view();
+    animation-range: entry 8% cover 28%;
+  }
+}
+
+@supports not (animation-timeline: view()) {
+  .scroll-reveal {
+    animation: carevo-fade-up 700ms ease both;
+  }
+}
+
+@keyframes carevo-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

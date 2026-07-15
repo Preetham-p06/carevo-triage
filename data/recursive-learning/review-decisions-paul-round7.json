@@ -1,0 +1,232 @@
+{
+  "reviewedAt": "2026-07-14",
+  "reviewSource": "Paul (clinical reviewer) \u2014 round-7 gate over-triage batch, reviewed via Carevo-Review-Cases-for-Paul.xlsx",
+  "summary": "32 cases reviewed: 26 approved downgrades (mechanical back pain, eczema, conjunctivitis, URI, pharyngitis, aphthous ulcers, stye, allergic rhinitis), 6 rejected (acute eye pain and vertigo clusters \u2014 ER routing clinically correct; benchmark labels identified as the error).",
+  "globalLearningGoal": "Reduce over-escalation of clearly low-acuity presentations when red flags are explicitly denied or absent, while never lowering ambiguous ocular or vestibular presentations below ER.",
+  "decisions": [
+    {
+      "caseNumber": 86,
+      "id": "case-0229",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul (clinical reviewer): Mechanical low back pain. No neurological red flags (sciatica, numbness, weakness) or constitutional symptoms (fever). Safe for conservative home management (rest, ice/heat, OTC analgesics)."
+    },
+    {
+      "caseNumber": 85,
+      "id": "case-0224",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul (clinical reviewer): Mechanical low back pain. No neurological red flags (sciatica, numbness, weakness) or constitutional symptoms (fever). Safe for conservative home management (rest, ice/heat, OTC analgesics)."
+    },
+    {
+      "caseNumber": 87,
+      "id": "case-0234",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul (clinical reviewer): Mechanical low back pain. No neurological red flags (sciatica, numbness, weakness) or constitutional symptoms (fever). Safe for conservative home management (rest, ice/heat, OTC analgesics)."
+    },
+    {
+      "caseNumber": 88,
+      "id": "case-0239",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul (clinical reviewer): Mechanical low back pain. No neurological red flags (sciatica, numbness, weakness) or constitutional symptoms (fever). Safe for conservative home management (rest, ice/heat, OTC analgesics)."
+    },
+    {
+      "caseNumber": 76,
+      "id": "case-0204",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Atopic dermatitis (eczema) flare. Despite severe discomfort, no signs of secondary bacterial infection (pus, streaks, fever) or systemic anaphylaxis. Manage with moisturizers/topicals; primary care acceptable alternative."
+    },
+    {
+      "caseNumber": 79,
+      "id": "case-0209",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Atopic dermatitis (eczema) flare. Despite severe discomfort, no signs of secondary bacterial infection (pus, streaks, fever) or systemic anaphylaxis. Manage with moisturizers/topicals; primary care acceptable alternative."
+    },
+    {
+      "caseNumber": 81,
+      "id": "case-0214",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Atopic dermatitis (eczema) flare. Despite severe discomfort, no signs of secondary bacterial infection (pus, streaks, fever) or systemic anaphylaxis. Manage with moisturizers/topicals; primary care acceptable alternative."
+    },
+    {
+      "caseNumber": 83,
+      "id": "case-0219",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Atopic dermatitis (eczema) flare. Despite severe discomfort, no signs of secondary bacterial infection (pus, streaks, fever) or systemic anaphylaxis. Manage with moisturizers/topicals; primary care acceptable alternative."
+    },
+    {
+      "caseNumber": 77,
+      "id": "case-0205",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Acute conjunctivitis (pink eye), classic post-viral presentation. No vision changes, trauma, or severe deep eye pain \u2014 rules out emergent ocular pathology. Telehealth acceptable alternative."
+    },
+    {
+      "caseNumber": 80,
+      "id": "case-0210",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Acute conjunctivitis (pink eye), classic post-viral presentation. No vision changes, trauma, or severe deep eye pain \u2014 rules out emergent ocular pathology. Telehealth acceptable alternative."
+    },
+    {
+      "caseNumber": 82,
+      "id": "case-0215",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Acute conjunctivitis (pink eye), classic post-viral presentation. No vision changes, trauma, or severe deep eye pain \u2014 rules out emergent ocular pathology. Telehealth acceptable alternative."
+    },
+    {
+      "caseNumber": 84,
+      "id": "case-0220",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Acute conjunctivitis (pink eye), classic post-viral presentation. No vision changes, trauma, or severe deep eye pain \u2014 rules out emergent ocular pathology. Telehealth acceptable alternative."
+    },
+    {
+      "caseNumber": 63,
+      "id": "case-0181",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Viral URI (common cold). Mild, self-limiting, no lower respiratory or systemic red flags. Supportive home care (hydration, rest)."
+    },
+    {
+      "caseNumber": 66,
+      "id": "case-0186",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Viral URI (common cold). Mild, self-limiting, no lower respiratory or systemic red flags. Supportive home care (hydration, rest)."
+    },
+    {
+      "caseNumber": 69,
+      "id": "case-0191",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Viral URI (common cold). Mild, self-limiting, no lower respiratory or systemic red flags. Supportive home care (hydration, rest)."
+    },
+    {
+      "caseNumber": 72,
+      "id": "case-0196",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Viral URI (common cold). Mild, self-limiting, no lower respiratory or systemic red flags. Supportive home care (hydration, rest)."
+    },
+    {
+      "caseNumber": 64,
+      "id": "case-0184",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Mild viral pharyngitis. Absence of high fever, exudates, or difficulty swallowing points away from strep or severe complications. Safe for home monitoring."
+    },
+    {
+      "caseNumber": 67,
+      "id": "case-0189",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Mild viral pharyngitis. Absence of high fever, exudates, or difficulty swallowing points away from strep or severe complications. Safe for home monitoring."
+    },
+    {
+      "caseNumber": 70,
+      "id": "case-0194",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Mild viral pharyngitis. Absence of high fever, exudates, or difficulty swallowing points away from strep or severe complications. Safe for home monitoring."
+    },
+    {
+      "caseNumber": 73,
+      "id": "case-0199",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Mild viral pharyngitis. Absence of high fever, exudates, or difficulty swallowing points away from strep or severe complications. Safe for home monitoring."
+    },
+    {
+      "caseNumber": 75,
+      "id": "case-0202",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Aphthous stomatitis (canker sores). Chronic recurrent pattern without systemic symptoms. OTC topical anesthetics or rinses."
+    },
+    {
+      "caseNumber": 78,
+      "id": "case-0208",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Hordeolum (stye) or chalazion. Localized eyelid inflammation without orbital involvement, vision compromise, or trauma. Warm compresses at home."
+    },
+    {
+      "caseNumber": 65,
+      "id": "case-0185",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Allergic rhinitis. Long-standing classic seasonal presentation without acute sinusitis or secondary infection signs."
+    },
+    {
+      "caseNumber": 68,
+      "id": "case-0190",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Allergic rhinitis. Long-standing classic seasonal presentation without acute sinusitis or secondary infection signs."
+    },
+    {
+      "caseNumber": 71,
+      "id": "case-0195",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Allergic rhinitis. Long-standing classic seasonal presentation without acute sinusitis or secondary infection signs."
+    },
+    {
+      "caseNumber": 74,
+      "id": "case-0200",
+      "decision": "approve",
+      "reviewerTarget": "home_care",
+      "reviewerNote": "Paul: Allergic rhinitis. Long-standing classic seasonal presentation without acute sinusitis or secondary infection signs."
+    },
+    {
+      "caseNumber": 57,
+      "id": "case-0164",
+      "decision": "reject",
+      "reviewerTarget": "er",
+      "reviewerNote": "Paul: KEEP ER \u2014 engine was right. Sudden eye pain + photophobia + blurred vision is highly ambiguous and dangerous; ER to rule out acute angle-closure glaucoma, uveitis, or serious ocular injury. Benchmark label (urgent care) is the error, not the routing."
+    },
+    {
+      "caseNumber": 60,
+      "id": "case-0174",
+      "decision": "reject",
+      "reviewerTarget": "er",
+      "reviewerNote": "Paul: KEEP ER \u2014 engine was right. Sudden eye pain + photophobia + blurred vision is highly ambiguous and dangerous; ER to rule out acute angle-closure glaucoma, uveitis, or serious ocular injury. Benchmark label (urgent care) is the error, not the routing."
+    },
+    {
+      "caseNumber": 62,
+      "id": "case-0179",
+      "decision": "reject",
+      "reviewerTarget": "er",
+      "reviewerNote": "Paul: KEEP ER \u2014 engine was right. Sudden eye pain + photophobia + blurred vision is highly ambiguous and dangerous; ER to rule out acute angle-closure glaucoma, uveitis, or serious ocular injury. Benchmark label (urgent care) is the error, not the routing."
+    },
+    {
+      "caseNumber": 58,
+      "id": "case-0165",
+      "decision": "reject",
+      "reviewerTarget": "er",
+      "reviewerNote": "Paul: KEEP ER \u2014 engine was right to escalate. Presentation suggests BPPV but severe spinning vertigo can mimic central neurological events. Benchmark label (urgent care) too lax for safety."
+    },
+    {
+      "caseNumber": 59,
+      "id": "case-0170",
+      "decision": "reject",
+      "reviewerTarget": "er",
+      "reviewerNote": "Paul: KEEP ER \u2014 engine was right to escalate. Presentation suggests BPPV but severe spinning vertigo can mimic central neurological events. Benchmark label (urgent care) too lax for safety."
+    },
+    {
+      "caseNumber": 61,
+      "id": "case-0175",
+      "decision": "reject",
+      "reviewerTarget": "er",
+      "reviewerNote": "Paul: KEEP ER \u2014 engine was right to escalate. Presentation suggests BPPV but severe spinning vertigo can mimic central neurological events. Benchmark label (urgent care) too lax for safety."
+    }
+  ]
+}

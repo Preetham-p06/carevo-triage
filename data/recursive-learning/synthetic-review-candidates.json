@@ -1,0 +1,809 @@
+{
+  "createdAt": "2026-07-11",
+  "purpose": "Synthetic review candidates for offline extractor calibration. NOT approved training data. Each case must be reviewed and approved by Preetham before inclusion in the training pack.",
+  "globalLearningGoal": "Expand approved rows from 26 toward 100+ by adding high-diversity vignettes across the 9 learned patterns. All cases in this file follow established safe patterns with explicit denial of red flags.",
+  "reviewInstructions": "For each case: mark approve, reject, or needs_clinician. Approve only if you are confident the routing and safety note are correct. Add any notes.",
+  "safetyNote": "None of these cases should be approved if they contain or imply: chest pain with radiation, stroke symptoms, significant trauma, immunocompromise, pediatric under 3 months, pregnancy complications, or any finding that would trigger an emergency hard stop.",
+  "cases": [
+    {
+      "id": "syn-001",
+      "pattern": "home_allergic_rhinitis_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, acute facial pain, severe headache, or infection signs are mentioned.",
+      "vignette": "A 28-year-old teacher has had sneezing fits, runny nose, and itchy eyes every spring for the past four years. No fever, no facial pain, and no thick yellow discharge.",
+      "correctionGoal": "Keep classic seasonal allergic rhinitis at home care when infection flags are absent.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-002",
+      "pattern": "home_allergic_rhinitis_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, acute facial pain, severe headache, or infection signs are mentioned.",
+      "vignette": "The patient says: I've had a stuffy nose and eye itching every time I mow the lawn for as long as I can remember. No fever. No sinus pain.",
+      "correctionGoal": "Allergic rhinitis triggered by grass pollen with no infection red flags is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-003",
+      "pattern": "home_allergic_rhinitis_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, acute facial pain, severe headache, or infection signs are mentioned.",
+      "vignette": "A family member reports that a 16-year-old has been sneezing constantly since they got a new cat two weeks ago. Eyes are watery and itchy. No fever, no facial pressure, no colored discharge.",
+      "correctionGoal": "Animal-triggered allergic rhinitis without infection markers stays at home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-004",
+      "pattern": "home_allergic_rhinitis_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, acute facial pain, severe headache, or infection signs are mentioned.",
+      "vignette": "In a triage intake: a 41-year-old office worker has had nasal congestion and sneezing every fall for several years. Antihistamines help. No fever, no ear pain, no tooth pain.",
+      "correctionGoal": "Perennial allergic rhinitis responding to antihistamines with no complication signs is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-005",
+      "pattern": "home_allergic_rhinitis_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, acute facial pain, severe headache, or infection signs are mentioned.",
+      "vignette": "A 33-year-old has post-nasal drip and frequent sneezing that gets worse outdoors. She uses nasal saline rinses. No fever, no thick green mucus, no pain.",
+      "correctionGoal": "Perennial allergic rhinitis managed with saline is home care when infection flags are absent.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-006",
+      "pattern": "home_mild_vomiting_with_fluids_tolerated",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if dehydration, blood, severe abdominal pain, persistent vomiting, high fever, pregnancy, or high-risk age is present.",
+      "vignette": "A 25-year-old vomited once after eating sushi last night. Feeling queasy but has kept down water and crackers this morning. No blood, no fever, no stomach pain beyond mild nausea.",
+      "correctionGoal": "Single vomiting episode after a meal with fluids tolerated and no red flags is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-007",
+      "pattern": "home_mild_vomiting_with_fluids_tolerated",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if dehydration, blood, severe abdominal pain, persistent vomiting, high fever, pregnancy, or high-risk age is present.",
+      "vignette": "The patient says: I threw up twice overnight, probably a stomach bug going around work. I've been sipping Gatorade all morning and it's staying down. No blood, temperature is 99.1, mild cramping only.",
+      "correctionGoal": "Mild gastroenteritis with low-grade fever and tolerated fluids is home care when no alarm features are present.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-008",
+      "pattern": "home_mild_vomiting_with_fluids_tolerated",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if dehydration, blood, severe abdominal pain, persistent vomiting, high fever, pregnancy, or high-risk age is present.",
+      "vignette": "In a triage intake: an 18-year-old vomited three times after a party last night. Now drinking water and it is staying down. No fever, no abdominal pain, no blood in vomit.",
+      "correctionGoal": "Post-party vomiting with fluids tolerated, no fever, and no alarm features is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-009",
+      "pattern": "home_mild_vomiting_with_fluids_tolerated",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if dehydration, blood, severe abdominal pain, persistent vomiting, high fever, pregnancy, or high-risk age is present.",
+      "vignette": "A family member reports that a 10-year-old vomited twice this morning but has been sipping apple juice and keeping it down. Mild stomach ache, no fever above 99, no blood.",
+      "correctionGoal": "Pediatric mild vomiting with fluids tolerated and no alarm signs is home care in a school-age child.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-010",
+      "pattern": "home_mild_vomiting_with_fluids_tolerated",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if dehydration, blood, severe abdominal pain, persistent vomiting, high fever, pregnancy, or high-risk age is present.",
+      "vignette": "A 52-year-old vomited twice after a rich holiday dinner. Nausea has mostly resolved. Can keep clear fluids down. No fever, no blood, no severe abdominal pain.",
+      "correctionGoal": "Post-meal vomiting resolving with fluids tolerated and no alarm features is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-011",
+      "pattern": "home_mild_eye_irritation_without_vision_or_trauma_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if sudden eye pain, photophobia, blurred vision, vision loss, trauma, contact lens complication, or severe pain is present.",
+      "vignette": "A 9-year-old woke up with both eyes crusty and stuck shut. Eyes are red and watery. Had a cold last week. No vision change, no pain, no trauma.",
+      "correctionGoal": "Bilateral conjunctivitis following a cold with no vision or pain red flags is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-012",
+      "pattern": "home_mild_eye_irritation_without_vision_or_trauma_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if sudden eye pain, photophobia, blurred vision, vision loss, trauma, contact lens complication, or severe pain is present.",
+      "vignette": "The patient says: my right eye has been red and gritty for two days. No blurry vision, no sensitivity to light, no injury, no contact lenses.",
+      "correctionGoal": "Mild unilateral eye redness described as gritty without vision, photophobia, or trauma flags is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-013",
+      "pattern": "home_mild_eye_irritation_without_vision_or_trauma_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if sudden eye pain, photophobia, blurred vision, vision loss, trauma, contact lens complication, or severe pain is present.",
+      "vignette": "In a triage intake: a 6-year-old has had yellow discharge from one eye for one day. Eye is red. No vision complaints, no fever, no trauma, no contact lenses.",
+      "correctionGoal": "Pediatric purulent conjunctivitis without systemic signs or vision flags is home care or telehealth.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-014",
+      "pattern": "home_mild_eye_irritation_without_vision_or_trauma_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if sudden eye pain, photophobia, blurred vision, vision loss, trauma, contact lens complication, or severe pain is present.",
+      "vignette": "A 44-year-old has seasonal watery itchy eyes every spring. Both eyes affected, mild redness. No pain, no vision change, no trauma.",
+      "correctionGoal": "Bilateral allergic conjunctivitis in a known allergy sufferer without red flags is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-015",
+      "pattern": "home_mild_eye_irritation_without_vision_or_trauma_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if sudden eye pain, photophobia, blurred vision, vision loss, trauma, contact lens complication, or severe pain is present.",
+      "vignette": "A family member reports that a 5-year-old has pink eyes stuck shut each morning for two days, started after the child at daycare had the same thing. No pain, no vision concerns, no fever.",
+      "correctionGoal": "Viral conjunctivitis in an epidemic cluster context without vision or pain flags is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-016",
+      "pattern": "home_chronic_eczema_style_rash_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, pus, rapidly spreading redness, red streaking, severe pain, systemic illness, or immune compromise is present.",
+      "vignette": "A 19-year-old college student has had dry itchy patches behind both knees since childhood. Flares during stress. No fever, no open wounds, no pus, no spreading redness.",
+      "correctionGoal": "Chronic atopic dermatitis flare in a known eczema patient without infection signs is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-017",
+      "pattern": "home_chronic_eczema_style_rash_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, pus, rapidly spreading redness, red streaking, severe pain, systemic illness, or immune compromise is present.",
+      "vignette": "The patient says: I have eczema and it flared up on my arms after I changed laundry detergent. Red, itchy, and dry. No pus, no fever, no red lines going up my arm.",
+      "correctionGoal": "Contact trigger eczema flare with no infection signs is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-018",
+      "pattern": "home_chronic_eczema_style_rash_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, pus, rapidly spreading redness, red streaking, severe pain, systemic illness, or immune compromise is present.",
+      "vignette": "In a triage intake: an 8-year-old with known eczema and hay fever has itchy dry skin on their elbows that has been scratched. No pus, no fever, no red streaks, no severe pain.",
+      "correctionGoal": "Excoriated atopic dermatitis without secondary infection signs is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-019",
+      "pattern": "home_chronic_eczema_style_rash_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, pus, rapidly spreading redness, red streaking, severe pain, systemic illness, or immune compromise is present.",
+      "vignette": "A family member reports that a 10-year-old with atopic history has very dry itchy skin that cracks in winter. No pus, no fever, no red streaks, no swelling beyond the rash itself.",
+      "correctionGoal": "Seasonal atopic dry skin in a pediatric patient without infection flags is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-020",
+      "pattern": "home_chronic_eczema_style_rash_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, pus, rapidly spreading redness, red streaking, severe pain, systemic illness, or immune compromise is present.",
+      "vignette": "A 35-year-old has had dry itchy flexural skin since their teens. Currently flared on the wrists and neck. Denies fever, pus, severe pain, or red streaks extending from the rash.",
+      "correctionGoal": "Adult chronic eczema flare with all infection red flags denied is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-021",
+      "pattern": "home_mechanical_back_pain_without_neuro_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if weakness, foot drop, bowel/bladder changes, saddle numbness, fever, major trauma, cancer history, or injection drug use is present.",
+      "vignette": "A 29-year-old moved furniture over the weekend and now has low back soreness. Hurts more when bending. No leg pain, no weakness, no numbness, no fever.",
+      "correctionGoal": "Acute mechanical low back pain from exertion without neurologic or systemic red flags is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-022",
+      "pattern": "home_mechanical_back_pain_without_neuro_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if weakness, foot drop, bowel/bladder changes, saddle numbness, fever, major trauma, cancer history, or injection drug use is present.",
+      "vignette": "The patient says: I slept wrong and my lower back has been aching all day. Hard to stand up straight. No shooting pain down my legs, no weakness, no bowel or bladder issues, no fever.",
+      "correctionGoal": "Positional low back pain without neurologic or systemic flags is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-023",
+      "pattern": "home_mechanical_back_pain_without_neuro_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if weakness, foot drop, bowel/bladder changes, saddle numbness, fever, major trauma, cancer history, or injection drug use is present.",
+      "vignette": "In a triage intake: a 47-year-old office worker has had recurring low back pain for years, currently flared after a long drive. No leg radiation, no weakness, no bladder changes, no fever, similar episodes before.",
+      "correctionGoal": "Recurrent mechanical low back pain without red flags is home care, especially with prior similar episodes.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-024",
+      "pattern": "home_mechanical_back_pain_without_neuro_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if weakness, foot drop, bowel/bladder changes, saddle numbness, fever, major trauma, cancer history, or injection drug use is present.",
+      "vignette": "A family member reports that a 55-year-old has back pain after gardening all day. Can walk but stiff. No leg symptoms, no weakness, no bowel or bladder problems, no fever.",
+      "correctionGoal": "Overuse back pain after physical work without neurologic flags is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-025",
+      "pattern": "home_mechanical_back_pain_without_neuro_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if weakness, foot drop, bowel/bladder changes, saddle numbness, fever, major trauma, cancer history, or injection drug use is present.",
+      "vignette": "A 22-year-old wrenched their back during a gym session. Sharp pain at the muscle level when twisting. No shooting pain, no leg weakness, no numbness, no bowel or bladder issues, no fever.",
+      "correctionGoal": "Acute muscle strain from exercise without any neurologic or systemic flags is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-026",
+      "pattern": "urgent_sore_throat_without_airway_red_flags",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if airway trouble, drooling, inability to swallow secretions, respiratory distress, or toxic appearance is present.",
+      "vignette": "A 16-year-old has had sore throat and fever of 102°F for two days. Throat looks red with white patches. No drooling, no difficulty breathing, no muffled voice, no stiff neck.",
+      "correctionGoal": "Classic strep-pattern sore throat without airway red flags is urgent care for swab and antibiotics.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-027",
+      "pattern": "urgent_sore_throat_without_airway_red_flags",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if airway trouble, drooling, inability to swallow secretions, respiratory distress, or toxic appearance is present.",
+      "vignette": "The patient says: my throat has been killing me since yesterday. Swollen glands in my neck. Temperature 101.5. I can swallow, no drooling, no breathing trouble.",
+      "correctionGoal": "Sore throat with cervical adenopathy, fever, no airway compromise is urgent care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-028",
+      "pattern": "urgent_sore_throat_without_airway_red_flags",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if airway trouble, drooling, inability to swallow secretions, respiratory distress, or toxic appearance is present.",
+      "vignette": "In a triage intake: a 10-year-old has severe sore throat, headache, and a fever of 103°F. No cough. Can swallow food, just hurts. No drooling, no stridor, no neck stiffness.",
+      "correctionGoal": "Pediatric high-fever pharyngitis with Centor-suggestive features but no airway signs is urgent care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-029",
+      "pattern": "urgent_sore_throat_without_airway_red_flags",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if airway trouble, drooling, inability to swallow secretions, respiratory distress, or toxic appearance is present.",
+      "vignette": "A family member reports that a 9-year-old has had sore throat, fever of 101°F, and stomachache for one day. Tonsils look swollen. Not drooling, no breathing trouble, can drink liquids.",
+      "correctionGoal": "Tonsillopharyngitis with fever and abdominal symptoms without airway compromise is urgent care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-030",
+      "pattern": "urgent_sore_throat_without_airway_red_flags",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if airway trouble, drooling, inability to swallow secretions, respiratory distress, or toxic appearance is present.",
+      "vignette": "A 22-year-old college student has had a severely sore throat for three days, no cough, swollen lymph nodes, and feels exhausted. No voice change, no drooling, no breathing difficulty.",
+      "correctionGoal": "Exudative pharyngitis with fatigue in a young adult without airway signs is urgent care (may be mono, still needs eval).",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-031",
+      "pattern": "urgent_pediatric_ear_symptoms_without_complications",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if severe dehydration, systemic toxicity, mastoid swelling, displaced pinna, or neurologic signs are present.",
+      "vignette": "A 3-year-old has been pulling at their right ear and crying more than usual for two days. Mild fever of 100.8°F. Eating and drinking normally. No mastoid swelling, no discharge, not inconsolable.",
+      "correctionGoal": "Toddler with ear-tugging, low-grade fever, and good feeding is classic otitis media pattern for urgent care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-032",
+      "pattern": "urgent_pediatric_ear_symptoms_without_complications",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if severe dehydration, systemic toxicity, mastoid swelling, displaced pinna, or neurologic signs are present.",
+      "vignette": "The patient says: my 5-year-old has ear pain and a fever of 102°F since last night. Had a cold for a week before this. Still eating okay. No stiff neck, no swelling behind the ear.",
+      "correctionGoal": "Post-URI otitis media in a school-age child without complications is urgent care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-033",
+      "pattern": "urgent_pediatric_ear_symptoms_without_complications",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if severe dehydration, systemic toxicity, mastoid swelling, displaced pinna, or neurologic signs are present.",
+      "vignette": "In a triage intake: a 2-year-old woke up screaming with one ear red and appears to be in pain. Low-grade fever. Drinking small amounts. No vomiting, no dehydration, no swelling behind ear.",
+      "correctionGoal": "Acute otitis media in a toddler without dehydration or complication signs is urgent care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-034",
+      "pattern": "urgent_pediatric_ear_symptoms_without_complications",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if severe dehydration, systemic toxicity, mastoid swelling, displaced pinna, or neurologic signs are present.",
+      "vignette": "A family member reports that a 4-year-old has had ear pain, fever of 101.5°F, and trouble sleeping for two nights. Runny nose for a week prior. Still drinking fluids. No mastoid redness or swelling.",
+      "correctionGoal": "Recurrent otitis media pattern in a preschool child without complications is urgent care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-035",
+      "pattern": "urgent_pediatric_ear_symptoms_without_complications",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if severe dehydration, systemic toxicity, mastoid swelling, displaced pinna, or neurologic signs are present.",
+      "vignette": "A 6-year-old has ear pain and fever after swimming. The outer ear canal looks red and is tender when you touch it. Not pulling at the eardrum area, no systemic toxicity, no swelling behind ear.",
+      "correctionGoal": "Otitis externa (swimmer's ear) in a school-age child without systemic signs is urgent care for ear drops.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-036",
+      "pattern": "urgent_unilateral_vesicular_rash_without_eye_or_neuro_flags",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if eye involvement, facial weakness, confusion, immunocompromise, or systemic illness is present.",
+      "vignette": "A 58-year-old has had burning pain along the left side of their torso for two days, and this morning noticed a stripe of small blisters appearing. No eye symptoms, no facial drooping, feeling otherwise well.",
+      "correctionGoal": "Dermatomal vesicular rash consistent with zoster on the trunk without eye or neuro involvement is urgent care for antivirals.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-037",
+      "pattern": "urgent_unilateral_vesicular_rash_without_eye_or_neuro_flags",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if eye involvement, facial weakness, confusion, immunocompromise, or systemic illness is present.",
+      "vignette": "The patient says: I have a painful red rash wrapping around my right rib cage that started with itching two days ago and now has blisters. No rash near my eye, no weakness, no confusion.",
+      "correctionGoal": "Thoracic zoster without ocular or neurologic involvement is urgent care within 72 hours of rash onset.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-038",
+      "pattern": "urgent_unilateral_vesicular_rash_without_eye_or_neuro_flags",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if eye involvement, facial weakness, confusion, immunocompromise, or systemic illness is present.",
+      "vignette": "In a triage intake: a 65-year-old has tingling and pain on the left side of the lower back for 3 days, and small grouped blisters appeared today. No involvement of the face or eye, no neurologic symptoms.",
+      "correctionGoal": "Lumbar zoster within 72-hour antiviral window without complications is urgent care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-039",
+      "pattern": "urgent_unilateral_vesicular_rash_without_eye_or_neuro_flags",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if eye involvement, facial weakness, confusion, immunocompromise, or systemic illness is present.",
+      "vignette": "A family member reports that a 72-year-old has had a painful rash on one side of the chest for four days that started as red bumps and is now blistering. Not near the eye, no trouble with facial movement, no confusion.",
+      "correctionGoal": "Older adult with classic dermatomal zoster without ocular or neurologic extension is urgent care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-040",
+      "pattern": "urgent_local_nail_fold_infection_without_systemic_flags",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if rapidly ascending streaks, crepitus, necrotic tissue, or severe systemic illness are present.",
+      "vignette": "A 26-year-old has a painful swollen red area at the corner of their thumbnail with pus. Has been getting worse for 3 days. No red streaks going up the hand, no fever, no crepitus.",
+      "correctionGoal": "Paronychia with pus formation but no systemic signs or ascending infection is urgent care for drainage.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-041",
+      "pattern": "urgent_local_nail_fold_infection_without_systemic_flags",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if rapidly ascending streaks, crepitus, necrotic tissue, or severe systemic illness are present.",
+      "vignette": "The patient says: the skin around my big toenail is red, swollen, and has a small pocket of pus. Started after a pedicure. No red lines going up my leg, no fever, no spreading past the toe.",
+      "correctionGoal": "Post-pedicure paronychia confined to the nail fold without systemic or spreading signs is urgent care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-042",
+      "pattern": "urgent_local_nail_fold_infection_without_systemic_flags",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if rapidly ascending streaks, crepitus, necrotic tissue, or severe systemic illness are present.",
+      "vignette": "In a triage intake: a 17-year-old nail biter has a swollen painful fingertip around the index nail with visible pus collection. No fever, no red streaks, no spread beyond the finger.",
+      "correctionGoal": "Nail biting-related paronychia with pus but no spreading infection or systemic signs is urgent care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-043",
+      "pattern": "urgent_local_nail_fold_infection_without_systemic_flags",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if rapidly ascending streaks, crepitus, necrotic tissue, or severe systemic illness are present.",
+      "vignette": "A family member reports that a 45-year-old dishwasher has a chronically red swollen nail fold that has now developed pus. Painful to touch. No ascending redness, no fever, no crepitus.",
+      "correctionGoal": "Chronic water-exposure paronychia now with acute suppuration but no spreading or systemic illness is urgent care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-044",
+      "pattern": "home_mild_eye_irritation_without_vision_or_trauma_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if sudden eye pain, photophobia, blurred vision, vision loss, trauma, contact lens complication, or severe pain is present.",
+      "vignette": "A 31-year-old has had mild eye irritation and redness in both eyes for two days after working in a dusty environment. No vision change, no pain beyond mild grittiness, no trauma.",
+      "correctionGoal": "Environmental irritant conjunctivitis without vision or pain red flags is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-045",
+      "pattern": "home_mild_eye_irritation_without_vision_or_trauma_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if sudden eye pain, photophobia, blurred vision, vision loss, trauma, contact lens complication, or severe pain is present.",
+      "vignette": "A 50-year-old frequently wakes up with dry, mildly red eyes that improve after blinking. Has had this for months. No pain, no vision change, no discharge, no photophobia.",
+      "correctionGoal": "Chronic dry eye symptoms without alarm features is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-046",
+      "pattern": "home_allergic_rhinitis_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, acute facial pain, severe headache, or infection signs are mentioned.",
+      "vignette": "A 37-year-old has sneezing fits, a runny nose, and mild eye itching every time she visits her parents' house. They have multiple pets. No fever, no facial pain, no thick colored discharge.",
+      "correctionGoal": "Pet dander allergic rhinitis/conjunctivitis without infection flags is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-047",
+      "pattern": "home_allergic_rhinitis_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, acute facial pain, severe headache, or infection signs are mentioned.",
+      "vignette": "In a triage intake: a 12-year-old gets a stuffy itchy nose every time they're around freshly cut grass. Symptoms resolve indoors. No fever, no ear pain, no sinus pressure.",
+      "correctionGoal": "Grass-triggered allergic rhinitis resolving with avoidance, without infection signs, is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-048",
+      "pattern": "home_mechanical_back_pain_without_neuro_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if weakness, foot drop, bowel/bladder changes, saddle numbness, fever, major trauma, cancer history, or injection drug use is present.",
+      "vignette": "A 61-year-old retired teacher has aching in the lower back that is worse after sitting for long periods. Has had similar pain off and on for years. No leg symptoms, no weakness, no bladder issues, no fever.",
+      "correctionGoal": "Chronic low back pain without neurologic or systemic flags in an older adult with prior similar episodes is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-049",
+      "pattern": "home_mechanical_back_pain_without_neuro_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if weakness, foot drop, bowel/bladder changes, saddle numbness, fever, major trauma, cancer history, or injection drug use is present.",
+      "vignette": "The patient says: I threw out my back shoveling snow. Sharp pain when I try to bend forward. No tingling down my legs, no weakness, no bladder changes, no fever.",
+      "correctionGoal": "Classic acute back strain from shoveling snow without neurologic or systemic flags is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-050",
+      "pattern": "home_chronic_eczema_style_rash_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, pus, rapidly spreading redness, red streaking, severe pain, systemic illness, or immune compromise is present.",
+      "vignette": "A 27-year-old has a history of eczema and has a flare on the backs of their hands after exposure to cold dry weather. Itchy, cracked, dry. No pus, no fever, no spreading red streaks.",
+      "correctionGoal": "Cold weather eczema flare without infection signs is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-051",
+      "pattern": "home_chronic_eczema_style_rash_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, pus, rapidly spreading redness, red streaking, severe pain, systemic illness, or immune compromise is present.",
+      "vignette": "In a triage intake: a 6-year-old with known atopic dermatitis has a new flare on the face and neck. Red, itchy, no crusting with yellow fluid, no fever, no rapid spread.",
+      "correctionGoal": "Pediatric facial eczema flare without secondary infection signs is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-052",
+      "pattern": "urgent_sore_throat_without_airway_red_flags",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if airway trouble, drooling, inability to swallow secretions, respiratory distress, or toxic appearance is present.",
+      "vignette": "A 14-year-old has had very sore throat, difficulty swallowing due to pain, and a fever of 103°F for two days. Tonsils are enlarged with white patches. No voice changes, no drooling, no stridor.",
+      "correctionGoal": "Exudative tonsillitis with high fever in a teenager without airway signs is urgent care for strep test.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-053",
+      "pattern": "urgent_sore_throat_without_airway_red_flags",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if airway trouble, drooling, inability to swallow secretions, respiratory distress, or toxic appearance is present.",
+      "vignette": "A family member reports that an 8-year-old refuses to eat because of throat pain, has a fever of 102°F, and has bad breath. No cough. Can still drink fluids. No drooling, no trouble breathing.",
+      "correctionGoal": "Sore throat with odynophagia in a child with no airway compromise is urgent care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-054",
+      "pattern": "home_mild_vomiting_with_fluids_tolerated",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if dehydration, blood, severe abdominal pain, persistent vomiting, high fever, pregnancy, or high-risk age is present.",
+      "vignette": "A 7-year-old vomited twice and had loose stools this morning. Now resting and able to keep popsicles down. Mild fever of 100.2°F. No blood, no severe stomach pain.",
+      "correctionGoal": "Mild gastroenteritis in a school-age child with fluids tolerated and no alarm features is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-055",
+      "pattern": "home_mild_vomiting_with_fluids_tolerated",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if dehydration, blood, severe abdominal pain, persistent vomiting, high fever, pregnancy, or high-risk age is present.",
+      "vignette": "The patient says: I woke up nauseated and vomited once. I think I ate something bad last night. Feeling better now, drinking water, keeping it down. No fever, no pain, no blood.",
+      "correctionGoal": "Single vomiting episode likely from food with fluids tolerated and no alarm features is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-056",
+      "pattern": "home_mild_eye_irritation_without_vision_or_trauma_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if sudden eye pain, photophobia, blurred vision, vision loss, trauma, contact lens complication, or severe pain is present.",
+      "vignette": "A 38-year-old has had itchy red eyes since starting to work from home with more screen time. Uses artificial tears which help. No pain, no vision change, no photophobia.",
+      "correctionGoal": "Screen-related dry eye/eye strain with symptom relief from artificial tears and no alarm features is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-057",
+      "pattern": "home_mild_eye_irritation_without_vision_or_trauma_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if sudden eye pain, photophobia, blurred vision, vision loss, trauma, contact lens complication, or severe pain is present.",
+      "vignette": "In a triage intake: a 7-year-old has one eye that has been pink and slightly crusty since yesterday after their daycare had a pink eye outbreak. No severe pain, no vision change, no fever.",
+      "correctionGoal": "Epidemic viral conjunctivitis in a child without vision or pain flags is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-058",
+      "pattern": "home_chronic_eczema_style_rash_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, pus, rapidly spreading redness, red streaking, severe pain, systemic illness, or immune compromise is present.",
+      "vignette": "A 30-year-old has had itchy dry skin behind the ears and on the scalp since childhood. Currently flared. No pus, no fever, no rapidly spreading redness, no pain beyond itching.",
+      "correctionGoal": "Seborrheic or atopic dermatitis in a typical distribution without infection signs is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-059",
+      "pattern": "home_mechanical_back_pain_without_neuro_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if weakness, foot drop, bowel/bladder changes, saddle numbness, fever, major trauma, cancer history, or injection drug use is present.",
+      "vignette": "A 44-year-old experienced low back tightness after a long run. Gets better with stretching. No radiation to legs, no weakness, no numbness, no bowel or bladder changes, no fever.",
+      "correctionGoal": "Runner's low back muscle tightness without neurologic or systemic flags is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-060",
+      "pattern": "home_allergic_rhinitis_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, acute facial pain, severe headache, or infection signs are mentioned.",
+      "vignette": "A 20-year-old moved to a new city and has had constant sneezing and nasal congestion for weeks. Allergist diagnosed allergic rhinitis last year. No fever, no facial pressure, no colored discharge.",
+      "correctionGoal": "Known allergic rhinitis triggered by a new environment without infection signs is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-061",
+      "pattern": "urgent_pediatric_ear_symptoms_without_complications",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if severe dehydration, systemic toxicity, mastoid swelling, displaced pinna, or neurologic signs are present.",
+      "vignette": "A 7-year-old has had one ear hurting for one day with mild fever of 100.4°F. Started after a week of a runny nose. Eating and drinking okay. No swelling behind the ear, no inconsolable crying.",
+      "correctionGoal": "Classic post-URI pediatric otitis media without complications is urgent care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-062",
+      "pattern": "urgent_unilateral_vesicular_rash_without_eye_or_neuro_flags",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if eye involvement, facial weakness, confusion, immunocompromise, or systemic illness is present.",
+      "vignette": "A 70-year-old has had a painful burning sensation on one side of the upper chest for one day, now with a few small fluid-filled blisters appearing. No facial symptoms, no eye involvement, no confusion, feels otherwise okay.",
+      "correctionGoal": "Early zoster without eye or neurologic involvement is urgent care for timely antiviral therapy.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-063",
+      "pattern": "home_mild_vomiting_with_fluids_tolerated",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if dehydration, blood, severe abdominal pain, persistent vomiting, high fever, pregnancy, or high-risk age is present.",
+      "vignette": "A 40-year-old vomited twice after starting a new antibiotic. Nausea has improved. Drinking water and it is staying down. No blood, no fever, no abdominal pain.",
+      "correctionGoal": "Medication-related nausea and mild vomiting with fluids tolerated and no alarm features is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-064",
+      "pattern": "home_allergic_rhinitis_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, acute facial pain, severe headache, or infection signs are mentioned.",
+      "vignette": "A family member reports that a 9-year-old has been rubbing their nose constantly and sneezing since school started. Eyes also look irritated and itchy. No fever, no colored mucus, no ear complaints.",
+      "correctionGoal": "Back-to-school allergic rhinoconjunctivitis without infection signs in a child is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-065",
+      "pattern": "home_chronic_eczema_style_rash_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, pus, rapidly spreading redness, red streaking, severe pain, systemic illness, or immune compromise is present.",
+      "vignette": "A 23-year-old with asthma and atopic history has a skin flare on their forearms after a stressful week of exams. Dry and itchy. No pus, no fever, no red streaks, no spreading beyond the existing patches.",
+      "correctionGoal": "Stress-triggered eczema flare in an atopic individual without infection signs is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-066",
+      "pattern": "home_mechanical_back_pain_without_neuro_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if weakness, foot drop, bowel/bladder changes, saddle numbness, fever, major trauma, cancer history, or injection drug use is present.",
+      "vignette": "A 38-year-old nurse has low back pain after a long shift of bending and lifting patients. Has had this happen before. No leg tingling, no weakness, no bladder issues, no fever.",
+      "correctionGoal": "Occupational low back strain in a healthcare worker without red flags is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-067",
+      "pattern": "urgent_sore_throat_without_airway_red_flags",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if airway trouble, drooling, inability to swallow secretions, respiratory distress, or toxic appearance is present.",
+      "vignette": "A 30-year-old has a sore throat and fever of 101°F and lives with someone who just tested positive for strep. No drooling, no difficulty breathing, no voice change.",
+      "correctionGoal": "Symptomatic sore throat in a strep contact without airway signs warrants urgent care evaluation.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-068",
+      "pattern": "home_mild_vomiting_with_fluids_tolerated",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if dehydration, blood, severe abdominal pain, persistent vomiting, high fever, pregnancy, or high-risk age is present.",
+      "vignette": "In a triage intake: a 65-year-old vomited once and felt nauseous after taking iron supplements on an empty stomach. Nausea resolved after eating. No blood, no fever, no abdominal pain.",
+      "correctionGoal": "Supplement-induced single vomiting episode resolving after eating in an older adult is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-069",
+      "pattern": "urgent_local_nail_fold_infection_without_systemic_flags",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if rapidly ascending streaks, crepitus, necrotic tissue, or severe systemic illness are present.",
+      "vignette": "A 36-year-old has a red swollen nail fold on the middle finger with visible pus after an ingrown nail. The redness is limited to the finger. No fever, no red lines, no swelling of the hand.",
+      "correctionGoal": "Ingrown nail paronychia with localized pus and no spreading or systemic signs is urgent care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-070",
+      "pattern": "home_mild_eye_irritation_without_vision_or_trauma_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if sudden eye pain, photophobia, blurred vision, vision loss, trauma, contact lens complication, or severe pain is present.",
+      "vignette": "A 15-year-old has been having red watery eyes after playing video games for hours. The eyes feel better after rest. No pain, no vision change, no discharge.",
+      "correctionGoal": "Digital eye strain causing transient redness and watering without alarm features is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-071",
+      "pattern": "home_allergic_rhinitis_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, acute facial pain, severe headache, or infection signs are mentioned.",
+      "vignette": "A 45-year-old has chronic nasal congestion and post-nasal drip that gets worse in dry heated offices. No fever, no facial pressure or pain, no discolored discharge.",
+      "correctionGoal": "Non-allergic or irritant rhinitis without infection signs is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-072",
+      "pattern": "home_chronic_eczema_style_rash_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, pus, rapidly spreading redness, red streaking, severe pain, systemic illness, or immune compromise is present.",
+      "vignette": "A 40-year-old with atopic history notices dry itchy patches on the inner wrists every winter. Currently active. No pus, no fever, no systemic symptoms, no streaking redness.",
+      "correctionGoal": "Seasonal atopic dermatitis in a known eczema patient without secondary infection signs is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-073",
+      "pattern": "home_mechanical_back_pain_without_neuro_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if weakness, foot drop, bowel/bladder changes, saddle numbness, fever, major trauma, cancer history, or injection drug use is present.",
+      "vignette": "A 50-year-old has low back stiffness each morning that loosens up after moving around. Has had this for about a year. No leg symptoms, no weakness, no bowel or bladder issues, no fever.",
+      "correctionGoal": "Morning stiffness low back pain resolving with activity in a middle-aged adult without red flags is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-074",
+      "pattern": "urgent_sore_throat_without_airway_red_flags",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if airway trouble, drooling, inability to swallow secretions, respiratory distress, or toxic appearance is present.",
+      "vignette": "A family member reports that a 7-year-old has refused breakfast because it hurts to swallow. Fever of 102.5°F, neck glands swollen. No cough, no drooling, no muffled voice, can still drink small amounts.",
+      "correctionGoal": "Odynophagia with fever and adenopathy in a child without airway compromise is urgent care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-075",
+      "pattern": "home_mild_vomiting_with_fluids_tolerated",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if dehydration, blood, severe abdominal pain, persistent vomiting, high fever, pregnancy, or high-risk age is present.",
+      "vignette": "A 32-year-old vomited twice during a migraine. Now the headache is improving and they can keep small sips of water down. No blood, no fever, no abdominal pain separate from the headache.",
+      "correctionGoal": "Migraine-associated vomiting resolving with headache improvement and fluids tolerated is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-076",
+      "pattern": "home_mild_eye_irritation_without_vision_or_trauma_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if sudden eye pain, photophobia, blurred vision, vision loss, trauma, contact lens complication, or severe pain is present.",
+      "vignette": "A 22-year-old wears glasses but recently tried non-prescription decorative contacts at a costume party. Eyes have been mildly red and irritated since. Not wearing them anymore. No pain, no vision change.",
+      "correctionGoal": "Mild irritation from brief decorative contact use without vision or pain flags is home care if lenses have been removed.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-077",
+      "pattern": "urgent_pediatric_ear_symptoms_without_complications",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if severe dehydration, systemic toxicity, mastoid swelling, displaced pinna, or neurologic signs are present.",
+      "vignette": "A 2-year-old has been inconsolably crying and holding one ear since midnight. Mild fever of 100.8°F. Taking small amounts of fluid. No swelling behind the ear, not lethargic, no vomiting.",
+      "correctionGoal": "Acute otitis media causing nighttime ear pain in a toddler without complications is urgent care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-078",
+      "pattern": "home_chronic_eczema_style_rash_without_infection_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if fever, pus, rapidly spreading redness, red streaking, severe pain, systemic illness, or immune compromise is present.",
+      "vignette": "A 16-year-old has had itchy inflamed skin in the elbow creases and behind the knees since age 4. Current flare is mild. No pus, no fever, no red streaks, no severe pain.",
+      "correctionGoal": "Childhood-onset atopic dermatitis with a typical distribution and mild flare without infection signs is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-079",
+      "pattern": "urgent_unilateral_vesicular_rash_without_eye_or_neuro_flags",
+      "targetLevel": "urgent_care",
+      "safetyBoundary": "Do not approve if eye involvement, facial weakness, confusion, immunocompromise, or systemic illness is present.",
+      "vignette": "A 55-year-old has a painful blistering rash wrapping around the left side of the abdomen. Started with tingling 4 days ago. No fever, no eye symptoms, no weakness, no immunosuppression.",
+      "correctionGoal": "Abdominal zoster within antiviral treatment window without ocular or neurologic extension is urgent care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    },
+    {
+      "id": "syn-080",
+      "pattern": "home_mechanical_back_pain_without_neuro_flags",
+      "targetLevel": "home_care",
+      "safetyBoundary": "Do not approve if weakness, foot drop, bowel/bladder changes, saddle numbness, fever, major trauma, cancer history, or injection drug use is present.",
+      "vignette": "A 33-year-old has had low back pain for three days after helping friends move. Ibuprofen has helped some. No leg pain, no weakness, no numbness, no bowel or bladder changes, no fever, no trauma beyond carrying boxes.",
+      "correctionGoal": "Acute back strain from a specific lifting task responding to NSAIDs without red flags is home care.",
+      "reviewerDecision": null,
+      "reviewerNotes": ""
+    }
+  ]
+}

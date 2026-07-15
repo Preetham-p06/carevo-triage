@@ -1,0 +1,47 @@
+{
+  "promotionReady": false,
+  "reason": "Promotion blocked. Keep current safe baseline.",
+  "steps": [
+    {
+      "name": "typecheck",
+      "ok": true,
+      "status": 0,
+      "stdoutTail": "",
+      "stderrTail": ""
+    },
+    {
+      "name": "engine_eval",
+      "ok": true,
+      "status": 0,
+      "stdoutTail": "\nCarevo Route Engine — eval\n  Cases:            104\n  Exact match:      84 (81%)\n  Acceptable:       104 (100%)\n  Under-triaged:    0\n  SAFETY FAILURES:  0 (red-flag cases under-triaged)\n\nEVOI interview policy:\n  ✓ P1 vague cardiac → asks first, targets redFlag:chest_pressure\n  ✓ P2 fully-known mild case → decides immediately (conf 0.54)\n  ✓ P3 out of budget → decides (confident: 0.79)\n  ✓ P4 ER red flag present → interview stops immediately\n  ✓ P5 mental-health case → never probes suicidal ideation\n  ✓ P7 emergency tiers: bare chest pain interviews, ACS wording hard-stops\n  ✓ P7b neuro presentation → asks focused red-flag ladder (redFlag:one_sided_weakness)\n  ✓ P8 infant-fever backstop: deterministic detection, no LLM dependency\n  ✓ P9 softened self-harm phrasing reaches the crisis flow\n  ✓ P6 combination rule fires without any reported red flag\n  ✓ P10 severe-dehydration backstop: cant-keep-fluids-down + vomiting/orthostatic detected\n\nKnowledge retrieval:\n  ✓ R1 cardiac → AHA warning signs (doc.aha.heart#1, score 1)\n  ✓ R2 infant fever → pediatric chunks (doc.aap.infant#1, doc.aap.fever#1)\n  ✓ R3 content-type isolation holds (self_care → mlp.dehydration#2, mlp.dehydration#3)\n  ✓ R4 pregnancy → ACOG guidance\n  ✓ R5 provenance complete on every retrieved chunk\n  ✓ R6 retrieval deterministic\n\nKnowledge graph consistency:\n  591 nodes · 1005 edges · 444 chunks · 24 rules · warning-signs coverage 11/11 systems\n  ⚠ 444/444 chunks not clinician-reviewed yet\n  ✓ no wiring errors (every red flag floors, every screen routes, every citation resolves)\n\nProperty-based safety (feature grid):\n  grid points: 704 · checks: 528 severity + 2112 red-flag + 2112 risk-modifier = 4752\n  ✓ severity monotonicity holds everywhere\n  ✓ red-flag dominance holds everywhere\n  ✓ risk modifiers never lower acuity\n\nPASS\n",
+      "stderrTail": ""
+    },
+    {
+      "name": "dataset_multiturn_eval",
+      "ok": false,
+      "status": 1,
+      "stdoutTail": "",
+      "stderrTail": ""
+    }
+  ],
+  "datasetOutput": "/Users/preethamprabhu/Documents/Claude/Projects/Carevo/triage-web/data/recursive-learning/juror-dataset-2026-07-14T19-15-55-061Z.jsonl",
+  "datasetSummary": {
+    "total": 240,
+    "scored": 240,
+    "counts": {
+      "over": 87,
+      "exact": 152,
+      "UNDER": 1
+    },
+    "exactAccuracyPct": 63.3,
+    "safeOrExactPct": 99.6,
+    "underTriageCount": 1
+  },
+  "requirements": {
+    "typecheck": true,
+    "engineEval": true,
+    "zeroUnderTriage": true,
+    "zeroProviderErrors": true,
+    "humanApprovalStillRequired": true
+  }
+}

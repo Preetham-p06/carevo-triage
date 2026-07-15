@@ -1,0 +1,19 @@
+{
+  "candidates": "/sessions/fervent-funny-mendel/mnt/Carevo/triage-web/data/recursive-learning/training-candidates-overtriage-240.jsonl",
+  "decisions": "/sessions/fervent-funny-mendel/mnt/Carevo/triage-web/data/recursive-learning/high-priority-review-decisions.json",
+  "output": "/sessions/fervent-funny-mendel/mnt/Carevo/triage-web/data/recursive-learning/approved-training-prep-reviewed-high-priority.jsonl",
+  "reviewedAt": "2026-07-11",
+  "reviewSource": "Comprehensive case-by-case clinical triage analyses provided by Preetham; medium-priority batch rejected — all 50 remaining cases are ACS/stroke/PE/anaphylaxis/GI-bleed where Emergency routing is clinically correct per ACEP/AHA/ASA guidelines",
+  "globalLearningGoal": "Teach the extractor to bind negative qualifiers to red-flag terms and distinguish time-sensitive urgent-care cases from ER cases. If the patient says no fever, no pus, no red streaks, no severe pain, no vision change, no trauma, no weakness, or similar, those denied features must not drive escalation.",
+  "decisionCounts": {
+    "approve": 26,
+    "reject": 51,
+    "needs_clinician": 8
+  },
+  "approvedRows": 26,
+  "missing": [],
+  "trainingAllowed": false,
+  "offlineTrainingPrepReady": true,
+  "nextStep": "Convert approved rows into the final provider-specific SFT/DPO format after confirming the chosen local model and training toolchain.",
+  "safety": "Rows are approved for offline training preparation only. They do not promote a model or alter live routing."
+}
