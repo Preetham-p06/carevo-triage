@@ -3,6 +3,14 @@ const isDev = process.env.NODE_ENV !== 'production'
 
 const nextConfig = {
   allowedDevOrigins: ['127.0.0.1', 'localhost'],
+  // Serverless deploys (Vercel): bundle the runtime-read clinical data with
+  // the API functions — the 444-chunk knowledge overlay, the clinician-
+  // promoted calibration artifact, and embeddings. Without this, fs reads
+  // silently fail in production and the app degrades to seed corpus with
+  // calibration disabled.
+  outputFileTracingIncludes: {
+    '/api/**': ['./data/knowledge/**', './data/calibration/**'],
+  },
   async headers() {
     return [
       {
