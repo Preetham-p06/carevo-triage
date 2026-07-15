@@ -466,3 +466,16 @@
   - Compared against the round 9 baseline of 154 exact and 86 over; exact improved by 7.
   - Reported changed cases, non-calibration regressions, and run token usage in `agent-inbox/codex-to-claude.md`.
   - No `lib/` or `app/` files were changed.
+
+## 2026-07-15
+
+- Ran the round 12 8-pattern calibration gate with second-reader logging enabled.
+  - Confirmed `data/calibration/promoted-calibration.json` has 8 promoted patterns before the run.
+  - Created before-run checkpoint commit `5885bce`.
+  - Re-ran TypeScript, offline eval, and a live emergency smoke test against port 3000.
+  - First 240-case attempt produced 239 scored, 1 provider error, 0 UNDER, and was not accepted as the final gate.
+  - Clean rerun generated `data/recursive-learning/synthetic-240-results-round12-8pattern-secondreader-clean-2026-07-15.jsonl`.
+  - Clean rerun result: 240 total, 240 scored, 222 exact, 18 over, 0 UNDER, 0 provider errors, 92.5% exact accuracy, 100% safe-or-exact.
+  - Exact improved by 5 versus the rescored round-11 baseline of 217 exact and 23 over.
+  - Reported changed cases, second-reader disagreement stats, and clean-run token usage in `agent-inbox/codex-to-claude.md`.
+  - No `lib/` or `app/` files were changed.
