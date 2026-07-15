@@ -1,5 +1,5 @@
 {
-  "createdAt": "2026-07-14T21:29:08.120Z",
+  "createdAt": "2026-07-15T03:05:20.861Z",
   "type": "offline_ree_smoke_training",
   "packDir": "data/recursive-learning/offline-training-pack-paul-round7",
   "rows": 26,
@@ -9,6 +9,99 @@
     "home_care": 26
   },
   "learnedPatterns": [
+    {
+      "name": "home_uri_cold_without_lower_respiratory_flags",
+      "target": "home_care",
+      "requiredAny": [
+        "runny nose",
+        "common cold",
+        "nasal congestion",
+        "clear sputum",
+        "stuffy nose"
+      ],
+      "supporting": [
+        "no fever",
+        "without fever",
+        "mild",
+        "clear sputum",
+        "normal exam",
+        "sore throat"
+      ],
+      "safetyBoundary": "Do not apply if high fever, shortness of breath, chest pain, wheezing, symptoms beyond 10 days, or immune compromise is present.",
+      "learnedFrom": [
+        "case-0181",
+        "case-0186",
+        "case-0191",
+        "case-0196"
+      ]
+    },
+    {
+      "name": "home_mild_pharyngitis_without_red_flags",
+      "target": "home_care",
+      "requiredAny": [
+        "sore throat"
+      ],
+      "supporting": [
+        "no fever",
+        "mild throat redness",
+        "nonproductive cough",
+        "no exudate",
+        "mild",
+        "headache"
+      ],
+      "safetyBoundary": "Do not apply if high fever, exudates, difficulty swallowing, drooling, muffled voice, neck swelling, or rash is present.",
+      "learnedFrom": [
+        "case-0181",
+        "case-0184",
+        "case-0186",
+        "case-0189",
+        "case-0191",
+        "case-0194",
+        "case-0196",
+        "case-0199"
+      ]
+    },
+    {
+      "name": "home_recurrent_aphthous_ulcers",
+      "target": "home_care",
+      "requiredAny": [
+        "mouth ulcers",
+        "canker sores",
+        "aphthous"
+      ],
+      "supporting": [
+        "since childhood",
+        "recurrent",
+        "no eye",
+        "no skin",
+        "no genital",
+        "no gi"
+      ],
+      "safetyBoundary": "Do not apply if eye, skin, genital, or GI lesions, weight loss, fever, immune compromise, or a non-healing ulcer beyond two weeks is present.",
+      "learnedFrom": [
+        "case-0202"
+      ]
+    },
+    {
+      "name": "home_stye_without_orbital_flags",
+      "target": "home_care",
+      "requiredAny": [
+        "swollen eyelid",
+        "stye",
+        "eyelid"
+      ],
+      "supporting": [
+        "no trauma",
+        "no vision change",
+        "minor tenderness",
+        "one day",
+        "painful swollen eyelid"
+      ],
+      "safetyBoundary": "Do not apply if vision change, severe eye pain, proptosis, fever, spreading redness, both eyelids, or trauma is present.",
+      "learnedFrom": [
+        "case-0208"
+      ]
+    },
     {
       "name": "home_allergic_rhinitis_without_infection_flags",
       "target": "home_care",

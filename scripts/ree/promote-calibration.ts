@@ -36,6 +36,19 @@ const BOUNDARY_TERMS: Record<string, string[]> = {
     'fever', 'pus', 'spreading', 'red streak', 'streaking', 'severe pain',
     'immunocompromised', 'chemo', 'transplant', 'systemic', 'blister', 'open sore',
   ],
+  home_uri_cold_without_lower_respiratory_flags: [
+    'high fever', 'shortness of breath', 'chest pain', 'wheezing', 'immunocompromised', 'chemo',
+  ],
+  home_mild_pharyngitis_without_red_flags: [
+    'high fever', 'exudate', 'difficulty swallowing', 'drooling', 'muffled voice', 'neck swelling', 'rash',
+  ],
+  home_recurrent_aphthous_ulcers: [
+    'eye lesions present', 'genital lesions present', 'genital ulcer', 'weight loss', 'fever',
+    'immunocompromised', 'not healing', 'getting bigger',
+  ],
+  home_stye_without_orbital_flags: [
+    'vision change', 'severe eye pain', 'proptosis', 'fever', 'spreading redness', 'both eyelids', 'trauma',
+  ],
   home_mechanical_back_pain_without_neuro_flags: [
     'weakness', 'foot drop', 'bladder', 'bowel', 'saddle', 'numbness', 'tingling',
     'fever', 'trauma', 'accident', 'fall from', 'cancer', 'injection drug', 'iv drug',
@@ -47,6 +60,7 @@ const get = (k: string) => args.find(a => a.startsWith(`--${k}=`))?.slice(k.leng
 const artifactPath = get('artifact')
 const reviewedBy = get('reviewed-by')
 const confirm = args.includes('--confirm')
+const allowFromEr = (get('allow-from-er') ?? '').split(',').map(s => s.trim()).filter(Boolean)
 
 async function main() {
   if (!artifactPath || !reviewedBy || !confirm) {
@@ -76,6 +90,7 @@ async function main() {
       boundaryTerms,
       safetyBoundary: p.safetyBoundary,
       learnedFrom: p.learnedFrom,
+      allowFromEr: allowFromEr.includes(p.name) || undefined,
     })
   }
 

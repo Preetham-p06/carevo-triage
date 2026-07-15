@@ -73,6 +73,35 @@ const patternCatalog: Array<Omit<CalibrationPattern, 'learnedFrom'>> = [
     supporting: ['no leg', 'no weakness', 'no fever', 'no bowel', 'denies leg', 'denies fever', 'no bladder', 'no saddle'],
     safetyBoundary: 'Do not apply if weakness, foot drop, bowel/bladder changes, saddle numbness, fever, major trauma, cancer history, or injection drug use is present.',
   },
+  // Round-12 additions (Codex round-10 recommendation; Paul-approved rows exist)
+  {
+    name: 'home_uri_cold_without_lower_respiratory_flags',
+    target: 'home_care',
+    requiredAny: ['runny nose', 'common cold', 'nasal congestion', 'clear sputum', 'stuffy nose'],
+    supporting: ['no fever', 'without fever', 'mild', 'clear sputum', 'normal exam', 'sore throat'],
+    safetyBoundary: 'Do not apply if high fever, shortness of breath, chest pain, wheezing, symptoms beyond 10 days, or immune compromise is present.',
+  },
+  {
+    name: 'home_mild_pharyngitis_without_red_flags',
+    target: 'home_care',
+    requiredAny: ['sore throat'],
+    supporting: ['no fever', 'mild throat redness', 'nonproductive cough', 'no exudate', 'mild', 'headache'],
+    safetyBoundary: 'Do not apply if high fever, exudates, difficulty swallowing, drooling, muffled voice, neck swelling, or rash is present.',
+  },
+  {
+    name: 'home_recurrent_aphthous_ulcers',
+    target: 'home_care',
+    requiredAny: ['mouth ulcers', 'canker sores', 'aphthous'],
+    supporting: ['since childhood', 'recurrent', 'no eye', 'no skin', 'no genital', 'no gi'],
+    safetyBoundary: 'Do not apply if eye, skin, genital, or GI lesions, weight loss, fever, immune compromise, or a non-healing ulcer beyond two weeks is present.',
+  },
+  {
+    name: 'home_stye_without_orbital_flags',
+    target: 'home_care',
+    requiredAny: ['swollen eyelid', 'stye', 'eyelid'],
+    supporting: ['no trauma', 'no vision change', 'minor tenderness', 'one day', 'painful swollen eyelid'],
+    safetyBoundary: 'Do not apply if vision change, severe eye pain, proptosis, fever, spreading redness, both eyelids, or trauma is present.',
+  },
   {
     name: 'home_allergic_rhinitis_without_infection_flags',
     target: 'home_care',

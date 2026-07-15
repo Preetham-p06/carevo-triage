@@ -1,10 +1,139 @@
 {
   "version": "carevo-calibration-2026-07-15.1",
-  "promotedAt": "2026-07-15T01:26:59.531Z",
+  "promotedAt": "2026-07-15T03:11:02.268Z",
   "promotedBy": "promote-calibration.ts (manual --confirm)",
-  "reviewedBy": "Paul (clinical reviewer, 2026-07-14 batch)",
+  "reviewedBy": "Paul (clinical reviewer, 2026-07-14 batch; allowFromEr per his approved er-downgrades)",
   "sourceArtifact": "data/recursive-learning/offline-training-pack-paul-round7/smoke-calibration-artifact.json",
   "patterns": [
+    {
+      "name": "home_uri_cold_without_lower_respiratory_flags",
+      "target": "home_care",
+      "requiredAny": [
+        "runny nose",
+        "common cold",
+        "nasal congestion",
+        "clear sputum",
+        "stuffy nose"
+      ],
+      "supporting": [
+        "no fever",
+        "without fever",
+        "mild",
+        "clear sputum",
+        "normal exam",
+        "sore throat"
+      ],
+      "boundaryTerms": [
+        "high fever",
+        "shortness of breath",
+        "chest pain",
+        "wheezing",
+        "immunocompromised",
+        "chemo"
+      ],
+      "safetyBoundary": "Do not apply if high fever, shortness of breath, chest pain, wheezing, symptoms beyond 10 days, or immune compromise is present.",
+      "learnedFrom": [
+        "case-0181",
+        "case-0186",
+        "case-0191",
+        "case-0196"
+      ]
+    },
+    {
+      "name": "home_mild_pharyngitis_without_red_flags",
+      "target": "home_care",
+      "requiredAny": [
+        "sore throat"
+      ],
+      "supporting": [
+        "no fever",
+        "mild throat redness",
+        "nonproductive cough",
+        "no exudate",
+        "mild",
+        "headache"
+      ],
+      "boundaryTerms": [
+        "high fever",
+        "exudate",
+        "difficulty swallowing",
+        "drooling",
+        "muffled voice",
+        "neck swelling",
+        "rash"
+      ],
+      "safetyBoundary": "Do not apply if high fever, exudates, difficulty swallowing, drooling, muffled voice, neck swelling, or rash is present.",
+      "learnedFrom": [
+        "case-0181",
+        "case-0184",
+        "case-0186",
+        "case-0189",
+        "case-0191",
+        "case-0194",
+        "case-0196",
+        "case-0199"
+      ]
+    },
+    {
+      "name": "home_recurrent_aphthous_ulcers",
+      "target": "home_care",
+      "requiredAny": [
+        "mouth ulcers",
+        "canker sores",
+        "aphthous"
+      ],
+      "supporting": [
+        "since childhood",
+        "recurrent",
+        "no eye",
+        "no skin",
+        "no genital",
+        "no gi"
+      ],
+      "boundaryTerms": [
+        "eye lesions present",
+        "genital lesions present",
+        "genital ulcer",
+        "weight loss",
+        "fever",
+        "immunocompromised",
+        "not healing",
+        "getting bigger"
+      ],
+      "safetyBoundary": "Do not apply if eye, skin, genital, or GI lesions, weight loss, fever, immune compromise, or a non-healing ulcer beyond two weeks is present.",
+      "learnedFrom": [
+        "case-0202"
+      ]
+    },
+    {
+      "name": "home_stye_without_orbital_flags",
+      "target": "home_care",
+      "requiredAny": [
+        "swollen eyelid",
+        "stye",
+        "eyelid"
+      ],
+      "supporting": [
+        "no trauma",
+        "no vision change",
+        "minor tenderness",
+        "one day",
+        "painful swollen eyelid"
+      ],
+      "boundaryTerms": [
+        "vision change",
+        "severe eye pain",
+        "proptosis",
+        "fever",
+        "spreading redness",
+        "both eyelids",
+        "trauma"
+      ],
+      "safetyBoundary": "Do not apply if vision change, severe eye pain, proptosis, fever, spreading redness, both eyelids, or trauma is present.",
+      "learnedFrom": [
+        "case-0208"
+      ]
+    },
     {
       "name": "home_allergic_rhinitis_without_infection_flags",
       "target": "home_care",
@@ -86,7 +215,8 @@
         "case-0205",
         "case-0210",
         "case-0215"
-      ]
+      ],
+      "allowFromEr": true
     },
     {
       "name": "home_rash_without_infection_flags",
@@ -126,7 +256,8 @@
         "case-0204",
         "case-0209",
         "case-0214"
-      ]
+      ],
+      "allowFromEr": true
     },
     {
       "name": "home_mechanical_back_pain_without_neuro_flags",

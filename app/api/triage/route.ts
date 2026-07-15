@@ -1051,6 +1051,39 @@ export async function POST(req: NextRequest) {
     const chunksUsed = [...warningSigns, ...selfCareRetrieved, ...followUp]
       .map(g => `${g.chunkId}@v${g.chunkVersion}`)
 
+    // ── Second reader (RECORD-ONLY) ──────────────────────────────────────────
+    // An independent LLM opinion on the RAW conversation, compared with the
+    // engine. It has a different failure profile than the extractor pipeline
+    // (it sees the words the extractor may have dropped), so DISAGREEMENT is
+    // a high-value review signal for REE. It NEVER changes routing — not up,
+    // not down. Disable with SECOND_READER=0.
+    let secondReader: { opinion: string; agrees: boolean; engineSaid: string } | null = null
+    if (process.env.SECOND_READER !== '0') {
+      try {
+        const SR_LEVELS = ['emergency', 'er', 'urgent_care', 'primary_care', 'telehealth', 'home_care']
+        const srCompletion = await openai.chat.completions.create({
+          model: MODEL,
+          max_tokens: 60,
+          temperature: 0,
+          ...(useNvidia ? {} : { response_format: { type: 'json_object' as const } }),
+          messages: [
+            { role: 'system' as const, content: `You are an experienced emergency triage clinician giving an INDEPENDENT second opinion. Read the conversation and decide the single safest appropriate care level. Output valid JSON only: {"careLevel":"${SR_LEVELS.join('|')}"}` },
+            ...messages.map(m => ({ role: m.role as 'user' | 'assistant', content: m.content })),
+          ],
+        })
+        totalTokensUsed += completionTokenTotal(srCompletion)
+        await logLlmUsage('phraser', srCompletion)
+        const sr = extractJson(srCompletion.choices[0]?.message?.content ?? '')
+        if (typeof sr?.careLevel === 'string' && SR_LEVELS.includes(sr.careLevel)) {
+          secondReader = {
+            opinion: sr.careLevel,
+            engineSaid: decision.careLevel,
+            agrees: sr.careLevel === decision.careLevel,
+          }
+        }
+      } catch { /* record-only: any failure is silently skipped */ }
+    }
+
     await auditDecision({
       kind: 'recommendation',
       features, knownFields: [...known], risk, questionsAsked,
@@ -1067,7 +1100,7 @@ export async function POST(req: NextRequest) {
       rulesetVersion: RULESET_VERSION,
       kbVersion: kbVersion(),
       decision,
-      metadata: { kind: 'recommendation', roundedUp, chunksUsed },
+      metadata: { kind: 'recommendation', roundedUp, chunksUsed, secondReader },
     })
 
     // Evidence is RETRIEVED from the citation registry (rules that fired,
@@ -1091,6 +1124,7 @@ export async function POST(req: NextRequest) {
       evidence,
       rulesFired: decision.rulesFired.map(r => r.id),
       roundedUp,
+      secondReader,   // record-only: independent opinion + agreement flag
       provenance: {
         engineVersion: decision.version,
         rulesetVersion: decision.rulesetVersion,

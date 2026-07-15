@@ -40,6 +40,10 @@ export interface PromotedPattern {
   /** Prose boundary from the artifact — audit/display only */
   safetyBoundary: string
   learnedFrom: string[]
+  /** Human-granted at promotion: pattern may lower FROM 'er' (never from
+   *  'emergency'). Only for patterns whose clinician-approved rows were
+   *  themselves er→lower corrections (e.g. "severe discomfort" eczema). */
+  allowFromEr?: boolean
 }
 
 export interface PromotedCalibration {
@@ -107,13 +111,14 @@ export function applyCalibration(
   // Conditions 3–5 (defense in depth — caller checks these too)
   if (features.redFlags.length > 0) return null
   if (floorsFired) return null
-  if (LEVEL_RANK[decisionLevel] >= LEVEL_RANK.er) return null
+  if (decisionLevel === 'emergency') return null   // 911 is untouchable, always
 
   const raw = rawText.toLowerCase()
   const stripped = stripNegatedClauses(rawText).toLowerCase()
 
   for (const p of cal.patterns) {
     if (LEVEL_RANK[decisionLevel] <= LEVEL_RANK[p.target]) continue          // nothing to lower
+    if (decisionLevel === 'er' && !p.allowFromEr) continue                   // ER needs the human-granted exception
     if (!p.requiredAny.some(t => has(raw, t))) continue                      // condition 1a
     if (!p.supporting.some(t => has(raw, t))) continue                       // condition 1b
     if (p.boundaryTerms.some(t => hasBoundaryTerm(stripped, t))) continue    // condition 2
