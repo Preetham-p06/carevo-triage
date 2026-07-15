@@ -28,21 +28,35 @@ import { recordReeTelemetry } from '@/lib/ree/telemetry'
 // LLM provider — priority: OpenAI → Cerebras → Groq → NVIDIA Build → GitHub Models.
 // All five expose an OpenAI-compatible API; only the baseURL and key differ.
 // Switch providers by setting/unsetting the corresponding env var.
-const useOpenAI   = !!process.env.OPENAI_API_KEY
-const useCerebras = !useOpenAI && !!process.env.CEREBRAS_API_KEY
-const useGroq     = !useOpenAI && !useCerebras && !!process.env.GROQ_API_KEY
-const useNvidia   = !useOpenAI && !useCerebras && !useGroq && !!process.env.NVIDIA_API_KEY
-const useGitHub   = !useOpenAI && !useCerebras && !useGroq && !useNvidia && !!process.env.GITHUB_TOKEN
+// Keys pasted through dashboard UIs (Vercel env vars, etc.) sometimes carry
+// stray newlines, spaces, quotes, or a "NAME=" prefix. Any whitespace in the
+// Authorization header makes EVERY call fail instantly with "Connection
+// error." before a request is even sent (observed in production 2026-07-15).
+// Real API keys never contain whitespace or quotes — strip them defensively.
+const cleanKey = (v?: string): string | undefined => {
+  const k = v?.replace(/^[A-Z_]+=/, '').replace(/["']/g, '').replace(/\s+/g, '')
+  return k || undefined
+}
+const OPENAI_KEY   = cleanKey(process.env.OPENAI_API_KEY)
+const CEREBRAS_KEY = cleanKey(process.env.CEREBRAS_API_KEY)
+const GROQ_KEY     = cleanKey(process.env.GROQ_API_KEY)
+const NVIDIA_KEY   = cleanKey(process.env.NVIDIA_API_KEY)
+const GITHUB_KEY   = cleanKey(process.env.GITHUB_TOKEN)
+const useOpenAI   = !!OPENAI_KEY
+const useCerebras = !useOpenAI && !!CEREBRAS_KEY
+const useGroq     = !useOpenAI && !useCerebras && !!GROQ_KEY
+const useNvidia   = !useOpenAI && !useCerebras && !useGroq && !!NVIDIA_KEY
+const useGitHub   = !useOpenAI && !useCerebras && !useGroq && !useNvidia && !!GITHUB_KEY
 const providerApiKey = useOpenAI
-  ? process.env.OPENAI_API_KEY
+  ? OPENAI_KEY
   : useCerebras
-  ? process.env.CEREBRAS_API_KEY
+  ? CEREBRAS_KEY
   : useGroq
-  ? process.env.GROQ_API_KEY
+  ? GROQ_KEY
   : useNvidia
-  ? process.env.NVIDIA_API_KEY
+  ? NVIDIA_KEY
   : useGitHub
-  ? process.env.GITHUB_TOKEN
+  ? GITHUB_KEY
   : 'missing-provider-key'
 const openai = new OpenAI({
   apiKey: providerApiKey,
