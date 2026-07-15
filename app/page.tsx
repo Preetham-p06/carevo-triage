@@ -303,12 +303,33 @@ export function HomePage() {
             <div className="px-5 py-4 border-t border-slate-100">
               <p className="text-slate-700 leading-relaxed text-sm">{recommendation.reasoning}</p>
             </div>
-            {cfg.cost && (
-              <div className="px-5 pb-4 flex items-center gap-2.5 flex-wrap">
-                <IconDollar className="w-4 h-4 text-slate-400 shrink-0" aria-hidden="true" />
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Est. cost</span>
-                <span className={`text-sm font-bold ${cfg.color} tabular-nums`}>${cfg.cost.min}–${cfg.cost.max}</span>
-                {recommendation.careLevel === 'urgent_care' && <span className="text-xs text-slate-400 tabular-nums">vs $1,800–$3,200 at the ER</span>}
+            {/* Cost: prefer the deterministic engine estimate (versioned rates
+                table with sources); fall back to the static config range. */}
+            {(recommendation.costEstimate || cfg.cost) && (
+              <div className="px-5 pb-4">
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <IconDollar className="w-4 h-4 text-slate-400 shrink-0" aria-hidden="true" />
+                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Est. cost</span>
+                  {recommendation.costEstimate ? (
+                    <>
+                      <span className={`text-sm font-bold ${cfg.color} tabular-nums`}>
+                        ${recommendation.costEstimate.insured.low.toLocaleString()}–${recommendation.costEstimate.insured.high.toLocaleString()}
+                        <span className="font-medium text-slate-400"> with insurance</span>
+                      </span>
+                      <span className="text-xs text-slate-400 tabular-nums">
+                        ${recommendation.costEstimate.cash.low.toLocaleString()}–${recommendation.costEstimate.cash.high.toLocaleString()} without
+                      </span>
+                    </>
+                  ) : (
+                    <span className={`text-sm font-bold ${cfg.color} tabular-nums`}>${cfg.cost!.min}–${cfg.cost!.max}</span>
+                  )}
+                </div>
+                {recommendation.costEstimate?.safetyNote && (
+                  <p className="text-xs text-slate-500 mt-2 leading-relaxed">{recommendation.costEstimate.safetyNote}</p>
+                )}
+                {recommendation.costEstimate && (
+                  <p className="text-[10px] text-slate-400 mt-1.5 leading-relaxed">{recommendation.costEstimate.disclaimer}</p>
+                )}
               </div>
             )}
           </article>

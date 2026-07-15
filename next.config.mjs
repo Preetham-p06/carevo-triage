@@ -9,7 +9,7 @@ const nextConfig = {
   // silently fail in production and the app degrades to seed corpus with
   // calibration disabled.
   outputFileTracingIncludes: {
-    '/api/**': ['./data/knowledge/**', './data/calibration/**'],
+    '/api/**': ['./data/knowledge/**', './data/calibration/**', './data/cost/**'],
   },
   async headers() {
     return [

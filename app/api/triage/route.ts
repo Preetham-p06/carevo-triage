@@ -24,6 +24,7 @@ import { rateLimit, clientIp, TOO_MANY } from '@/lib/ratelimit'
 import { triageRequestSchema, getFieldErrors } from '@/lib/validation'
 import { sanitize, sanitizeObject } from '@/lib/sanitize'
 import { recordReeTelemetry } from '@/lib/ree/telemetry'
+import { estimateCost } from '@/lib/cost/engine'
 
 // LLM provider — priority: OpenAI → Cerebras → Groq → NVIDIA Build → GitHub Models.
 // All five expose an OpenAI-compatible API; only the baseURL and key differ.
@@ -1122,6 +1123,12 @@ export async function POST(req: NextRequest) {
     const citationKeys = citationKeysFor(decision.rulesFired)
     const evidence = getCitations(citationKeys.length ? citationKeys : ['acep-when-to-go'])
 
+    // Cost estimate: deterministic table lookup, never LLM. Returns null for
+    // 'emergency' by design (no dollar figure on a 911 screen) and null if
+    // the rates table is missing (fail closed — never invent a number). The
+    // /api/cost endpoint refines this with user-entered benefits.
+    const costEstimate = await estimateCost(decision.careLevel).catch(() => null)
+
     return NextResponse.json({
       type: 'recommendation',
       careLevel: decision.careLevel,
@@ -1139,6 +1146,7 @@ export async function POST(req: NextRequest) {
       rulesFired: decision.rulesFired.map(r => r.id),
       roundedUp,
       secondReader,   // record-only: independent opinion + agreement flag
+      costEstimate,   // deterministic range from versioned rates table (or null)
       provenance: {
         engineVersion: decision.version,
         rulesetVersion: decision.rulesetVersion,

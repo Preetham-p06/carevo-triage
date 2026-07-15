@@ -63,6 +63,18 @@ export interface TriageRecommendation {
   roundedUp?: boolean
   engineVersion?: string
   rulesetVersion?: string
+  /** Deterministic cost range from the versioned rates table (null for 911) */
+  costEstimate?: {
+    careLevel: CareLevel
+    serviceDescription: string
+    billingCodes: string[]
+    cash: { low: number; high: number }
+    insured: { low: number; high: number }
+    basis: 'cash_uninsured' | 'plan_copay' | 'deductible_not_met' | 'typical_insured'
+    safetyNote?: string
+    disclaimer: string
+    provenance: { version: string; ratesVersion: string; sources: { label: string; url: string; accessed: string }[] }
+  } | null
 }
 
 export interface TriageEmergency {

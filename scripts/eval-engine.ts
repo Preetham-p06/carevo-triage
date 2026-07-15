@@ -15,6 +15,9 @@ import { retrieveGuidance } from '../lib/knowledge/retrieval'
 import { applyCalibration, loadPromotedCalibration } from '../lib/engine/calibration'
 import { checkConsistency } from '../lib/knowledge/graph'
 import { RED_FLAGS, type ExtractedFeatures, type RedFlag, type BodySystem } from '../lib/engine/features'
+import { estimateCostFromTable } from '../lib/cost/engine'
+import * as fsSync from 'fs'
+import * as path from 'path'
 
 interface Case {
   name: string
@@ -415,6 +418,34 @@ const NO_RISK = { modifiers: [] as any }
   if (bad.length) {
     bad.forEach(([text, want]) => policyFailures.push(`P10: "${text.slice(0, 60)}…" — expected ${want}, got ${detectSevereDehydration(text)}`))
   } else console.log('  ✓ P10 severe-dehydration backstop: cant-keep-fluids-down + vomiting/orthostatic detected')
+}
+
+// P12: cost engine — deterministic, fail-closed, never a number on a 911
+// screen. Money must never influence routing (there is no code path for it,
+// but the invariants below keep it that way).
+{
+  const ratesPath = path.join(process.cwd(), 'data', 'cost', 'rates-seed.json')
+  if (!fsSync.existsSync(ratesPath)) {
+    policyFailures.push('P12: data/cost/rates-seed.json missing — cost engine has no rates table')
+  } else {
+    const table = JSON.parse(fsSync.readFileSync(ratesPath, 'utf8'))
+    const levels = ['er', 'urgent_care', 'primary_care', 'telehealth', 'home_care'] as const
+    const p12: Array<[string, () => boolean]> = [
+      ['emergency (911) NEVER gets a dollar estimate', () => estimateCostFromTable(table, 'emergency') === null],
+      ['every non-911 level has an estimate', () => levels.every(l => estimateCostFromTable(table, l) !== null)],
+      ['all ranges valid (0 ≤ low ≤ high)', () => levels.every(l => { const e = estimateCostFromTable(table, l)!; return e.cash.low >= 0 && e.cash.low <= e.cash.high && e.insured.low >= 0 && e.insured.low <= e.insured.high })],
+      ['ER cash dominates every lower level', () => { const er = estimateCostFromTable(table, 'er')!; return levels.slice(1).every(l => { const e = estimateCostFromTable(table, l)!; return er.cash.high >= e.cash.high && er.cash.low >= e.cash.low }) }],
+      ['home care is the cheapest', () => { const h = estimateCostFromTable(table, 'home_care')!; return levels.slice(0, 4).every(l => estimateCostFromTable(table, l)!.cash.high >= h.cash.high) }],
+      ['every estimate carries sourced provenance', () => levels.every(l => { const e = estimateCostFromTable(table, l)!; return e.provenance.sources.length > 0 && e.provenance.sources.every(s => s.url && s.accessed) && !!e.disclaimer })],
+      ['ER estimate always carries the EMTALA safety note', () => !!estimateCostFromTable(table, 'er')!.safetyNote],
+      ['uninsured → cash basis', () => { const e = estimateCostFromTable(table, 'urgent_care', { payerType: 'uninsured', source: 'manual' })!; return e.basis === 'cash_uninsured' && e.insured.high === e.cash.high },],
+      ['known copay + deductible met → exact copay', () => { const e = estimateCostFromTable(table, 'urgent_care', { payerType: 'commercial', copay: 40, deductibleMet: true, source: 'manual' })!; return e.basis === 'plan_copay' && e.insured.low === 40 && e.insured.high === 40 }],
+      ['deductible not met → allowed-amount range (higher than copay tier)', () => { const e = estimateCostFromTable(table, 'urgent_care', { payerType: 'commercial', deductibleMet: false, source: 'manual' })!; return e.basis === 'deductible_not_met' && e.insured.high >= estimateCostFromTable(table, 'urgent_care')!.insured.high }],
+    ]
+    const bad = p12.filter(([, fn]) => { try { return !fn() } catch { return true } })
+    if (bad.length) bad.forEach(([name]) => policyFailures.push(`P12: ${name}`))
+    else console.log(`  ✓ P12 cost engine: 911-silent, fail-closed, sourced, benefit ladder correct (${table.version})`)
+  }
 }
 
 if (policyFailures.length) {
