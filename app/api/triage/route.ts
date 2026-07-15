@@ -116,6 +116,8 @@ const PHRASER_PROMPT = (hint: string) => `You are Carevo's intake interviewer �
 RULES:
 - One brief empathetic beat acknowledging what the patient just said, then the question.
 - Plain language, contractions, no jargon, no condition names or claims of certainty.
+- NEVER ask the patient to rate pain or symptoms on a scale (1 to 10) or to pick a word like mild, moderate, or severe — people can't judge those categories. Ask about concrete, observable effects instead: "Is it stopping you from walking?", "Did it wake you up from sleep?", "Can you keep food down?"
+- If the patient has been vague, ask for specifics about their main symptom: where exactly it is, what it feels like, what makes it better or worse.
 - If patient asked whether you're an AI, answer honestly in one clause ("I'm Carevo's automated assistant"), then ask the question.
 - Output valid JSON only: {"type":"question","text":"..."}`
 
@@ -979,6 +981,27 @@ export async function POST(req: NextRequest) {
     }
 
     // ── Decision ─────────────────────────────────────────────────────────────
+    // Clinician rule (Paul, 2026-07-15): real patients are vague — synthetic
+    // vignettes are detailed, so gate accuracy overstates real-world intake.
+    // If we're about to decide on THIN information (≤2 established fields)
+    // with question budget left, ask one open catch-all first: "any other
+    // symptoms?". Deterministic text (no LLM), asked at most once (client
+    // echoes 'catch_all' back in askedTargets), and NEVER when the preview
+    // decision is already ER+ — an urgent recommendation must not be delayed
+    // by a turn.
+    const askedCatchAll = (parsedBody.data.askedTargets ?? []).includes('catch_all')
+    if (!askedCatchAll && questionsAsked < 4 && known.size <= 2) {
+      const preview = decide(features, risk, adjustments)
+      if (preview.careLevel !== 'emergency' && preview.careLevel !== 'er') {
+        return NextResponse.json({
+          type: 'question',
+          text: "Before I point you in the right direction — do you have any other symptoms, or anything else about how you're feeling that you haven't mentioned? Even small details help.",
+          questionNumber: questionsAsked + 1,
+          askedFor: 'catch_all',
+          askRationale: 'thin-information catch-all (clinician rule: sweep for missed symptoms before deciding)',
+        })
+      }
+    }
     const decision = decide(features, risk, adjustments)
 
     // Patient-facing factors may only assert established facts: trajectory

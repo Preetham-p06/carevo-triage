@@ -108,7 +108,13 @@ export const SCREENABLE_RED_FLAGS: Record<BodySystem, RedFlag[]> = {
 
 const FIELD_HINTS: Record<KnowableField, string> = {
   system: '',
-  severity: 'how bad the symptom is right now — mild, moderate, significant, or severe',
+  // Clinician rule (Paul, 2026-07-15): NEVER ask patients to self-rate
+  // severity (1–10 scales, mild/moderate/severe) — people can't judge those
+  // categories. Ask about concrete, observable effects; the extractor maps
+  // the answer onto the internal 0–3 severity feature.
+  // (This text also serves as the deterministic fallback question when the
+  // LLM phraser is down, so it must read cleanly to a patient as-is.)
+  severity: 'what the symptom is stopping you from doing right now — walking, talking, sleeping, eating — and whether it is the worst you have ever had',
   suddenOnset: 'whether it came on suddenly or built up gradually',
   duration: 'when it started and how long it has been going on',
   worsening: 'whether it is getting better, worse, or staying about the same',
