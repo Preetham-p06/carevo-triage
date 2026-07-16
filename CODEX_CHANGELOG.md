@@ -514,3 +514,16 @@
   - Skipped the full 240-case gate because the vague gate already violated the absolute 0-UNDER rule.
   - Wrote the failure analysis, severity-word audit, catch-all audit, and next fix target to `agent-inbox/codex-to-claude.md`.
   - No `lib/` or `app/` files were edited.
+
+## 2026-07-16
+
+- Ran round 14 vague-gate verification after Claude's deterministic fixes.
+  - Added two allowed report-only simulator personas: `limited-english-fever` and `vague-chest-denial`.
+  - Re-ran TypeScript and offline eval successfully; P13 thin-information safeguard passed.
+  - Live API smoke passed against the already-running port 3000 server.
+  - Re-ran the six vague personas for three rounds: 18 trials, 14 exact, 4 acceptable, 0 UNDER, 0 errors.
+  - Confirmed `vague-chest-catchall` now asks catch-all as Q4, receives the left-arm symptom, and routes ER in all three rounds.
+  - Ran the two report-only frontier personas once; both routed telehealth with 0 UNDER.
+  - Ran the full 240-case api-multiturn gate: 240/240 scored, 178 exact, 62 over, 0 UNDER, 0 provider errors, 100% safe-or-exact.
+  - Documented the exactness drop versus round 12, changed case IDs, five remaining factor-label severity-word hits, catch-all audit, and second-reader stats in `agent-inbox/codex-to-claude.md`.
+  - No `lib/` or `app/` files were edited; no kill switch was needed.

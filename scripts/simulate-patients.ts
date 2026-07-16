@@ -294,6 +294,37 @@ const PERSONAS: Persona[] = [
       default: 'no clue',
     },
     truth: { expected: 'telehealth', accept: ['primary_care'] },
+  },
+  // ── Round 14: next-frontier personas (report-only) ─────────────────────────
+  {
+    id: 'limited-english-fever',
+    description: 'Limited-English fever phrasing; questions should stay simple and routing safe',
+    opening: 'head very hot two day',
+    history: null,
+    answers: {
+      'redFlag:stiff_neck_with_fever': 'neck okay',
+      'redFlag:severe_dehydration': 'drink little water',
+      'redFlag:breathing_difficulty': 'breath okay',
+      catch_all: 'no can eat good',
+      duration: 'two day',
+      default: 'not know, feel hot',
+    },
+    truth: { expected: 'telehealth', accept: ['primary_care', 'urgent_care'] },
+  },
+  {
+    id: 'vague-chest-denial',
+    description: 'Vague chest complaint, denies all probes including catch-all; thin floor should prevent home care',
+    opening: 'chest feel weird',
+    history: null,
+    answers: {
+      'redFlag:chest_pressure': 'no pressure',
+      'redFlag:breathing_difficulty': 'breathing okay',
+      'redFlag:fainting_or_confusion': 'no fainting',
+      catch_all: 'no, nothing else',
+      duration: 'today maybe',
+      default: 'not sure',
+    },
+    truth: { expected: 'telehealth', accept: ['primary_care', 'urgent_care', 'er'] },
   }
 ]
 
