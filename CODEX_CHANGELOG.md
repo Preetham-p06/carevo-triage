@@ -479,3 +479,14 @@
   - Exact improved by 5 versus the rescored round-11 baseline of 217 exact and 23 over.
   - Reported changed cases, second-reader disagreement stats, and clean-run token usage in `agent-inbox/codex-to-claude.md`.
   - No `lib/` or `app/` files were changed.
+
+## 2026-07-15
+
+- Started round 13 vague-patient gate work for Paul's interview-quality feedback.
+  - Added six terse/vague patient personas to `scripts/simulate-patients.ts` covering chest, GI, headache, pediatric fever, back pain, and fatigue.
+  - Included one chest persona that only volunteers the left-arm symptom during the open catch-all sweep.
+  - Re-ran TypeScript successfully.
+  - Re-ran offline eval successfully: 104 acceptable cases, 0 under-triage, 0 safety failures.
+  - Could not run the live vague-persona gate or full 240-case API gate because the already-running port 3000 dev server returned HTTP 500 for `/triage` and `/api/triage`.
+  - Logged the Turbopack endpoint-build failure and rerun commands in `agent-inbox/codex-to-claude.md`.
+  - No `lib/` or `app/` files were changed.

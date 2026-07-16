@@ -1,192 +1,101 @@
-# Codex report to Claude - Round 12 8-pattern gate + second reader
+# Codex → Claude Round 13 Report
 
 Date: 2026-07-15
+Task: Paul's vague-patient rules gate
+Status: BLOCKED on live server preflight
 
 ## Bottom line
 
-Round 12 passed on the clean rerun.
+I added the six requested vague-patient personas to `scripts/simulate-patients.ts` and verified the repo still passes local static/offline checks. I could not run the required live vague-persona x3 gate or the full 240-case API gate because the already-running dev server on port 3000 returns HTTP 500 for both `/triage` and `/api/triage`.
 
-- Clean output: `data/recursive-learning/synthetic-240-results-round12-8pattern-secondreader-clean-2026-07-15.jsonl`
-- Total: 240
-- Scored: 240
-- Exact: 222
-- Over: 18
-- UNDER: 0
-- Provider errors: 0
-- Exact accuracy: 92.5%
-- Safe-or-exact: 100%
-- Kill switch action: not needed; no UNDER appeared.
+This is not a routing failure from the new personas. The Next dev log shows a Turbopack internal error while building app endpoints, caused by a timeout reading:
 
-Compared with the rescored round-11 baseline of 217 exact / 23 over:
+`node_modules/next/dist/lib/default-transpiled-packages.json`
 
-- Exact rose by 5.
-- Over fell by 5.
-- 5 cases changed.
-- 0 cases got worse.
+Affected endpoints in the log include `/api/triage/route` and `/triage/page`.
 
-Important caveat: first attempt produced 239/240 scored with 1 transient provider error at case-0137, then the clean rerun passed 240/240.
+## Changes made
 
-## Git checkpoints
+Only one code file was changed:
 
-- Before-run checkpoint commit: `5885bce round 12: before calibrated gate`
-- After-run commit: pending until this report is committed at the end of the turn.
+- `scripts/simulate-patients.ts`
 
-## Preflight
+Added six Round 13 personas:
 
-| Check | Result |
-| --- | --- |
-| `data/calibration/promoted-calibration.json` exists | PASS |
-| Calibration version | `carevo-calibration-2026-07-15.1` |
-| Promoted pattern count | 8 |
-| `allowFromEr` patterns | `home_mild_eye_irritation_without_vision_or_trauma_flags`, `home_rash_without_infection_flags` |
-| Typecheck | PASS |
-| Offline eval | PASS: 104/104 acceptable, 0 under-triage, P11 calibration gate passed with 8 patterns |
-| Live port 3000 emergency smoke | PASS |
+| Persona | Purpose | Expected | Accepts |
+|---|---:|---:|---:|
+| `vague-chest-catchall` | Terse chest complaint; left-arm symptom only appears during catch-all | ER | emergency |
+| `vague-gi-terse` | Vague stomach pain without volunteered red flags | telehealth | primary care, urgent care |
+| `vague-headache-terse` | Vague headache; denies neuro/meningitis red flags when asked | telehealth | primary care, urgent care |
+| `vague-kid-fever-terse` | Vague pediatric fever; not infant, no danger signs | telehealth | primary care, urgent care, home care |
+| `vague-back-pain-terse` | Vague back pain without trauma/infection/neuro red flags | home care | telehealth, primary care |
+| `vague-tired-terse` | Terse fatigue; should not jump to ER without red flags | telehealth | primary care |
 
-Promoted patterns:
+The chest persona specifically tests Paul's point that vague patients may only reveal important symptoms when asked an open catch-all question.
 
-- `home_uri_cold_without_lower_respiratory_flags`
-- `home_mild_pharyngitis_without_red_flags`
-- `home_recurrent_aphthous_ulcers`
-- `home_stye_without_orbital_flags`
-- `home_allergic_rhinitis_without_infection_flags`
-- `home_mild_eye_irritation_without_vision_or_trauma_flags`
-- `home_rash_without_infection_flags`
-- `home_mechanical_back_pain_without_neuro_flags`
+## Completed checks
 
-## Gate result
+| Check | Result | Notes |
+|---|---:|---|
+| Before-run checkpoint commit | PASS | Created `be55100 round 13: before vague-patient gate` |
+| TypeScript | PASS | `tsc --noEmit` completed cleanly |
+| Offline engine eval | PASS | 104 cases, 84 exact, 104 acceptable, 0 under-triage, 0 safety failures |
+| Port 3000 landing page | PASS | `/landing-v2.html` returned HTTP 200 |
+| Port 3000 triage page | FAIL | `/triage` returned HTTP 500 |
+| Port 3000 triage API | FAIL | `/api/triage` returned HTTP 500 |
 
-| Metric | Round 11 rescored baseline | Round 12 clean | Delta |
-| --- | ---: | ---: | ---: |
-| Total | 240 | 240 | 0 |
-| Scored | 240 | 240 | 0 |
-| Exact | 217 | 222 | +5 |
-| Over | 23 | 18 | -5 |
-| UNDER | 0 | 0 | 0 |
-| Provider errors | 0 | 0 | 0 |
-| Exact accuracy | 90.4% | 92.5% | +2.1 pts |
-| Safe-or-exact | 100% | 100% | 0 |
+## Live gate status
 
-## Changed cases vs round 11 rescored baseline
+Not run because the live app was unavailable. Required live checks still pending:
 
-All changed cases improved. No changed case got worse.
+1. Vague personas x3 against port 3000.
+2. Severity-scale audit across vague runs and fresh 240 gate.
+3. Catch-all audit: count, answers, routing impact, and confirmation it never fires before ER/emergency preview.
+4. Full 240 `api-multiturn` gate with output file containing `round13`.
+5. Second-reader stats.
+6. Token/cost usage for the live round.
 
-| Case | Before | After | Calibration factor? | Matching promoted pattern |
-| --- | --- | --- | --- | --- |
-| case-0202 | over / telehealth | exact / home_care | yes | `home_recurrent_aphthous_ulcers` |
-| case-0207 | over / primary_care | exact / home_care | yes | `home_recurrent_aphthous_ulcers` |
-| case-0208 | over / primary_care | exact / home_care | yes | `home_stye_without_orbital_flags` |
-| case-0212 | over / primary_care | exact / home_care | yes | `home_recurrent_aphthous_ulcers` |
-| case-0240 | over / telehealth | exact / home_care | no | none detected; likely extractor/rounding variance |
+## Server failure evidence
 
-Verbatim improved case text:
+Observed HTTP responses from the existing port-3000 server:
 
-- case-0202: `A 17-year-old has recurrent mouth ulcers since childhood with no eye, skin, genital, respiratory, or GI lesions.`
-- case-0207: `The patient says: A 17-year-old has recurrent mouth ulcers since childhood with no eye, skin, genital, respiratory, or GI lesions.`
-- case-0208: `The patient says: A 30-year-old has a painful swollen eyelid for one day with minor tenderness, no trauma, and no vision change.`
-- case-0212: `In a triage intake, A 17-year-old has recurrent mouth ulcers since childhood with no eye, skin, genital, respiratory, or GI lesions.`
-- case-0240: `A family member reports that A 20-year-old has mild sunburn on shoulders without blistering, fever, severe pain, or dehydration.`
+- `GET /triage` → 500
+- `POST /api/triage` → 500
+- `GET /landing-v2.html` → 200
 
-## Cluster notes
+Relevant log summary from `.next/dev/logs/next-development.log`:
 
-Flipped as expected:
+- `TurbopackInternalError: Failed to write app endpoint /api/triage/route`
+- `TurbopackInternalError: Failed to write app endpoint /triage/page`
+- Cause: operation timed out while reading `node_modules/next/dist/lib/default-transpiled-packages.json`
 
-- Aphthous ulcers: clear improvement via `home_recurrent_aphthous_ulcers`.
-- Stye: at least case-0208 improved via `home_stye_without_orbital_flags`.
-- Rhinitis and mechanical back pain remained exact from round 11.
+## Commands to rerun after the dev server is healthy
 
-Still not fully flipped:
+Use the already-running port 3000 server once it is restarted or fixed:
 
-- URI/cold and mild pharyngitis still have several over-to-urgent-care rows.
-- Eczema rows case-0204, case-0209, case-0214, case-0219 still over-route to ER.
-- Conjunctivitis / mild-eye-irritation rows case-0205, case-0210, case-0215, case-0220 still over-route to ER.
+```bash
+cd ~/Documents/Claude/Projects/Carevo/triage-web
 
-Interpretation: the 8-pattern calibration improved exactness, but `allowFromEr` still did not make the eczema/conjunctivitis cluster land home-care in this live run. This is safe, but not the expected full flip.
+TRIAL_KEY=carevo-trials-x7k2 npm run trials -- \
+  --only=vague-chest-catchall,vague-gi-terse,vague-headache-terse,vague-kid-fever-terse,vague-back-pain-terse,vague-tired-terse \
+  --repeat=3 \
+  --inter-round-delay-ms=0 \
+  --max-errors=0
 
-## Worse cases
+TRIAL_KEY=carevo-trials-x7k2 node_modules/.bin/sucrase-node scripts/run-clinical-dataset.ts \
+  --input=data/recursive-learning/synthetic-240-benchmark.jsonl \
+  --mode=api-multiturn \
+  --output=data/recursive-learning/synthetic-240-results-round13-vague-rules-2026-07-15.jsonl
+```
 
-None versus the rescored round-11 baseline.
+Acceptance criteria remain unchanged:
 
-## Second-reader stats
+- 240/240 scored
+- 0 UNDER
+- 0 provider errors
+- no new severity-scale phrasing hits
+- no accuracy drop from the round-12 baseline of 222/240 exact unless explainable and safe
 
-Second reader appeared on 183 recommendation rows. Emergency hard-stop rows do not include second-reader output.
+## Notes
 
-| Metric | Count |
-| --- | ---: |
-| Rows with secondReader | 183 |
-| Agreements | 35 |
-| Disagreements | 148 |
-| Agreement rate | 19.1% |
-| Reader higher than engine | 130 |
-| Reader lower than engine | 18 |
-
-The second reader is record-only and did not affect routing.
-
-### Higher-than-engine disagreements to eyeball
-
-Grouped by engine-to-reader direction:
-
-- `er -> emergency`:
-  `case-0041`, `case-0042`, `case-0043`, `case-0046`, `case-0047`, `case-0048`, `case-0051`, `case-0052`, `case-0053`, `case-0056`, `case-0057`, `case-0058`, `case-0061`, `case-0062`, `case-0063`, `case-0064`, `case-0065`, `case-0066`, `case-0067`, `case-0068`, `case-0069`, `case-0070`, `case-0071`, `case-0072`, `case-0073`, `case-0074`, `case-0075`, `case-0076`, `case-0077`, `case-0078`, `case-0079`, `case-0080`, `case-0081`, `case-0082`, `case-0085`, `case-0086`, `case-0087`, `case-0090`, `case-0091`, `case-0092`, `case-0095`, `case-0096`, `case-0097`, `case-0100`, `case-0164`, `case-0165`, `case-0169`, `case-0170`, `case-0174`, `case-0179`
-
-- `urgent_care -> emergency`:
-  `case-0102`, `case-0103`, `case-0106`, `case-0107`, `case-0108`, `case-0112`, `case-0113`, `case-0116`, `case-0117`, `case-0118`, `case-0121`, `case-0122`, `case-0123`, `case-0125`, `case-0126`, `case-0127`, `case-0128`, `case-0130`, `case-0131`, `case-0132`, `case-0133`, `case-0135`, `case-0136`, `case-0137`, `case-0138`, `case-0140`, `case-0141`, `case-0147`, `case-0161`, `case-0163`, `case-0166`, `case-0168`, `case-0171`, `case-0173`, `case-0176`, `case-0178`
-
-- `home_care -> primary_care`:
-  `case-0182`, `case-0183`, `case-0185`, `case-0187`, `case-0188`, `case-0190`, `case-0192`, `case-0193`, `case-0195`, `case-0197`, `case-0198`, `case-0200`, `case-0202`, `case-0207`, `case-0212`, `case-0217`, `case-0221`, `case-0222`, `case-0223`, `case-0224`, `case-0225`, `case-0226`, `case-0228`, `case-0229`, `case-0230`, `case-0231`, `case-0233`, `case-0234`, `case-0235`, `case-0236`, `case-0237`, `case-0238`, `case-0239`, `case-0240`
-
-- `home_care -> urgent_care`:
-  `case-0201`, `case-0203`, `case-0206`, `case-0208`, `case-0211`, `case-0213`, `case-0216`, `case-0218`, `case-0227`, `case-0232`
-
-Highest-priority eyeball set:
-
-- The `urgent_care -> emergency` disagreements, because they are the largest acuity gap in non-ER rows.
-- The `home_care -> urgent_care` and `home_care -> primary_care` disagreements in the newly calibrated rows, because they show the reader is much more conservative than the engine/calibration target.
-
-## Cost / usage for clean rerun
-
-Usage measured from `data/llm-usage.jsonl` lines 3420 through 4421.
-
-| Metric | Value |
-| --- | ---: |
-| LLM calls | 1,002 |
-| Prompt tokens | 432,115 |
-| Completion tokens | 72,674 |
-| Total tokens | 504,789 |
-| Cached prompt tokens | 0 |
-| Extractor calls | 499 |
-| Extractor tokens | 404,383 |
-| Phraser/reader calls | 497 |
-| Phraser/reader tokens | 95,350 |
-| Extractor retry calls | 6 |
-| Extractor retry tokens | 5,056 |
-
-Estimated dollar cost using $0.15 / 1M input tokens and $0.60 / 1M output tokens:
-
-- Estimated clean rerun cost: about `$0.108`
-
-Compared with round 11 measured usage:
-
-- Round 11 calls: 792
-- Round 12 clean calls: 1,002
-- Increase: +210 calls (+26.5%)
-
-Note: usage logging does not separate second-reader calls into a distinct role. The increase appears mostly inside the phraser/reader bucket.
-
-## Rollback assessment
-
-No rollback was triggered.
-
-- No UNDER appeared.
-- Clean rerun had 0 provider errors.
-- `data/calibration/promoted-calibration.json` was left in place.
-
-## Files created or updated
-
-- Created: `data/recursive-learning/synthetic-240-results-round12-8pattern-secondreader-2026-07-15.jsonl`
-- Created: `data/recursive-learning/synthetic-240-results-round12-8pattern-secondreader-2026-07-15.summary.json`
-- Created: `data/recursive-learning/synthetic-240-results-round12-8pattern-secondreader-clean-2026-07-15.jsonl`
-- Created: `data/recursive-learning/synthetic-240-results-round12-8pattern-secondreader-clean-2026-07-15.summary.json`
-- Updated: `data/llm-usage.jsonl`
-- Updated: `agent-inbox/codex-to-claude.md`
-- No `lib/` or `app/` files changed.
+No `lib/` or `app/` files were changed. No emergency net, rules, extractor, phraser, calibration, or routing logic was edited.
