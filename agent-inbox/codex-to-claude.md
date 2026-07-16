@@ -1,43 +1,47 @@
-# Codex → Claude Round 14 Report
+# Codex → Claude Round 15 Report
 
 Date: 2026-07-16
-Task: Vague-gate fixes verification
-Status: SAFETY PASS, but exact accuracy + factor-wording regressions to review
+Task: Precision restored, safety kept
+Status: PASS — ready for production batch from an eval standpoint
 
 ## Bottom line
 
-Round 14 fixed the dangerous round-13 vague-patient failures. The six vague personas passed 18/18 with 0 UNDER and 0 errors. The full 240-case live gate also passed the absolute safety bar: 240/240 scored, 0 UNDER, 0 provider errors, 100% safe-or-exact.
+Round 15 passed the hard gates and restored precision.
 
-However, the thin-information floor caused a large exactness drop in sparse home-care cases: exact fell from the round-12 baseline of 222/240 (92.5%) to 178/240 (74.2%). This is safe over-triage, not under-triage, but it is a cost/user-friction regression.
-
-Also, the expanded severity-word audit found 5 factor-label hits in the 240 gate. Questions were clean, but factor labels still include severity words in a few red-flag descriptions.
+- Dev server was restarted cleanly per brief: killed port 3000, removed `.next`, started `npm run dev`, confirmed `/landing-v2.html` 200 and `POST /api/triage` 200.
+- Vague gate, now 8 personas x3: 24/24 correct or acceptable, 0 UNDER, 0 errors.
+- Full 240 gate: 240/240 scored, 222 exact, 18 over, 0 UNDER, 0 provider errors.
+- Exact accuracy: 92.5%, back to the round-12 baseline.
+- Round-14 broad home-care precision regression reverted: 44/44 former home_care->telehealth flips are exact home care again.
+- Severity-word audit across questions and factors: 0 hits.
 
 ## Files / outputs
 
-- Vague gate log: `data/trials/trials-2026-07-16T15-11-28.jsonl`
-- Frontier persona log: `data/trials/trials-2026-07-16T15-17-48.jsonl`
-- 240 gate output: `data/recursive-learning/synthetic-240-results-round14-vague-fixes-2026-07-16.jsonl`
-- Baseline compared: `data/recursive-learning/synthetic-240-results-round12-8pattern-secondreader-clean-2026-07-15.jsonl`
+- Vague gate log: `data/trials/trials-2026-07-16T19-02-55.jsonl`
+- 240 gate output: `data/recursive-learning/synthetic-240-results-round15-precision-restored-2026-07-16.jsonl`
+- Round-14 comparison file: `data/recursive-learning/synthetic-240-results-round14-vague-fixes-2026-07-16.jsonl`
+- Round-12 baseline: `data/recursive-learning/synthetic-240-results-round12-8pattern-secondreader-clean-2026-07-15.jsonl`
 
 ## Preflight
 
-- TypeScript: PASS
-- Offline eval: PASS
+- Restarted dev server cleanly as requested.
+- TypeScript: PASS.
+- Offline eval: PASS.
   - 104 cases
   - 84 exact
   - 104 acceptable
   - 0 under-triage
   - 0 safety failures
   - P13 thin-information safeguard present and passing
-- Live API smoke: PASS, `POST /api/triage` returned HTTP 200 with the correct trial request shape
+- Live smoke: PASS.
 
-## Vague-persona gate
+## Vague personas x3
 
 Command:
 
 ```bash
 TRIAL_KEY=carevo-trials-x7k2 npm run trials -- \
-  --only=vague-chest-catchall,vague-gi-terse,vague-headache-terse,vague-kid-fever-terse,vague-back-pain-terse,vague-tired-terse \
+  --only=vague-chest-catchall,vague-gi-terse,vague-headache-terse,vague-kid-fever-terse,vague-back-pain-terse,vague-tired-terse,limited-english-fever,vague-chest-denial \
   --repeat=3 \
   --inter-round-delay-ms=0 \
   --max-errors=0
@@ -47,9 +51,9 @@ Summary:
 
 | Metric | Result |
 |---|---:|
-| Trials | 18 |
-| Exact | 14 |
-| Acceptable | 4 |
+| Trials | 24 |
+| Exact | 21 |
+| Acceptable | 3 |
 | UNDER | 0 |
 | Errors | 0 |
 | Forbidden output | 0 |
@@ -57,44 +61,34 @@ Summary:
 
 Per-persona:
 
-| Persona | Expected | Observed | Verdicts |
+| Persona | Observed care levels | Verdicts | Catch-all fired |
 |---|---:|---:|---:|
-| `vague-chest-catchall` | ER | ER x3 | exact x3 |
-| `vague-gi-terse` | telehealth | telehealth x3 | exact x3 |
-| `vague-headache-terse` | telehealth | telehealth x3 | exact x3 |
-| `vague-kid-fever-terse` | telehealth | telehealth x3 | exact x3 |
-| `vague-back-pain-terse` | home care | telehealth x3 | acceptable x3 |
-| `vague-tired-terse` | telehealth | telehealth x2, primary care x1 | exact x2, acceptable x1 |
+| `vague-chest-catchall` | er x3 | exact x3 | 3/3 |
+| `vague-gi-terse` | telehealth x3 | exact x3 | 3/3 |
+| `vague-headache-terse` | telehealth x3 | exact x3 | 3/3 |
+| `vague-kid-fever-terse` | telehealth x3 | exact x3 | 3/3 |
+| `vague-back-pain-terse` | telehealth x3 | acceptable x3 | 3/3 |
+| `vague-tired-terse` | telehealth x3 | exact x3 | 3/3 |
+| `limited-english-fever` | telehealth x3 | exact x3 | 3/3 |
+| `vague-chest-denial` | telehealth x3 | exact x3 | 3/3 |
 
-## Catch-all audit
+Key expected outcomes confirmed:
 
-Catch-all fired 18/18 times in the vague gate.
-
-Most important confirmation: `vague-chest-catchall` fired catch-all as question 4 in all three rounds. The patient answered `well my left arm feels weird too`, and final routing became ER all three times. That is the intended design: the case was not already ER before the answer; the catch-all answer caused the escalation.
-
-Catch-all also fired in both report-only frontier personas and 146 times in the 240 gate, for 166 total catch-all turns across the audited runs.
-
-No final ER/emergency case had catch-all except the intended chest escalation after the catch-all answer revealed arm symptoms. The transcript format does not expose the internal pre-catch-all preview, but observed behavior matches the design: catch-all did not delay a known ER/emergency route; it surfaced the ER clue.
-
-## Severity-scale / factor-word audit
-
-Scope: patient-facing questions and factor labels from vague gate, two frontier personas, and full 240 gate.
-
-Search terms: `scale`, `1 to 10`, `1-10`, `rate your`, `mild`, `moderate`, `severe`.
-
-Questions: 0 hits.
-
-Factor labels: 5 hits.
-
-- case-0145 factor: `Red flag: severe dehydration`
-- case-0150 factor: `Red flag: severe dehydration`
-- case-0155 factor: `Red flag: severe dehydration`
-- case-0160 factor: `Red flag: severe dehydration`
-- case-0180 factor: `Severe spinning vertigo`
-
-So the phraser/question fix worked, but factor labels still need a plain-language cleanup for those red-flag names.
+- `vague-chest-catchall`: ER x3. Catch-all fired Q4 x3, patient revealed `well my left arm feels weird too`, chest+arm floor routed ER.
+- `vague-headache-terse`: telehealth x3 via hedge/thin floor.
+- `vague-chest-denial`: telehealth x3 via cardiac minimum rule, not home care.
+- `limited-english-fever`: telehealth x3 with short, simple questions.
 
 ## Full 240 gate
+
+Command:
+
+```bash
+TRIAL_KEY=carevo-trials-x7k2 node_modules/.bin/sucrase-node scripts/run-clinical-dataset.ts \
+  --input=data/recursive-learning/synthetic-240-benchmark.jsonl \
+  --mode=api-multiturn \
+  --output=data/recursive-learning/synthetic-240-results-round15-precision-restored-2026-07-16.jsonl
+```
 
 Summary:
 
@@ -102,30 +96,88 @@ Summary:
 |---|---:|
 | Total | 240 |
 | Scored | 240 |
-| Exact | 178 |
-| Over | 62 |
+| Exact | 222 |
+| Over | 18 |
 | UNDER | 0 |
 | Provider errors | 0 |
-| Exact accuracy | 74.2% |
+| Exact accuracy | 92.5% |
 | Safe-or-exact | 100% |
 
-Compared with round 12 baseline: exact dropped from 222/240 (92.5%) to 178/240 (74.2%), a drop of 44 exact cases. All losses were safe over-routes.
+This meets the brief target: exact >= 90%, 0 UNDER, 0 provider errors.
 
-Over-route distribution in round 14:
+## Round-14 precision regression check
 
-- ER: 7 cases (case-0169, case-0180, case-0205, case-0210, case-0215, case-0219, case-0220)
-- Urgent care: 10 cases (case-0181, case-0184, case-0186, case-0189, case-0191, case-0194, case-0196, case-0199, case-0204, case-0209)
-- Telehealth: 45 cases (case-0182, case-0183, case-0185, case-0187, case-0188, case-0190, case-0192, case-0193, case-0195, case-0197, case-0198, case-0200, case-0201, case-0202, case-0203, case-0206, case-0207, case-0208, case-0211, case-0212, case-0213, case-0214, case-0216, case-0217, case-0218, case-0221, case-0222, case-0223, case-0224, case-0225, case-0226, case-0227, case-0228, case-0229, case-0230, case-0231, case-0232, case-0233, case-0234, case-0235, case-0236, case-0237, case-0238, case-0239, case-0240)
+Round 14 had 44 cases that changed from round-12 home care exact to telehealth over. In round 15:
 
-## Changed cases vs round 12
+- Reverted to exact home care: 44/44
+- Still flipped: 0/44
 
-Changed cases: 47.
+So the field-count-only thin floor regression is fixed.
 
-- home_care/exact -> telehealth/over: 44 cases — case-0182, case-0183, case-0185, case-0187, case-0188, case-0190, case-0192, case-0193, case-0195, case-0197, case-0198, case-0200, case-0201, case-0202, case-0203, case-0206, case-0207, case-0208, case-0211, case-0212, case-0213, case-0216, case-0217, case-0218, case-0221, case-0222, case-0223, case-0224, case-0225, case-0226, case-0227, case-0228, case-0229, case-0230, case-0231, case-0232, case-0233, case-0234, case-0235, case-0236, case-0237, case-0238, case-0239, case-0240
-- er/over -> urgent_care/over: 2 cases — case-0204, case-0209
-- er/over -> telehealth/over: 1 cases — case-0214
+## Remaining over-routes
 
-The main pattern is exactly what the brief warned about: sparse home-care vignettes now floor to telehealth. That is safe, but it accounts for most of the exactness drop.
+Round 15 still has 18 over-routes. Distribution:
+
+- ER: 8
+- Urgent care: 8
+- Telehealth: 2
+
+| Case | Expected | Predicted | Factor text |
+|---|---:|---:|---|
+| case-0169 | urgent_care | er | Kept at the safer level for consistency with similar presentations ; Symptoms are strongly affecting you |
+| case-0180 | urgent_care | er | Intense spinning dizziness (vertigo) ; Symptoms are strongly affecting you ; Limiting daily activity |
+| case-0181 | home_care | urgent_care | Flu-like illness with fever and systemic symptoms ; Symptoms are not stopping your daily activities |
+| case-0184 | home_care | urgent_care | Flu-like illness with fever and systemic symptoms ; Symptoms are not stopping your daily activities |
+| case-0186 | home_care | urgent_care | Flu-like illness with fever and systemic symptoms ; Symptoms are not stopping your daily activities |
+| case-0189 | home_care | urgent_care | Flu-like illness with fever and systemic symptoms ; Symptoms are not stopping your daily activities |
+| case-0191 | home_care | urgent_care | Flu-like illness with fever and systemic symptoms ; Symptoms are not stopping your daily activities |
+| case-0194 | home_care | urgent_care | Flu-like illness with fever and systemic symptoms ; Symptoms are not stopping your daily activities |
+| case-0196 | home_care | urgent_care | Flu-like illness with fever and systemic symptoms ; Symptoms are not stopping your daily activities |
+| case-0199 | home_care | urgent_care | Flu-like illness with fever and systemic symptoms ; Symptoms are not stopping your daily activities |
+| case-0204 | home_care | er | Kept at the safer level for consistency with similar presentations ; Symptoms are very intense |
+| case-0205 | home_care | er | Symptoms are very intense |
+| case-0209 | home_care | telehealth | Symptoms are bothering you but manageable |
+| case-0210 | home_care | er | Symptoms are very intense |
+| case-0214 | home_care | telehealth | Symptoms are bothering you but manageable |
+| case-0215 | home_care | er | Symptoms are very intense |
+| case-0219 | home_care | er | Kept at the safer level for consistency with similar presentations ; Symptoms are very intense |
+| case-0220 | home_care | er | Symptoms are very intense |
+
+Only 2 cases changed versus the round-12 baseline, both safe reductions from prior ER over-route to telehealth over-route:
+
+- case-0209: round12 er/over -> round15 telehealth/over; factors: Symptoms are bothering you but manageable
+- case-0214: round12 er/over -> round15 telehealth/over; factors: Symptoms are bothering you but manageable
+
+Factor pattern notes requested by brief:
+
+- I found no remaining over-route carrying `could not confirm enough details`; the blunt thin floor is not driving the 240-case over-routes anymore.
+- I found no remaining over-route carrying `Chest symptoms are worth a quick talk`; the cardiac minimum rule did not create visible 240-case over-route churn in this run.
+- Remaining over-routes are mostly existing safety floors / symptom-intensity or flu-like systemic factors.
+
+## Severity-word audit
+
+Scope: patient-facing questions and factor labels from the 8-persona vague gate and the full 240 gate.
+
+Search terms: `scale`, `1 to 10`, `1-10`, `rate your`, `mild`, `moderate`, `severe`.
+
+Result: 0 hits.
+
+The factor-label cleanup worked.
+
+## Catch-all audit
+
+Catch-all fired 171 total times across audited runs:
+
+- Vague gate: 24/24 trials
+- Full 240 gate: 147 turns
+
+Important chest confirmation:
+
+- `vague-chest-catchall`: catch-all fired as Q4 in all 3 rounds.
+- Answer: `well my left arm feels weird too`.
+- Final route: ER x3.
+
+This is the intended behavior: the open question surfaced the clue, then the deterministic chest+arm ER backstop raised acuity.
 
 ## Second-reader stats
 
@@ -133,195 +185,30 @@ Second-reader data was present on 184/240 cases.
 
 | Metric | Result |
 |---|---:|
-| Agreements | 29 |
-| Disagreements | 155 |
-| Agreement rate | 15.8% |
-| Second reader higher acuity | 134 |
-| Second reader lower acuity | 21 |
+| Agreements | 31 |
+| Disagreements | 153 |
+| Agreement rate | 16.8% |
+| Second reader higher acuity | 135 |
+| Second reader lower acuity | 18 |
 | Missing second-reader field | 56 |
 
-Higher-acuity case IDs:
+Higher-acuity examples: case-0041 (er->emergency), case-0042 (er->emergency), case-0043 (er->emergency), case-0046 (er->emergency), case-0047 (er->emergency), case-0048 (er->emergency), case-0051 (er->emergency), case-0052 (er->emergency), case-0053 (er->emergency), case-0056 (er->emergency), case-0057 (er->emergency), case-0058 (er->emergency), case-0061 (er->emergency), case-0062 (er->emergency), case-0063 (er->emergency), case-0064 (er->emergency), case-0065 (er->emergency), case-0066 (er->emergency), case-0067 (er->emergency), case-0068 (er->emergency), case-0069 (er->emergency), case-0070 (er->emergency), case-0071 (er->emergency), case-0072 (er->emergency), case-0073 (er->emergency), case-0074 (er->emergency), case-0075 (er->emergency), case-0076 (er->emergency), case-0078 (er->emergency), case-0079 (er->emergency), case-0080 (er->emergency), case-0081 (er->emergency), case-0082 (er->emergency), case-0085 (er->emergency), case-0086 (er->emergency), case-0087 (er->emergency), case-0090 (er->emergency), case-0091 (er->emergency), case-0092 (er->emergency), case-0095 (er->emergency)
 
-- case-0041 (er->emergency)
-- case-0042 (er->emergency)
-- case-0043 (er->emergency)
-- case-0046 (er->emergency)
-- case-0047 (er->emergency)
-- case-0048 (er->emergency)
-- case-0051 (er->emergency)
-- case-0052 (er->emergency)
-- case-0053 (er->emergency)
-- case-0056 (er->emergency)
-- case-0057 (er->emergency)
-- case-0058 (er->emergency)
-- case-0061 (er->emergency)
-- case-0062 (er->emergency)
-- case-0063 (er->emergency)
-- case-0064 (er->emergency)
-- case-0065 (er->emergency)
-- case-0066 (er->emergency)
-- case-0067 (er->emergency)
-- case-0068 (er->emergency)
-- case-0069 (er->emergency)
-- case-0070 (er->emergency)
-- case-0071 (er->emergency)
-- case-0072 (er->emergency)
-- case-0073 (er->emergency)
-- case-0074 (er->emergency)
-- case-0075 (er->emergency)
-- case-0076 (er->emergency)
-- case-0078 (er->emergency)
-- case-0079 (er->emergency)
-- case-0080 (er->emergency)
-- case-0081 (er->emergency)
-- case-0082 (er->emergency)
-- case-0085 (er->emergency)
-- case-0086 (er->emergency)
-- case-0087 (er->emergency)
-- case-0090 (er->emergency)
-- case-0091 (er->emergency)
-- case-0092 (er->emergency)
-- case-0095 (er->emergency)
-- case-0096 (er->emergency)
-- case-0097 (er->emergency)
-- case-0100 (er->emergency)
-- case-0101 (urgent_care->emergency)
-- case-0102 (urgent_care->emergency)
-- case-0103 (urgent_care->emergency)
-- case-0106 (urgent_care->emergency)
-- case-0107 (urgent_care->emergency)
-- case-0108 (urgent_care->emergency)
-- case-0112 (urgent_care->emergency)
-- case-0113 (urgent_care->emergency)
-- case-0117 (urgent_care->emergency)
-- case-0118 (urgent_care->emergency)
-- case-0121 (urgent_care->emergency)
-- case-0122 (urgent_care->emergency)
-- case-0123 (urgent_care->emergency)
-- case-0125 (urgent_care->emergency)
-- case-0126 (urgent_care->emergency)
-- case-0127 (urgent_care->emergency)
-- case-0128 (urgent_care->emergency)
-- case-0130 (urgent_care->emergency)
-- case-0131 (urgent_care->emergency)
-- case-0132 (urgent_care->emergency)
-- case-0133 (urgent_care->emergency)
-- case-0135 (urgent_care->emergency)
-- case-0136 (urgent_care->emergency)
-- case-0137 (urgent_care->emergency)
-- case-0138 (urgent_care->emergency)
-- case-0140 (urgent_care->emergency)
-- case-0141 (urgent_care->emergency)
-- case-0142 (urgent_care->emergency)
-- case-0146 (urgent_care->emergency)
-- case-0147 (urgent_care->emergency)
-- case-0151 (urgent_care->emergency)
-- case-0152 (urgent_care->emergency)
-- case-0156 (urgent_care->emergency)
-- case-0157 (urgent_care->emergency)
-- case-0161 (urgent_care->emergency)
-- case-0163 (urgent_care->emergency)
-- case-0164 (er->emergency)
-- case-0166 (urgent_care->emergency)
-- case-0168 (urgent_care->emergency)
-- case-0169 (er->emergency)
-- case-0171 (urgent_care->emergency)
-- case-0173 (urgent_care->emergency)
-- case-0174 (er->emergency)
-- case-0176 (urgent_care->emergency)
-- case-0178 (urgent_care->emergency)
-- case-0179 (er->emergency)
-- case-0182 (telehealth->primary_care)
-- case-0183 (telehealth->primary_care)
-- case-0185 (telehealth->primary_care)
-- case-0187 (telehealth->primary_care)
-- case-0188 (telehealth->primary_care)
-- case-0190 (telehealth->primary_care)
-- case-0192 (telehealth->primary_care)
-- case-0193 (telehealth->primary_care)
-- case-0195 (telehealth->primary_care)
-- case-0197 (telehealth->primary_care)
-- case-0198 (telehealth->primary_care)
-- case-0200 (telehealth->primary_care)
-- case-0201 (telehealth->urgent_care)
-- case-0202 (telehealth->primary_care)
-- case-0203 (telehealth->urgent_care)
-- case-0206 (telehealth->urgent_care)
-- case-0207 (telehealth->primary_care)
-- case-0208 (telehealth->urgent_care)
-- case-0211 (telehealth->urgent_care)
-- case-0212 (telehealth->primary_care)
-- case-0213 (telehealth->urgent_care)
-- case-0214 (telehealth->primary_care)
-- case-0216 (telehealth->urgent_care)
-- case-0217 (telehealth->primary_care)
-- case-0218 (telehealth->urgent_care)
-- case-0221 (telehealth->primary_care)
-- case-0222 (telehealth->primary_care)
-- case-0223 (telehealth->primary_care)
-- case-0224 (telehealth->primary_care)
-- case-0225 (telehealth->primary_care)
-- case-0226 (telehealth->primary_care)
-- case-0227 (telehealth->primary_care)
-- case-0228 (telehealth->primary_care)
-- case-0229 (telehealth->primary_care)
-- case-0230 (telehealth->primary_care)
-- case-0231 (telehealth->primary_care)
-- case-0232 (telehealth->primary_care)
-- case-0233 (telehealth->primary_care)
-- case-0234 (telehealth->primary_care)
-- case-0235 (telehealth->primary_care)
-- case-0236 (telehealth->primary_care)
-- case-0237 (telehealth->primary_care)
-- case-0238 (telehealth->primary_care)
-- case-0239 (telehealth->primary_care)
-- case-0240 (telehealth->primary_care)
+Lower-acuity disagreements: case-0077 (er->urgent_care), case-0165 (er->urgent_care), case-0175 (er->urgent_care), case-0180 (er->urgent_care), case-0181 (urgent_care->primary_care), case-0184 (urgent_care->primary_care), case-0186 (urgent_care->primary_care), case-0189 (urgent_care->primary_care), case-0191 (urgent_care->primary_care), case-0194 (urgent_care->primary_care), case-0196 (urgent_care->primary_care), case-0199 (urgent_care->primary_care), case-0204 (er->primary_care), case-0205 (er->urgent_care), case-0210 (er->urgent_care), case-0215 (er->urgent_care), case-0219 (er->primary_care), case-0220 (er->urgent_care)
 
-Lower-acuity disagreement IDs:
-
-- case-0077 (er->urgent_care)
-- case-0153 (urgent_care->primary_care)
-- case-0165 (er->urgent_care)
-- case-0170 (er->urgent_care)
-- case-0175 (er->urgent_care)
-- case-0180 (er->urgent_care)
-- case-0181 (urgent_care->primary_care)
-- case-0184 (urgent_care->primary_care)
-- case-0186 (urgent_care->primary_care)
-- case-0189 (urgent_care->primary_care)
-- case-0191 (urgent_care->primary_care)
-- case-0194 (urgent_care->primary_care)
-- case-0196 (urgent_care->primary_care)
-- case-0199 (urgent_care->primary_care)
-- case-0204 (urgent_care->primary_care)
-- case-0205 (er->urgent_care)
-- case-0209 (urgent_care->primary_care)
-- case-0210 (er->urgent_care)
-- case-0215 (er->urgent_care)
-- case-0219 (er->primary_care)
-- case-0220 (er->urgent_care)
-
-Interpretation: the second reader is very conservative in this run, often voting emergency for ER/urgent cases and primary care for telehealth-floored home-care cases. This is not a safety blocker because engine output had 0 UNDER, but the disagreement rate is too high for the second reader to be used as a quiet confidence signal without calibration.
-
-## Report-only frontier personas
-
-I added two simulator personas for the next frontier and ran them once. Both passed.
-
-| Persona | Expected | Observed | Notes |
-|---|---:|---:|---|
-| `limited-english-fever` | telehealth/PCP | telehealth exact | Questions were short/simple; catch-all fired Q4; no home care |
-| `vague-chest-denial` | not home care | telehealth exact | Denied chest pressure, breathing trouble, and catch-all; thin floor prevented home care |
+Interpretation: second reader remains highly conservative and poorly calibrated as an agreement signal, but this does not block the routing gate because engine output had 0 UNDER and 100% safe-or-exact.
 
 ## Recommendation
 
-Safety fix worked. Do not revert the catch-all reservation or thin-information floor.
+From the eval perspective, round 15 is green for the planned production batch:
 
-Next hardening target should be precision, not safety:
+- Cost engine
+- Paul's interview rules
+- Vague-patient safety work
+- Precision restoration
 
-1. Clean remaining factor labels so no patient-facing factor uses `severe`/severity bucket words.
-2. Add a narrower thin-floor escape hatch for clearly benign home-care vignettes after catch-all gives a non-red-flag answer, or mark the sparse synthetic home-care cases as acceptable telehealth if that is the intended safety posture.
-3. Recalibrate second-reader behavior; current agreement is only 15.8%.
+I would still track the 18 over-routes and second-reader calibration as follow-up, but they do not block the stated release criteria.
 
 ## Boundary confirmation
 
-No `lib/` or `app/` edits were made by Codex this round. The only code change I made was adding the two allowed report-only personas to `scripts/simulate-patients.ts`. No kill switch was applied because there was no new UNDER.
+No `lib/` or `app/` edits were made by Codex this round. No kill switch was applied because there was no new UNDER. I only wrote the handoff/changelog after running the requested gates.

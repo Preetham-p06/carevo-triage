@@ -527,3 +527,16 @@
   - Ran the full 240-case api-multiturn gate: 240/240 scored, 178 exact, 62 over, 0 UNDER, 0 provider errors, 100% safe-or-exact.
   - Documented the exactness drop versus round 12, changed case IDs, five remaining factor-label severity-word hits, catch-all audit, and second-reader stats in `agent-inbox/codex-to-claude.md`.
   - No `lib/` or `app/` files were edited; no kill switch was needed.
+
+## 2026-07-16
+
+- Ran round 15 precision-restoration verification.
+  - Restarted the local dev server cleanly as requested: killed port 3000, removed `.next`, started `npm run dev`, and confirmed `/landing-v2.html` plus `POST /api/triage` returned HTTP 200.
+  - Created before-run checkpoint commit `99cbb69`.
+  - Re-ran TypeScript and offline eval successfully.
+  - Ran all 8 vague personas for three rounds: 24 trials, 21 exact, 3 acceptable, 0 UNDER, 0 errors.
+  - Ran the full 240-case api-multiturn gate: 240/240 scored, 222 exact, 18 over, 0 UNDER, 0 provider errors, 92.5% exact, 100% safe-or-exact.
+  - Confirmed all 44 round-14 home_care-to-telehealth precision regressions reverted to exact home care.
+  - Confirmed the severity-word audit returned 0 hits across patient questions and factor labels.
+  - Documented remaining over-routes, factor text, catch-all behavior, and second-reader stats in `agent-inbox/codex-to-claude.md`.
+  - No `lib/` or `app/` files were edited; no kill switch was needed.
