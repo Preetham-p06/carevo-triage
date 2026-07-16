@@ -16,6 +16,7 @@ import { applyCalibration, loadPromotedCalibration } from '../lib/engine/calibra
 import { checkConsistency } from '../lib/knowledge/graph'
 import { RED_FLAGS, type ExtractedFeatures, type RedFlag, type BodySystem } from '../lib/engine/features'
 import { estimateCostFromTable } from '../lib/cost/engine'
+import { isVagueAnswer, countVagueAnswers, isThinInformation, applyThinInfoFloor } from '../lib/engine/thinInfo'
 import * as fsSync from 'fs'
 import * as path from 'path'
 
@@ -446,6 +447,36 @@ const NO_RISK = { modifiers: [] as any }
     if (bad.length) bad.forEach(([name]) => policyFailures.push(`P12: ${name}`))
     else console.log(`  ✓ P12 cost engine: 911-silent, fail-closed, sourced, benefit ladder correct (${table.version})`)
   }
+}
+
+// P13: thin-information safeguards (round-13 fix) — vague interviews can
+// never end at home_care; the floor is up-only and touches nothing else.
+{
+  const p13: Array<[string, () => boolean]> = [
+    ['"not sure" is vague', () => isVagueAnswer('not sure')],
+    ['"idk" is vague', () => isVagueAnswer('idk')],
+    ['"kinda bad i guess" is vague', () => isVagueAnswer('kinda bad i guess')],
+    ['"maybe since yesterday" is vague', () => isVagueAnswer('maybe since yesterday')],
+    ['"it just feels weird" is vague', () => isVagueAnswer('it just feels weird')],
+    ['"no" is NOT vague (a denial is signal)', () => !isVagueAnswer('no')],
+    ['"yes, it hurts when I walk" is NOT vague', () => !isVagueAnswer('yes, it hurts when I walk')],
+    ['"started yesterday after soccer, swollen but I can walk" is NOT vague', () => !isVagueAnswer('started yesterday after soccer, swollen but I can walk')],
+    ['opener never counts toward vagueness', () => countVagueAnswers([
+      { role: 'user', content: 'idk something feels off' },
+      { role: 'assistant', content: 'q1' },
+      { role: 'user', content: 'no trouble breathing' },
+    ] as any) === 0],
+    ['thin when ≤2 fields established', () => isThinInformation(2, 0) && isThinInformation(0, 0)],
+    ['thin when ≥2 vague answers regardless of fields', () => isThinInformation(5, 2)],
+    ['NOT thin when 3+ fields and ≤1 vague answer', () => !isThinInformation(3, 1)],
+    ['thin home_care → telehealth (up-only)', () => applyThinInfoFloor('home_care', 1, 2)?.to === 'telehealth'],
+    ['rich home_care untouched', () => applyThinInfoFloor('home_care', 4, 0) === null],
+    ['telehealth never touched', () => applyThinInfoFloor('telehealth', 0, 3) === null],
+    ['er/emergency never touched', () => applyThinInfoFloor('er', 0, 3) === null && applyThinInfoFloor('emergency', 0, 3) === null],
+  ]
+  const bad = p13.filter(([, fn]) => { try { return !fn() } catch { return true } })
+  if (bad.length) bad.forEach(([name]) => policyFailures.push(`P13: ${name}`))
+  else console.log('  ✓ P13 thin-information safeguards: vague detection + up-only never-home-care floor')
 }
 
 if (policyFailures.length) {

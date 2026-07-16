@@ -7,7 +7,7 @@ export const runtime = 'nodejs'
 
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
-import { classifyEmergency, detectSelfHarm, detectInfantFever, detectFeverMention, detectSevereDehydration } from '@/lib/emergency'
+import { classifyEmergency, detectSelfHarm, detectInfantFever, detectFeverMention, detectSevereDehydration, stripNegatedClauses } from '@/lib/emergency'
 import type { Message, TriageResponse } from '@/lib/types'
 import { deriveRisk, inferPresentationType, PRESENTATION_TYPES, RED_FLAGS, type ExtractedFeatures, type RedFlag } from '@/lib/engine/features'
 import { decide, ENGINE_VERSION } from '@/lib/engine/model'
@@ -25,6 +25,7 @@ import { triageRequestSchema, getFieldErrors } from '@/lib/validation'
 import { sanitize, sanitizeObject } from '@/lib/sanitize'
 import { recordReeTelemetry } from '@/lib/ree/telemetry'
 import { estimateCost } from '@/lib/cost/engine'
+import { countVagueAnswers, isThinInformation, applyThinInfoFloor } from '@/lib/engine/thinInfo'
 
 // LLM provider — priority: OpenAI → Cerebras → Groq → NVIDIA Build → GitHub Models.
 // All five expose an OpenAI-compatible API; only the baseURL and key differ.
@@ -116,6 +117,7 @@ const PHRASER_PROMPT = (hint: string) => `You are Carevo's intake interviewer �
 RULES:
 - One brief empathetic beat acknowledging what the patient just said, then the question.
 - Plain language, contractions, no jargon, no condition names or claims of certainty.
+- Use VERY simple English — short sentences, everyday words a 6th grader knows. Many patients speak limited English. No idioms, no medical terms.
 - NEVER ask the patient to rate pain or symptoms on a scale (1 to 10) or to pick a word like mild, moderate, or severe — people can't judge those categories. Ask about concrete, observable effects instead: "Is it stopping you from walking?", "Did it wake you up from sleep?", "Can you keep food down?"
 - If the patient has been vague, ask for specifics about their main symptom: where exactly it is, what it feels like, what makes it better or worse.
 - If patient asked whether you're an AI, answer honestly in one clause ("I'm Carevo's automated assistant"), then ask the question.
@@ -315,6 +317,20 @@ function rawErSafetyFloor(text: string): string | null {
   const severeVertigo = /\b(severe|violent|intense|debilitating)\b/i.test(s) &&
     /\b(spinning (?:dizziness|sensation)|room (?:is |was )?spinning|vertigo)\b/i.test(s)
   if (severeVertigo) return 'Severe spinning vertigo'
+
+  // Chest symptoms + ANY arm sensation — classic ACS presentation pattern.
+  // Round-13 finding (2026-07-16): a vague patient revealed "left arm feels
+  // weird" and the extractor missed it; routing fell to home care. Like all
+  // floors this is deterministic and LLM-independent. Negation-stripped so
+  // "chest cold, no arm pain" can't trigger. Requires the sensation word
+  // within a few words of "arm" (either order) to avoid matching unrelated
+  // mentions ("hurt my arm last month ... chest congestion today").
+  const stripped = stripNegatedClauses(s)
+  const chestWithArmSymptom = /\b(chest|heart)\b/i.test(stripped) && (
+    /\b(?:left |right |my )?arm[s]?\b[^.!?]{0,30}\b(weird|strange|funny|odd|numb(?:ness)?|tingl\w*|heav(?:y|iness)|ach(?:e|es|ing|y)|pain(?:ful)?|hurt(?:s|ing)?|weak(?:ness)?)\b/i.test(stripped) ||
+    /\b(weird|strange|funny|odd|numb(?:ness)?|tingl\w*|heav(?:y|iness)|ach(?:e|es|ing|y)|pain|hurt(?:s|ing)?|weak(?:ness)?)\b[^.!?]{0,30}\barm[s]?\b/i.test(stripped)
+  )
+  if (chestWithArmSymptom) return 'Chest symptoms with arm sensation (possible cardiac pattern)'
 
   return null
 }
@@ -954,7 +970,37 @@ export async function POST(req: NextRequest) {
     // ── The engine decides the interview: ask or decide (EVOI, evoi.ts) ─────
     const plan = planInterview(features, known, checkedRedFlags, risk, adjustments, questionsAsked)
 
+    // Thin-information state (round-13 fix, 2026-07-16): "thin" = almost
+    // nothing established OR the patient hedged through the interview
+    // ("not sure", "idk", "kinda"). Drives two safeguards below: the reserved
+    // catch-all slot and the never-home-care floor.
+    const askedCatchAll = (parsedBody.data.askedTargets ?? []).includes('catch_all')
+    const vagueCount = countVagueAnswers(messages)
+    const thinInfo = isThinInformation(known.size, vagueCount)
+    // Simple English on purpose — many users have limited English.
+    const CATCH_ALL_TEXT = "One more thing — do you feel anything else? Anything you have not told me yet, even something small?"
+    const catchAllQuestion = () => NextResponse.json({
+      type: 'question',
+      text: CATCH_ALL_TEXT,
+      questionNumber: questionsAsked + 1,
+      askedFor: 'catch_all',
+      askRationale: 'thin-information catch-all (clinician rule: sweep for missed symptoms before deciding)',
+    })
+
     if (plan.action === 'ask' && plan.asks.length > 0) {
+      // Round-13 failure: on vague chest/headache cases EVOI spent all 4
+      // questions on closed red-flag probes and the open sweep NEVER ran —
+      // the persona's hidden "left arm feels weird" was missed and routing
+      // fell to home care. Fix: when the interview is thin, the LAST budget
+      // slot is RESERVED for the open catch-all — an open question surfaces
+      // more from a vague patient than a fourth closed probe. Never fires if
+      // the engine already sees ER+ (urgent routing is never delayed).
+      if (questionsAsked === 3 && thinInfo && !askedCatchAll) {
+        const preview = decide(features, risk, adjustments)
+        if (preview.careLevel !== 'emergency' && preview.careLevel !== 'er') {
+          return catchAllQuestion()
+        }
+      }
       // LLM role 2: phrase the engine's chosen question warmly.
       // askPhraser receives only the last patient message — not the full history.
       const target = plan.asks[0]
@@ -981,25 +1027,14 @@ export async function POST(req: NextRequest) {
     }
 
     // ── Decision ─────────────────────────────────────────────────────────────
-    // Clinician rule (Paul, 2026-07-15): real patients are vague — synthetic
-    // vignettes are detailed, so gate accuracy overstates real-world intake.
-    // If we're about to decide on THIN information (≤2 established fields)
-    // with question budget left, ask one open catch-all first: "any other
-    // symptoms?". Deterministic text (no LLM), asked at most once (client
-    // echoes 'catch_all' back in askedTargets), and NEVER when the preview
-    // decision is already ER+ — an urgent recommendation must not be delayed
-    // by a turn.
-    const askedCatchAll = (parsedBody.data.askedTargets ?? []).includes('catch_all')
-    if (!askedCatchAll && questionsAsked < 4 && known.size <= 2) {
+    // Clinician rule (Paul, 2026-07-15): if we're about to decide on THIN
+    // information with question budget left, ask the open catch-all first.
+    // Deterministic text (no LLM), asked at most once (client echoes
+    // 'catch_all' back in askedTargets), never when the preview is ER+.
+    if (!askedCatchAll && questionsAsked < 4 && thinInfo) {
       const preview = decide(features, risk, adjustments)
       if (preview.careLevel !== 'emergency' && preview.careLevel !== 'er') {
-        return NextResponse.json({
-          type: 'question',
-          text: "Before I point you in the right direction — do you have any other symptoms, or anything else about how you're feeling that you haven't mentioned? Even small details help.",
-          questionNumber: questionsAsked + 1,
-          askedFor: 'catch_all',
-          askRationale: 'thin-information catch-all (clinician rule: sweep for missed symptoms before deciding)',
-        })
+        return catchAllQuestion()
       }
     }
     const decision = decide(features, risk, adjustments)
@@ -1052,6 +1087,18 @@ export async function POST(req: NextRequest) {
           ...decision.factors,
         ].slice(0, 5)
       }
+    }
+
+    // ── Thin-information floor (round-13 fix) — UP-ONLY, runs LAST ──────────
+    // A vague interview can never end at home_care: if we established almost
+    // nothing (or the patient hedged through it), the minimum is telehealth —
+    // a clinician gets eyes on the case. Runs after calibration on purpose:
+    // nothing, including clinician calibration, may leave a thin case at home.
+    const thinAdjustment = applyThinInfoFloor(decision.careLevel, known.size, vagueCount)
+    if (thinAdjustment) {
+      decision.careLevel = thinAdjustment.to
+      decision.factors = [thinAdjustment.reason, ...decision.factors].slice(0, 5)
+      roundedUp = true
     }
 
     if (decision.careLevel === 'emergency') {

@@ -78,8 +78,10 @@ const BASE_WEIGHTS: Record<string, LevelWeights> = {
 }
 
 const FACTOR_LABELS: Record<string, string> = {
-  'severity:3': 'Severe symptoms', 'severity:2': 'Significant symptoms',
-  'severity:1': 'Moderate symptoms', 'severity:0': 'Mild symptoms',
+  // Patient-facing wording, not clinical severity words (Paul's rule +
+  // simple-English requirement — patients can't judge "mild/moderate").
+  'severity:3': 'Symptoms are very intense', 'severity:2': 'Symptoms are strongly affecting you',
+  'severity:1': 'Symptoms are bothering you but manageable', 'severity:0': 'Symptoms are not stopping your daily activities',
   'onset:sudden': 'Sudden onset', 'trend:worsening': 'Getting worse',
   'impact:3': 'Unable to function normally', 'impact:2': 'Limiting daily activity',
   'flag:possibleFracture': 'Possible fracture (needs imaging)',
