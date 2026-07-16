@@ -6,6 +6,7 @@
 # Server-side data: exclude runtime state, KEEP clinically-governed inputs
 /data/*
 !/data/calibration/
+!/data/cost/
 !/data/knowledge/
 /data/knowledge/staging/
 !/data/recursive-learning/

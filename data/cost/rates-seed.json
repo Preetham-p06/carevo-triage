@@ -1,0 +1,60 @@
+{
+  "version": "carevo-rates-2026.07.0-seed",
+  "region": "US national (seed — replace with Columbus-metro hospital MRF ingest via scripts/ingest-hospital-rates.ts)",
+  "levels": {
+    "er": {
+      "serviceDescription": "Emergency department visit (moderate to high severity)",
+      "billingCodes": ["99283", "99284", "99285"],
+      "cash": { "low": 800, "high": 3200 },
+      "typicalInsured": { "low": 150, "high": 700 },
+      "allowedAmount": { "low": 800, "high": 2900 },
+      "sources": [
+        { "label": "Mira Health — ER visit cost 2026 (avg $2,863 uninsured; 2.5B claims)", "url": "https://www.talktomira.com/post/how-much-does-an-er-visit-cost", "accessed": "2026-07-15" },
+        { "label": "BetterCare — ER visit cost 2026 (insured OOP $150–$700, copay $150–$500)", "url": "https://bettercare.com/costs/er-visit-cost", "accessed": "2026-07-15" }
+      ]
+    },
+    "urgent_care": {
+      "serviceDescription": "Urgent care center visit",
+      "billingCodes": ["99202", "99203", "99204", "99213"],
+      "cash": { "low": 120, "high": 260 },
+      "typicalInsured": { "low": 20, "high": 75 },
+      "allowedAmount": { "low": 100, "high": 250 },
+      "sources": [
+        { "label": "eHealth — urgent care cost (avg $200 uninsured, $35 insured)", "url": "https://www.ehealthinsurance.com/resources/individual-and-family/how-much-does-an-urgent-care-visit-cost", "accessed": "2026-07-15" },
+        { "label": "Forbes Advisor — urgent care copays $20–$75 in-network", "url": "https://www.forbes.com/advisor/health-insurance/urgent-care-cost/", "accessed": "2026-07-15" }
+      ]
+    },
+    "primary_care": {
+      "serviceDescription": "Primary care office visit",
+      "billingCodes": ["99203", "99213", "99214"],
+      "cash": { "low": 100, "high": 300 },
+      "typicalInsured": { "low": 15, "high": 50 },
+      "allowedAmount": { "low": 90, "high": 250 },
+      "sources": [
+        { "label": "Galileo — doctor visit without insurance 2026 ($100–$300 primary care)", "url": "https://galileo.io/blog/how-much-is-a-doctor-visit-cost-without-insurance", "accessed": "2026-07-15" },
+        { "label": "Zocdoc — primary care visit cost without insurance", "url": "https://www.zocdoc.com/blog/guides/how-much-does-a-primary-care-visit-cost-without-insurance/", "accessed": "2026-07-15" }
+      ]
+    },
+    "telehealth": {
+      "serviceDescription": "Telehealth / virtual visit",
+      "billingCodes": ["99441", "99442", "99443", "99213-95"],
+      "cash": { "low": 40, "high": 90 },
+      "typicalInsured": { "low": 0, "high": 50 },
+      "allowedAmount": { "low": 40, "high": 90 },
+      "sources": [
+        { "label": "Zocdoc — telehealth cost guide ($40–$90 general consult uninsured)", "url": "https://www.zocdoc.com/blog/guides/cost-of-telehealth/", "accessed": "2026-07-15" },
+        { "label": "GoodRx — how much does telehealth cost", "url": "https://www.goodrx.com/healthcare-access/telehealth/how-much-does-telehealth-cost", "accessed": "2026-07-15" }
+      ]
+    },
+    "home_care": {
+      "serviceDescription": "Self-care at home (over-the-counter items if needed)",
+      "billingCodes": [],
+      "cash": { "low": 0, "high": 30 },
+      "typicalInsured": { "low": 0, "high": 30 },
+      "allowedAmount": { "low": 0, "high": 30 },
+      "sources": [
+        { "label": "Carevo editorial — typical OTC spend for self-limited conditions", "url": "https://usecarevoai-eight.vercel.app", "accessed": "2026-07-15" }
+      ]
+    }
+  }
+}
