@@ -25,7 +25,7 @@ import { triageRequestSchema, getFieldErrors } from '@/lib/validation'
 import { sanitize, sanitizeObject } from '@/lib/sanitize'
 import { recordReeTelemetry } from '@/lib/ree/telemetry'
 import { estimateCost } from '@/lib/cost/engine'
-import { countVagueAnswers, isThinInformation, applyThinInfoFloor } from '@/lib/engine/thinInfo'
+import { countVagueAnswers, shouldSweep, applyThinInfoFloor } from '@/lib/engine/thinInfo'
 
 // LLM provider — priority: OpenAI → Cerebras → Groq → NVIDIA Build → GitHub Models.
 // All five expose an OpenAI-compatible API; only the baseURL and key differ.
@@ -316,7 +316,7 @@ function rawErSafetyFloor(text: string): string | null {
   // a spinning descriptor, so ordinary dizziness stays with the engine.
   const severeVertigo = /\b(severe|violent|intense|debilitating)\b/i.test(s) &&
     /\b(spinning (?:dizziness|sensation)|room (?:is |was )?spinning|vertigo)\b/i.test(s)
-  if (severeVertigo) return 'Severe spinning vertigo'
+  if (severeVertigo) return 'Intense spinning dizziness (vertigo)'
 
   // Chest symptoms + ANY arm sensation — classic ACS presentation pattern.
   // Round-13 finding (2026-07-16): a vague patient revealed "left arm feels
@@ -976,7 +976,11 @@ export async function POST(req: NextRequest) {
     // catch-all slot and the never-home-care floor.
     const askedCatchAll = (parsedBody.data.askedTargets ?? []).includes('catch_all')
     const vagueCount = countVagueAnswers(messages)
-    const thinInfo = isThinInformation(known.size, vagueCount)
+    // Two thresholds on purpose (round-14 lesson): the SWEEP trigger is
+    // generous (an open question is cheap); the never-home-care FLOOR is
+    // strict (real hedging or near-zero info only) so brief-but-clear home
+    // cases keep their exact routing.
+    const sweepWanted = shouldSweep(known.size, vagueCount)
     // Simple English on purpose — many users have limited English.
     const CATCH_ALL_TEXT = "One more thing — do you feel anything else? Anything you have not told me yet, even something small?"
     const catchAllQuestion = () => NextResponse.json({
@@ -995,7 +999,7 @@ export async function POST(req: NextRequest) {
       // slot is RESERVED for the open catch-all — an open question surfaces
       // more from a vague patient than a fourth closed probe. Never fires if
       // the engine already sees ER+ (urgent routing is never delayed).
-      if (questionsAsked === 3 && thinInfo && !askedCatchAll) {
+      if (questionsAsked === 3 && sweepWanted && !askedCatchAll) {
         const preview = decide(features, risk, adjustments)
         if (preview.careLevel !== 'emergency' && preview.careLevel !== 'er') {
           return catchAllQuestion()
@@ -1031,7 +1035,7 @@ export async function POST(req: NextRequest) {
     // information with question budget left, ask the open catch-all first.
     // Deterministic text (no LLM), asked at most once (client echoes
     // 'catch_all' back in askedTargets), never when the preview is ER+.
-    if (!askedCatchAll && questionsAsked < 4 && thinInfo) {
+    if (!askedCatchAll && questionsAsked < 4 && sweepWanted) {
       const preview = decide(features, risk, adjustments)
       if (preview.careLevel !== 'emergency' && preview.careLevel !== 'er') {
         return catchAllQuestion()
@@ -1094,7 +1098,7 @@ export async function POST(req: NextRequest) {
     // nothing (or the patient hedged through it), the minimum is telehealth —
     // a clinician gets eyes on the case. Runs after calibration on purpose:
     // nothing, including clinician calibration, may leave a thin case at home.
-    const thinAdjustment = applyThinInfoFloor(decision.careLevel, known.size, vagueCount)
+    const thinAdjustment = applyThinInfoFloor(decision.careLevel, known.size, vagueCount, features.presentationType)
     if (thinAdjustment) {
       decision.careLevel = thinAdjustment.to
       decision.factors = [thinAdjustment.reason, ...decision.factors].slice(0, 5)

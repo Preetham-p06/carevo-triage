@@ -41,10 +41,25 @@ export function countVagueAnswers(messages: Message[]): number {
   return userReplies.filter(m => isVagueAnswer(m.content)).length
 }
 
-/** The interview is "thin" when we established almost nothing, or the patient
- *  hedged through it. Either alone is enough. */
+/** When to spend a question slot on the open "anything else?" sweep — kept
+ *  GENEROUS on purpose: an extra open question is cheap and good practice. */
+export function shouldSweep(establishedFieldCount: number, vagueAnswerCount: number): boolean {
+  return establishedFieldCount <= 2 || vagueAnswerCount >= 1
+}
+
+/** The interview is "thin" — for the never-home-care FLOOR — only when the
+ *  patient actually HEDGED: ≥2 vague answers, or 1 vague answer with almost
+ *  nothing established. Field count alone NEVER triggers the floor.
+ *
+ *  Round-14 lesson (2026-07-16): flooring on "≤2 fields established" flipped
+ *  44 detailed-but-brief home-care benchmark cases to telehealth (92.5% →
+ *  74.2% exact). Live testing showed the extractor is conservative about
+ *  marking fields established even on clearly described cases — so low field
+ *  count is normal for simple presentations, not evidence of vagueness.
+ *  Clear answers and denials are SIGNAL (house philosophy: never
+ *  blanket-escalate; interview like a nurse). Hedging is the real marker. */
 export function isThinInformation(establishedFieldCount: number, vagueAnswerCount: number): boolean {
-  return establishedFieldCount <= 2 || vagueAnswerCount >= 2
+  return vagueAnswerCount >= 2 || (vagueAnswerCount >= 1 && establishedFieldCount <= 1)
 }
 
 export interface ThinInfoAdjustment {
@@ -54,16 +69,27 @@ export interface ThinInfoAdjustment {
 }
 
 /**
- * Up-only floor: thin information can never route home_care. Returns the
- * adjustment to apply, or null when nothing changes. Never lowers a level,
- * never fires on anything above home_care — provably safe by construction.
+ * Up-only floor: thin information can never route home_care, and CARDIAC
+ * presentations never route home_care at all (a chest complaint always
+ * deserves at least a virtual clinician, even when every red flag is
+ * denied — the deny-everything patient is exactly who under-reports).
+ * Returns the adjustment to apply, or null. Never lowers a level, never
+ * fires on anything above home_care — provably safe by construction.
  */
 export function applyThinInfoFloor(
   careLevel: CareLevel,
   establishedFieldCount: number,
   vagueAnswerCount: number,
+  presentationType?: string,
 ): ThinInfoAdjustment | null {
   if (careLevel !== 'home_care') return null
+  if (presentationType === 'cardiac') {
+    return {
+      from: 'home_care',
+      to: 'telehealth',
+      reason: 'Chest symptoms are worth a quick talk with a clinician, even when nothing else seems wrong — a virtual visit is a safe next step.',
+    }
+  }
   if (!isThinInformation(establishedFieldCount, vagueAnswerCount)) return null
   return {
     from: 'home_care',

@@ -16,7 +16,7 @@ import { applyCalibration, loadPromotedCalibration } from '../lib/engine/calibra
 import { checkConsistency } from '../lib/knowledge/graph'
 import { RED_FLAGS, type ExtractedFeatures, type RedFlag, type BodySystem } from '../lib/engine/features'
 import { estimateCostFromTable } from '../lib/cost/engine'
-import { isVagueAnswer, countVagueAnswers, isThinInformation, applyThinInfoFloor } from '../lib/engine/thinInfo'
+import { isVagueAnswer, countVagueAnswers, isThinInformation, shouldSweep, applyThinInfoFloor } from '../lib/engine/thinInfo'
 import * as fsSync from 'fs'
 import * as path from 'path'
 
@@ -466,11 +466,22 @@ const NO_RISK = { modifiers: [] as any }
       { role: 'assistant', content: 'q1' },
       { role: 'user', content: 'no trouble breathing' },
     ] as any) === 0],
-    ['thin when ≤2 fields established', () => isThinInformation(2, 0) && isThinInformation(0, 0)],
-    ['thin when ≥2 vague answers regardless of fields', () => isThinInformation(5, 2)],
-    ['NOT thin when 3+ fields and ≤1 vague answer', () => !isThinInformation(3, 1)],
+    // Floor threshold (STRICT — round-14 lesson: brief-but-clear ≠ vague;
+    // field count alone NEVER floors — extractor is conservative on simple cases):
+    ['thin when patient hedged ≥2 answers', () => isThinInformation(5, 2)],
+    ['thin when 1 hedge + almost nothing established', () => isThinInformation(1, 1) && isThinInformation(0, 1)],
+    ['NOT thin on clear answers, regardless of field count', () => !isThinInformation(0, 0) && !isThinInformation(1, 0) && !isThinInformation(2, 0)],
+    ['NOT thin at 3+ fields and ≤1 vague answer', () => !isThinInformation(3, 1)],
+    // Sweep threshold (GENEROUS — open question is cheap):
+    ['sweep at ≤2 fields even with clear answers', () => shouldSweep(2, 0)],
+    ['sweep on any hedged answer', () => shouldSweep(5, 1)],
+    ['no sweep when 3+ fields and zero hedges', () => !shouldSweep(3, 0)],
+    // Floor behavior:
     ['thin home_care → telehealth (up-only)', () => applyThinInfoFloor('home_care', 1, 2)?.to === 'telehealth'],
+    ['brief-but-clear home_care untouched (the 44 round-14 flips)', () => applyThinInfoFloor('home_care', 2, 0) === null],
     ['rich home_care untouched', () => applyThinInfoFloor('home_care', 4, 0) === null],
+    ['cardiac presentation never ends home_care, even rich + clear', () => applyThinInfoFloor('home_care', 4, 0, 'cardiac')?.to === 'telehealth'],
+    ['non-cardiac presentationType does not trigger the cardiac floor', () => applyThinInfoFloor('home_care', 4, 0, 'msk') === null],
     ['telehealth never touched', () => applyThinInfoFloor('telehealth', 0, 3) === null],
     ['er/emergency never touched', () => applyThinInfoFloor('er', 0, 3) === null && applyThinInfoFloor('emergency', 0, 3) === null],
   ]

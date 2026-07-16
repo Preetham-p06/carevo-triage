@@ -224,9 +224,25 @@ export function decide(
     floorApplied = ruleResult.fired[0].id
   }
 
-  // Human-readable factors (red flags first, then top contributors)
+  // Human-readable factors (red flags first, then top contributors).
+  // Patient-facing flag names use plain words — no clinical severity buckets
+  // (round-14 audit caught "Red flag: severe dehydration" reaching patients).
+  const FLAG_PATIENT_LABELS: Partial<Record<string, string>> = {
+    severe_dehydration: 'Signs of serious dehydration (fluids not staying down)',
+    breathing_difficulty: 'Trouble breathing',
+    chest_pressure: 'Chest pressure or tightness',
+    fainting_or_confusion: 'Fainting or new confusion',
+    one_sided_weakness: 'Weakness on one side of the body',
+    worst_headache_of_life: 'Unusually intense sudden headache',
+    uncontrolled_bleeding: 'Bleeding that will not stop',
+    stiff_neck_with_fever: 'Stiff neck together with fever',
+    sudden_vision_loss: 'Sudden change or loss of vision',
+    pregnancy_bleeding_or_pain: 'Bleeding or pain during pregnancy',
+    allergic_swelling: 'Swelling of the face, lips, or throat',
+    infant_under_3mo_fever: 'Fever in a baby under 3 months',
+  }
   const factors: string[] = []
-  for (const flag of f.redFlags) factors.push(`Red flag: ${flag.replace(/_/g, ' ')}`)
+  for (const flag of f.redFlags) factors.push(`Red flag: ${FLAG_PATIENT_LABELS[flag] ?? flag.replace(/_/g, ' ')}`)
   if (guardRaised) factors.push('Kept at the safer level for consistency with similar presentations')
   for (const rule of ruleResult.fired) {
     if (!rule.id.startsWith('rf.')) factors.push(rule.description.split(' — ')[0])
