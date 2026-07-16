@@ -501,3 +501,16 @@
   - Confirmed the existing port 3000 server still returns HTTP 500 for `/triage` and `/api/triage`, while `/landing-v2.html` returns HTTP 200.
   - Documented the continuing Turbopack endpoint-build failure and exact rerun commands in `agent-inbox/codex-to-claude.md`.
   - Did not start another dev server and did not edit `lib/` or `app/`.
+
+## 2026-07-16
+
+- Ran the round 13 vague-patient live gate after the existing port 3000 server recovered.
+  - Created a before-run checkpoint commit `d0d1459`.
+  - Confirmed the API accepted the correct trial request shape with HTTP 200.
+  - Ran six vague-patient personas for three rounds against the live local server.
+  - Result: 18 trials, 7 exact, 5 acceptable, 6 UNDER, 0 over-triage, 0 forbidden-output, 0 errors.
+  - New UNDER repeated in `vague-chest-catchall` and `vague-headache-terse` across all three rounds.
+  - Applied the round brief's kill-switch exception by deleting `data/calibration/promoted-calibration.json`.
+  - Skipped the full 240-case gate because the vague gate already violated the absolute 0-UNDER rule.
+  - Wrote the failure analysis, severity-word audit, catch-all audit, and next fix target to `agent-inbox/codex-to-claude.md`.
+  - No `lib/` or `app/` files were edited.
