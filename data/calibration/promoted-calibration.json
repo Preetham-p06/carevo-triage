@@ -1,8 +1,8 @@
 {
   "version": "carevo-calibration-2026-07-16.1",
-  "promotedAt": "2026-07-16T14:44:41.538Z",
+  "promotedAt": "2026-07-16T23:38:27.149Z",
   "promotedBy": "promote-calibration.ts (manual --confirm)",
-  "reviewedBy": "Paul (clinical reviewer)",
+  "reviewedBy": "Paul (MD, Clinical Informatics Lead) — batches 1-3, boundary conditions updated per batch-3 sign-off 2026-07-16",
   "sourceArtifact": "data/recursive-learning/offline-training-pack-paul-round7/smoke-calibration-artifact.json",
   "patterns": [
     {
@@ -24,12 +24,21 @@
         "sore throat"
       ],
       "boundaryTerms": [
+        "fever",
         "high fever",
         "shortness of breath",
+        "short of breath",
         "chest pain",
         "wheezing",
         "immunocompromised",
-        "chemo"
+        "chemo",
+        "more than a week",
+        "over a week",
+        "two weeks",
+        "three weeks",
+        "10 days",
+        "ten days",
+        "for weeks"
       ],
       "safetyBoundary": "Do not apply if high fever, shortness of breath, chest pain, wheezing, symptoms beyond 10 days, or immune compromise is present.",
       "learnedFrom": [
@@ -54,13 +63,23 @@
         "headache"
       ],
       "boundaryTerms": [
+        "fever",
         "high fever",
         "exudate",
         "difficulty swallowing",
         "drooling",
         "muffled voice",
         "neck swelling",
-        "rash"
+        "rash",
+        "shortness of breath",
+        "short of breath",
+        "more than a week",
+        "over a week",
+        "two weeks",
+        "three weeks",
+        "10 days",
+        "ten days",
+        "for weeks"
       ],
       "safetyBoundary": "Do not apply if high fever, exudates, difficulty swallowing, drooling, muffled voice, neck swelling, or rash is present.",
       "learnedFrom": [

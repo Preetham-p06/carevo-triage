@@ -1,0 +1,42 @@
+{
+  "batch": 3,
+  "reviewedBy": "Paul (MD, Clinical Informatics Lead)",
+  "signedDate": "2026-07-16",
+  "signatureMethod": "Digitally signed via Carevo Clinical Review Portal",
+  "sourceGate": "data/recursive-learning/synthetic-240-results-round15-precision-restored-2026-07-16.jsonl",
+  "summary": {
+    "totalCases": 18,
+    "approvedWithConditions": 16,
+    "engineRightLabelCorrected": 2
+  },
+  "clusters": [
+    {
+      "name": "A — Mild upper respiratory",
+      "cases": ["case-0181", "case-0184", "case-0186", "case-0189", "case-0191", "case-0194", "case-0196", "case-0199"],
+      "decision": "C — approve downgrade to home_care WITH CONDITIONS",
+      "conditions": ["fever is absent", "no shortness of breath", "symptoms present under 7 days"],
+      "implementation": [
+        "Root cause fixed deterministically: rawUrgentCareSafetyFloor fluLikeSystemic pattern matched 'fever' inside negated clauses ('no fever'); fever component now tested on negation-stripped text (route.ts).",
+        "Calibration boundary terms for home_uri_cold_without_lower_respiratory_flags and home_mild_pharyngitis_without_red_flags extended with Paul's conditions: fever (any), short of breath, and >7-day duration phrasings (promote-calibration.ts, re-promoted as batch-3 artifact)."
+      ]
+    },
+    {
+      "name": "B — Pediatric eczema & post-cold conjunctivitis",
+      "cases": ["case-0204", "case-0205", "case-0209", "case-0210", "case-0214", "case-0215", "case-0219", "case-0220"],
+      "decision": "C — approve downgrade to home_care WITH CONDITIONS via downward-guarding deterministic rules",
+      "conditions": {
+        "eczema": ["fever explicitly absent", "pus explicitly absent", "red streaks explicitly absent", "severe pain explicitly absent", "facial or airway swelling explicitly absent"],
+        "conjunctivitis": ["sudden vision change or loss explicitly absent", "ocular trauma explicitly absent", "severe/deep eye pain explicitly absent"]
+      },
+      "implementation": [
+        "lib/engine/homeGuard.ts (carevo-home-guards-2026.07.16-paul-batch3): raw-text guards paul3_pediatric_flexural_eczema and paul3_postcold_conjunctivitis. Fail-closed semantics: any danger AFFIRMED blocks; minimum count of EXPLICIT denials required (silence is not absence); never over emergency; skipped when any raw-text ER/urgent floor matched. Kill switch HOME_GUARDS=0."
+      ]
+    },
+    {
+      "name": "C — Safety rules vs benchmark labels",
+      "cases": ["case-0169", "case-0180"],
+      "decision": "B — engine is right; keep ER safety rules unchanged; correct benchmark labels",
+      "notes": "AMBIGUOUS - GO TO ER TO BE SAFE. Eye triad (glaucoma/uveitis risk) and severe recurrent vertigo (central neuro risk) keep their ER floors. Labels corrected ne->em in synthetic-240-benchmark.jsonl with label_note attribution."
+    }
+  ]
+}

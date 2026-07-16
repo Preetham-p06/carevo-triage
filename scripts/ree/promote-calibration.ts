@@ -36,11 +36,16 @@ const BOUNDARY_TERMS: Record<string, string[]> = {
     'fever', 'pus', 'spreading', 'red streak', 'streaking', 'severe pain',
     'immunocompromised', 'chemo', 'transplant', 'systemic', 'blister', 'open sore',
   ],
+  // Paul batch-3 conditions (2026-07-16) added to both URI patterns: ANY fever
+  // (not just high), shortness of breath, and >7-day duration phrasings block.
   home_uri_cold_without_lower_respiratory_flags: [
-    'high fever', 'shortness of breath', 'chest pain', 'wheezing', 'immunocompromised', 'chemo',
+    'fever', 'high fever', 'shortness of breath', 'short of breath', 'chest pain', 'wheezing', 'immunocompromised', 'chemo',
+    'more than a week', 'over a week', 'two weeks', 'three weeks', '10 days', 'ten days', 'for weeks',
   ],
   home_mild_pharyngitis_without_red_flags: [
-    'high fever', 'exudate', 'difficulty swallowing', 'drooling', 'muffled voice', 'neck swelling', 'rash',
+    'fever', 'high fever', 'exudate', 'difficulty swallowing', 'drooling', 'muffled voice', 'neck swelling', 'rash',
+    'shortness of breath', 'short of breath',
+    'more than a week', 'over a week', 'two weeks', 'three weeks', '10 days', 'ten days', 'for weeks',
   ],
   home_recurrent_aphthous_ulcers: [
     'eye lesions present', 'genital lesions present', 'genital ulcer', 'weight loss', 'fever',

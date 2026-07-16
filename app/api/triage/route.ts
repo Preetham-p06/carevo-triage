@@ -26,6 +26,7 @@ import { sanitize, sanitizeObject } from '@/lib/sanitize'
 import { recordReeTelemetry } from '@/lib/ree/telemetry'
 import { estimateCost } from '@/lib/cost/engine'
 import { countVagueAnswers, shouldSweep, applyThinInfoFloor } from '@/lib/engine/thinInfo'
+import { applyHomeGuard } from '@/lib/engine/homeGuard'
 
 // LLM provider — priority: OpenAI → Cerebras → Groq → NVIDIA Build → GitHub Models.
 // All five expose an OpenAI-compatible API; only the baseURL and key differ.
@@ -381,7 +382,12 @@ function rawUrgentCareSafetyFloor(text: string): string | null {
     /\b(several days|3 days|three days|worsening|chronic morning cough|increased cough)\b/i.test(s)
   if (copdFlareUrgent) return 'COPD or smoking history with worsening cough or breathing symptoms'
 
-  const fluLikeSystemic = /\b(fever|febrile|temperature)\b/i.test(s) &&
+  // Fever must be tested on NEGATION-STRIPPED text: this floor was firing on
+  // "mild headache, NO fever" vignettes (round-15 Cluster A; Paul batch-3
+  // ruling 2026-07-16: mild URI with fever explicitly ABSENT, no shortness of
+  // breath, under 7 days is home care). An explicitly denied fever must never
+  // satisfy the fever component of an urgent-care floor.
+  const fluLikeSystemic = /\b(fever|febrile|temperature)\b/i.test(stripNegatedClauses(s)) &&
     /\b(cough|headache|generalized weakness|generalised weakness|myalgias|muscle aches|chills|abrupt onset)\b/i.test(s) &&
     /\b(weakness|myalgias|muscle aches|chills|headache|abrupt onset)\b/i.test(s)
   if (fluLikeSystemic) return 'Flu-like illness with fever and systemic symptoms'
@@ -1103,6 +1109,24 @@ export async function POST(req: NextRequest) {
       decision.careLevel = thinAdjustment.to
       decision.factors = [thinAdjustment.reason, ...decision.factors].slice(0, 5)
       roundedUp = true
+    }
+
+    // ── Paul's downward guards (batch 3, signed 2026-07-16) ─────────────────
+    // Raw-text home-care rules for two presentations he approved with explicit
+    // absence conditions (lib/engine/homeGuard.ts). Skipped whenever raw-text
+    // evidence of danger exists (ER/urgent floors) — raw text beats raw text;
+    // extraction beats neither. Never applies over emergency. Kill switch:
+    // HOME_GUARDS=0.
+    let homeGuardApplied: ReturnType<typeof applyHomeGuard> = null
+    if (process.env.HOME_GUARDS !== '0' && !rawErReason && !rawUrgentCareReason) {
+      homeGuardApplied = applyHomeGuard(allUserText, stripNegatedClauses(allUserText), decision.careLevel)
+      if (homeGuardApplied) {
+        decision.careLevel = 'home_care'
+        decision.factors = [
+          `Consistent with clinician-reviewed guidance for this presentation (dangers you told us are absent: ${homeGuardApplied.deniedDangers.join(', ')})`,
+          ...decision.factors,
+        ].slice(0, 5)
+      }
     }
 
     if (decision.careLevel === 'emergency') {

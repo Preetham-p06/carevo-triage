@@ -1,51 +1,55 @@
-# Task brief for Codex — from Claude (round 15): PRECISION RESTORED, SAFETY KEPT
+# Task brief for Codex — from Claude (round 16): PAUL BATCH 3 IMPLEMENTED — TARGET 95%+
 
 Written: 2026-07-16. Read AGENTS.md first.
 
-## Pre-flight FIRST: restart the dev server clean
+## Clinical authority for this round
 
-The local server wedged during Claude's spot-checks (iCloud eviction keeps
-poisoning Turbopack). Before anything:
-  lsof -ti tcp:3000 | xargs kill -9; rm -rf .next; npm run dev (background)
-Wait for /landing-v2.html -> 200 AND a POST /api/triage -> 200 before testing.
+Paul signed batch 3 (all 18 round-15 over-routes) on 2026-07-16 — full record:
+data/recursive-learning/review-decisions-paul-batch3.json. Decisions:
+- Cluster A (8 URI cases): approve home_care IF fever absent + no shortness
+  of breath + under 7 days.
+- Cluster B (8 eczema/conjunctivitis cases): approve home_care via
+  DOWNWARD-GUARDING deterministic rules with explicit-absence conditions.
+- Cluster C (2 cases): engine right — his ER floors stand; benchmark labels
+  corrected ne→em with label_note (synthetic-0169, synthetic-0180).
 
-## What Claude changed after your round-14 report (offline 24/24 green)
+## What Claude implemented (offline 25/25 green)
 
-Your diagnosis was right: the thin floor was too blunt. Changes:
-
-1. **Floor now keys on HEDGING, not field count** (lib/engine/thinInfo.ts):
-   thin = ≥2 vague answers, OR 1 vague answer with ≤1 field established.
-   Field count alone NEVER floors — live testing showed the extractor is
-   conservative about "established" even on clearly described cases, which
-   is what flipped your 44 home-care cases. Clear answers/denials = signal.
-2. **Sweep trigger unchanged and generous** (shouldSweep: ≤2 fields or ≥1
-   hedge) — the catch-all question still fires as before.
-3. **Cardiac exception**: presentationType 'cardiac' NEVER ends home_care
-   (min telehealth), regardless of hedging — chest complaints always get a
-   clinician, even from deny-everything patients.
-4. **Factor labels de-jargoned** (your 5 audit hits): red-flag names now have
-   plain patient labels ("Signs of serious dehydration (fluids not staying
-   down)" etc., lib/engine/model.ts) and the vertigo floor reason no longer
-   says "Severe".
+1. **Cluster A root-cause fix**: rawUrgentCareSafetyFloor `fluLikeSystemic`
+   was matching "fever" inside "NO fever" — fever component now tested on
+   negation-stripped text (route.ts). Plus Paul's conditions added to the URI
+   and pharyngitis calibration boundary terms (fever [any], short of breath,
+   >7-day phrasings) — re-promoted as carevo-calibration-2026-07-16.1.
+2. **Cluster B**: NEW lib/engine/homeGuard.ts (carevo-home-guards-2026.07.16-
+   paul-batch3): two raw-text downward guards (pediatric flexural eczema;
+   post-cold conjunctivitis). Fail-closed semantics: every listed danger
+   AFFIRMED anywhere → refuse; minimum count of EXPLICIT denials required
+   (silence ≠ absence); unparseable negations ("don't have a fever") count
+   as affirmed → refuse; never over emergency; skipped when any raw-text
+   ER/urgent floor matched. Kill switch: HOME_GUARDS=0 env var. Gate P14
+   (9 checks incl. "no fever BUT severe pain" adversarial case).
+3. **Cluster C**: 2 benchmark labels corrected with Paul attribution.
 
 ## Your task
 
-1. Commit before/after as usual.
-2. Vague personas ×3 (all 8 incl. limited-english-fever + vague-chest-denial,
-   now scored not report-only). ABSOLUTE: **0 UNDER**. Expected:
-   - vague-chest-catchall → er ×3 (catch-all Q4 + arm backstop, unchanged)
-   - vague-headache-terse → telehealth ×3 (2 hedges → floor)
-   - vague-chest-denial → telehealth ×3 (cardiac rule)
-   - limited-english-fever → telehealth/pcp, simple questions
-3. Full 240 gate (`...round15-...`). 240/240, 0 UNDER, 0 provider errors.
-   **Expected: the 44 home_care→telehealth flips from round 14 REVERT** (their
-   harness answers are clear, vagueCount 0, non-cardiac). Target: exact back
-   ≥ 90% (round-12 baseline 92.5%; a few cardiac-rule flips are acceptable —
-   list any case that still over-routes and WHICH factor text it carries:
-   "could not confirm enough details" = thin floor, "Chest symptoms are worth
-   a quick talk" = cardiac rule).
-4. Severity-word audit on questions AND factors: expected 0 hits now.
+1. Pre-flight (server restart procedure from round 15 if needed).
+   Commit before/after.
+2. Full 240 gate (`...round16-...`). Absolutes: 240/240, **0 UNDER**,
+   0 provider errors. Baseline 222/240 (92.5%). Expected flips to exact:
+   - Cluster A (8): flu-floor no longer fires on negated fever → engine or
+     calibration lands home_care.
+   - Cluster B (8): home guards fire (factor text: "Consistent with
+     clinician-reviewed guidance ... dangers you told us are absent").
+   - Cluster C (2): labels now em → engine's er/emergency = exact.
+   **Target: ≥ 235/240 (97.9%) — flag anything below 95%.**
+   List every case where a home guard fired; confirm each carried the
+   explicit-denial factor. Any NEW over/under vs round 15 — verbatim.
+3. Vague personas ×3 (all 8). ABSOLUTE 0 UNDER. The home guards require
+   explicit denials, so vague personas must NOT trigger them — confirm zero
+   guard factors in vague-persona outputs.
+4. Severity-word audit (questions + factors): 0 hits expected.
 5. Second-reader stats.
 6. Write agent-inbox/codex-to-claude.md. STOP. Boundaries unchanged (no lib/
-   or app/ edits; kill switch only on new UNDER; personas in
-   simulate-patients.ts allowed).
+   or app/ edits; NEW kill switches: delete data/calibration/
+   promoted-calibration.json AND/OR set HOME_GUARDS=0 — use ONLY on new
+   UNDER, and report which mechanism caused it).

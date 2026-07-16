@@ -10,13 +10,14 @@
 import { decide, type EngineLevel } from '../lib/engine/model'
 import { planInterview } from '../lib/engine/evoi'
 import { applyRules } from '../lib/engine/rules'
-import { classifyEmergency, detectInfantFever, detectSelfHarm, detectSevereDehydration } from '../lib/emergency'
+import { classifyEmergency, detectInfantFever, detectSelfHarm, detectSevereDehydration, stripNegatedClauses } from '../lib/emergency'
 import { retrieveGuidance } from '../lib/knowledge/retrieval'
 import { applyCalibration, loadPromotedCalibration } from '../lib/engine/calibration'
 import { checkConsistency } from '../lib/knowledge/graph'
 import { RED_FLAGS, type ExtractedFeatures, type RedFlag, type BodySystem } from '../lib/engine/features'
 import { estimateCostFromTable } from '../lib/cost/engine'
 import { isVagueAnswer, countVagueAnswers, isThinInformation, shouldSweep, applyThinInfoFloor } from '../lib/engine/thinInfo'
+import { applyHomeGuard, HOME_GUARDS } from '../lib/engine/homeGuard'
 import * as fsSync from 'fs'
 import * as path from 'path'
 
@@ -488,6 +489,27 @@ const NO_RISK = { modifiers: [] as any }
   const bad = p13.filter(([, fn]) => { try { return !fn() } catch { return true } })
   if (bad.length) bad.forEach(([name]) => policyFailures.push(`P13: ${name}`))
   else console.log('  ✓ P13 thin-information safeguards: vague detection + up-only never-home-care floor')
+}
+
+// P14: Paul's downward guards (batch 3) — strict explicit-absence semantics.
+{
+  const eczema = 'A 12-year-old has chronic dry itchy flexural skin with hay fever history but no fever, pus, red streaks, or severe pain.'
+  const pinkeye = 'A 14-year-old has watery red eyes stuck shut in the morning after a cold, with no vision change, trauma, or severe eye pain.'
+  const strip = (t: string) => stripNegatedClauses(t)
+  const p14: Array<[string, () => boolean]> = [
+    ['eczema with explicit denials → home (from er)', () => applyHomeGuard(eczema, strip(eczema), 'er')?.to === 'home_care'],
+    ['conjunctivitis with explicit denials → home (from telehealth)', () => applyHomeGuard(pinkeye, strip(pinkeye), 'telehealth')?.to === 'home_care'],
+    ['AFFIRMED danger blocks (eczema now with fever)', () => applyHomeGuard(eczema.replace('but no fever,', 'with a fever and no') , strip(eczema.replace('but no fever,', 'with a fever and no')), 'er') === null],
+    ['silence is not absence (denials removed)', () => { const t = 'A 12-year-old has chronic dry itchy flexural skin with hay fever history.'; return applyHomeGuard(t, strip(t), 'er') === null }],
+    ['never applies over emergency', () => applyHomeGuard(eczema, strip(eczema), 'emergency') === null],
+    ['no-op when already home_care', () => applyHomeGuard(eczema, strip(eczema), 'home_care') === null],
+    ['unrelated presentation never triggers', () => { const t = 'crushing chest pain with no fever, pus, red streaks, or severe pain'; return applyHomeGuard(t, strip(t), 'er') === null }],
+    ['conjunctivitis with affirmed trauma blocks', () => { const t = pinkeye.replace('with no vision change, trauma,', 'after getting hit in the eye, with no vision change') ; return applyHomeGuard(t, strip(t), 'er') === null }],
+    ['negated list followed by affirmative still blocks ("no fever but severe pain")', () => { const t = 'A 12-year-old has chronic dry itchy flexural skin with hay fever history, no fever or pus but severe pain when touched, no red streaks.'; return applyHomeGuard(t, strip(t), 'er') === null }],
+  ]
+  const bad = p14.filter(([, fn]) => { try { return !fn() } catch { return true } })
+  if (bad.length) bad.forEach(([name]) => policyFailures.push(`P14: ${name}`))
+  else console.log(`  ✓ P14 Paul downward guards: explicit-absence semantics, fail-closed (${HOME_GUARDS.length} guards)`)
 }
 
 if (policyFailures.length) {
