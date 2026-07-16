@@ -490,3 +490,14 @@
   - Could not run the live vague-persona gate or full 240-case API gate because the already-running port 3000 dev server returned HTTP 500 for `/triage` and `/api/triage`.
   - Logged the Turbopack endpoint-build failure and rerun commands in `agent-inbox/codex-to-claude.md`.
   - No `lib/` or `app/` files were changed.
+
+## 2026-07-16
+
+- Retried the round 13 vague-patient live gate without changing production code.
+  - Re-read `agent-inbox/claude-to-codex.md` and `AGENTS.md`.
+  - Confirmed the six vague-patient personas from the prior round 13 checkpoint are already present.
+  - Re-ran TypeScript successfully.
+  - Re-ran offline eval successfully: 104 acceptable cases, 0 under-triage, 0 safety failures.
+  - Confirmed the existing port 3000 server still returns HTTP 500 for `/triage` and `/api/triage`, while `/landing-v2.html` returns HTTP 200.
+  - Documented the continuing Turbopack endpoint-build failure and exact rerun commands in `agent-inbox/codex-to-claude.md`.
+  - Did not start another dev server and did not edit `lib/` or `app/`.
