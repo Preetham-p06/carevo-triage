@@ -18,6 +18,7 @@ import { RED_FLAGS, type ExtractedFeatures, type RedFlag, type BodySystem } from
 import { estimateCostFromTable } from '../lib/cost/engine'
 import { isVagueAnswer, countVagueAnswers, isThinInformation, shouldSweep, applyThinInfoFloor, applyFeverLanguageFloor } from '../lib/engine/thinInfo'
 import { applyHomeGuard, HOME_GUARDS } from '../lib/engine/homeGuard'
+import { rawErSafetyFloor, rawUrgentCareSafetyFloor } from '../lib/engine/rawFloors'
 import * as fsSync from 'fs'
 import * as path from 'path'
 
@@ -534,6 +535,35 @@ const NO_RISK = { modifiers: [] as any }
   const bad = p15.filter(([, fn]) => { try { return !fn() } catch { return true } })
   if (bad.length) bad.forEach(([name]) => policyFailures.push(`P15: ${name}`))
   else console.log('  ✓ P15 limited-English fever safety: fever language never ends at home care')
+}
+
+// P16: raw safety floors vs real-world phrasing (NEJM45 findings, 2026-07-17)
+// — abbreviations and plain wording must reach the same nets as textbook
+// phrasing. Floors are testable offline now (lib/engine/rawFloors.ts).
+{
+  const p16: Array<[string, () => boolean]> = [
+    ['"8 y/o" fever+rash+headache reaches ER floor (RMSF pattern, case-0013)', () =>
+      rawErSafetyFloor('8 y/o m, Fever, chills, joint pain, headache, rash wrists/ankles') !== null],
+    ['"one leg" swelling + recent hospitalization reaches DVT floor (case-0005)', () =>
+      rawErSafetyFloor('65 y/o f, 5 days swelling, pain in one leg, recent hospitalization, leg painful, tender, swollen') !== null],
+    ['asthma flare "symptoms not responding" reaches floor (case-0003)', () =>
+      rawErSafetyFloor('27 y/o f, Hx of asthma, mild shortness of breath, wheezing, 3 days cough, symptoms not responding to rescue inhaler') !== null],
+    ['COPD "worsening shortness of breath, green sputum" reaches floor (case-0004)', () =>
+      (rawErSafetyFloor('67 y/o f, Hx of COPD, 3 days worsening shortness of breath, increase coughing, green sputum') ?? rawUrgentCareSafetyFloor('67 y/o f, Hx of COPD, 3 days worsening shortness of breath, increase coughing, green sputum')) !== null],
+    ['65+ with fever + productive cough reaches ER floor (case-0011)', () =>
+      rawErSafetyFloor('65 y/o m, Hx of hypertension, 3 day Hx of productive cough and fever (101)') !== null],
+    ['"no fever or neck stiffness" must NOT fire the meningitis floor (case-0044)', () =>
+      rawErSafetyFloor('30 y/o m, 2 day HX of runny nose, sore throat, hot, sweaty, mild headache, cough with clear sputum, muscle aches, no fever or neck stiffness') === null],
+    ['REAL fever+headache+stiff neck still fires', () =>
+      rawErSafetyFloor('bad headache with a fever of 102 and a stiff neck since this morning') !== null],
+    ['textbook "8-year-old" phrasing still works', () =>
+      rawErSafetyFloor('An 8-year-old has fever, chills, headache and a rash on wrists and ankles') !== null],
+    ['benign adult cold triggers nothing', () =>
+      rawErSafetyFloor('30 y/o, runny nose and sore throat for two days, no fever') === null && rawUrgentCareSafetyFloor('30 y/o, runny nose and sore throat for two days, no fever') === null],
+  ]
+  const bad = p16.filter(([, fn]) => { try { return !fn() } catch { return true } })
+  if (bad.length) bad.forEach(([name]) => policyFailures.push(`P16: ${name}`))
+  else console.log('  ✓ P16 raw floors vs real-world phrasing (NEJM45): abbreviations reach the nets, negations do not')
 }
 
 if (policyFailures.length) {
