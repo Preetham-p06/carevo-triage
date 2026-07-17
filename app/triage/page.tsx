@@ -27,7 +27,7 @@ export default function TriagePage() {
           <div className="pointer-events-none absolute inset-0 rounded-[2rem] bg-[linear-gradient(90deg,rgba(59,130,246,0.08)_1px,transparent_1px),linear-gradient(rgba(59,130,246,0.08)_1px,transparent_1px)] bg-[length:42px_42px] opacity-40 [mask-image:linear-gradient(180deg,#000,transparent_78%)]" />
           <div className="relative mb-3 flex items-center justify-between gap-3 px-2 pt-1">
             <span className="rounded-full border border-slate-200 bg-white px-3 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-slate-500 shadow-sm sm:px-4 sm:text-xs">
-              Embedded product
+              Live product
             </span>
             <span className="hidden rounded-full bg-carevo-50 px-4 py-2 text-xs font-black text-carevo-700 sm:inline-flex">
               Data stays on this device
