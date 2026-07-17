@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
 
     const apiKey = process.env.GOOGLE_PLACES_API_KEY
     if (!apiKey) {
-      return NextResponse.json({ facilities: getMockFacilities(careLevel) })
+      return NextResponse.json({ facilities: getMockFacilities(careLevel), sample: true, reason: 'no_key' })
     }
 
     const url = new URL('https://maps.googleapis.com/maps/api/place/nearbysearch/json')
@@ -54,11 +54,13 @@ export async function POST(req: NextRequest) {
     const data = await res.json()
 
     if (data.status !== 'OK' && data.status !== 'ZERO_RESULTS') {
-      console.error('Places API error:', data.status)
-      return NextResponse.json({ facilities: getMockFacilities(careLevel) })
+      console.error('Places API error:', data.status, data.error_message ?? '')
+      // sample:true lets the UI label mock data honestly; reason surfaces the
+      // Google status (e.g. REQUEST_DENIED = Places API not enabled/billing).
+      return NextResponse.json({ facilities: getMockFacilities(careLevel), sample: true, reason: data.status })
     }
 
-    const facilities: Facility[] = (data.results ?? [])
+    const withCoords = (data.results ?? [])
       .slice(0, 8)
       .map((place: any) => {
         const miles = distanceMiles(lat, lng, place.geometry.location.lat, place.geometry.location.lng)
@@ -71,13 +73,27 @@ export async function POST(req: NextRequest) {
           placeId: place.place_id,
           mapsUrl: `https://www.google.com/maps/place/?q=place_id:${place.place_id}`,
           _miles: miles,
+          _lat: place.geometry.location.lat,
+          _lng: place.geometry.location.lng,
         }
       })
       .sort((a: any, b: any) => a._miles - b._miles)
       .slice(0, 5)
-      .map(({ _miles: _, ...f }: any) => f)
 
-    return NextResponse.json({ facilities })
+    const facilities: Facility[] = withCoords.map(({ _miles: _m, _lat: _a, _lng: _b, ...f }: any) => f)
+
+    // Static map image (Maps Static API) — renders inside our CSP (img-src
+    // https: is allowed; no external scripts). Numbered teal markers match
+    // the list; blue dot = the user. Key must have "Maps Static API" enabled;
+    // restrict it by HTTP referrer in Google Cloud since the URL is public.
+    const mapUrl = withCoords.length
+      ? 'https://maps.googleapis.com/maps/api/staticmap?size=640x320&scale=2&maptype=roadmap' +
+        `&markers=size:mid%7Ccolor:0x2563eb%7C${lat},${lng}` +
+        withCoords.map((f: any, i: number) => `&markers=color:0x0e7490%7Clabel:${i + 1}%7C${f._lat},${f._lng}`).join('') +
+        `&key=${apiKey}`
+      : null
+
+    return NextResponse.json({ facilities, mapUrl })
   } catch (err) {
     console.error('Facilities API error:', err)
     return NextResponse.json({ facilities: [] })

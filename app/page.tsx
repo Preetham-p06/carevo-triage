@@ -46,6 +46,8 @@ function NearbyFacilities({ careLevel }: { careLevel: string }) {
   const [facilities, setFacilities] = useState<Facility[]>([])
   const [loading, setLoading]       = useState(true)
   const [denied, setDenied]         = useState(false)
+  const [sample, setSample]         = useState(false)
+  const [mapUrl, setMapUrl]         = useState<string | null>(null)
   const label = FACILITY_LABELS[careLevel]
   if (!label) return null
 
@@ -61,6 +63,8 @@ function NearbyFacilities({ careLevel }: { careLevel: string }) {
           })
           const data = await res.json()
           setFacilities(data.facilities ?? [])
+          setSample(!!data.sample)
+          setMapUrl(data.mapUrl ?? null)
         } catch { setFacilities([]) }
         finally  { setLoading(false) }
       },
@@ -72,6 +76,17 @@ function NearbyFacilities({ careLevel }: { careLevel: string }) {
 
   return (
     <section aria-label={label} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+      {mapUrl && (
+        // Maps Static API image — real map with numbered markers matching the
+        // list below; blue dot is the user. Renders within CSP (img-src https:).
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={mapUrl} alt="Map of nearby care options" className="w-full h-40 sm:h-48 object-cover border-b border-slate-200" />
+      )}
+      {sample && !loading && (
+        <p className="bg-amber-50 border-b border-amber-100 px-4 py-2 text-[11px] font-semibold text-amber-700">
+          Sample listings shown — live results need the Places API enabled for this key.
+        </p>
+      )}
       <div className="bg-carevo-600 px-4 py-3 flex items-center gap-2">
         <svg className="w-4 h-4 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -542,15 +557,7 @@ export function HomePage({ embedded = false }: { embedded?: boolean } = {}) {
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-carevo-700">Care near you</p>
                   <h2 className="font-display text-lg font-bold leading-tight text-ink">Nearby places for this next step</h2>
-                  <p className="mt-1 text-xs leading-relaxed text-slate-500">Live facilities can appear here after location access. A full map can drop into this space later.</p>
-                </div>
-                <span className="hidden rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[10px] font-black uppercase tracking-wide text-slate-500 sm:inline-flex">
-                  Map slot
-                </span>
-              </div>
-              <div className="mb-3 h-24 overflow-hidden rounded-xl border border-slate-200 bg-[linear-gradient(90deg,rgba(8,145,178,0.08)_1px,transparent_1px),linear-gradient(rgba(8,145,178,0.08)_1px,transparent_1px)] bg-[length:28px_28px]">
-                <div className="flex h-full items-center justify-center bg-white/50">
-                  <p className="rounded-full bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-slate-400 shadow-sm">Map-ready container</p>
+                  <p className="mt-1 text-xs leading-relaxed text-slate-500">Allow location access to see real places and a map, sorted by distance.</p>
                 </div>
               </div>
               <NearbyFacilities careLevel={recommendation.careLevel} />
