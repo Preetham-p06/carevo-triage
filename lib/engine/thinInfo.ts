@@ -104,21 +104,27 @@ export function applyThinInfoFloor(
 }
 
 /**
- * Fever-language floor (round-16 fix, 2026-07-16): if the patient described
- * feeling feverish anywhere in the conversation (checked on negation-stripped
- * text, so "no fever" doesn't count) the decision can never be home_care —
- * minimum telehealth. Deterministic, up-only, LLM-independent: it holds even
- * when the extractor misses limited-English fever phrasing ("head very hot
- * two day"). Caller supplies detectFeverMention(stripNegatedClauses(text)).
+ * Fever-language floor (round-16 fix; SCOPED in round 17): if the patient
+ * described feeling feverish anywhere (negation-stripped, so "no fever"
+ * doesn't count) AND the interview was hedged (≥1 vague answer), the decision
+ * can never be home_care — minimum telehealth.
+ *
+ * Round-17 lesson: without the hedge condition this floor flipped 14
+ * clearly-described benchmark home cases (98.3% → 92.5% exact). A patient
+ * who mentions fever context but answers every question clearly gets the
+ * engine's judgment — that is the house philosophy (never blanket-escalate).
+ * A patient who mentions fever AND can't answer clearly ("not know, feel
+ * hot") gets a clinician. Deterministic, up-only, LLM-independent.
  */
 export function applyFeverLanguageFloor(
   careLevel: CareLevel,
   feverMentioned: boolean,
+  vagueAnswerCount: number,
 ): ThinInfoAdjustment | null {
-  if (careLevel !== 'home_care' || !feverMentioned) return null
+  if (careLevel !== 'home_care' || !feverMentioned || vagueAnswerCount < 1) return null
   return {
     from: 'home_care',
     to: 'telehealth',
-    reason: 'You mentioned feeling hot or feverish — a quick virtual visit is the safe next step so a clinician can check.',
+    reason: 'You mentioned feeling hot or feverish, and some answers were hard to pin down — a quick virtual visit is the safe next step so a clinician can check.',
   }
 }

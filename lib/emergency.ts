@@ -146,18 +146,22 @@ const INFANT_AGE = new RegExp(
 // Includes limited-English fever phrasings — round-16 finding: "head very hot
 // two day" carried no recognizable fever token and the case fell to home care.
 // Body-word or feel-verb is required before "hot" so weather talk ("it is
-// very hot outside") stays out.
-const FEVER_MENTION = /\bfever|febrile|temp(erature)?\b|\b10[0-9](\.\d)?\s*(°|degrees|f\b)|burning up|\b(?:feel(?:s|ing)?|head|body|skin|forehead)\s+(?:very\s+|so\s+|too\s+)?hot\b/i
+// very hot outside") stays out. Round-17 fixes: every alternative is now
+// word-bounded ("afebrile" no longer matches febrile, "attempted" no longer
+// matches temp), and "hay fever" is neutralized before matching (it is an
+// allergy — this single unanchored token flipped 14 benchmark cases).
+const FEVER_MENTION = /\bfever(?:ish)?\b|\bfebrile\b|\btemp(?:erature)?\b|\b10[0-9](\.\d)?\s*(°|degrees|f\b)|\bburning up\b|\b(?:feel(?:s|ing)?|head|body|skin|forehead)\s+(?:very\s+|so\s+|too\s+)?hot\b/i
+const neutralizeHayFever = (text: string) => text.replace(/\bhay\s+fever\b/gi, 'hay allergy')
 
 export function detectInfantFever(text: string): boolean {
-  return INFANT_AGE.test(text) && FEVER_MENTION.test(text)
+  return INFANT_AGE.test(text) && FEVER_MENTION.test(neutralizeHayFever(text))
 }
 
 /** Any fever mention — used for populations where ANY fever is significant
  *  (active chemotherapy: the 100.4°F neutropenic threshold, not the general
  *  "high fever ~103°F" bar the extractor is calibrated to). */
 export function detectFeverMention(text: string): boolean {
-  return FEVER_MENTION.test(text)
+  return FEVER_MENTION.test(neutralizeHayFever(text))
 }
 
 // ── Deterministic severe-dehydration detection ───────────────────────────────

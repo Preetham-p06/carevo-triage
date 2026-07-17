@@ -1138,6 +1138,7 @@ export async function POST(req: NextRequest) {
     const feverFloor = applyFeverLanguageFloor(
       decision.careLevel,
       detectFeverMention(stripNegatedClauses(allUserText)),
+      vagueCount,
     )
     if (feverFloor) {
       decision.careLevel = feverFloor.to
