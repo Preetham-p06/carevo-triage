@@ -579,3 +579,18 @@
   - Severity-word audit returned 0 hits across questions and factor labels.
   - Wrote changed-case analysis, fever-floor audit, second-reader stats, and release recommendation to `agent-inbox/codex-to-claude.md`.
   - No `lib/` or `app/` files were edited; no kill switch was applied.
+
+
+## 2026-07-17
+
+- Ran round 19 NEJM45 external benchmark and regression verification.
+  - Created before-run checkpoint commit `8bc0d01`.
+  - Re-ran TypeScript and offline eval successfully; offline eval stayed 104/104 acceptable with 0 UNDER.
+  - Ran NEJM45 api-multiturn benchmark: 45/45 scored, 40 exact, 4 over, 1 UNDER, 88.9% exact, 97.8% safe-or-exact.
+  - Confirmed four targeted NEJM fixes now pass exactly: severe COPD exacerbation, DVT, older-adult pneumonia, and pediatric fever/rash systemic illness.
+  - Identified the remaining true safety failure: `case-0003 AsthmaExacerbation` routes telehealth instead of ER when the vignette says asthma + wheezing + symptoms not responsive to inhalers.
+  - Ran the full 240-case api-multiturn regression gate: 240/240 scored, 231 exact, 9 over, 0 UNDER, 0 provider errors, 96.3% exact, 100% safe-or-exact.
+  - Ran all 8 vague personas for three rounds: 24/24 correct or acceptable, 0 UNDER, 0 forbidden output, 0 errors.
+  - Severity-word audit returned 0 patient-facing hits for 1-to-10 or mild/moderate/severe wording.
+  - Wrote failure analysis and next deterministic fix target to `agent-inbox/codex-to-claude.md`.
+  - No `lib/` or `app/` files were edited; no kill switch was applied; no push was performed because NEJM45 still had 1 UNDER.
