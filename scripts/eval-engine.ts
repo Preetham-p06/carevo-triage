@@ -548,6 +548,10 @@ const NO_RISK = { modifiers: [] as any }
       rawErSafetyFloor('65 y/o f, 5 days swelling, pain in one leg, recent hospitalization, leg painful, tender, swollen') !== null],
     ['asthma flare "symptoms not responding" reaches floor (case-0003)', () =>
       rawErSafetyFloor('27 y/o f, Hx of asthma, mild shortness of breath, wheezing, 3 days cough, symptoms not responding to rescue inhaler') !== null],
+    ['asthma flare EXACT NEJM wording "not responsive to inhalers" reaches floor', () =>
+      rawErSafetyFloor('27 y/o f, Hx of asthma, mild shortness of breath, wheezing, 3 days cough, symptoms not responsive to inhalers, recent cold') !== null],
+    ['sleep-disruption wording alone (no asthma) fires nothing', () =>
+      rawErSafetyFloor('my snoring is disrupting my sleep and causing daytime somnolence') === null],
     ['COPD "worsening shortness of breath, green sputum" reaches floor (case-0004)', () =>
       (rawErSafetyFloor('67 y/o f, Hx of COPD, 3 days worsening shortness of breath, increase coughing, green sputum') ?? rawUrgentCareSafetyFloor('67 y/o f, Hx of COPD, 3 days worsening shortness of breath, increase coughing, green sputum')) !== null],
     ['65+ with fever + productive cough reaches ER floor (case-0011)', () =>

@@ -60,9 +60,14 @@ function rawErSafetyFloor(text: string): string | null {
     /\b(severe|appears ill|104\s*°?\s*f|40\s*°?\s*c|tense|guarding|rigid|no bowel sounds)\b/i.test(s)
   if (pediatricSevereAbdominal) return 'Child with severe abdominal pain, fever, and guarding signs'
 
+  // Escalation component covers every phrasing of "the inhaler isn't working"
+  // seen in benchmarks — NEJM45 case-0003 said "not responsIVE to inhalers"
+  // and slipped past "not respond(ing)". Parenthesized: sleep-disruption
+  // wording only counts alongside the asthma + symptom components.
   const severeAsthmaFlare = /\b(asthma|rescue inhaler|albuterol)\b/i.test(s) &&
     /\b(shortness of breath|wheezing|cough)\b/i.test(s) &&
-    /\b(progressive worsening|worsening symptoms|worsening wheezing|did not receive significant relief|despite (?:increased|repeated) rescue inhaler use|despite increased use|repeated rescue inhaler use|not respond(?:ing)?|no relief|not helping|not improving|disrupting .*sleep|daytime somnolence)\b/i.test(s)
+    (/\b(progressive worsening|worsening symptoms|worsening wheezing|did not receive significant relief|despite (?:increased|repeated) rescue inhaler use|despite increased use|repeated rescue inhaler use|not respond(?:ing|s)?|(?:not|un)responsive(?:\s+to)?|no relief|not help(?:ing)?|not improv(?:ing|ed)?|not work(?:ing)?|inhalers? (?:aren'?t|don'?t|didn'?t|not) (?:help|work))\b/i.test(s) ||
+     /\b(disrupting .*sleep|daytime somnolence)\b/i.test(s))
   if (severeAsthmaFlare) return 'Asthma symptoms worsening despite rescue inhaler use'
 
   const severeCopdFlare = /\bCOPD\b/i.test(s) &&
