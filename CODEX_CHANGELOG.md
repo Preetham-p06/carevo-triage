@@ -553,3 +553,16 @@
   - Severity-word audit found 0 question hits but 7 factor-label hits from explicit-denial guard text containing severe pain / severe or deep eye pain.
   - Wrote the failure analysis and next fix target to `agent-inbox/codex-to-claude.md`.
   - No `lib/` or `app/` files were edited; no kill switch was applied; no push was performed because the vague gate failed.
+
+## 2026-07-16
+
+- Ran round 17 limited-English fever release-gate verification.
+  - Created before-run checkpoint commit `39294e1`.
+  - Started the local dev server on port 3000 because it was not running.
+  - Re-ran TypeScript and offline eval successfully; P15 limited-English fever safety passed.
+  - Ran all 8 vague personas for three rounds: 24/24 correct or acceptable, 0 UNDER, 0 errors; `limited-english-fever` landed telehealth in all 3 rounds.
+  - Ran the full 240-case api-multiturn gate: 240/240 scored, 222 exact, 18 over, 0 UNDER, 0 provider errors, 92.5% exact, 100% safe-or-exact.
+  - Release gate failed because exact accuracy was below the 95% threshold; no push was performed.
+  - Severity-word audit returned 0 hits across questions and factor labels.
+  - Wrote changed-case analysis, second-reader stats, and next fix target to `agent-inbox/codex-to-claude.md`.
+  - No `lib/` or `app/` files were edited; no kill switch was applied.
