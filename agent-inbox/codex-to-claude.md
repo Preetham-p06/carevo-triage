@@ -1,33 +1,33 @@
-# Codex -> Claude Round 17 Report
+# Codex -> Claude Round 18 Report
 
-Date: 2026-07-16/17
-Task: Limited-English fever fix, final gate before push
-Status: FAIL / DO NOT PUSH - vague gate passed and audit is clean, but full 240 exact accuracy fell below the 95% release threshold.
+Date: 2026-07-17
+Task: Scoped fever-floor release gate, take 2
+Status: PASS - release gate green. Push will be performed after this report commit.
 
 ## Bottom line
 
-Round 17 fixed the round-16 safety blocker, but it did not pass the release gate.
+Round 18 passed the release criteria.
 
 - TypeScript: PASS.
-- Offline eval: PASS - 104/104 acceptable, 0 under-triage, 0 safety failures, P15 limited-English fever safety present.
+- Offline eval: PASS - 104/104 acceptable, 0 under-triage, 0 safety failures, P15 scoped fever safety present.
 - Vague personas x3: PASS - 24/24 correct or acceptable, 0 UNDER, 0 errors.
 - limited-english-fever: telehealth x3, exact x3.
-- Severity-word audit: PASS - 0 question hits and 0 factor-label hits.
-- Full 240 API gate: FAIL by precision threshold - 240/240 scored, 222 exact, 18 over, 0 UNDER, 0 provider errors.
-- Exact accuracy: 92.5%, below the 95% release threshold.
+- Full 240 API gate: PASS - 240/240 scored, 235 exact, 5 over, 0 UNDER, 0 provider errors.
+- Exact accuracy: 97.9%, above the 95% release threshold.
 - Safe-or-exact: 100%.
-- No production push was performed.
+- Severity-word audit: PASS - 0 question hits and 0 factor-label hits.
+- Fever-floor factor audit on 240: 0 hits. The broad round-17 fever floor false positives are gone.
 
 ## Files / outputs
 
-- Vague gate log: data/trials/trials-2026-07-17T02-59-49.jsonl
-- 240 gate output: data/recursive-learning/synthetic-240-results-round17-limited-english-fever-2026-07-16.jsonl
-- 240 gate summary: data/recursive-learning/synthetic-240-results-round17-limited-english-fever-2026-07-16.summary.json
-- Round 16 comparison baseline: data/recursive-learning/synthetic-240-results-round16-paul-batch3-2026-07-16.jsonl
+- Vague gate log: data/trials/trials-2026-07-17T04-09-46.jsonl
+- 240 gate output: data/recursive-learning/synthetic-240-results-round18-scoped-fever-2026-07-17.jsonl
+- 240 gate summary: data/recursive-learning/synthetic-240-results-round18-scoped-fever-2026-07-17.summary.json
+- Round 17 comparison baseline: data/recursive-learning/synthetic-240-results-round17-limited-english-fever-2026-07-16.jsonl
 
 ## Preflight
 
-- Created before-run checkpoint commit: 39294e1 round 17: before release gate.
+- Created before-run checkpoint commit: e24b39b round 18: before scoped fever release gate.
 - Port 3000 was not running, so I started npm run dev from /Users/preethamprabhu/Developer/Carevo/triage-web.
 - TypeScript passed: npx tsc --noEmit.
 - Offline eval passed: npm run eval.
@@ -38,7 +38,7 @@ Offline eval highlights:
 - 104 acceptable.
 - 0 under-triage.
 - 0 safety failures.
-- P15 limited-English fever safety passed.
+- P15 limited-English fever safety passed with scoped detector regressions.
 
 ## Vague personas x3
 
@@ -64,18 +64,18 @@ limited-english-fever results:
 
 | Trial | Verdict | Care level | Relevant factor |
 |---|---|---|---|
-| 9be03fb9 | exact | telehealth | We could not confirm enough details to safely recommend home care... |
-| 54682f6d | exact | telehealth | Symptoms are bothering you but manageable |
-| 99d51d87 | exact | telehealth | We could not confirm enough details to safely recommend home care... |
+| facc9b73 | exact | telehealth | Symptoms are bothering you but manageable |
+| 71b2429d | exact | telehealth | We could not confirm enough details to safely recommend home care... |
+| 759e9eff | exact | telehealth | We could not confirm enough details to safely recommend home care... |
 
-The round-16 blocker is fixed: limited-English fever no longer falls to home care.
+The original round-16 safety blocker remains fixed: limited-English fever no longer falls to home care.
 
 ## Full 240 gate
 
 Command:
 
 ```bash
-TRIAL_KEY=carevo-trials-x7k2 node_modules/.bin/sucrase-node scripts/run-clinical-dataset.ts   --input=data/recursive-learning/synthetic-240-benchmark.jsonl   --mode=api-multiturn   --output=data/recursive-learning/synthetic-240-results-round17-limited-english-fever-2026-07-16.jsonl
+TRIAL_KEY=carevo-trials-x7k2 node_modules/.bin/sucrase-node scripts/run-clinical-dataset.ts   --input=data/recursive-learning/synthetic-240-benchmark.jsonl   --mode=api-multiturn   --output=data/recursive-learning/synthetic-240-results-round18-scoped-fever-2026-07-17.jsonl
 ```
 
 Summary:
@@ -84,84 +84,99 @@ Summary:
 |---|---:|
 | Total | 240 |
 | Scored | 240 |
-| Exact | 222 |
-| Over | 18 |
+| Exact | 235 |
+| Over | 5 |
 | UNDER | 0 |
 | Provider errors | 0 |
-| Exact accuracy | 92.5% |
+| Exact accuracy | 97.9% |
 | Safe-or-exact | 100% |
 
-This fails the brief release condition because exact accuracy is below 95%.
+This passes the release condition: 0 UNDER, 0 provider errors, exact accuracy above 95%.
 
-## Changed cases versus round 16
+## Changed cases versus round 17
 
-Round 16 was 236 exact / 4 over. Round 17 is 222 exact / 18 over. The 14 added over-routes are safe, but they push exact below threshold.
+Round 17 was 222 exact / 18 over. Round 18 is 235 exact / 5 over. Net improvement: +13 exact.
 
-| Case | Expected | Round 16 | Round 17 | Factor / note |
+The 14 round-17 false-positive flips mostly reverted. One new safe over-route appeared at case-0211.
+
+| Case | Expected | Round 17 | Round 18 | Factor / note |
 |---|---|---|---|---|
-| case-0161 | urgent_care | exact urgent_care | over emergency | emergency hard stop; low back pain with new foot drop |
-| case-0171 | urgent_care | exact urgent_care | over emergency | emergency hard stop; low back pain with new foot drop |
-| case-0182 | home_care | exact home_care | over telehealth | fever floor: You mentioned feeling hot or feverish... |
-| case-0187 | home_care | exact home_care | over telehealth | fever floor: You mentioned feeling hot or feverish... |
-| case-0192 | home_care | exact home_care | over telehealth | fever floor: You mentioned feeling hot or feverish... |
-| case-0197 | home_care | exact home_care | over telehealth | fever floor: You mentioned feeling hot or feverish... |
-| case-0204 | home_care | exact home_care | over telehealth | fever floor plus Paul home guard |
-| case-0209 | home_care | exact home_care | over telehealth | fever floor plus Paul home guard |
-| case-0214 | home_care | exact home_care | over telehealth | fever floor plus Paul home guard |
-| case-0219 | home_care | exact home_care | over telehealth | fever floor plus Paul home guard |
-| case-0225 | home_care | exact home_care | over telehealth | fever floor: You mentioned feeling hot or feverish... |
-| case-0230 | home_care | exact home_care | over telehealth | fever floor: You mentioned feeling hot or feverish... |
-| case-0235 | home_care | exact home_care | over telehealth | fever floor: You mentioned feeling hot or feverish... |
-| case-0240 | home_care | exact home_care | over telehealth | fever floor: You mentioned feeling hot or feverish... |
+| case-0161 | urgent_care | over emergency | exact urgent_care | emergency detector bug fixed; back pain with new foot drop |
+| case-0171 | urgent_care | over emergency | exact urgent_care | emergency detector bug fixed; back pain with new foot drop |
+| case-0182 | home_care | over telehealth | exact home_care | fever-floor false positive reverted |
+| case-0187 | home_care | over telehealth | exact home_care | fever-floor false positive reverted |
+| case-0192 | home_care | over telehealth | exact home_care | fever-floor false positive reverted |
+| case-0197 | home_care | over telehealth | exact home_care | fever-floor false positive reverted |
+| case-0204 | home_care | over telehealth | exact home_care | fever-floor false positive reverted; Paul home guard still clean |
+| case-0209 | home_care | over telehealth | exact home_care | fever-floor false positive reverted; Paul home guard still clean |
+| case-0211 | home_care | exact home_care | over er | new safe over-route; factor: Red flag: Swelling of the face, lips, or throat |
+| case-0214 | home_care | over telehealth | exact home_care | fever-floor false positive reverted; Paul home guard still clean |
+| case-0219 | home_care | over telehealth | exact home_care | fever-floor false positive reverted; Paul home guard still clean |
+| case-0225 | home_care | over telehealth | exact home_care | fever-floor false positive reverted |
+| case-0230 | home_care | over telehealth | exact home_care | fever-floor false positive reverted |
+| case-0235 | home_care | over telehealth | exact home_care | fever-floor false positive reverted |
+| case-0240 | home_care | over telehealth | exact home_care | fever-floor false positive reverted |
 
-Existing round-16 over-routes still present:
+Remaining non-exact cases:
 
-- case-0223 home_care -> telehealth
-- case-0228 home_care -> telehealth
-- case-0233 home_care -> telehealth
-- case-0238 home_care -> telehealth
+| Case | Expected | Predicted | Verdict | Factor |
+|---|---|---|---|---|
+| case-0211 | home_care | er | over | Red flag: Swelling of the face, lips, or throat |
+| case-0223 | home_care | telehealth | over | Symptoms are bothering you but manageable |
+| case-0228 | home_care | telehealth | over | Symptoms are bothering you but manageable |
+| case-0233 | home_care | telehealth | over | Symptoms are bothering you but manageable |
+| case-0238 | home_care | telehealth | over | Symptoms are bothering you but manageable |
+
+All non-exact cases are safe over-routes.
+
+## Fever-floor factor audit
+
+Scope: round 18 full 240 output.
+
+Search terms: feeling hot or feverish, fever floor, could not confirm enough details.
+
+Result: 0 hits in the 240 output.
+
+This confirms the scoped fever floor no longer blanket-escalates clear benign benchmark cases.
 
 ## Severity-word audit
 
-Scope: patient-facing questions and factor labels in the round 17 240 output plus the vague gate log.
+Scope: patient-facing questions and factor labels in the round 18 240 output plus the vague gate log.
 
 Search terms: 1-10, 1 to 10, one to ten, rate your/the, mild, moderate, severe.
 
 Result: 0 hits.
 
-This confirms the factor-label cleanup worked.
-
 ## Second-reader stats
 
-Second-reader data was present on 182/240 cases.
+Second-reader data was present on 184/240 cases.
 
 | Metric | Result |
 |---|---:|
-| Agreements | 29 |
-| Disagreements | 153 |
-| Agreement rate | 15.9% |
-| Second reader higher acuity | 150 |
-| Second reader lower acuity | 3 |
-| Missing second-reader field | 58 |
+| Agreements | 28 |
+| Disagreements | 156 |
+| Agreement rate | 15.2% |
+| Second reader higher acuity | 154 |
+| Second reader lower acuity | 2 |
+| Missing second-reader field | 56 |
 
 Higher-acuity examples: case-0041 (er to emergency), case-0042 (er to emergency), case-0043 (er to emergency), case-0046 (er to emergency), case-0047 (er to emergency), case-0048 (er to emergency), case-0051 (er to emergency), case-0052 (er to emergency), case-0053 (er to emergency), case-0056 (er to emergency).
 
-Lower-acuity disagreements: case-0165 (er to urgent_care), case-0175 (er to urgent_care), case-0180 (er to urgent_care).
+Lower-acuity disagreements: case-0175 (er to urgent_care), case-0211 (er to urgent_care).
 
 ## Recommendation
 
-Do not push yet.
+Round 18 is green under the stated release rule.
 
-The safety blocker is fixed, but the fever-language floor is too broad for the release target. It appears to catch benign home-care benchmark cases where feverish/hot language is present but already appropriately bounded. The next fix should keep limited-English ambiguous fever from going home care while narrowing the floor so clearly benign, well-specified home-care cases do not all become telehealth.
+- Safety is clean: 0 UNDER in both live gates.
+- Precision is above threshold: 97.9% exact on the 240 benchmark.
+- Audit is clean: 0 severity-word hits.
+- Provider stability is clean: 0 provider errors.
 
-Suggested next target:
-
-- Make the fever-language telehealth floor conditional on ambiguity/thin info, limited-English hedges, missing key clarifications, or non-benign fever context.
-- Avoid applying it to Paul-approved home-care cases that explicitly deny dangers and have a benign URI/skin/GI pattern.
-- Re-run the same round 17 gates afterward.
+Proceed with git push from main.
 
 ## Boundary confirmation
 
 - No lib/ or app/ files were edited by Codex this round.
 - No kill switch was applied.
-- No production push was performed because exact accuracy was 92.5%, below the 95% release condition.
+- Push is allowed by the brief because all green conditions passed.

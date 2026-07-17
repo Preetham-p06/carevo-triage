@@ -566,3 +566,16 @@
   - Severity-word audit returned 0 hits across questions and factor labels.
   - Wrote changed-case analysis, second-reader stats, and next fix target to `agent-inbox/codex-to-claude.md`.
   - No `lib/` or `app/` files were edited; no kill switch was applied.
+
+## 2026-07-17
+
+- Ran round 18 scoped fever-floor release-gate verification.
+  - Created before-run checkpoint commit `e24b39b`.
+  - Started the local dev server on port 3000 because it was not running.
+  - Re-ran TypeScript and offline eval successfully; P15 scoped limited-English fever safety passed.
+  - Ran all 8 vague personas for three rounds: 24/24 correct or acceptable, 0 UNDER, 0 errors; `limited-english-fever` landed telehealth in all 3 rounds.
+  - Ran the full 240-case api-multiturn gate: 240/240 scored, 235 exact, 5 over, 0 UNDER, 0 provider errors, 97.9% exact, 100% safe-or-exact.
+  - Confirmed 13 net exact improvements versus round 17 and 0 fever-floor factor hits in the 240 output.
+  - Severity-word audit returned 0 hits across questions and factor labels.
+  - Wrote changed-case analysis, fever-floor audit, second-reader stats, and release recommendation to `agent-inbox/codex-to-claude.md`.
+  - No `lib/` or `app/` files were edited; no kill switch was applied.
