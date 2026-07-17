@@ -66,7 +66,7 @@ function rawErSafetyFloor(text: string): string | null {
   // wording only counts alongside the asthma + symptom components.
   const severeAsthmaFlare = /\b(asthma|rescue inhaler|albuterol)\b/i.test(s) &&
     /\b(shortness of breath|wheezing|cough)\b/i.test(s) &&
-    (/\b(progressive worsening|worsening symptoms|worsening wheezing|did not receive significant relief|despite (?:increased|repeated) rescue inhaler use|despite increased use|repeated rescue inhaler use|not respond(?:ing|s)?|(?:not|un)responsive(?:\s+to)?|no relief|not help(?:ing)?|not improv(?:ing|ed)?|not work(?:ing)?|inhalers? (?:aren'?t|don'?t|didn'?t|not) (?:help|work))\b/i.test(s) ||
+    (/\b(progressive worsening|worsening symptoms|worsening wheezing|did not receive significant relief|despite (?:increased|repeated) rescue inhaler use|despite increased use|repeated rescue inhaler use|not respond(?:ing|s)?|(?:not\s+|un)responsive(?:\s+to)?|no relief|not help(?:ing)?|not improv(?:ing|ed)?|not work(?:ing)?|inhalers? (?:aren'?t|don'?t|didn'?t|not) (?:help|work))\b/i.test(s) ||
      /\b(disrupting .*sleep|daytime somnolence)\b/i.test(s))
   if (severeAsthmaFlare) return 'Asthma symptoms worsening despite rescue inhaler use'
 
