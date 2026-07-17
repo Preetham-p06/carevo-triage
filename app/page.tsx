@@ -116,9 +116,201 @@ function NearbyFacilities({ careLevel }: { careLevel: string }) {
   )
 }
 
+// ── Coverage options card ────────────────────────────────────────────────────
+
+type CoveragePlan = {
+  name: string
+  issuer: string
+  metalLevel: string
+  monthlyPremium: number
+  deductible: number | null
+}
+
+type CoverageResponse = {
+  configured: boolean
+  options: {
+    eligibility: {
+      likelyMedicaidOrChip: boolean
+      estimatedMonthlyCredit: number | null
+    } | null
+    samplePlans: CoveragePlan[]
+    provenance: { source: string; retrievedAt: string }
+  } | null
+  error?: string
+}
+
+function parseAges(raw: string) {
+  return raw
+    .split(',')
+    .map(s => Number(s.trim()))
+    .filter(n => Number.isInteger(n) && n >= 0 && n <= 120)
+}
+
+function CoverageOptionsCard() {
+  const [zipcode, setZipcode] = useState('')
+  const [income, setIncome] = useState('')
+  const [agesText, setAgesText] = useState('')
+  const [status, setStatus] = useState<'idle' | 'loading' | 'ready' | 'hidden' | 'error'>('idle')
+  const [message, setMessage] = useState('')
+  const [result, setResult] = useState<CoverageResponse['options']>(null)
+
+  const ages = parseAges(agesText)
+  const zipOk = /^\d{5}$/.test(zipcode.trim())
+  const incomeValue = Number(income)
+  const incomeOk = Number.isFinite(incomeValue) && incomeValue >= 0 && incomeValue <= 5_000_000
+  const agesOk = ages.length > 0 && ages.length <= 8
+
+  async function submit(e: FormEvent) {
+    e.preventDefault()
+    setMessage('')
+    setResult(null)
+    if (!zipOk || !incomeOk || !agesOk) {
+      setStatus('error')
+      setMessage('Add a 5-digit ZIP, yearly income, and 1 to 8 ages.')
+      return
+    }
+    setStatus('loading')
+    try {
+      const res = await fetch('/api/coverage', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ zipcode: zipcode.trim(), income: incomeValue, ages }),
+      })
+      if (res.status === 429) {
+        setStatus('error')
+        setMessage('Too many tries. Please try again in a minute.')
+        return
+      }
+      const data: CoverageResponse = await res.json()
+      if (!data.configured) {
+        setStatus('hidden')
+        return
+      }
+      if (!res.ok || !data.options) {
+        setStatus('error')
+        setMessage('We could not check coverage right now. Please try again soon.')
+        return
+      }
+      setResult(data.options)
+      setStatus('ready')
+    } catch {
+      setStatus('error')
+      setMessage('We could not check coverage right now. Please try again soon.')
+    }
+  }
+
+  if (status === 'hidden') return null
+
+  return (
+    <section className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+      <div className="flex items-start gap-3">
+        <div className="w-10 h-10 rounded-xl bg-accent-50 border border-accent-100 flex items-center justify-center shrink-0" aria-hidden="true">
+          <IconShield className="w-5 h-5 text-accent" />
+        </div>
+        <div>
+          <p className="text-[10px] font-bold tracking-widest uppercase text-carevo-700">Coverage check</p>
+          <h2 className="font-display font-bold text-ink text-lg leading-tight mt-0.5">Uninsured? See what coverage could cost.</h2>
+          <p className="text-xs text-slate-500 leading-relaxed mt-1">This is only an estimate. It never changes your care recommendation.</p>
+        </div>
+      </div>
+
+      <form onSubmit={submit} className="mt-4 grid gap-3 sm:grid-cols-[0.8fr_1fr_1fr]">
+        <label className="block">
+          <span className="text-xs font-bold text-slate-600">ZIP code</span>
+          <input
+            inputMode="numeric"
+            maxLength={5}
+            value={zipcode}
+            onChange={e => setZipcode(e.target.value.replace(/\D/g, '').slice(0, 5))}
+            placeholder="43054"
+            className="mt-1 w-full min-h-[44px] rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-semibold text-ink outline-none transition focus:border-carevo-400 focus:ring-4 focus:ring-carevo-50"
+          />
+        </label>
+        <label className="block">
+          <span className="text-xs font-bold text-slate-600">Yearly income</span>
+          <input
+            inputMode="numeric"
+            value={income}
+            onChange={e => setIncome(e.target.value.replace(/[^\d.]/g, '').slice(0, 9))}
+            placeholder="32000"
+            className="mt-1 w-full min-h-[44px] rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-semibold text-ink outline-none transition focus:border-carevo-400 focus:ring-4 focus:ring-carevo-50"
+          />
+        </label>
+        <label className="block">
+          <span className="text-xs font-bold text-slate-600">Ages in your home</span>
+          <input
+            inputMode="numeric"
+            value={agesText}
+            onChange={e => setAgesText(e.target.value.replace(/[^\d,\s]/g, '').slice(0, 40))}
+            placeholder="28, 6"
+            className="mt-1 w-full min-h-[44px] rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-semibold text-ink outline-none transition focus:border-carevo-400 focus:ring-4 focus:ring-carevo-50"
+          />
+        </label>
+        <button
+          type="submit"
+          disabled={status === 'loading'}
+          className="min-h-[44px] rounded-xl bg-carevo-600 px-4 text-sm font-bold text-white shadow-sm transition hover:bg-carevo-700 disabled:opacity-50 sm:col-span-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-carevo-500"
+        >
+          {status === 'loading' ? 'Checking coverage...' : 'Check coverage'}
+        </button>
+      </form>
+
+      {status === 'error' && message && (
+        <p className="mt-3 rounded-xl border border-amber-100 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-800">{message}</p>
+      )}
+
+      {status === 'ready' && result && (
+        <div className="mt-4 space-y-3">
+          {result.eligibility?.likelyMedicaidOrChip && (
+            <div className="rounded-2xl border border-accent-100 bg-accent-50 p-3">
+              <p className="text-sm font-bold text-accent-700">You may qualify for free or low-cost coverage.</p>
+              <p className="mt-1 text-xs leading-relaxed text-slate-600">Medicaid or CHIP may be an option based on what you entered.</p>
+            </div>
+          )}
+          {result.eligibility?.estimatedMonthlyCredit != null && (
+            <div className="flex items-center justify-between gap-3 rounded-xl border border-carevo-100 bg-carevo-50 px-3 py-2">
+              <span className="text-xs font-bold text-carevo-800">Estimated help paying</span>
+              <span className="text-sm font-black tabular-nums text-carevo-700">
+                ${Math.round(result.eligibility.estimatedMonthlyCredit).toLocaleString()}/month
+              </span>
+            </div>
+          )}
+          {result.samplePlans?.length > 0 && (
+            <div className="divide-y divide-slate-100 overflow-hidden rounded-2xl border border-slate-200">
+              {result.samplePlans.slice(0, 3).map(plan => (
+                <div key={`${plan.issuer}-${plan.name}`} className="bg-slate-50 px-3 py-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-bold text-ink">{plan.name}</p>
+                      <p className="text-xs text-slate-500">{plan.issuer}</p>
+                    </div>
+                    <span className="rounded-full bg-white px-2 py-1 text-[10px] font-black uppercase tracking-wide text-slate-500 ring-1 ring-slate-200">
+                      {plan.metalLevel || 'Plan'}
+                    </span>
+                  </div>
+                  <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-600">
+                    <span><strong className="text-ink tabular-nums">${Math.round(plan.monthlyPremium).toLocaleString()}</strong>/mo</span>
+                    <span>Deductible: <strong className="text-ink tabular-nums">{plan.deductible == null ? 'varies' : `$${Math.round(plan.deductible).toLocaleString()}`}</strong></span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          <p className="text-[11px] leading-relaxed text-slate-400">
+            Live data from HealthCare.gov · estimates only, not an enrollment decision ·{' '}
+            <a href="https://www.healthcare.gov/" target="_blank" rel="noopener noreferrer" className="font-bold text-carevo-700 hover:text-carevo-800">
+              healthcare.gov
+            </a>
+          </p>
+        </div>
+      )}
+    </section>
+  )
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 
-export function HomePage() {
+export function HomePage({ embedded = false }: { embedded?: boolean } = {}) {
   const [appState, setAppState]             = useState<AppState>('landing')
   const [messages, setMessages]             = useState<Message[]>([])
   const [currentInput, setCurrentInput]     = useState('')
@@ -262,7 +454,7 @@ export function HomePage() {
   // ── EMERGENCY ─────────────────────────────────────────────────────────────
   if (appState === 'emergency') {
     return (
-      <div className="min-h-[calc(100dvh-3.5rem)] bg-red-600 flex flex-col items-center justify-center p-6 text-white">
+      <div className={`${embedded ? 'min-h-[620px] rounded-[1rem]' : 'min-h-[calc(100dvh-3.5rem)]'} bg-red-600 flex flex-col items-center justify-center p-6 text-white`}>
         <div className="max-w-md w-full text-center space-y-6">
           <div className="w-20 h-20 mx-auto rounded-full bg-red-500 border-4 border-red-400 flex items-center justify-center" aria-hidden="true">
             <IconAlert className="w-10 h-10" />
@@ -280,9 +472,10 @@ export function HomePage() {
   // ── RESULT ────────────────────────────────────────────────────────────────
   if (appState === 'result' && recommendation) {
     const cfg = CARE_LEVEL_CONFIG[recommendation.careLevel]
+    const hasFacilitySection = !!FACILITY_LABELS[recommendation.careLevel]
     return (
-      <div className="min-h-screen bg-slate-50">
-        <div className="max-w-lg mx-auto p-4 space-y-4 pb-16">
+      <div className={embedded ? 'min-h-[620px] bg-slate-50' : 'min-h-screen bg-slate-50'}>
+        <div className={`${embedded ? 'max-w-2xl' : 'max-w-lg'} mx-auto p-4 space-y-4 pb-16`}>
           <div className="flex items-center gap-3 pt-2">
             <button onClick={reset} aria-label="Back" className="text-slate-400 hover:text-slate-600 cursor-pointer w-11 h-11 -ml-2 flex items-center justify-center rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-carevo-500">
               <IconBack className="w-5 h-5" />
@@ -341,7 +534,28 @@ export function HomePage() {
             </div>
           )}
 
-          <NearbyFacilities careLevel={recommendation.careLevel} />
+          <CoverageOptionsCard />
+
+          {hasFacilitySection && (
+            <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+              <div className="mb-3 flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-carevo-700">Care near you</p>
+                  <h2 className="font-display text-lg font-bold leading-tight text-ink">Nearby places for this next step</h2>
+                  <p className="mt-1 text-xs leading-relaxed text-slate-500">Live facilities can appear here after location access. A full map can drop into this space later.</p>
+                </div>
+                <span className="hidden rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[10px] font-black uppercase tracking-wide text-slate-500 sm:inline-flex">
+                  Map slot
+                </span>
+              </div>
+              <div className="mb-3 h-24 overflow-hidden rounded-xl border border-slate-200 bg-[linear-gradient(90deg,rgba(8,145,178,0.08)_1px,transparent_1px),linear-gradient(rgba(8,145,178,0.08)_1px,transparent_1px)] bg-[length:28px_28px]">
+                <div className="flex h-full items-center justify-center bg-white/50">
+                  <p className="rounded-full bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-slate-400 shadow-sm">Map-ready container</p>
+                </div>
+              </div>
+              <NearbyFacilities careLevel={recommendation.careLevel} />
+            </section>
+          )}
 
           {recommendation.factors && recommendation.factors.length > 0 && (
             <section className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
@@ -439,7 +653,7 @@ export function HomePage() {
   // ── CHAT ─────────────────────────────────────────────────────────────────
   if (appState === 'chatting' || appState === 'thinking') {
     return (
-      <div className="h-[calc(100dvh-3.5rem)] bg-slate-50 flex flex-col">
+      <div className={`${embedded ? 'h-[min(760px,76dvh)] min-h-[620px]' : 'h-[calc(100dvh-3.5rem)]'} bg-slate-50 flex flex-col`}>
         <div className="bg-white border-b border-slate-100 px-4 py-2 flex items-center gap-2 shrink-0" role="banner">
           <button onClick={reset} aria-label="Back" className="text-slate-400 hover:text-slate-600 w-11 h-11 flex items-center justify-center rounded-xl transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-carevo-500">
             <IconBack className="w-5 h-5" />
@@ -496,6 +710,84 @@ export function HomePage() {
     { href: '/profile#history', Icon: IconHeart,       title: 'Health history',    desc: 'Better answers, fewer questions' },
     { href: '/profile',         Icon: IconChat,        title: 'Recent chats',      desc: 'Past checks and results' },
   ]
+
+  if (embedded) {
+    return (
+      <div className="min-h-[620px] bg-white">
+        <div className="relative overflow-hidden border-b border-slate-100 bg-white">
+          <div className="pointer-events-none absolute right-0 top-0 h-56 w-56 opacity-[0.05]" aria-hidden="true"
+            style={{ background: 'radial-gradient(circle at top right, #0891b2, transparent 70%)' }} />
+
+          <div className="mx-auto max-w-2xl px-5 py-6 sm:px-7 sm:py-8">
+            <div className="mb-5 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-carevo-600" aria-hidden="true" />
+                <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-carevo-700">
+                  Care routing · Free · No account needed
+                </span>
+              </div>
+              <span className="hidden rounded-full bg-carevo-50 px-3 py-1 text-[10px] font-black text-carevo-700 sm:inline-flex">
+                Private by design
+              </span>
+            </div>
+
+            <h2 className="font-display text-[clamp(2.25rem,6vw,3.7rem)] font-black leading-[0.95] tracking-[-0.06em] text-ink">
+              Stop guessing.<br />
+              Know where to go.
+            </h2>
+            <p className="mt-4 max-w-md text-sm font-semibold leading-7 text-slate-500 sm:text-base">
+              Answer a few focused questions. Carevo gives one clear care level, cost context, and nearby options.
+            </p>
+
+            <div className="mt-6 rounded-2xl border-2 border-slate-200 bg-white p-3 shadow-md transition-all duration-200 focus-within:border-carevo-500 focus-within:shadow-carevo-100">
+              {inputBar}
+            </div>
+            <p className="mt-3 text-xs text-slate-400">
+              Not a medical label. Emergency? <a href="tel:911" className="font-bold text-red-600 hover:text-red-700">Call 911</a>.
+            </p>
+          </div>
+        </div>
+
+        <div className="mx-auto max-w-2xl px-5 py-5 sm:px-7">
+          <div className="mb-3 flex items-center gap-2">
+            <div className="h-px flex-1 bg-slate-100" aria-hidden="true" />
+            <p className="px-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">What you get</p>
+            <div className="h-px flex-1 bg-slate-100" aria-hidden="true" />
+          </div>
+          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+            <div className="flex items-center gap-3 border-b border-amber-100 bg-amber-50 px-4 py-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-amber-200 bg-amber-100">
+                <IconZap className="h-4.5 w-4.5 text-amber-600" aria-hidden="true" />
+              </div>
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-amber-600">Your recommendation</p>
+                <p className="font-display text-lg font-bold leading-tight text-amber-700">Urgent Care</p>
+              </div>
+              <div className="ml-auto text-right">
+                <p className="text-[10px] uppercase tracking-wide text-slate-400">Est. cost</p>
+                <p className="font-bold tabular-nums text-amber-700">$150-$300</p>
+              </div>
+            </div>
+            <div className="border-b border-slate-100 px-4 py-3">
+              <p className="text-xs leading-relaxed text-slate-600">
+                Based on the information you provided, your symptoms suggest a same-day evaluation — not an emergency.
+              </p>
+            </div>
+            <div className="grid gap-2 px-4 py-3 sm:grid-cols-2">
+              <div className="rounded-xl border border-slate-200 bg-white px-3 py-2">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-carevo-700">Care near you</p>
+                <p className="mt-1 text-xs font-semibold text-ink">Nearby facilities after your result.</p>
+              </div>
+              <div className="rounded-xl border border-slate-200 bg-white px-3 py-2">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-accent">Coverage</p>
+                <p className="mt-1 text-xs font-semibold text-ink">Uninsured users can check plan estimates.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-white">

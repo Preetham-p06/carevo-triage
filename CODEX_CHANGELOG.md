@@ -609,3 +609,15 @@
   - Severity-word audit returned 0 patient-facing hits for 1-to-10 or mild/moderate/severe wording.
   - Wrote release report to `agent-inbox/codex-to-claude.md`.
   - No `lib/` or `app/` files were edited by Codex in this round.
+
+
+## 2026-07-17
+
+- Ran round 21 unified `/triage` UI build.
+  - Removed the iframe from `app/triage/page.tsx` and mounted the product inline via `HomePage embedded`.
+  - Added embedded mode to `HomePage` in `app/page.tsx` so `/triage` has a compact product surface while `/triage-embed` remains untouched.
+  - Added a results-only coverage card that posts ZIP, yearly income, and ages to `/api/coverage`, hides when unconfigured, and renders estimated help paying plus sample HealthCare.gov plans when available.
+  - Added a titled `Care near you` results section with a map-ready container around the existing `NearbyFacilities` component.
+  - Verified TypeScript and offline eval: 104/104 acceptable, 0 UNDER, 0 safety failures.
+  - Verified `/triage` has 0 iframes, a normal chat reaches an inline urgent-care recommendation with cost row, coverage test values render `$269/month` and plan rows, and emergency hard-stop shows no coverage card or cost figures.
+  - No `lib/**`, `app/api/**`, `scripts/**`, or `data/**` files were edited. No push was performed; awaiting visual review.
