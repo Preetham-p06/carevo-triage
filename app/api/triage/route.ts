@@ -25,7 +25,7 @@ import { triageRequestSchema, getFieldErrors } from '@/lib/validation'
 import { sanitize, sanitizeObject } from '@/lib/sanitize'
 import { recordReeTelemetry } from '@/lib/ree/telemetry'
 import { estimateCost } from '@/lib/cost/engine'
-import { countVagueAnswers, shouldSweep, applyThinInfoFloor } from '@/lib/engine/thinInfo'
+import { countVagueAnswers, shouldSweep, applyThinInfoFloor, applyFeverLanguageFloor } from '@/lib/engine/thinInfo'
 import { applyHomeGuard } from '@/lib/engine/homeGuard'
 
 // LLM provider — priority: OpenAI → Cerebras → Groq → NVIDIA Build → GitHub Models.
@@ -1127,6 +1127,22 @@ export async function POST(req: NextRequest) {
           ...decision.factors,
         ].slice(0, 5)
       }
+    }
+
+    // ── Fever-language floor (round-16 fix) — UP-ONLY, runs ABSOLUTELY LAST ─
+    // A patient who said they feel hot/feverish (any phrasing, incl. limited
+    // English: "head very hot two day") can never be sent home — minimum
+    // telehealth. Negation-stripped, so an explicit "no fever" doesn't count.
+    // Runs after the home guards on purpose: a fever mention outranks even a
+    // clinician-approved downgrade (their conditions all require fever absent).
+    const feverFloor = applyFeverLanguageFloor(
+      decision.careLevel,
+      detectFeverMention(stripNegatedClauses(allUserText)),
+    )
+    if (feverFloor) {
+      decision.careLevel = feverFloor.to
+      decision.factors = [feverFloor.reason, ...decision.factors].slice(0, 5)
+      roundedUp = true
     }
 
     if (decision.careLevel === 'emergency') {

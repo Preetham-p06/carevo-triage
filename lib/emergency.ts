@@ -143,7 +143,11 @@ const INFANT_AGE = new RegExp(
     /\b([1-9]|1[0-3])[\s-]*(week|wk)s?[\s-]*old\b/.source,
   ].join('|'), 'i',
 )
-const FEVER_MENTION = /\bfever|febrile|temp(erature)?\b|\b10[0-9](\.\d)?\s*(°|degrees|f\b)|burning up|feels? hot\b/i
+// Includes limited-English fever phrasings — round-16 finding: "head very hot
+// two day" carried no recognizable fever token and the case fell to home care.
+// Body-word or feel-verb is required before "hot" so weather talk ("it is
+// very hot outside") stays out.
+const FEVER_MENTION = /\bfever|febrile|temp(erature)?\b|\b10[0-9](\.\d)?\s*(°|degrees|f\b)|burning up|\b(?:feel(?:s|ing)?|head|body|skin|forehead)\s+(?:very\s+|so\s+|too\s+)?hot\b/i
 
 export function detectInfantFever(text: string): boolean {
   return INFANT_AGE.test(text) && FEVER_MENTION.test(text)

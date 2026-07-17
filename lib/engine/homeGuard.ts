@@ -49,7 +49,9 @@ export const HOME_GUARDS: HomeGuard[] = [
       { label: 'fever', re: /\b(fever|febrile|temperature over|hot to the touch)\b/i },
       { label: 'pus', re: /\b(pus|purulent|oozing|weeping|infected)\b/i },
       { label: 'red streaks', re: /\b(red streaks?|streaking|spreading redness)\b/i },
-      { label: 'severe pain', re: /\b(severe|intense|unbearable|extreme)\s+(pain|discomfort)|\bpain(?:ful)?\b[^.!?]{0,20}\b(severe|intense|unbearable)\b/i },
+      // Labels are patient-facing (they appear in the explanation factor) —
+      // plain words only, no clinical severity buckets (round-16 audit).
+      { label: 'strong pain', re: /\b(severe|intense|unbearable|extreme)\s+(pain|discomfort)|\bpain(?:ful)?\b[^.!?]{0,20}\b(severe|intense|unbearable)\b/i },
       { label: 'facial or airway swelling', re: /\b(face|facial|lip|tongue|throat|airway)\b[^.!?]{0,30}\bswell|\bswelling\b[^.!?]{0,30}\b(face|facial|lips?|tongue|throat|airway)\b|\btrouble breathing\b/i },
     ],
     minExplicitDenials: 3,
@@ -64,7 +66,7 @@ export const HOME_GUARDS: HomeGuard[] = [
     dangers: [
       { label: 'vision change or loss', re: /\b(vision (?:change|changes|loss)|blurr?(?:y|ed) vision|double vision|can'?t see|sight (?:change|loss))\b/i },
       { label: 'eye trauma', re: /\b(trauma|injur(?:y|ed)|hit|struck|scratch(?:ed)?|foreign body|chemical)\b/i },
-      { label: 'severe or deep eye pain', re: /\b(severe|intense|deep|unbearable)\b[^.!?]{0,20}\b(eye )?pain\b|\beye pain\b[^.!?]{0,20}\b(severe|intense|deep)\b/i },
+      { label: 'strong or deep eye pain', re: /\b(severe|intense|deep|unbearable)\b[^.!?]{0,20}\b(eye )?pain\b|\beye pain\b[^.!?]{0,20}\b(severe|intense|deep)\b/i },
     ],
     minExplicitDenials: 2,
     approvedBy: 'Paul (MD, Clinical Informatics Lead) — batch 3, 2026-07-16',

@@ -10,13 +10,13 @@
 import { decide, type EngineLevel } from '../lib/engine/model'
 import { planInterview } from '../lib/engine/evoi'
 import { applyRules } from '../lib/engine/rules'
-import { classifyEmergency, detectInfantFever, detectSelfHarm, detectSevereDehydration, stripNegatedClauses } from '../lib/emergency'
+import { classifyEmergency, detectInfantFever, detectSelfHarm, detectSevereDehydration, detectFeverMention, stripNegatedClauses } from '../lib/emergency'
 import { retrieveGuidance } from '../lib/knowledge/retrieval'
 import { applyCalibration, loadPromotedCalibration } from '../lib/engine/calibration'
 import { checkConsistency } from '../lib/knowledge/graph'
 import { RED_FLAGS, type ExtractedFeatures, type RedFlag, type BodySystem } from '../lib/engine/features'
 import { estimateCostFromTable } from '../lib/cost/engine'
-import { isVagueAnswer, countVagueAnswers, isThinInformation, shouldSweep, applyThinInfoFloor } from '../lib/engine/thinInfo'
+import { isVagueAnswer, countVagueAnswers, isThinInformation, shouldSweep, applyThinInfoFloor, applyFeverLanguageFloor } from '../lib/engine/thinInfo'
 import { applyHomeGuard, HOME_GUARDS } from '../lib/engine/homeGuard'
 import * as fsSync from 'fs'
 import * as path from 'path'
@@ -510,6 +510,26 @@ const NO_RISK = { modifiers: [] as any }
   const bad = p14.filter(([, fn]) => { try { return !fn() } catch { return true } })
   if (bad.length) bad.forEach(([name]) => policyFailures.push(`P14: ${name}`))
   else console.log(`  ✓ P14 Paul downward guards: explicit-absence semantics, fail-closed (${HOME_GUARDS.length} guards)`)
+}
+
+// P15: limited-English fever safety (round-16 UNDER: "head very hot two day"
+// → home_care). Fever language, any phrasing, can never end at home care.
+{
+  const p15: Array<[string, () => boolean]> = [
+    ['"head very hot two day" reads as fever', () => detectFeverMention('head very hot two day')],
+    ['"feel hot" reads as fever', () => detectFeverMention('not know, feel hot')],
+    ['"burning up" reads as fever', () => detectFeverMention('i am burning up since yesterday')],
+    ['weather talk does NOT read as fever', () => !detectFeverMention('it is very hot outside today')],
+    ['negated fever does not count', () => !detectFeverMention(stripNegatedClauses('sore throat but no fever and not hot'))],
+    ['fever language floors home_care → telehealth', () => applyFeverLanguageFloor('home_care', true)?.to === 'telehealth'],
+    ['no fever language → untouched', () => applyFeverLanguageFloor('home_care', false) === null],
+    ['never touches anything above home_care', () => applyFeverLanguageFloor('telehealth', true) === null && applyFeverLanguageFloor('er', true) === null && applyFeverLanguageFloor('emergency', true) === null],
+    ['"not know" is a hedge (limited English)', () => isVagueAnswer('not know, feel hot') && isVagueAnswer('no understand question')],
+    ['guard danger labels carry no clinical severity words', () => HOME_GUARDS.every(g => g.dangers.every(d => !/\b(severe|moderate|mild)\b/i.test(d.label)))],
+  ]
+  const bad = p15.filter(([, fn]) => { try { return !fn() } catch { return true } })
+  if (bad.length) bad.forEach(([name]) => policyFailures.push(`P15: ${name}`))
+  else console.log('  ✓ P15 limited-English fever safety: fever language never ends at home care')
 }
 
 if (policyFailures.length) {

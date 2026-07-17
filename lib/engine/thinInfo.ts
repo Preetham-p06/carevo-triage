@@ -24,6 +24,11 @@ const VAGUE_PATTERNS: RegExp[] = [
   /\b(hard\s+to\s+(say|tell|explain|describe))\b/i,
   /\b(can'?t\s+(really\s+)?(tell|say|describe|explain))\b/i,
   /\b(it'?s?\s+just\s+weird|feels?\s+weird|feels?\s+strange|feels?\s+off|feels?\s+funny)\b/i,
+  // Limited-English hedge forms — round-16 finding: "not know, feel hot"
+  // wasn't counted as vague, so the thin floor never fired for a
+  // limited-English fever patient. Hedging sounds different in broken
+  // English; these forms are hedges all the same.
+  /\b(not\s+know|no\s+know|no\s+understand|not\s+understand|no\s+can\s+say|cannot\s+say\s+how|how\s+to\s+say)\b/i,
 ]
 
 export function isVagueAnswer(text: string): boolean {
@@ -95,5 +100,25 @@ export function applyThinInfoFloor(
     from: 'home_care',
     to: 'telehealth',
     reason: 'We could not confirm enough details to safely recommend home care, so we suggest at least a virtual visit — a clinician can ask what we could not.',
+  }
+}
+
+/**
+ * Fever-language floor (round-16 fix, 2026-07-16): if the patient described
+ * feeling feverish anywhere in the conversation (checked on negation-stripped
+ * text, so "no fever" doesn't count) the decision can never be home_care —
+ * minimum telehealth. Deterministic, up-only, LLM-independent: it holds even
+ * when the extractor misses limited-English fever phrasing ("head very hot
+ * two day"). Caller supplies detectFeverMention(stripNegatedClauses(text)).
+ */
+export function applyFeverLanguageFloor(
+  careLevel: CareLevel,
+  feverMentioned: boolean,
+): ThinInfoAdjustment | null {
+  if (careLevel !== 'home_care' || !feverMentioned) return null
+  return {
+    from: 'home_care',
+    to: 'telehealth',
+    reason: 'You mentioned feeling hot or feverish — a quick virtual visit is the safe next step so a clinician can check.',
   }
 }
