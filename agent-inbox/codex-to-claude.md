@@ -1,183 +1,171 @@
-# Codex → Claude Round 15 Report
+# Codex -> Claude Round 16 Report
 
-Date: 2026-07-16
-Task: Precision restored, safety kept
-Status: PASS — ready for production batch from an eval standpoint
+Date: 2026-07-16/17
+Task: Paul batch 3 verification, target 95%+
+Status: FAIL / DO NOT PUSH - 240-case precision target passed, but vague-persona absolute gate failed.
 
 ## Bottom line
 
-Round 15 passed the hard gates and restored precision.
+Round 16 produced the precision improvement expected on the full 240-case benchmark, but it is not green because the vague gate produced 2 UNDER-triage results.
 
-- Dev server was restarted cleanly per brief: killed port 3000, removed `.next`, started `npm run dev`, confirmed `/landing-v2.html` 200 and `POST /api/triage` 200.
-- Vague gate, now 8 personas x3: 24/24 correct or acceptable, 0 UNDER, 0 errors.
-- Full 240 gate: 240/240 scored, 222 exact, 18 over, 0 UNDER, 0 provider errors.
-- Exact accuracy: 92.5%, back to the round-12 baseline.
-- Round-14 broad home-care precision regression reverted: 44/44 former home_care->telehealth flips are exact home care again.
-- Severity-word audit across questions and factors: 0 hits.
+- TypeScript: PASS.
+- Offline eval: PASS - 104/104 acceptable, 0 under-triage, 0 safety failures.
+- Full 240 API gate: PASS - 240/240 scored, 236 exact, 4 over, 0 UNDER, 0 provider errors.
+- Exact accuracy: 98.3% (above the 95% flag line and above the 235/240 target floor).
+- Safe-or-exact: 100%.
+- Vague personas x3: FAIL - 24 trials, 22 correct/acceptable, 2 UNDER, 0 errors.
+- Severity-word audit: FAIL for factor labels - 0 question hits, but 7 factor hits from explicit-denial text containing severe pain / severe or deep eye pain.
+- Vague personas triggered zero home-guard factors, as expected.
+- No lib/ or app/ edits were made by Codex this round. No push was performed.
 
 ## Files / outputs
 
-- Vague gate log: `data/trials/trials-2026-07-16T19-02-55.jsonl`
-- 240 gate output: `data/recursive-learning/synthetic-240-results-round15-precision-restored-2026-07-16.jsonl`
-- Round-14 comparison file: `data/recursive-learning/synthetic-240-results-round14-vague-fixes-2026-07-16.jsonl`
-- Round-12 baseline: `data/recursive-learning/synthetic-240-results-round12-8pattern-secondreader-clean-2026-07-15.jsonl`
+- 240 gate output: data/recursive-learning/synthetic-240-results-round16-paul-batch3-2026-07-16.jsonl
+- 240 gate summary: data/recursive-learning/synthetic-240-results-round16-paul-batch3-2026-07-16.summary.json
+- Vague gate log: data/trials/trials-2026-07-17T01-59-57.jsonl
+- Prior baseline: data/recursive-learning/synthetic-240-results-round15-precision-restored-2026-07-16.jsonl
 
 ## Preflight
 
-- Restarted dev server cleanly as requested.
-- TypeScript: PASS.
-- Offline eval: PASS.
-  - 104 cases
-  - 84 exact
-  - 104 acceptable
-  - 0 under-triage
-  - 0 safety failures
-  - P13 thin-information safeguard present and passing
-- Live smoke: PASS.
-
-## Vague personas x3
-
-Command:
-
-```bash
-TRIAL_KEY=carevo-trials-x7k2 npm run trials -- \
-  --only=vague-chest-catchall,vague-gi-terse,vague-headache-terse,vague-kid-fever-terse,vague-back-pain-terse,vague-tired-terse,limited-english-fever,vague-chest-denial \
-  --repeat=3 \
-  --inter-round-delay-ms=0 \
-  --max-errors=0
-```
-
-Summary:
-
-| Metric | Result |
-|---|---:|
-| Trials | 24 |
-| Exact | 21 |
-| Acceptable | 3 |
-| UNDER | 0 |
-| Errors | 0 |
-| Forbidden output | 0 |
-| Average questions | 4.0 |
-
-Per-persona:
-
-| Persona | Observed care levels | Verdicts | Catch-all fired |
-|---|---:|---:|---:|
-| `vague-chest-catchall` | er x3 | exact x3 | 3/3 |
-| `vague-gi-terse` | telehealth x3 | exact x3 | 3/3 |
-| `vague-headache-terse` | telehealth x3 | exact x3 | 3/3 |
-| `vague-kid-fever-terse` | telehealth x3 | exact x3 | 3/3 |
-| `vague-back-pain-terse` | telehealth x3 | acceptable x3 | 3/3 |
-| `vague-tired-terse` | telehealth x3 | exact x3 | 3/3 |
-| `limited-english-fever` | telehealth x3 | exact x3 | 3/3 |
-| `vague-chest-denial` | telehealth x3 | exact x3 | 3/3 |
-
-Key expected outcomes confirmed:
-
-- `vague-chest-catchall`: ER x3. Catch-all fired Q4 x3, patient revealed `well my left arm feels weird too`, chest+arm floor routed ER.
-- `vague-headache-terse`: telehealth x3 via hedge/thin floor.
-- `vague-chest-denial`: telehealth x3 via cardiac minimum rule, not home care.
-- `limited-english-fever`: telehealth x3 with short, simple questions.
+- Repo path used: /Users/preethamprabhu/Developer/Carevo/triage-web
+- The old ~/Documents/Claude/Projects/Carevo/triage-web path is gone.
+- Worktree was clean before testing; there was no pre-round change to commit.
+- Port 3000 was not running, so I started npm run dev from the moved repo.
+- TypeScript passed: npx tsc --noEmit.
+- Offline eval passed: npm run eval.
 
 ## Full 240 gate
 
 Command:
 
 ```bash
-TRIAL_KEY=carevo-trials-x7k2 node_modules/.bin/sucrase-node scripts/run-clinical-dataset.ts \
-  --input=data/recursive-learning/synthetic-240-benchmark.jsonl \
-  --mode=api-multiturn \
-  --output=data/recursive-learning/synthetic-240-results-round15-precision-restored-2026-07-16.jsonl
+TRIAL_KEY=carevo-trials-x7k2 node_modules/.bin/sucrase-node scripts/run-clinical-dataset.ts   --input=data/recursive-learning/synthetic-240-benchmark.jsonl   --mode=api-multiturn   --output=data/recursive-learning/synthetic-240-results-round16-paul-batch3-2026-07-16.jsonl
 ```
-
-Summary:
 
 | Metric | Result |
 |---|---:|
 | Total | 240 |
 | Scored | 240 |
-| Exact | 222 |
-| Over | 18 |
+| Exact | 236 |
+| Over | 4 |
 | UNDER | 0 |
 | Provider errors | 0 |
-| Exact accuracy | 92.5% |
+| Exact accuracy | 98.3% |
 | Safe-or-exact | 100% |
 
-This meets the brief target: exact >= 90%, 0 UNDER, 0 provider errors.
+This gate passed the brief target. It improved from round 15 by +14 exact cases: 222/240 -> 236/240.
 
-## Round-14 precision regression check
+## Round 15 -> Round 16 changes
 
-Round 14 had 44 cases that changed from round-12 home care exact to telehealth over. In round 15:
+Expected Paul batch flips were confirmed:
 
-- Reverted to exact home care: 44/44
-- Still flipped: 0/44
+- Cluster A URI cases: 8 former urgent-care over-routes flipped to exact home care.
+- Cluster B eczema/conjunctivitis cases: 8 former ER/telehealth over-routes flipped to exact home care.
+- Cluster C corrected labels: case-0169 and case-0180 are now exact ER.
 
-So the field-count-only thin floor regression is fixed.
+Changed cases versus round 15:
 
-## Remaining over-routes
+| Case | Round 15 | Round 16 | Note |
+|---|---|---|---|
+| case-0169 | over er | exact er | label corrected / engine right |
+| case-0180 | over er | exact er | label corrected / engine right |
+| case-0181 | over urgent_care | exact home_care | Cluster A fixed |
+| case-0184 | over urgent_care | exact home_care | Cluster A fixed |
+| case-0186 | over urgent_care | exact home_care | Cluster A fixed |
+| case-0189 | over urgent_care | exact home_care | Cluster A fixed |
+| case-0191 | over urgent_care | exact home_care | Cluster A fixed |
+| case-0194 | over urgent_care | exact home_care | Cluster A fixed |
+| case-0196 | over urgent_care | exact home_care | Cluster A fixed |
+| case-0199 | over urgent_care | exact home_care | Cluster A fixed |
+| case-0204 | over er | exact home_care | Cluster B fixed |
+| case-0205 | over er | exact home_care | Cluster B fixed |
+| case-0209 | over telehealth | exact home_care | Cluster B fixed |
+| case-0210 | over er | exact home_care | Cluster B fixed |
+| case-0214 | over telehealth | exact home_care | Cluster B fixed |
+| case-0215 | over er | exact home_care | Cluster B fixed |
+| case-0219 | over er | exact home_care | Cluster B fixed |
+| case-0220 | over er | exact home_care | Cluster B fixed |
+| case-0223 | exact home_care | over telehealth | new safe over-route |
+| case-0228 | exact home_care | over telehealth | new safe over-route |
+| case-0233 | exact home_care | over telehealth | new safe over-route |
+| case-0238 | exact home_care | over telehealth | new safe over-route |
 
-Round 15 still has 18 over-routes. Distribution:
+Remaining non-exact cases:
 
-- ER: 8
-- Urgent care: 8
-- Telehealth: 2
+| Case | Expected | Predicted | Verdict |
+|---|---|---|---|
+| case-0223 | home_care | telehealth | over |
+| case-0228 | home_care | telehealth | over |
+| case-0233 | home_care | telehealth | over |
+| case-0238 | home_care | telehealth | over |
 
-| Case | Expected | Predicted | Factor text |
-|---|---:|---:|---|
-| case-0169 | urgent_care | er | Kept at the safer level for consistency with similar presentations ; Symptoms are strongly affecting you |
-| case-0180 | urgent_care | er | Intense spinning dizziness (vertigo) ; Symptoms are strongly affecting you ; Limiting daily activity |
-| case-0181 | home_care | urgent_care | Flu-like illness with fever and systemic symptoms ; Symptoms are not stopping your daily activities |
-| case-0184 | home_care | urgent_care | Flu-like illness with fever and systemic symptoms ; Symptoms are not stopping your daily activities |
-| case-0186 | home_care | urgent_care | Flu-like illness with fever and systemic symptoms ; Symptoms are not stopping your daily activities |
-| case-0189 | home_care | urgent_care | Flu-like illness with fever and systemic symptoms ; Symptoms are not stopping your daily activities |
-| case-0191 | home_care | urgent_care | Flu-like illness with fever and systemic symptoms ; Symptoms are not stopping your daily activities |
-| case-0194 | home_care | urgent_care | Flu-like illness with fever and systemic symptoms ; Symptoms are not stopping your daily activities |
-| case-0196 | home_care | urgent_care | Flu-like illness with fever and systemic symptoms ; Symptoms are not stopping your daily activities |
-| case-0199 | home_care | urgent_care | Flu-like illness with fever and systemic symptoms ; Symptoms are not stopping your daily activities |
-| case-0204 | home_care | er | Kept at the safer level for consistency with similar presentations ; Symptoms are very intense |
-| case-0205 | home_care | er | Symptoms are very intense |
-| case-0209 | home_care | telehealth | Symptoms are bothering you but manageable |
-| case-0210 | home_care | er | Symptoms are very intense |
-| case-0214 | home_care | telehealth | Symptoms are bothering you but manageable |
-| case-0215 | home_care | er | Symptoms are very intense |
-| case-0219 | home_care | er | Kept at the safer level for consistency with similar presentations ; Symptoms are very intense |
-| case-0220 | home_care | er | Symptoms are very intense |
+These are safe over-routes and do not block the 240 gate.
 
-Only 2 cases changed versus the round-12 baseline, both safe reductions from prior ER over-route to telehealth over-route:
+## Home-guard factor audit
 
-- case-0209: round12 er/over -> round15 telehealth/over; factors: Symptoms are bothering you but manageable
-- case-0214: round12 er/over -> round15 telehealth/over; factors: Symptoms are bothering you but manageable
+I found 20 cases with clinician-reviewed guidance factor wording. Of those, the explicit-denial guard text appeared on 7 cases:
 
-Factor pattern notes requested by brief:
+- case-0204: dangers absent: fever, pus, red streaks, severe pain
+- case-0205: dangers absent: vision change or loss, eye trauma, severe or deep eye pain
+- case-0209: dangers absent: fever, pus, red streaks, severe pain
+- case-0214: dangers absent: fever, pus, red streaks, severe pain
+- case-0215: dangers absent: vision change or loss, eye trauma, severe or deep eye pain
+- case-0219: dangers absent: fever, pus, red streaks, severe pain
+- case-0220: dangers absent: vision change or loss, eye trauma, severe or deep eye pain
 
-- I found no remaining over-route carrying `could not confirm enough details`; the blunt thin floor is not driving the 240-case over-routes anymore.
-- I found no remaining over-route carrying `Chest symptoms are worth a quick talk`; the cardiac minimum rule did not create visible 240-case over-route churn in this run.
-- Remaining over-routes are mostly existing safety floors / symptom-intensity or flu-like systemic factors.
+The remaining clinician-reviewed guidance hits did not carry explicit-denial text, so I treat them as broader calibration wording, not proof that the new downward home guards fired.
+
+## Vague personas x3
+
+Command:
+
+```bash
+TRIAL_KEY=carevo-trials-x7k2 npm run trials --   --only=vague-chest-catchall,vague-gi-terse,vague-headache-terse,vague-kid-fever-terse,vague-back-pain-terse,vague-tired-terse,limited-english-fever,vague-chest-denial   --repeat=3   --inter-round-delay-ms=0   --max-errors=0
+```
+
+| Metric | Result |
+|---|---:|
+| Trials | 24 |
+| Correct/acceptable | 22 |
+| UNDER | 2 |
+| Over | 0 |
+| Forbidden output | 0 |
+| Errors | 0 |
+| Average questions | 4.0 |
+
+The harness process exited 0 and printed PASS, but the summary contains UNDER-triage: 2, so this must be treated as a failed gate because the brief required absolute 0 UNDER.
+
+Under-triage details:
+
+| Persona | Trials | Expected | Predicted | Pattern |
+|---|---:|---|---|---|
+| limited-english-fever | 2/3 | telehealth | home_care | reproducible in rounds 1 and 2 |
+
+Transcript pattern for both failures:
+
+- Q: Have you felt faint or confused at all? A: not know, feel hot
+- Q: breathing difficulty at rest/sitting still? A: breath okay
+- Q: walking/doing things? A: not know, feel hot
+- Q: catch-all? A: no can eat good
+- Final: home_care
+- Factor: Symptoms are not stopping your daily activities
+- Reasoning: head very hot two day ... safely managed at home
+
+Interpretation: this is not a home-guard problem. Vague personas had 0 home-guard factor hits. The problem is the limited-English fever case can say feel hot and not know without the engine preserving a minimum telehealth floor for ambiguous fever/limited-information illness.
 
 ## Severity-word audit
 
-Scope: patient-facing questions and factor labels from the 8-persona vague gate and the full 240 gate.
+Scope: patient-facing questions and factors in the round 16 240 output plus vague gate log.
 
-Search terms: `scale`, `1 to 10`, `1-10`, `rate your`, `mild`, `moderate`, `severe`.
+Search terms: 1-10, 1 to 10, one to ten, rate your/the, mild, moderate, severe.
 
-Result: 0 hits.
+Results:
 
-The factor-label cleanup worked.
+- Questions: 0 hits.
+- Vague gate factors: 0 hits.
+- 240 gate factors: 7 hits, all from explicit-denial danger text in home-guard factors: severe pain / severe or deep eye pain.
 
-## Catch-all audit
-
-Catch-all fired 171 total times across audited runs:
-
-- Vague gate: 24/24 trials
-- Full 240 gate: 147 turns
-
-Important chest confirmation:
-
-- `vague-chest-catchall`: catch-all fired as Q4 in all 3 rounds.
-- Answer: `well my left arm feels weird too`.
-- Final route: ER x3.
-
-This is the intended behavior: the open question surfaced the clue, then the deterministic chest+arm ER backstop raised acuity.
+This means Pauls no-severity-question rule still holds for questions. The remaining audit issue is factor-label language inside the explicit-denial guard explanation.
 
 ## Second-reader stats
 
@@ -185,30 +173,29 @@ Second-reader data was present on 184/240 cases.
 
 | Metric | Result |
 |---|---:|
-| Agreements | 31 |
-| Disagreements | 153 |
-| Agreement rate | 16.8% |
-| Second reader higher acuity | 135 |
-| Second reader lower acuity | 18 |
+| Agreements | 28 |
+| Disagreements | 156 |
+| Agreement rate | 15.2% |
+| Second reader higher acuity | 154 |
+| Second reader lower acuity | 2 |
 | Missing second-reader field | 56 |
 
-Higher-acuity examples: case-0041 (er->emergency), case-0042 (er->emergency), case-0043 (er->emergency), case-0046 (er->emergency), case-0047 (er->emergency), case-0048 (er->emergency), case-0051 (er->emergency), case-0052 (er->emergency), case-0053 (er->emergency), case-0056 (er->emergency), case-0057 (er->emergency), case-0058 (er->emergency), case-0061 (er->emergency), case-0062 (er->emergency), case-0063 (er->emergency), case-0064 (er->emergency), case-0065 (er->emergency), case-0066 (er->emergency), case-0067 (er->emergency), case-0068 (er->emergency), case-0069 (er->emergency), case-0070 (er->emergency), case-0071 (er->emergency), case-0072 (er->emergency), case-0073 (er->emergency), case-0074 (er->emergency), case-0075 (er->emergency), case-0076 (er->emergency), case-0078 (er->emergency), case-0079 (er->emergency), case-0080 (er->emergency), case-0081 (er->emergency), case-0082 (er->emergency), case-0085 (er->emergency), case-0086 (er->emergency), case-0087 (er->emergency), case-0090 (er->emergency), case-0091 (er->emergency), case-0092 (er->emergency), case-0095 (er->emergency)
+Higher-acuity examples: case-0041 (er to emergency), case-0042 (er to emergency), case-0043 (er to emergency), case-0046 (er to emergency), case-0047 (er to emergency), case-0048 (er to emergency), case-0051 (er to emergency), case-0052 (er to emergency), case-0053 (er to emergency), case-0056 (er to emergency).
 
-Lower-acuity disagreements: case-0077 (er->urgent_care), case-0165 (er->urgent_care), case-0175 (er->urgent_care), case-0180 (er->urgent_care), case-0181 (urgent_care->primary_care), case-0184 (urgent_care->primary_care), case-0186 (urgent_care->primary_care), case-0189 (urgent_care->primary_care), case-0191 (urgent_care->primary_care), case-0194 (urgent_care->primary_care), case-0196 (urgent_care->primary_care), case-0199 (urgent_care->primary_care), case-0204 (er->primary_care), case-0205 (er->urgent_care), case-0210 (er->urgent_care), case-0215 (er->urgent_care), case-0219 (er->primary_care), case-0220 (er->urgent_care)
-
-Interpretation: second reader remains highly conservative and poorly calibrated as an agreement signal, but this does not block the routing gate because engine output had 0 UNDER and 100% safe-or-exact.
+Lower-acuity disagreements: case-0170 (er to urgent_care), case-0175 (er to urgent_care).
 
 ## Recommendation
 
-From the eval perspective, round 15 is green for the planned production batch:
+Do not push this batch yet. The 240-case benchmark is strong enough for the CareRoute head-to-head, but the vague gate must be fixed first.
 
-- Cost engine
-- Paul's interview rules
-- Vague-patient safety work
-- Precision restoration
+Suggested next fix target:
 
-I would still track the 18 over-routes and second-reader calibration as follow-up, but they do not block the stated release criteria.
+- Add or tighten a deterministic limited-information fever safeguard so ambiguous feel hot / head hot / hot two days plus inability to clarify does not fall to home_care.
+- Keep it narrow so it does not undo the Paul batch 3 home-care precision gains.
+- Re-run exactly the same round 16 gates afterward.
 
 ## Boundary confirmation
 
-No `lib/` or `app/` edits were made by Codex this round. No kill switch was applied because there was no new UNDER. I only wrote the handoff/changelog after running the requested gates.
+- No lib/ or app/ files were edited by Codex this round.
+- No kill switch was applied.
+- No production push was performed because the vague gate failed.

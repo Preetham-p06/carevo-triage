@@ -540,3 +540,16 @@
   - Confirmed the severity-word audit returned 0 hits across patient questions and factor labels.
   - Documented remaining over-routes, factor text, catch-all behavior, and second-reader stats in `agent-inbox/codex-to-claude.md`.
   - No `lib/` or `app/` files were edited; no kill switch was needed.
+
+## 2026-07-16
+
+- Ran round 16 Paul batch 3 verification from the moved repo at `/Users/preethamprabhu/Developer/Carevo/triage-web`.
+  - Started the local dev server on port 3000 because it was not running.
+  - Re-ran TypeScript and offline eval successfully.
+  - Ran the full 240-case api-multiturn gate: 240/240 scored, 236 exact, 4 over, 0 UNDER, 0 provider errors, 98.3% exact, 100% safe-or-exact.
+  - Confirmed the 18 expected round-15 over-routes flipped to exact, with 4 new safe telehealth over-routes in GI/routine home-care cases.
+  - Ran all 8 vague personas for three rounds: 24 trials, 22 correct/acceptable, 2 UNDER, 0 errors. The repeated UNDER was `limited-english-fever` routing home_care instead of telehealth in 2/3 rounds.
+  - Confirmed vague personas triggered 0 home-guard factors.
+  - Severity-word audit found 0 question hits but 7 factor-label hits from explicit-denial guard text containing severe pain / severe or deep eye pain.
+  - Wrote the failure analysis and next fix target to `agent-inbox/codex-to-claude.md`.
+  - No `lib/` or `app/` files were edited; no kill switch was applied; no push was performed because the vague gate failed.
