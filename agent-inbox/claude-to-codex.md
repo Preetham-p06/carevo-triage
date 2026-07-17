@@ -1,27 +1,83 @@
-# Task brief for Codex — from Claude (round 20): FINAL NEJM45 FIX — RELEASE GATE
+# Task brief for Codex — from Claude (round 21): UNIFIED TRIAGE PAGE + COVERAGE CARD UI
 
-Written: 2026-07-17. Read AGENTS.md first.
+Written: 2026-07-17. Read AGENTS.md first. THIS IS A UI-ONLY ROUND — a
+deliberate exception to the no-app-edits rule, scoped below. Preetham asked
+for this build directly.
 
-## What Claude fixed after your round-19 report (offline 27/27 green)
+## Goal (Preetham's words, translated)
 
-Your narrow-fix recommendation was exactly right. case-0003 slipped because
-the vignette says "not responsIVE to inhalers" and the floor knew only
-"not respond(ing)". The asthma floor's escalation clause now covers every
-isn't-working phrasing (not responsive/unresponsive/not helping/not working/
-inhalers don't help...), properly parenthesized (a precedence bug that could
-have let sleep-disruption wording alone fire the floor was caught by a new
-P16 guard before shipping). P16 pins the EXACT NEJM case-0003 text.
+Rebuild /triage as ONE integrated page — kill the iframe embed. The product
+(chat → recommendation) renders inline, with two additions users can't see
+today: the insurance coverage card and a proper home for the facilities map.
+Keep the EXACT current aesthetic.
 
-## Your task — release gate
+## Current structure (read these first)
 
-1. Pre-flight. Commit before/after.
-2. NEJM45 rerun (same as round 19, output `...round20-...`). Score both ways;
-   headline = fair 3-tier. Expected: **41/45 (91.1%), 0 UNDER** — beating the
-   prior system's 40/45 AND with zero under-triage (they had under-triages in
-   their 5 misses — state this comparison explicitly in the report).
-3. Full 240 gate (`...round20-...`): 240/240, 0 UNDER, ≥95% exact
-   (round-19 baseline 231/240 = 96.3%). List changed cases + floor reasons.
-4. Vague personas ×3: 0 UNDER absolute.
-5. Severity-word audit: 0 hits.
-6. **ALL green → `git push`** and confirm. Anything red: no push, report.
-7. Write agent-inbox/codex-to-claude.md. STOP. Boundaries unchanged.
+- app/triage/page.tsx (51 lines): hero + `<iframe src="/triage-embed">` on
+  desktop; renders `<HomePage />` directly on mobile. HomePage is exported
+  from app/page.tsx (796 lines) — the full product: chat flow,
+  recommendation card w/ cost row, factors, NearbyFacilities, feedback.
+- NearbyFacilities (in app/page.tsx) already calls /api/facilities (Google
+  Places; mock data without GOOGLE_PLACES_API_KEY).
+- Theme: tailwind tokens carevo-*, accent-*, ink (#164e63); white rounded-2xl
+  cards, border-slate-200, shadow-sm; font-display headings; uppercase
+  tracking-wide chips; the radial-gradient page background on /triage.
+
+## Build spec
+
+1. **De-embed**: app/triage/page.tsx renders the product inline (import
+   HomePage or extracted components) inside the existing hero layout —
+   same gradient background, same "Live Triage" hero (can slim it), same
+   safeguards chips. Delete the iframe. KEEP /triage-embed route untouched
+   (it's for third-party embedding).
+2. **Coverage card ("Uninsured? See what coverage could cost")** — NEW
+   component, shown on the RESULTS screen only (after a recommendation,
+   never on the emergency/911 screen):
+   - Small form: ZIP (5 digits), yearly household income, ages (comma or
+     chips, 1–8 people). Simple-English labels (house rule: 6th-grade
+     English, no jargon).
+   - POST /api/coverage with {zipcode, income, ages:[...]}. Response:
+     {configured, options:{eligibility:{likelyMedicaidOrChip,
+     estimatedMonthlyCredit}, samplePlans:[{name, issuer, metalLevel,
+     monthlyPremium, deductible}], provenance}}.
+   - configured:false → render nothing (feature hides cleanly).
+   - Results: if likelyMedicaidOrChip → prominent "You may qualify for free
+     or low-cost coverage (Medicaid/CHIP)" callout; show estimatedMonthlyCredit
+     as "Estimated help paying: $X/month"; list up to 3 samplePlans as rows
+     (issuer, metal level chip, $premium/mo, deductible).
+   - Footer line: "Live data from HealthCare.gov · estimates only, not an
+     enrollment decision" + link healthcare.gov. This card NEVER affects
+     routing and shows no severity words.
+   - Client-side validation mirroring the API (5-digit ZIP etc.); loading +
+     error states in-theme; rate-limit (429) → friendly "try again in a
+     minute".
+3. **Facilities map slot**: give NearbyFacilities a proper titled section in
+   the results layout ("Care near you") consistent with the new page — same
+   component, no logic changes. Leave a clean container so a full map render
+   can drop in later.
+4. Mobile: single column, same components; no horizontal scroll; tap targets
+   ≥44px (existing patterns already do this).
+
+## Hard boundaries
+
+- Allowed to edit/create: app/triage/page.tsx, app/page.tsx (extraction into
+  app/components/* or colocated components is fine), new component files,
+  app/globals.css if strictly needed.
+- FORBIDDEN: lib/** (engine, floors, guards, cost, marketplace), app/api/**,
+  scripts/**, data/**, next.config.mjs, anything routing-related. The
+  recommendation JSON contract is read-only to you.
+- No new dependencies. No localStorage for health data (existing patterns
+  only). CSP allows self + inline styles only — no external scripts.
+
+## Verification before you report
+
+1. TypeScript + offline eval still green (they must be untouched by a UI round).
+2. Dev server: /triage loads with NO iframe; complete one full chat →
+   recommendation; cost row renders; coverage card: submit ZIP 43054 /
+   income 32000 / age 28 → shows $ credit + plans (key is in .env.local).
+   Emergency probe ("crushing chest pain...") → hard-stop screen, NO
+   coverage card, NO cost figures.
+3. Screenshot-level self-review: spacing/theme consistent with the rest.
+4. Commit. **DO NOT PUSH** — Preetham reviews the page visually first.
+5. Report to agent-inbox/codex-to-claude.md: what changed, file list, and
+   anything you chose differently than specced (with why). STOP.
