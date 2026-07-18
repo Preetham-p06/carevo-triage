@@ -634,3 +634,16 @@
   - Added the permanent public benchmark freshness rule to `AGENTS.md`.
   - Release gate blocked because `/benchmarks` is now stale versus the latest round-22 240-gate result: page says 231/240 and 96.3%, but the latest run produced 232/240 and 96.7%. Per brief, reported the mismatch and did not edit the public benchmark numbers.
   - Wrote the full report to `agent-inbox/codex-to-claude.md`. No push was performed.
+
+## 2026-07-18
+
+- Ran round 23 MedAsk Triage Bench head-to-head report-only round.
+  - Created pre-flight checkpoint commit `9639eda`.
+  - Fetched MedAsk's public canonical Semigran45 JSONL and converted it to `data/recursive-learning/semigran45-canonical.jsonl`.
+  - Added `scripts/score-semigran.ts` to compute MedAsk-compatible 3-tier metrics: accuracy, per-tier accuracy, safety_of_advice, and overtriage-among-errors.
+  - Re-ran TypeScript and offline eval successfully; offline eval stayed 104/104 acceptable with 0 UNDER and 0 safety failures.
+  - Ran five canonical Semigran45 api-multiturn passes: 225/225 scored, 203 exact, 22 over, 0 UNDER, 0 errors.
+  - Carevo canonical mean table: 90.2 (1.1) accuracy, 100 (0) emergency-tier exact, 86.7 (0) non-emergency clinician-tier exact, 84 (3.3) self-care exact, 100 (0) safety_of_advice, 100 (0) overtriage-among-errors.
+  - Scored historical patient-voice rounds 19+20 as a secondary row and noted the round-19 asthma under-triage that round 20 fixed.
+  - Fetched `semigran_medask.jsonl` for optional paired comparison; Carevo run 1 vs MedAsk run 1 had 9 discordant pairs, exact McNemar p=1.0, with Carevo misses all over-triage.
+  - Wrote the full report to `agent-inbox/codex-to-claude.md`. No `lib/` or `app/` files were edited. No push was performed.
