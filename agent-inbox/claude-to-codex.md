@@ -35,3 +35,17 @@ Written: 2026-07-17. Read AGENTS.md first.
 7. ALL green → `git push` and confirm. Anything red: no push, report.
 8. Report to agent-inbox/codex-to-claude.md. STOP. Boundaries: UI attribute
    fixes from 6 allowed; nothing else in lib/ or app/api/.
+
+## ADDENDUM (benchmark page — added to this round's checks)
+
+Claude built the public benchmark page: app/benchmarks/page.tsx, linked in
+the marketing nav, mobile nav, site footer, and landing-v2.html nav+footer.
+
+Additional checks for step 6:
+- /benchmarks returns 200 and contains "91.1%", "96.3%", "0" under-triage
+  stats and the limitations box ("What these numbers do not claim").
+- NUMBER-FRESHNESS RULE (permanent, add to AGENTS.md if not present): after
+  EVERY future full-gate round, verify the stats on /benchmarks match the
+  latest round report; if they drifted, REPORT the mismatch — do not edit the
+  page yourself. A public page with stale numbers is worse than no page.
+- Nav check: /benchmarks shows the marketing nav (Benchmarks highlighted).

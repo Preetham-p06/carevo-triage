@@ -29,6 +29,7 @@ export default function SiteFooter() {
           </span>
         </p>
         <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-semibold text-slate-600">
+          <Link href="/benchmarks" className="hover:text-carevo-700">Benchmarks</Link>
           <Link href="/privacy" className="hover:text-carevo-700">Privacy Policy</Link>
           <Link href="/terms" className="hover:text-carevo-700">Terms of Use</Link>
           <Link href="/contact" className="hover:text-carevo-700">Contact</Link>

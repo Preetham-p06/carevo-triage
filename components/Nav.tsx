@@ -31,7 +31,7 @@ const TABS = [
   },
 ]
 
-const MARKETING_PATHS = new Set(['/triage', '/company', '/contact', '/privacy', '/terms'])
+const MARKETING_PATHS = new Set(['/triage', '/company', '/contact', '/privacy', '/terms', '/benchmarks'])
 
 function CarevoLogoMark() {
   return (
@@ -58,6 +58,7 @@ export default function Nav() {
             <Link href="/landing-v2.html#products" className="rounded-full px-4 py-2 transition hover:bg-slate-100 hover:text-slate-950">Products</Link>
             <Link href="/triage" className={`rounded-full px-4 py-2 transition hover:bg-slate-100 hover:text-slate-950 ${pathname === '/triage' ? 'bg-slate-100 text-slate-950' : ''}`}>Triage</Link>
             <Link href="/landing-v2.html#how-it-works" className="rounded-full px-4 py-2 transition hover:bg-slate-100 hover:text-slate-950">How it works</Link>
+            <Link href="/benchmarks" className={`rounded-full px-4 py-2 transition hover:bg-slate-100 hover:text-slate-950 ${pathname === '/benchmarks' ? 'bg-slate-100 text-slate-950' : ''}`}>Benchmarks</Link>
             <Link href="/company" className={`rounded-full px-4 py-2 transition hover:bg-slate-100 hover:text-slate-950 ${pathname === '/company' ? 'bg-slate-100 text-slate-950' : ''}`}>Company</Link>
             <Link href="/contact" className={`rounded-full px-4 py-2 transition hover:bg-slate-100 hover:text-slate-950 ${pathname === '/contact' ? 'bg-slate-100 text-slate-950' : ''}`}>Contact</Link>
           </div>
@@ -96,6 +97,7 @@ export default function Nav() {
               <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/landing-v2.html#products">Products</Link>
               <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/triage">Triage</Link>
               <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/landing-v2.html#how-it-works">How it works</Link>
+              <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/benchmarks">Benchmarks</Link>
               <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/company">Company</Link>
               <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/contact">Contact</Link>
             </div>
