@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const headline = [
   ['0', 'dangerous under-triage results across every verification gate ever run'],
   ['91.1%', 'exact on NEJM45, an external benchmark of 45 published clinical vignettes'],
-  ['96.3%', 'exact on Carevo’s 240-case multi-turn clinical gate'],
+  ['96.7%', 'exact on Carevo’s 240-case multi-turn clinical gate'],
   ['100%', 'safe-or-exact on both — every miss routed to a safer level, never a riskier one'],
 ] as const
 
@@ -103,7 +103,7 @@ export default function BenchmarksPage() {
         <p className="mt-4 text-[15px] leading-7 text-slate-600">
           Before any change ships, Carevo must pass a 240-case multi-turn clinical gate — synthetic
           vignettes spanning all six care levels, with labels reviewed and where necessary corrected under
-          a named clinician’s signature. Current result: <strong>231 of 240 exact (96.3%)</strong>, 9 safe
+          a named clinician’s signature. Current result: <strong>232 of 240 exact (96.7%)</strong>, 8 safe
           over-routes, 0 under-triage, 0 errors. Separately, a vague-patient gate tests what benchmarks
           usually ignore: terse answers (&ldquo;kinda bad i guess&rdquo;), hedging, deny-everything patients,
           and limited-English phrasings like &ldquo;head very hot two day.&rdquo; Current result: <strong>24 of 24</strong> correct
