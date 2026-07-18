@@ -1,0 +1,185 @@
+{
+  "generatedAt": "2026-07-18T21:24:15.602Z",
+  "groups": [
+    {
+      "label": "Carevo canonical",
+      "metrics": [
+        {
+          "file": "data/recursive-learning/semigran45-canonical-round23-run1-2026-07-18.jsonl",
+          "total": 45,
+          "scored": 45,
+          "accuracy": 88.88888888888889,
+          "em": 100,
+          "ne": 86.66666666666667,
+          "sc": 80,
+          "safety_of_advice": 100,
+          "overtriage": 100,
+          "incorrect": 5,
+          "overCount": 5,
+          "underCount": 0
+        },
+        {
+          "file": "data/recursive-learning/semigran45-canonical-round23-run2-2026-07-18.jsonl",
+          "total": 45,
+          "scored": 45,
+          "accuracy": 91.11111111111111,
+          "em": 100,
+          "ne": 86.66666666666667,
+          "sc": 86.66666666666667,
+          "safety_of_advice": 100,
+          "overtriage": 100,
+          "incorrect": 4,
+          "overCount": 4,
+          "underCount": 0
+        },
+        {
+          "file": "data/recursive-learning/semigran45-canonical-round23-run3-2026-07-18.jsonl",
+          "total": 45,
+          "scored": 45,
+          "accuracy": 91.11111111111111,
+          "em": 100,
+          "ne": 86.66666666666667,
+          "sc": 86.66666666666667,
+          "safety_of_advice": 100,
+          "overtriage": 100,
+          "incorrect": 4,
+          "overCount": 4,
+          "underCount": 0
+        },
+        {
+          "file": "data/recursive-learning/semigran45-canonical-round23-run4-2026-07-18.jsonl",
+          "total": 45,
+          "scored": 45,
+          "accuracy": 91.11111111111111,
+          "em": 100,
+          "ne": 86.66666666666667,
+          "sc": 86.66666666666667,
+          "safety_of_advice": 100,
+          "overtriage": 100,
+          "incorrect": 4,
+          "overCount": 4,
+          "underCount": 0
+        },
+        {
+          "file": "data/recursive-learning/semigran45-canonical-round23-run5-2026-07-18.jsonl",
+          "total": 45,
+          "scored": 45,
+          "accuracy": 88.88888888888889,
+          "em": 100,
+          "ne": 86.66666666666667,
+          "sc": 80,
+          "safety_of_advice": 100,
+          "overtriage": 100,
+          "incorrect": 5,
+          "overCount": 5,
+          "underCount": 0
+        }
+      ],
+      "under": []
+    },
+    {
+      "label": "Carevo patient-voice",
+      "metrics": [
+        {
+          "file": "data/recursive-learning/nejm45-results-round19-2026-07-17.jsonl",
+          "total": 45,
+          "scored": 45,
+          "accuracy": 88.88888888888889,
+          "em": 93.33333333333333,
+          "ne": 93.33333333333333,
+          "sc": 80,
+          "safety_of_advice": 97.77777777777777,
+          "overtriage": 80,
+          "incorrect": 5,
+          "overCount": 4,
+          "underCount": 1
+        },
+        {
+          "file": "data/recursive-learning/nejm45-results-round20-2026-07-17.jsonl",
+          "total": 45,
+          "scored": 45,
+          "accuracy": 91.11111111111111,
+          "em": 100,
+          "ne": 93.33333333333333,
+          "sc": 80,
+          "safety_of_advice": 100,
+          "overtriage": 100,
+          "incorrect": 4,
+          "overCount": 4,
+          "underCount": 0
+        }
+      ],
+      "under": [
+        {
+          "file": "data/recursive-learning/nejm45-results-round19-2026-07-17.jsonl",
+          "id": "case-0003",
+          "trueTier": "em",
+          "predictedTier": "ne",
+          "predicted": "telehealth",
+          "sourceLabel": "AsthmaExacerbation",
+          "text": "27 y/o f, Hx of asthma, mild shortness of breath, wheezing, 3 days cough, symptoms not responsive to inhalers, recent cold",
+          "factors": [
+            "Symptoms are bothering you but manageable"
+          ],
+          "rulesFired": [],
+          "turns": [
+            {
+              "question": "Are you having trouble breathing right now, even when you're sitting still?",
+              "askedFor": "redFlag:breathing_difficulty",
+              "answer": "Not mentioned in the case.",
+              "source": "llm"
+            },
+            {
+              "question": "What is your main symptom stopping you from doing right now?",
+              "askedFor": "severity",
+              "answer": "Not mentioned in the case.",
+              "source": "llm"
+            },
+            {
+              "question": "One more thing — do you feel anything else? Anything you have not told me yet, even something small?",
+              "askedFor": "catch_all",
+              "answer": "Not mentioned in the case.",
+              "source": "llm"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "table": "| system | accuracy | em | ne | sc | safety_of_advice | overtriage |\n|---|---:|---:|---:|---:|---:|---:|\n| Carevo canonical | 90.2 (1.1) | 100 (0) | 86.7 (0) | 84 (3.3) | 100 (0) | 100 (0) |\n| Carevo patient-voice | 90 (1.1) | 96.7 (3.3) | 93.3 (0) | 80 (0) | 98.9 (1.1) | 90 (10) |",
+  "under": [
+    {
+      "file": "data/recursive-learning/nejm45-results-round19-2026-07-17.jsonl",
+      "id": "case-0003",
+      "trueTier": "em",
+      "predictedTier": "ne",
+      "predicted": "telehealth",
+      "sourceLabel": "AsthmaExacerbation",
+      "text": "27 y/o f, Hx of asthma, mild shortness of breath, wheezing, 3 days cough, symptoms not responsive to inhalers, recent cold",
+      "factors": [
+        "Symptoms are bothering you but manageable"
+      ],
+      "rulesFired": [],
+      "turns": [
+        {
+          "question": "Are you having trouble breathing right now, even when you're sitting still?",
+          "askedFor": "redFlag:breathing_difficulty",
+          "answer": "Not mentioned in the case.",
+          "source": "llm"
+        },
+        {
+          "question": "What is your main symptom stopping you from doing right now?",
+          "askedFor": "severity",
+          "answer": "Not mentioned in the case.",
+          "source": "llm"
+        },
+        {
+          "question": "One more thing — do you feel anything else? Anything you have not told me yet, even something small?",
+          "askedFor": "catch_all",
+          "answer": "Not mentioned in the case.",
+          "source": "llm"
+        }
+      ]
+    }
+  ]
+}

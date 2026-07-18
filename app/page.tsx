@@ -161,6 +161,79 @@ function parseAges(raw: string) {
     .filter(n => Number.isInteger(n) && n >= 0 && n <= 120)
 }
 
+function ShareConversationCard({ messages, recommendation }: { messages: Message[]; recommendation: TriageRecommendation | null }) {
+  const [agreed, setAgreed]   = useState(false)   // un-checked by default — explicit opt-in
+  const [state, setState]     = useState<'idle' | 'sending' | 'done' | 'hidden' | 'error'>('idle')
+  const [shareCode, setShareCode] = useState('')
+
+  if (state === 'hidden' || !recommendation) return null
+  if (state === 'done') return (
+    <section className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+      <p className="text-sm font-semibold text-accent-700 text-accent">Thank you — your conversation was shared.</p>
+      <p className="mt-2 text-xs leading-relaxed text-slate-500">
+        Your deletion code is <strong className="font-mono text-slate-700">{shareCode}</strong>. Save it: send it to us
+        from the contact page any time and we will erase this conversation from our records.
+      </p>
+    </section>
+  )
+
+  const share = async () => {
+    if (!agreed || state === 'sending') return
+    setState('sending')
+    try {
+      const res = await fetch('/api/research/share', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          consent: true,
+          messages,
+          careLevel: recommendation.careLevel,
+          factors: recommendation.factors ?? [],
+          engineVersion: recommendation.engineVersion ?? null,
+        }),
+      })
+      const data = await res.json()
+      if (data?.ok && data?.shareCode) { setShareCode(data.shareCode); setState('done') }
+      else if (data?.configured === false) setState('hidden')
+      else setState('error')
+    } catch { setState('error') }
+  }
+
+  return (
+    <section className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+      <h2 className="font-display font-bold text-ink">Help make Carevo better</h2>
+      <p className="mt-1 text-xs leading-relaxed text-slate-500">
+        If you choose to share, we keep a copy of this conversation and the recommendation — nothing else,
+        and no name or contact details — so our clinical team can review how well the questions and routing
+        worked. Sharing is optional and does not change your recommendation. Details in our{' '}
+        <a href="/privacy" className="underline text-carevo-700">Privacy Policy</a>.
+      </p>
+      <label className="mt-3 flex items-start gap-2.5 cursor-pointer select-none">
+        <input
+          type="checkbox"
+          checked={agreed}
+          onChange={e => setAgreed(e.target.checked)}
+          className="mt-0.5 h-4 w-4 rounded border-slate-300 text-carevo-600 focus:ring-carevo-500"
+        />
+        <span className="text-xs leading-relaxed text-slate-600">
+          I agree to share this conversation and recommendation with Carevo for quality review and to
+          improve the service. I understand I can request deletion later using my deletion code.
+        </span>
+      </label>
+      <div className="mt-3 flex items-center gap-3">
+        <button
+          onClick={share}
+          disabled={!agreed || state === 'sending'}
+          className="rounded-full bg-carevo-600 px-5 py-2.5 text-sm font-bold text-white transition disabled:opacity-40 hover:bg-carevo-700"
+        >
+          {state === 'sending' ? 'Sharing…' : 'Share conversation'}
+        </button>
+        {state === 'error' && <p className="text-xs font-semibold text-red-600">Could not share right now — nothing was saved.</p>}
+      </div>
+    </section>
+  )
+}
+
 function CoverageOptionsCard() {
   const [zipcode, setZipcode] = useState('')
   const [income, setIncome] = useState('')
@@ -550,6 +623,8 @@ export function HomePage({ embedded = false }: { embedded?: boolean } = {}) {
           )}
 
           <CoverageOptionsCard />
+
+          <ShareConversationCard messages={messages} recommendation={recommendation} />
 
           {hasFacilitySection && (
             <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
