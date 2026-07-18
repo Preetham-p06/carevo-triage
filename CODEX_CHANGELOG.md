@@ -620,4 +620,17 @@
   - Added a titled `Care near you` results section with a map-ready container around the existing `NearbyFacilities` component.
   - Verified TypeScript and offline eval: 104/104 acceptable, 0 UNDER, 0 safety failures.
   - Verified `/triage` has 0 iframes, a normal chat reaches an inline urgent-care recommendation with cost row, coverage test values render `$269/month` and plan rows, and emergency hard-stop shows no coverage card or cost figures.
-  - No `lib/**`, `app/api/**`, `scripts/**`, or `data/**` files were edited. No push was performed; awaiting visual review.
+- No `lib/**`, `app/api/**`, `scripts/**`, or `data/**` files were edited. No push was performed; awaiting visual review.
+
+## 2026-07-18
+
+- Ran round 22 production-readiness release gate.
+  - Created pre-flight checkpoint commit `626f22e`.
+  - Re-ran TypeScript and offline eval successfully; offline eval stayed 104/104 acceptable with 0 UNDER and 0 safety failures.
+  - Ran npm audit: 7 total findings (0 critical, 2 high, 4 moderate, 1 low); production-only audit still has 1 high transitive `ws` finding via the installed OpenAI/miniflare dependency tree. No audit fixes were applied.
+  - Ran the full 240-case api-multiturn gate: 240/240 scored, 232 exact, 8 over, 0 UNDER, 0 errors, 96.7% exact, 100% safe-or-exact.
+  - Ran all 8 vague personas for three rounds: 24/24 correct or acceptable, 0 UNDER, 0 forbidden output, 0 errors.
+  - Verified `/privacy`, `/terms`, `/triage` footer emergency banner, cost/facilities rate limiting, invalid facilities coordinates, emergency hard-stop cost/coverage suppression, and `/benchmarks` content/nav.
+  - Added the permanent public benchmark freshness rule to `AGENTS.md`.
+  - Release gate blocked because `/benchmarks` is now stale versus the latest round-22 240-gate result: page says 231/240 and 96.3%, but the latest run produced 232/240 and 96.7%. Per brief, reported the mismatch and did not edit the public benchmark numbers.
+  - Wrote the full report to `agent-inbox/codex-to-claude.md`. No push was performed.

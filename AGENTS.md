@@ -34,6 +34,11 @@ costs patients money — track its rate over time. Compare runs by diffing
 summaries across log files; the `provenance` block tells you exactly which
 engine/rules/KB versions produced each result.
 
+**Public benchmark freshness:** after every future full-gate round, verify the
+stats on `/benchmarks` still match the latest release report. If the public
+numbers drift, report the mismatch — do not quietly edit the page. Stale public
+benchmark numbers are worse than no benchmark page.
+
 ## Offline checks (no server needed)
 
 ```bash
