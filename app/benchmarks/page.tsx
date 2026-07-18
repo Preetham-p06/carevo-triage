@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Carevo — Published triage benchmarks',
   description:
-    'Carevo publishes its triage accuracy: 91.1% on the external NEJM45 benchmark with zero under-triage, 96.3% on a 240-case clinical gate, 100% safe-or-exact. Full methodology included.',
+    'Carevo publishes its triage accuracy: 91.1% on the external NEJM45 benchmark with zero under-triage, 96.7% on a 240-case clinical gate, 100% safe-or-exact. Full methodology included.',
 }
 
 const headline = [
