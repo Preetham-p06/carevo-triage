@@ -4,20 +4,22 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Carevo — Published triage benchmarks',
   description:
-    'Carevo publishes its triage accuracy: 91.1% on the external NEJM45 benchmark with zero under-triage, 96.7% on a 240-case clinical gate, 100% safe-or-exact. Full methodology included.',
+    'Carevo publishes its triage accuracy: 90.2% mean on the MedAsk/Semigran Triage Bench (above the published MedAsk result of 87.6%) with 100% safety of advice, 96.7% on a 240-case clinical gate, 100% safe-or-exact. Full methodology included.',
 }
 
 const headline = [
   ['0', 'dangerous under-triage results across every verification gate ever run'],
-  ['91.1%', 'exact on NEJM45, an external benchmark of 45 published clinical vignettes'],
+  ['90.2%', 'mean accuracy across 5 runs of the published Semigran Triage Bench — above MedAsk\u2019s published 87.6%'],
   ['96.7%', 'exact on Carevo’s 240-case multi-turn clinical gate'],
   ['100%', 'safe-or-exact on both — every miss routed to a safer level, never a riskier one'],
 ] as const
 
-const nejmRows = [
-  ['Exact routing (fair 3-tier rubric)', '41 / 45 (91.1%)', '40 / 45 (88.9%)'],
-  ['Dangerous under-triage', '0', 'Present among its 5 misses'],
-  ['Misses that were SAFER than the label', '4 of 4', '—'],
+const h2hRows = [
+  ['Carevo', '90.2 (1.1)', '100 (0)', '86.7 (0)', '84 (3.3)', '100 (0)', '100 (0)', true],
+  ['MedAsk', '87.6 (3.7)', '92 (5.6)', '82.7 (3.7)', '88 (5.6)', '92.9 (1.9)', '41.7 (11.8)', false],
+  ['OpenAI o3', '75.6 (3.5)', '90.7 (6)', '82.7 (3.7)', '53.3 (12.5)', '93.3 (1.6)', '72.1 (8)', false],
+  ['OpenAI o4-mini', '80.4 (2.9)', '89.3 (6)', '81.3 (3)', '70.7 (8.9)', '92.4 (2.5)', '61.3 (11.9)', false],
+  ['GPT-4.5', '68.9 (3.1)', '93.3 (0)', '82.7 (3.7)', '30.7 (6)', '97.3 (1)', '91.5 (2.8)', false],
 ] as const
 
 export default function BenchmarksPage() {
@@ -32,7 +34,7 @@ export default function BenchmarksPage() {
         <p className="mt-6 max-w-2xl text-lg font-semibold leading-8 text-slate-600">
           Every figure on this page comes from versioned benchmark files, a scripted test harness, and
           verbatim transcripts committed to our repository. Any result can be re-run and reproduced.
-          Last verification run: July 17, 2026.
+          Last verification run: July 18, 2026.
         </p>
       </section>
 
@@ -59,41 +61,52 @@ export default function BenchmarksPage() {
         </p>
       </section>
 
-      {/* NEJM45 */}
+      {/* Head-to-head */}
       <section className="mx-auto mt-16 max-w-4xl">
-        <h2 className="text-2xl font-black tracking-[-0.04em] text-ink">External benchmark: NEJM45</h2>
+        <h2 className="text-2xl font-black tracking-[-0.04em] text-ink">Head-to-head: a competitor&rsquo;s own published benchmark</h2>
         <p className="mt-4 text-[15px] leading-7 text-slate-600">
-          NEJM45 is a published set of 45 clinical vignettes drawn from New England Journal of Medicine
-          case material — 15 emergency, 15 doctor-visit, 15 self-care — used in prior academic work to
-          evaluate automated triage. We did not design it, select it, or train on it. Carevo ran the
-          patient-voice version of each vignette through its full multi-turn interview against the same
-          production code that serves this website, and was scored on the benchmark’s own three tiers
-          (emergency care · see a clinician · self-care).
+          In July 2025, MedAsk published Triage Bench — 45 standardized clinical vignettes (Semigran et
+          al., 15 emergency &middot; 15 non-emergency &middot; 15 self-care) — and used it to report that their system
+          beats OpenAI&rsquo;s o3 and GPT-4.5 at triage. We ran the identical canonical vignettes from their
+          public repository through Carevo&rsquo;s full multi-turn interview, five times, against the same
+          production code serving this website, scored with their metric definitions. Their rows below are
+          their published results; ours were produced July 2026.
         </p>
-        <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200">
-          <table className="w-full text-left text-sm">
+        <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200">
+          <table className="w-full min-w-[640px] text-left text-sm">
             <thead>
               <tr className="bg-slate-950 text-white">
-                <th className="px-4 py-3 font-black">Result</th>
-                <th className="px-4 py-3 font-black">Carevo</th>
-                <th className="px-4 py-3 font-black">Prior published system</th>
+                <th className="px-3 py-3 font-black">System</th>
+                <th className="px-3 py-3 font-black">Accuracy</th>
+                <th className="px-3 py-3 font-black">Emergency</th>
+                <th className="px-3 py-3 font-black">Non-emerg.</th>
+                <th className="px-3 py-3 font-black">Self-care</th>
+                <th className="px-3 py-3 font-black">Safety of advice</th>
+                <th className="px-3 py-3 font-black">Overtriage*</th>
               </tr>
             </thead>
             <tbody>
-              {nejmRows.map(([metric, us, them], i) => (
-                <tr key={metric} className={i % 2 ? 'bg-slate-50' : 'bg-white'}>
-                  <td className="px-4 py-3 font-semibold text-slate-700">{metric}</td>
-                  <td className="px-4 py-3 font-black tabular-nums text-carevo-700">{us}</td>
-                  <td className="px-4 py-3 font-semibold tabular-nums text-slate-500">{them}</td>
+              {h2hRows.map(([name, acc, em, ne, sc, safety, over, isUs], i) => (
+                <tr key={name as string} className={isUs ? 'bg-carevo-50' : i % 2 ? 'bg-slate-50' : 'bg-white'}>
+                  <td className={`px-3 py-3 ${isUs ? 'font-black text-carevo-800' : 'font-semibold text-slate-700'}`}>{name}</td>
+                  {[acc, em, ne, sc, safety, over].map((v, j) => (
+                    <td key={j} className={`px-3 py-3 tabular-nums ${isUs ? 'font-black text-carevo-800' : 'font-semibold text-slate-500'}`}>{v}</td>
+                  ))}
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
         <p className="mt-3 text-xs leading-relaxed text-slate-400">
-          &ldquo;Prior published system&rdquo; refers to the evaluation results distributed with the dataset, scored on
-          the same 45 vignettes and the same three-tier rubric. All four Carevo misses routed to a MORE
-          cautious level than the benchmark label; none routed to a riskier one.
+          Values are mean (standard deviation) across runs; Carevo n=5 runs, 225 scored trials. *Overtriage
+          counts, among a system&rsquo;s INCORRECT answers only, the share that routed too high — Carevo&rsquo;s reads
+          100% because every one of its misses was over-cautious; the others&rsquo; misses include routing BELOW
+          the correct urgency. Safety of advice is the share of all answers at or above correct urgency:
+          Carevo was the only system with no below-urgency advice. Being honest about the rest: MedAsk
+          scores higher on self-care precision (88 vs 84), and at 45 vignettes the overall accuracy gap
+          (90.2 vs 87.6) is within statistical noise on a paired test — the safety record is the robust
+          difference. Sources: MedAsk&rsquo;s public benchmark repository (github.com/medaks/medask-benchmarks)
+          and their July 2025 results; Carevo runs are reproducible from our committed harness and outputs.
         </p>
       </section>
 
