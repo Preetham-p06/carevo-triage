@@ -2,6 +2,7 @@ export const runtime = 'nodejs'
 
 import { NextRequest, NextResponse } from 'next/server'
 import type { CareLevel, Facility } from '@/lib/types'
+import { rateLimit, clientIp, TOO_MANY } from '@/lib/ratelimit'
 
 // Haversine — returns distance in miles
 function distanceMiles(lat1: number, lng1: number, lat2: number, lng2: number): number {
@@ -30,11 +31,16 @@ const SEARCH_CONFIG: Partial<Record<CareLevel, { keyword: string; type: string }
 }
 
 export async function POST(req: NextRequest) {
+  if (!rateLimit(`facilities:${clientIp(req)}`, 20, 60_000)) return NextResponse.json(TOO_MANY, { status: 429 })
   try {
     const { careLevel, lat, lng }: { careLevel: CareLevel; lat: number; lng: number } = await req.json()
 
     const config = SEARCH_CONFIG[careLevel]
-    if (!config || !lat || !lng) {
+    // Coordinates validated as real-world lat/lng — anything else is rejected
+    // before reaching the Places API (input validation, not just presence).
+    if (!config || typeof lat !== 'number' || typeof lng !== 'number' ||
+        !Number.isFinite(lat) || !Number.isFinite(lng) ||
+        Math.abs(lat) > 90 || Math.abs(lng) > 180) {
       return NextResponse.json({ facilities: [] })
     }
 

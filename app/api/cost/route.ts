@@ -8,10 +8,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import type { CareLevel } from '@/lib/types'
 import { estimateCost } from '@/lib/cost/engine'
 import { manualBenefits } from '@/lib/cost/eligibility'
+import { rateLimit, clientIp, TOO_MANY } from '@/lib/ratelimit'
 
 const VALID_LEVELS: CareLevel[] = ['emergency', 'er', 'urgent_care', 'primary_care', 'telehealth', 'home_care']
 
 export async function POST(req: NextRequest) {
+  if (!rateLimit(`cost:${clientIp(req)}`, 20, 60_000)) return NextResponse.json(TOO_MANY, { status: 429 })
   try {
     const body = await req.json()
     const careLevel = body?.careLevel as CareLevel

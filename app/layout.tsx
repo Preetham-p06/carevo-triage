@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import Nav from '@/components/Nav'
+import SiteFooter from '@/components/SiteFooter'
 
 export const metadata: Metadata = {
   title: 'Carevo — Know exactly where to go when you\'re sick',
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="antialiased bg-white text-slate-900">
         <Nav />
         <div className="pb-20 sm:pb-0">{children}</div>
+        <SiteFooter />
       </body>
     </html>
   )
