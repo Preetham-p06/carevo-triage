@@ -706,3 +706,22 @@
   - Shrunk the hero cards by roughly 25% with smaller type and slower reduced-motion-safe floating animation.
   - Added mobile-specific hero behavior: compact two-line headline, wrapped benchmark pill, hidden floating cards below 768px, and no horizontal scroll at 390px.
   - Verified `/landing-v2.html`, `/triage`, and `/benchmarks` return 200 locally; verified `npx tsc --noEmit` and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
+
+## 2026-07-19
+
+- Simplified the `public/landing-v2.html` hero illustration so the homepage reads less crowded and more product-specific.
+  - Redrew the lower SVG flow as a concrete ankle-injury journey: patient with ankle pain, mobile intake, Carevo medical routing engine, and grouped care options.
+  - Replaced the single generic care building with separate ER, urgent care, primary care, telehealth, and home-care destinations.
+  - Added medical-engine details to the Carevo AI block, including rule-floor chips, a scanning line, ECG core, and animated routing nodes.
+  - Lightened and repositioned the floating cards so they support the flow without crowding the headline or illustration.
+  - Verified `npx tsc --noEmit` and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
+
+## 2026-07-19
+
+- Ran round 27 illustration-band cleanup for `public/landing-v2.html`.
+  - Removed the floating white checklist cards from the hero illustration band entirely.
+  - Rebuilt the band as a four-stop patient journey: ankle-injury patient, Carevo app, animated deterministic medical engine, and right-care destination cluster.
+  - Added the caption row: scans for life threats, extracts symptoms, routes deterministically, and matches real facilities.
+  - Added a mobile-specific 2x2 SVG layout with no connector and no horizontal scroll at 390px.
+  - Made the engine and connector animations explicitly static under `prefers-reduced-motion`.
+  - Verified `/landing-v2.html`, `/triage`, and `/benchmarks` return 200 locally; verified `npx tsc --noEmit` and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.

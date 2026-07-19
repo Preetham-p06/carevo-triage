@@ -1,44 +1,51 @@
-# Codex Round 26 Report — Landing Hero Polish
+# Codex Round 27 Report — Illustration Band Patient Journey
 
 Date: 2026-07-19
 
 ## Summary
 
-Completed the UI-only landing hero pass in `public/landing-v2.html`. No `lib/**`, `app/api/**`, `scripts/**`, or `data/**` files were changed.
+Completed the UI-only hero illustration-band cleanup in `public/landing-v2.html`. No `lib/**`, `app/**`, `app/api/**`, `scripts/**`, or `data/**` files were changed.
 
 ## What Changed
 
-- Updated the announcement pill to link to `/benchmarks` with:
-  `Carevo beats the published MedAsk triage benchmark — see the numbers →`
-- Tuned the hero headline to the requested Vela-like weight and proportions:
-  - Desktop font size: `83.2px`
-  - Font weight: `600`
-  - Line height: `88.192px`
-  - Letter spacing: `-2.496px`
-  - Desktop line count: 2
-- Removed the patient-care shimmer so the full headline renders as clean black text.
-- Adjusted desktop vertical rhythm:
-  - Nav-to-pill gap: `95px`
-  - Pill-to-headline gap: `30px`
-  - Headline-to-CTA gap: `39px`
-- Softened the blue medical-building background and lowered the illustration presence.
-- Shrunk/lowered the floating cards:
-  - Desktop card widths: `245px`, `259px`, `245px`
-  - Card padding: `14px 16px`
-  - Card title size: `15px`
-  - Card row size: `11.5px`
-  - Card top positions: `706px`, `832px`, `698px`
-  - Float animation duration: `6s`
-- Mobile behavior:
-  - 390px headline: 2 lines
-  - 390px headline font size: `29.6px`
-  - Announcement pill font size: `12px`
-  - Floating cards hidden under 768px
-  - 390px horizontal scroll: `false`
+- Removed the floating white checklist cards from the hero illustration band entirely.
+- Rebuilt the band as one clean left-to-right patient journey:
+  - Patient seated with ankle pain.
+  - Carevo phone/app intake.
+  - Deterministic medical engine with hexagon, cross, EKG line, orbit nodes, and badge.
+  - Right-care destination cluster with ER, urgent care, primary care, and telehealth.
+- Added the requested caption row under the band:
+  `SCANS FOR LIFE THREATS · EXTRACTS SYMPTOMS · ROUTES DETERMINISTICALLY · MATCHES REAL FACILITIES`
+- Added CSS-only subtle animation:
+  - Engine hex pulse: 3s
+  - Orbit rotation: 24s
+  - EKG dash crawl: 2.5s
+  - Teal connector dot travel: 6s
+- Added explicit reduced-motion handling so those scene animations freeze for users who prefer reduced motion.
+- Added mobile layout for `<640px`: a clean 2x2 SVG grid with no connector and no horizontal overflow.
+
+## Visual Verification
+
+Desktop 1440px:
+
+- Floating cards in band: `0`
+- Stop centers: `152`, `548`, `909`, `1304`
+- Target grid positions: approximately 10%, 37%, 63%, 90% of 1440px
+- Stop widths: `211`, `169`, `184`, `236` px
+- Minimum horizontal gap between stops: `184px`
+- Horizontal overflow: `false`
+
+Mobile 390px:
+
+- Floating cards in band: `0`
+- Desktop SVG hidden: yes
+- Mobile 2x2 SVG visible: yes
+- Horizontal overflow: `false`
+- Hero text opacity after animation settles: `1`
 
 ## Route Checks
 
-All returned 200 locally on port 3000:
+All returned `200` locally on port 3000:
 
 - `/landing-v2.html`
 - `/triage`
@@ -57,5 +64,5 @@ All returned 200 locally on port 3000:
 
 ## Notes
 
-- `app/api/triage/route.ts` had no pending clarify-first diff in this checkout, so no separate route commit was needed.
-- `CODEX_CHANGELOG.md` was appended per project save discipline.
+- This round was restricted to `public/landing-v2.html`, `CODEX_CHANGELOG.md`, and this report.
+- `agent-inbox/claude-to-codex.md` remains modified as the incoming task brief and should not be included in the commit.
