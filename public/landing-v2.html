@@ -239,7 +239,7 @@ nav {
   position: relative; z-index: 2;
   display: flex; flex-direction: column; align-items: center;
   text-align: center;
-  padding-top: 174px;
+  padding-top: 148px; /* Vela rhythm: pill sits close under the nav */
   width: 100%;
 }
 .announce {
@@ -249,7 +249,7 @@ nav {
   border-radius: 100px;
   padding: 10px 20px;
   font-size: 14px; font-weight: 500; color: #64748b;
-  margin-bottom: 28px;
+  margin-bottom: 58px; /* Vela rhythm: big breath between pill and headline */
   text-decoration: none;
   backdrop-filter: blur(10px);
   transition: border-color .15s;
@@ -258,9 +258,9 @@ nav {
 .announce svg { width: 13px; height: 13px; stroke: #94a3b8; fill: none; }
 h1 {
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-size: clamp(3.2rem, 6.5vw, 5.2rem);
+  font-size: clamp(3rem, 5.5vw, 4.9rem); /* Vela-scale: large but not shouting */
   font-weight: 600;
-  line-height: 1.06;
+  line-height: 1.08;
   letter-spacing: -0.03em;
   color: #07111e;
   max-width: 1080px;
@@ -302,7 +302,7 @@ body.shine-done .hl {
   position: relative; z-index: 2;
   width: min(1440px, 100vw);
   height: 462px;
-  margin-top: clamp(76px, 10vh, 104px);
+  margin-top: clamp(120px, 16vh, 176px); /* Vela rhythm: a wide-open band of air between CTA and the scene */
   flex: 1;
   pointer-events: none;
 }
