@@ -691,3 +691,9 @@
   - Expanded the deterministic `CLARIFY_FIRST` table in `app/api/triage/route.ts` for injury, cuts, vomiting/diarrhea, headache, dizziness, belly pain, rash, sore throat, cough, and generic symptom duration.
   - Reused shared evidence patterns for timing and onset so the system asks one useful clarifier only when the patient has not already provided that detail.
   - Verified `npx tsc --noEmit` and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
+
+## 2026-07-19
+
+- Preserved red-flag priority while allowing clarify-first questions to take slot one for normal-tier cases.
+  - Updated `app/api/triage/route.ts` so high-alert presentations keep their red-flag-first ordering, while lower-alert cases can ask the most obvious symptom-specific clarifier first.
+  - Verified `npx tsc --noEmit` and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.

@@ -863,7 +863,13 @@ export async function POST(req: NextRequest) {
       },
     ]
 
-    if (plan.action === 'ask' && plan.asks.length > 0 && !plan.asks[0].target.startsWith('redFlag:')) {
+    // Red-flag-first ordering is protected ONLY for genuinely high-alert
+    // presentations (chest pain etc.). For normal-tier cases the engine's
+    // generic danger screen may yield the first slot to the obvious
+    // follow-up — that's the nurse order (found live: bare "fever" was
+    // still getting the fainting screen because its top pick IS a red flag).
+    const clarifierMayOverride = emergencyClass !== 'high_alert' || !plan.asks[0]?.target.startsWith('redFlag:')
+    if (plan.action === 'ask' && plan.asks.length > 0 && clarifierMayOverride) {
       const askedSet = new Set(parsedBody.data.askedTargets ?? [])
       for (const c of CLARIFY_FIRST) {
         if (askedSet.has(c.target) || known.has(c.target as any) || plan.asks[0].target === c.target) continue
