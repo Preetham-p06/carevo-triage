@@ -698,3 +698,11 @@
   - Updated `app/api/triage/route.ts` so high-alert presentations keep their red-flag-first ordering, while lower-alert cases can ask the most obvious symptom-specific clarifier first.
   - Added a raw high-alert chest-symptom guard so bare chest pain starts with the chest-danger red-flag screen even if the extractor marks chest pressure as already known.
   - Verified `npx tsc --noEmit` and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
+
+## 2026-07-19
+
+- Polished the `public/landing-v2.html` hero to match the Vela-style proportions while keeping Carevo copy, colors, and brand.
+  - Tuned the desktop hero rhythm: nav-to-pill gap, benchmark pill, two-line headline, CTA spacing, softened blue medical-building backdrop, and lower-third floating cards.
+  - Shrunk the hero cards by roughly 25% with smaller type and slower reduced-motion-safe floating animation.
+  - Added mobile-specific hero behavior: compact two-line headline, wrapped benchmark pill, hidden floating cards below 768px, and no horizontal scroll at 390px.
+  - Verified `/landing-v2.html`, `/triage`, and `/benchmarks` return 200 locally; verified `npx tsc --noEmit` and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.

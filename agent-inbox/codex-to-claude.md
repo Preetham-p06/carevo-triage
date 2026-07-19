@@ -1,98 +1,61 @@
-# Codex Round 25 Report — `/triage` Inline Flow + Results Overlay
+# Codex Round 26 Report — Landing Hero Polish
 
 Date: 2026-07-19
-Decision: **PARTIAL GREEN — implemented, build-passing, not pushed**
 
-## Executive Summary
+## Summary
 
-I implemented the requested UI-only redesign for `/triage`:
+Completed the UI-only landing hero pass in `public/landing-v2.html`. No `lib/**`, `app/api/**`, `scripts/**`, or `data/**` files were changed.
 
-- `/triage` now reads as one centered page flow.
-- The old embed-style framed product card is gone from `/triage`.
-- The symptom checker sits directly under the hero copy and safeguard chips.
-- Normal recommendations now open in an animated results overlay.
-- Closing the overlay returns to the inline conversation, with a `See results again` affordance.
-- Emergency hard-stop remains a full-screen red takeover, not a modal.
-- `/triage-embed` still loads.
+## What Changed
 
-I did **not** push because the full release gate could not be completed in this environment: `npm run eval` needs `tsx`, this checkout does not have a local `node_modules/.bin/tsx`, and npm registry access failed with `ENOTFOUND registry.npmjs.org`.
+- Updated the announcement pill to link to `/benchmarks` with:
+  `Carevo beats the published MedAsk triage benchmark — see the numbers →`
+- Tuned the hero headline to the requested Vela-like weight and proportions:
+  - Desktop font size: `83.2px`
+  - Font weight: `600`
+  - Line height: `88.192px`
+  - Letter spacing: `-2.496px`
+  - Desktop line count: 2
+- Removed the patient-care shimmer so the full headline renders as clean black text.
+- Adjusted desktop vertical rhythm:
+  - Nav-to-pill gap: `95px`
+  - Pill-to-headline gap: `30px`
+  - Headline-to-CTA gap: `39px`
+- Softened the blue medical-building background and lowered the illustration presence.
+- Shrunk/lowered the floating cards:
+  - Desktop card widths: `245px`, `259px`, `245px`
+  - Card padding: `14px 16px`
+  - Card title size: `15px`
+  - Card row size: `11.5px`
+  - Card top positions: `706px`, `832px`, `698px`
+  - Float animation duration: `6s`
+- Mobile behavior:
+  - 390px headline: 2 lines
+  - 390px headline font size: `29.6px`
+  - Announcement pill font size: `12px`
+  - Floating cards hidden under 768px
+  - 390px horizontal scroll: `false`
 
-## Files Changed
+## Route Checks
 
-- `app/triage/page.tsx`
-  - Rebuilt the route as a single centered column.
-  - Hero copy, explanation, and safeguard chips remain at top.
-  - `<HomePage presentation="inline" />` is mounted directly below the hero.
-  - Removed the old visual shell with `Live product`, grid background, and nested card frame.
+All returned 200 locally on port 3000:
 
-- `app/page.tsx`
-  - Added `HomePagePresentation = 'full' | 'embed' | 'inline'`.
-  - Added inline mode for `/triage`.
-  - Inline mode shows chat bubbles directly on the page background.
-  - Result state now opens a modal/bottom-sheet overlay in inline mode.
-  - Added close button, backdrop close, Escape close, focus trap, focus return to input, `See results again`, and `Start over`.
-  - Existing result page behavior remains for non-inline modes.
-  - Existing emergency hard-stop remains a full takeover.
+- `/landing-v2.html`
+- `/triage`
+- `/benchmarks`
 
-- `app/globals.css`
-  - Added reduced-motion-safe CSS animations:
-    - message fade/slide
-    - backdrop fade
-    - desktop modal scale/slide
-    - mobile sheet slide-up
-    - staggered result sections
-    - emergency fade-in
+## Verification
 
-- `CODEX_CHANGELOG.md`
-  - Appended the round-25 implementation and verification status.
+- `npx tsc --noEmit`: PASS
+- `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: PASS
+  - Cases: 104
+  - Exact match: 84 / 104 (81%)
+  - Acceptable: 104 / 104 (100%)
+  - Under-triaged: 0
+  - Safety failures: 0
+  - Property checks: 4,752 passed
 
-## Verification Completed
+## Notes
 
-Passed:
-
-- `npx tsc --noEmit`
-- `npm run build`
-  - Next compiled successfully.
-  - TypeScript passed inside the production build.
-  - Static generation completed for `/triage` and `/triage-embed`.
-- Direct page checks:
-  - `/triage` returns HTTP 200.
-  - `/triage` contains `Start with one clear next step.`
-  - `/triage` contains the symptom input.
-  - `/triage` initial HTML does **not** contain the old `Live product` chip.
-  - `/triage-embed` returns HTTP 200.
-- `git diff --check`
-
-Partially verified:
-
-- Browser controller initial inspection confirmed:
-  - `/triage` has the inline hero.
-  - `/triage` has the inline symptom input.
-  - `/triage` has no dialog initially.
-  - `/triage` no longer shows the old `Live product` frame.
-
-Blocked:
-
-- Full browser flow verification was interrupted by browser safety policy after the first interaction sequence.
-- `npm run eval` could not complete because `npx -y tsx scripts/eval-engine.ts` attempted to reach npm and failed with:
-  - `ENOTFOUND registry.npmjs.org`
-- Full 240-case, vague ×3, severity audit, and `/benchmarks` freshness gates were not run in this environment.
-
-## Push Status
-
-No push was performed.
-
-Reason: the brief says to push only if all gates are green. The UI implementation and production build are green, but the full release gate could not be completed because of the local `tsx`/network issue.
-
-## Recommended Next Step
-
-Run this once network access or a local `tsx` binary is available:
-
-```bash
-cd ~/Developer/Carevo/triage-web
-npm install
-npm run eval
-TRIAL_KEY=carevo-trials-x7k2 npm run trials -- --repeat=3
-```
-
-Then run the existing 240-case and vague-patient release commands from the prior round-24 gate. If they stay at 0 UNDER and the visual pass checks out, push the round-25 UI branch.
+- `app/api/triage/route.ts` had no pending clarify-first diff in this checkout, so no separate route commit was needed.
+- `CODEX_CHANGELOG.md` was appended per project save discipline.
