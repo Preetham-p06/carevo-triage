@@ -153,6 +153,11 @@ const FIELD_PRIORITY_BY_PRESENTATION: Partial<Record<PresentationType, KnowableF
   eye: ['suddenOnset', 'severity', 'functionalImpact'],
   dental: ['severity', 'highFever', 'duration', 'functionalImpact'],
   mental_health: ['severity', 'functionalImpact', 'duration', 'worsening'],
+  // 'general' is where bare fever / malaise / "feel sick" land. Without a
+  // tuned lane these cases got the generic danger ladder (faint? breathing?)
+  // and never the questions a nurse leads with: how long, the meningitis
+  // screen, fluids staying down, trajectory. (User-reported, 2026-07-19.)
+  general: ['duration', 'highFever', 'worsening', 'functionalImpact', 'severity'],
 }
 
 const REQUIRED_FIELDS_BY_PRESENTATION: Partial<Record<PresentationType, string[]>> = {
@@ -164,6 +169,7 @@ const REQUIRED_FIELDS_BY_PRESENTATION: Partial<Record<PresentationType, string[]
   allergic: ['redFlag:allergic_swelling', 'redFlag:breathing_difficulty'],
   eye: ['suddenOnset', 'redFlag:sudden_vision_loss'],
   pediatric: ['severity', 'highFever', 'redFlag:breathing_difficulty'],
+  general: ['duration', 'redFlag:stiff_neck_with_fever', 'redFlag:severe_dehydration'],
 }
 
 function isTargetEstablished(target: string, known: Set<string>, checkedRedFlags: Set<RedFlag>, f: ExtractedFeatures): boolean {
