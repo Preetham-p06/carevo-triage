@@ -770,6 +770,35 @@ export async function POST(req: NextRequest) {
       askRationale: 'thin-information catch-all (clinician rule: sweep for missed symptoms before deciding)',
     })
 
+    // ── Clarify-first pass (deterministic, 2026-07-19) ──────────────────────
+    // House interviewing principle: clarify what the patient VOLUNTEERED
+    // before screening for what they didn't — a nurse hears "fever" and asks
+    // what the thermometer reads, not "are you fainting?" first. The screens
+    // still run, just not ahead of the obvious follow-up. Danger always wins:
+    // the pass never overrides a red-flag question the engine chose first.
+    // Table-driven so new clarifiers are added (with clinician review), not
+    // coded ad hoc. Each: symptom mentioned + its key detail absent + not
+    // already asked → that detail becomes the next question, anchored.
+    const CLARIFY_FIRST: { name: string; mentioned: RegExp; detailPresent: RegExp; target: string; hint: string }[] = [
+      {
+        name: 'fever_needs_temperature',
+        mentioned: /\b(fever(?:ish)?|febrile|temperature|burning up)\b|\b(?:feel(?:s|ing)?|head|body|skin|forehead)\s+(?:very\s+|so\s+|too\s+)?hot\b/i,
+        detailPresent: /\b(9[5-9]|10[0-6])(\.\d)?\b|\b(3[5-9]|4[01])(\.\d)?\s*°?\s*c\b/i,
+        target: 'highFever',
+        hint: 'what their thermometer actually reads — they mentioned a fever, so ask for the number, and if they have not measured it, whether they feel very hot to the touch or have shaking chills',
+      },
+    ]
+
+    if (plan.action === 'ask' && plan.asks.length > 0 && !plan.asks[0].target.startsWith('redFlag:')) {
+      const askedSet = new Set(parsedBody.data.askedTargets ?? [])
+      for (const c of CLARIFY_FIRST) {
+        if (askedSet.has(c.target) || known.has(c.target as any) || plan.asks[0].target === c.target) continue
+        if (!c.mentioned.test(allUserText) || c.detailPresent.test(allUserText)) continue
+        plan.asks[0] = { ...plan.asks[0], target: c.target, hint: c.hint, rationale: `clarify volunteered symptom first (${c.name})` }
+        break
+      }
+    }
+
     if (plan.action === 'ask' && plan.asks.length > 0) {
       // Round-13 failure: on vague chest/headache cases EVOI spent all 4
       // questions on closed red-flag probes and the open sweep NEVER ran —
