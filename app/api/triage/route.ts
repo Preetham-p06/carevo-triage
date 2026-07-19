@@ -779,13 +779,87 @@ export async function POST(req: NextRequest) {
     // Table-driven so new clarifiers are added (with clinician review), not
     // coded ad hoc. Each: symptom mentioned + its key detail absent + not
     // already asked → that detail becomes the next question, anchored.
+    // Shared "the detail was already given" evidence patterns:
+    const TOLD_TIME = /\b(hours?|days?|weeks?|months?|years?|today|tonight|yesterday|since|ago|last night|this morning|all (day|week))\b/i
+    const TOLD_ONSET = /\b(sudden(ly)?|out of nowhere|all at once|instantly|gradual(ly)?|slowly|built (up|over)|over (hours|days|weeks)|came on)\b/i
     const CLARIFY_FIRST: { name: string; mentioned: RegExp; detailPresent: RegExp; target: string; hint: string }[] = [
+      // Most specific first — one clarifier per turn, first match wins.
+      {
+        name: 'injury_weight_bearing',
+        mentioned: /\b(twist(ed)?|sprain(ed)?|fell|fall(en)?|injur(y|ed)|hurt my (ankle|knee|leg|foot|wrist|arm|shoulder)|rolled my)\b/i,
+        detailPresent: /\b(walk|weight|bear|stand|deform|crooked|bent wrong)\b/i,
+        target: 'possibleFracture',
+        hint: 'about the injury they mentioned — can they put weight on it or use it, and does it look deformed or wrongly shaped',
+      },
+      {
+        name: 'cut_needs_depth',
+        mentioned: /\b(cut (my|his|her)self|cut my|gash|laceration|sliced)\b/i,
+        detailPresent: /\b(deep|shallow|wide|stitches|stopped bleeding|still bleeding)\b/i,
+        target: 'openWound',
+        hint: 'about the cut they mentioned — how deep and wide it is, and whether the bleeding stops with pressure',
+      },
       {
         name: 'fever_needs_temperature',
         mentioned: /\b(fever(?:ish)?|febrile|temperature|burning up)\b|\b(?:feel(?:s|ing)?|head|body|skin|forehead)\s+(?:very\s+|so\s+|too\s+)?hot\b/i,
         detailPresent: /\b(9[5-9]|10[0-6])(\.\d)?\b|\b(3[5-9]|4[01])(\.\d)?\s*°?\s*c\b/i,
         target: 'highFever',
         hint: 'what their thermometer actually reads — they mentioned a fever, so ask for the number, and if they have not measured it, whether they feel very hot to the touch or have shaking chills',
+      },
+      {
+        name: 'vomiting_needs_fluids',
+        mentioned: /\b(vomit(ing|ed)?|throw(ing)? up|threw up|diarrh(o?e)a|stomach bug)\b/i,
+        detailPresent: /\b(keep(ing)?\s+(fluids|water|anything)|fluids? (stay|down)|sips?|hydrat)\b/i,
+        target: 'redFlag:severe_dehydration',
+        hint: 'about the vomiting they mentioned — whether they can keep any fluids down, even small sips of water',
+      },
+      {
+        name: 'headache_needs_onset',
+        mentioned: /\b(headache|head (hurts|pain|pounding)|migraine)\b/i,
+        detailPresent: TOLD_ONSET,
+        target: 'suddenOnset',
+        hint: 'about the headache they mentioned — did it hit suddenly at full strength, or build up gradually',
+      },
+      {
+        name: 'dizziness_needs_onset',
+        mentioned: /\b(dizz(y|iness)|lightheaded|spinning|vertigo|off.?balance)\b/i,
+        detailPresent: TOLD_ONSET,
+        target: 'suddenOnset',
+        hint: 'about the dizziness they mentioned — did it start suddenly, and does it feel like the room is spinning or more like nearly fainting',
+      },
+      {
+        name: 'belly_pain_needs_onset',
+        mentioned: /\b(stomach|belly|abdominal|abdomen|tummy)\b[^.!?]{0,25}\b(pain|ache|hurts?|cramp)/i,
+        detailPresent: TOLD_ONSET,
+        target: 'suddenOnset',
+        hint: 'about the belly pain they mentioned — did it come on suddenly and sharply, or build up slowly',
+      },
+      {
+        name: 'rash_needs_trajectory',
+        mentioned: /\b(rash|hives|bumps on (my|the) skin|skin (breaking out|spots))\b/i,
+        detailPresent: /\b(spread(ing)?|getting (bigger|worse|better)|same size|shrinking|fading)\b/i,
+        target: 'worsening',
+        hint: 'about the rash they mentioned — is it spreading or changing, and where on the body it started',
+      },
+      {
+        name: 'sore_throat_needs_swallowing',
+        mentioned: /\b(sore throat|throat (hurts?|pain)|pharyngitis)\b/i,
+        detailPresent: /\b(swallow(ing)?|drink(ing)?|eat(ing)?)\b/i,
+        target: 'functionalImpact',
+        hint: 'about the sore throat they mentioned — can they still swallow food and drink without much trouble',
+      },
+      {
+        name: 'cough_needs_duration',
+        mentioned: /\b(cough(ing)?)\b/i,
+        detailPresent: TOLD_TIME,
+        target: 'duration',
+        hint: 'about the cough they mentioned — how long it has been going on, and whether anything is coming up with it',
+      },
+      {
+        name: 'generic_symptom_needs_duration',
+        mentioned: /\b(pain|ache|hurts?|sore|cramp|itch(y|ing)?|swollen|swelling)\b/i,
+        detailPresent: TOLD_TIME,
+        target: 'duration',
+        hint: 'when the problem they described started and how long it has been going on',
       },
     ]
 

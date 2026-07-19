@@ -684,3 +684,10 @@
   - Added reduced-motion-safe CSS keyframes in `app/globals.css` for message transitions, result overlay, bottom-sheet mobile entry, staggered sections, and emergency fade-in.
   - Verified TypeScript and `npm run build` successfully. Direct page checks confirmed `/triage` loads inline with no old "Live product" chip and `/triage-embed` still loads.
   - Browser automation was blocked by the browser safety policy after initial inspection, and `npm run eval` could not complete because this checkout lacks a local `tsx` binary and npm registry access returned `ENOTFOUND`. No push was performed because the full release gates were not all green.
+
+## 2026-07-19
+
+- Added clarify-first routing table coverage across symptom families.
+  - Expanded the deterministic `CLARIFY_FIRST` table in `app/api/triage/route.ts` for injury, cuts, vomiting/diarrhea, headache, dizziness, belly pain, rash, sore throat, cough, and generic symptom duration.
+  - Reused shared evidence patterns for timing and onset so the system asks one useful clarifier only when the patient has not already provided that detail.
+  - Verified `npx tsc --noEmit` and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
