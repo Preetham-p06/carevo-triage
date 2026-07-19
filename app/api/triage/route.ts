@@ -863,14 +863,35 @@ export async function POST(req: NextRequest) {
       },
     ]
 
-    // Red-flag-first ordering is protected ONLY for genuinely high-alert
-    // presentations (chest pain etc.). For normal-tier cases the engine's
-    // generic danger screen may yield the first slot to the obvious
-    // follow-up — that's the nurse order (found live: bare "fever" was
-    // still getting the fainting screen because its top pick IS a red flag).
-    const clarifierMayOverride = emergencyClass !== 'high_alert' || !plan.asks[0]?.target.startsWith('redFlag:')
+    const askedSet = new Set(parsedBody.data.askedTargets ?? [])
+
+    // Red-flag-first ordering is protected for genuinely high-alert raw
+    // openings. The extractor can treat bare "chest pain" as already-known
+    // chest_pressure, which makes EVOI drift to duration; raw high-alert
+    // language should still get the fast chest-danger character screen first.
+    const rawChestHighAlert = /\bchest\s*(pain|discomfort|tight|pressure|hurt|ache|burn)\b/i.test(stripNegatedClauses(allUserText))
+    if (
+      plan.action === 'ask' &&
+      plan.asks.length > 0 &&
+      emergencyClass === 'high_alert' &&
+      rawChestHighAlert &&
+      !askedSet.has('redFlag:chest_pressure') &&
+      !checkedRedFlags.has('chest_pressure')
+    ) {
+      plan.asks[0] = {
+        ...plan.asks[0],
+        target: 'redFlag:chest_pressure',
+        hint: 'whether they feel pressure, squeezing, or tightness in the chest — especially with sweating, nausea, or pain spreading to the arm or jaw',
+        rationale: 'raw high-alert chest symptom: preserve red-flag-first interview order',
+      }
+    }
+
+    // For normal-tier cases the engine's generic danger screen may yield the
+    // first slot to the obvious follow-up — that's the nurse order (found live:
+    // bare "fever" was still getting the fainting screen because its top pick
+    // IS a red flag).
+    const clarifierMayOverride = emergencyClass !== 'high_alert'
     if (plan.action === 'ask' && plan.asks.length > 0 && clarifierMayOverride) {
-      const askedSet = new Set(parsedBody.data.askedTargets ?? [])
       for (const c of CLARIFY_FIRST) {
         if (askedSet.has(c.target) || known.has(c.target as any) || plan.asks[0].target === c.target) continue
         if (!c.mentioned.test(allUserText) || c.detailPresent.test(allUserText)) continue

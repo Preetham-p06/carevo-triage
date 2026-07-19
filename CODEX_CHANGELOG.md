@@ -696,4 +696,5 @@
 
 - Preserved red-flag priority while allowing clarify-first questions to take slot one for normal-tier cases.
   - Updated `app/api/triage/route.ts` so high-alert presentations keep their red-flag-first ordering, while lower-alert cases can ask the most obvious symptom-specific clarifier first.
+  - Added a raw high-alert chest-symptom guard so bare chest pain starts with the chest-danger red-flag screen even if the extractor marks chest pressure as already known.
   - Verified `npx tsc --noEmit` and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
