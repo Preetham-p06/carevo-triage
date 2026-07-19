@@ -1,6 +1,6 @@
 const SECTIONS: [string, string[]][] = [
   ['What Carevo is (and is not)', [
-    'Carevo is an informational care-navigation tool: you describe symptoms, and it suggests a level of care (911, emergency room, urgent care, primary care, telehealth, or self-care) with cost context and nearby options. Carevo is not a healthcare provider, does not give medical advice or diagnosis, and does not create a provider–patient relationship. Carevo is not currently offered as a HIPAA-covered service; do not use it to transmit another person’s medical records.',
+    'Carevo is an informational care-navigation tool: you describe symptoms, and it suggests a level of care (911, emergency room, urgent care, primary care, telehealth, or self-care) with cost context and nearby options. Carevo is not a healthcare provider, does not give medical advice or identify a medical condition, and does not create a provider–patient relationship. Carevo is not currently offered as a HIPAA-covered service; do not use it to transmit medical records, insurance member IDs, Social Security numbers, addresses, or other identifying details.',
   ]],
   ['What we collect — and what we deliberately don’t', [
     'No account is required and we do not ask for your name, email, phone number, address, or any government identifier. Please do not type identifying details into the chat — the symptom conversation works without them.',
@@ -8,7 +8,7 @@ const SECTIONS: [string, string[]][] = [
     'Cost & coverage tool (optional): if you use it, your ZIP code, household income, and ages are sent to our server and forwarded to the U.S. government’s HealthCare.gov Marketplace API to compute estimates. We do not store these values.',
     'Nearby facilities (optional): if you grant location access, your coordinates are sent to our server and forwarded to Google Places to find nearby care. We do not store your location.',
     'On your device only: visit summaries, recovery check-ins, and history you choose to save are stored in your browser’s local storage on your device. They never reach our servers, and you can erase them anytime by clearing site data in your browser.',
-    'Optional conversation sharing (opt-in only): after you receive a recommendation, you can choose to share that conversation with us to help improve Carevo. The box is un-checked by default and nothing is shared unless you tick it and press Share. If you do, we store the conversation text, the recommendation, and its reasoning factors — still no name, contact details, or identifiers — in access-controlled storage, reviewed only by Carevo’s team and clinical reviewer for quality review and to improve the routing engine through our clinician-approved process. You receive a deletion code when you share: send it to us from the contact page at any time and we will erase that conversation. Shared conversations are kept only as long as they are useful for quality review.',
+    'Optional conversation sharing (opt-in only): after you receive a recommendation, Carevo asks whether this conversation can be shared. The box is un-checked by default and nothing is shared unless you tick it and press Share. If you do, we store the conversation text, the recommendation, and its routing factors in access-controlled storage. We do not ask for a name, contact details, address, member ID, or medical record number; please do not type those into the chat. Shared conversations are reviewed only by Carevo’s team and clinical reviewer for quality review and product improvement. They are not used to weaken emergency safeguards or bypass clinician-approved review. You receive a deletion code when you share: send it to us from the contact page at any time and we will erase that conversation. Shared conversations are kept only as long as they are useful for quality review.',
   ]],
   ['AI processing', [
     'Carevo uses a language model (via the OpenAI API) for exactly two narrow jobs: reading your words into structured symptom facts, and phrasing questions in plain language. The routing decision itself is made by Carevo’s own deterministic clinical engine — never by the AI. Conversation text is processed by OpenAI under its API data-usage policy (not used to train their models; may be retained by OpenAI for up to 30 days for abuse monitoring).',
@@ -18,7 +18,10 @@ const SECTIONS: [string, string[]][] = [
     'No advertising or analytics trackers: this site sets no tracking cookies and contains no Google Analytics, Meta/Facebook pixel, or any third-party advertising or analytics code.',
   ]],
   ['Security', [
-    'All traffic is encrypted in transit with HTTPS/TLS. The site enforces strict browser security headers (HSTS, content-security policy, frame denial, MIME sniffing protection), server-side input validation and sanitization on every endpoint, request rate limiting, and API keys that live only on the server — never in your browser.',
+    'All traffic is encrypted in transit with HTTPS/TLS. The site enforces strict browser security headers (HSTS, content-security policy, frame denial, MIME sniffing protection), server-side input validation and sanitization on every endpoint, request rate limiting, and API keys that live only on the server — never in your browser. Shared-conversation review is protected by an admin key, deletion codes, server-side rate limits, and production storage that fails closed if durable private storage is not configured.',
+  ]],
+  ['HIPAA and compliance status', [
+    'Carevo is designed with HIPAA-aware safeguards, but it should not be described as HIPAA compliant until the business and operational requirements are also in place: signed BAAs with required vendors, production access controls, audit procedures, retention rules, incident-response procedures, and documented workforce access policies. Until those are complete, do not submit protected health information or identifying medical records.',
   ]],
   ['Third parties we use', [
     'Vercel (hosting), OpenAI (language processing), Google Maps Platform (nearby facilities and map images), and the CMS HealthCare.gov Marketplace API (coverage estimates). Each receives only the minimum described above. We never sell or share data for advertising.',
@@ -39,7 +42,7 @@ export default function PrivacyPage() {
         <h1 className="text-4xl font-black leading-tight tracking-[-0.05em] sm:text-5xl">
           Plain answers about your data.
         </h1>
-        <p className="mt-4 text-sm font-semibold text-slate-500">Effective: July 17, 2026</p>
+        <p className="mt-4 text-sm font-semibold text-slate-500">Effective: July 18, 2026</p>
 
         {SECTIONS.map(([title, paras]) => (
           <section key={title} className="mt-10">

@@ -15,7 +15,7 @@ export default function SiteFooter() {
       <div className="mx-auto max-w-6xl px-5 py-8">
         <p className="text-xs leading-relaxed text-slate-500">
           <strong className="text-slate-600">Medical disclaimer:</strong> Carevo helps you decide where to seek care.
-          It is for informational purposes only and does not provide medical advice, diagnosis, or treatment, and does
+          It is for informational purposes only and does not provide medical advice, treatment, or condition identification, and does
           not create a provider–patient relationship. Cost and coverage figures are estimates, not quotes or enrollment
           decisions. Always seek the advice of a qualified clinician with any questions about a medical condition.
         </p>

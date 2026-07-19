@@ -663,3 +663,13 @@
   - Severity-word audit returned 0 hits across the new vague trial log and new 240-case output.
   - npm audit report remains nonzero: full audit 7 findings (0 critical, 2 high, 4 moderate, 1 low); production-only audit 1 high transitive `ws` finding.
   - Wrote the full report to `agent-inbox/codex-to-claude.md`. No `lib/` or `app/` files were edited by Codex in this round.
+
+## 2026-07-18
+
+- Tightened the post-assessment consent-sharing and data-collection language.
+  - Updated `ShareConversationCard` in `app/page.tsx` to ask plainly, "Can this conversation be shared?", explain that sharing is optional, unchecked by default, admin-key protected, and deletable by code.
+  - Updated the triage trust strip so it no longer says "No health data stored"; it now says sharing happens only if the user opts in.
+  - Updated `app/research/page.tsx` with stronger admin handling rules for confidential consent-shared logs.
+  - Updated `app/privacy/page.tsx` with clearer opt-in sharing, deletion, security, and HIPAA-aware-but-not-yet-HIPAA-covered language.
+  - Updated `public/landing-v2.html` privacy section to match the accurate data posture: private by default, shared only by consent.
+  - Updated public legal/footer copy to describe Carevo as care navigation without condition-identification wording.

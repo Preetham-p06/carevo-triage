@@ -39,7 +39,15 @@ export default function ResearchAdminPage() {
     <main className="min-h-screen bg-slate-50 px-5 pt-28 pb-16">
       <div className="mx-auto max-w-3xl">
         <h1 className="text-2xl font-black tracking-tight text-slate-950">Shared conversations (admin)</h1>
-        <p className="mt-1 text-xs text-slate-500">User-consented research logs. Handle as confidential; honor deletion codes promptly.</p>
+        <p className="mt-1 text-xs leading-relaxed text-slate-500">
+          User-consented quality-review logs. Treat as confidential health information, never export casually,
+          and honor deletion codes promptly.
+        </p>
+        <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-relaxed text-amber-900">
+          <strong>Admin handling rules:</strong> minimum access only, do not copy into chat/email/docs unless required
+          for review, remove entries immediately when a deletion code is provided, and do not use these rows for model
+          training unless they pass the clinician-approved review process.
+        </div>
         <div className="mt-4 flex gap-2">
           <input
             type="password" value={key} onChange={e => setKey(e.target.value)}

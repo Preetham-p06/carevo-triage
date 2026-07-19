@@ -3,7 +3,7 @@ const SECTIONS: [string, string[]][] = [
     'By using Carevo you agree to these terms. If you do not agree, do not use the site. Carevo is operated in the United States; these terms are governed by the laws of the State of Ohio.',
   ]],
   ['Medical disclaimer — read this first', [
-    'Carevo is an informational tool that helps you decide where to seek care. It does not provide medical advice, diagnosis, or treatment; it never names conditions; and using it does not create a provider–patient relationship. Its suggestions are navigation guidance, not a clinical determination. Always consult a qualified clinician about a medical condition, and never delay or disregard professional care because of something on this site.',
+    'Carevo is an informational tool that helps you decide where to seek care. It does not provide medical advice, treatment, or condition identification; it never names conditions; and using it does not create a provider–patient relationship. Its suggestions are navigation guidance, not a clinical determination. Always consult a qualified clinician about a medical condition, and never delay or disregard professional care because of something on this site.',
   ]],
   ['Emergencies', [
     'If you are experiencing a medical emergency — or think you might be — do not use this website. Call 911 or go to the nearest emergency room immediately. If you are having thoughts of self-harm, call or text 988 (Suicide & Crisis Lifeline). Carevo screens for emergency signals and will tell you to call 911 when it detects them, but no automated screen is a substitute for your own judgment.',

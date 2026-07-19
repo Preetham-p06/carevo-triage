@@ -200,14 +200,21 @@ function ShareConversationCard({ messages, recommendation }: { messages: Message
   }
 
   return (
-    <section className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
-      <h2 className="font-display font-bold text-ink">Help make Carevo better</h2>
+    <section className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm" aria-labelledby="share-consent-title">
+      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-carevo-600">Optional after-assessment sharing</p>
+      <h2 id="share-consent-title" className="mt-1 font-display font-bold text-ink">Can this conversation be shared?</h2>
       <p className="mt-1 text-xs leading-relaxed text-slate-500">
-        If you choose to share, we keep a copy of this conversation and the recommendation — nothing else,
-        and no name or contact details — so our clinical team can review how well the questions and routing
-        worked. Sharing is optional and does not change your recommendation. Details in our{' '}
+        You can say no and still use Carevo. If you say yes, we store a copy of this conversation,
+        the care-level recommendation, and the routing factors so the Carevo team and clinical reviewer
+        can check whether the questions and routing worked well. Do not include names, phone numbers,
+        addresses, member IDs, or medical record numbers. Details in our{' '}
         <a href="/privacy" className="underline text-carevo-700">Privacy Policy</a>.
       </p>
+      <ul className="mt-3 grid gap-1.5 text-[11px] font-semibold leading-relaxed text-slate-500 sm:grid-cols-3">
+        <li className="rounded-xl bg-slate-50 px-3 py-2">Unchecked by default</li>
+        <li className="rounded-xl bg-slate-50 px-3 py-2">Admin-key protected</li>
+        <li className="rounded-xl bg-slate-50 px-3 py-2">Deletable by code</li>
+      </ul>
       <label className="mt-3 flex items-start gap-2.5 cursor-pointer select-none">
         <input
           type="checkbox"
@@ -216,8 +223,9 @@ function ShareConversationCard({ messages, recommendation }: { messages: Message
           className="mt-0.5 h-4 w-4 rounded border-slate-300 text-carevo-600 focus:ring-carevo-500"
         />
         <span className="text-xs leading-relaxed text-slate-600">
-          I agree to share this conversation and recommendation with Carevo for quality review and to
-          improve the service. I understand I can request deletion later using my deletion code.
+          Yes, I give Carevo permission to store this conversation and recommendation for confidential
+          quality review and product improvement. I understand I will receive a deletion code and can
+          request deletion later.
         </span>
       </label>
       <div className="mt-3 flex items-center gap-3">
@@ -1124,7 +1132,7 @@ export function HomePage({ embedded = false }: { embedded?: boolean } = {}) {
           {/* ── TRUST STRIP ── */}
           <div className="mt-4 grid grid-cols-2 gap-2">
             {[
-              { Icon: IconLock,   text: 'Private by design', sub: 'No health data stored' },
+              { Icon: IconLock,   text: 'Private by design', sub: 'Share only if you opt in' },
               { Icon: IconHeart,  text: 'Always free',        sub: 'No account required' },
             ].map(({ Icon, text, sub }) => (
               <div key={text} className="bg-white rounded-xl border border-slate-200 p-3 flex items-start gap-2.5">
