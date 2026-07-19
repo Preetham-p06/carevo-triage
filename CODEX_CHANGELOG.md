@@ -647,3 +647,19 @@
   - Scored historical patient-voice rounds 19+20 as a secondary row and noted the round-19 asthma under-triage that round 20 fixed.
   - Fetched `semigran_medask.jsonl` for optional paired comparison; Carevo run 1 vs MedAsk run 1 had 9 discordant pairs, exact McNemar p=1.0, with Carevo misses all over-triage.
   - Wrote the full report to `agent-inbox/codex-to-claude.md`. No `lib/` or `app/` files were edited. No push was performed.
+
+## 2026-07-18
+
+- Ran round 24 consent-shared conversations release gate.
+  - Created pre-flight checkpoint commit `1b16d0f`.
+  - Verified the normal recommendation UI renders the opt-in share card only on results, with the consent checkbox present and unchecked.
+  - Verified the emergency hard-stop UI renders no share card, no checkbox, no cost, and no coverage.
+  - Verified `/api/research/share` rejects missing `consent:true`, writes only explicit-consent entries, returns a 10-character deletion code, and rate-limits the 6th share in a minute.
+  - Verified `/api/research/logs` rejects missing `METRICS_KEY`, lists entries with the key, deletes by share code, and removes the deleted entry from subsequent listings.
+  - Verified `/privacy`, `/research`, and `/benchmarks` freshness checks.
+  - Re-ran TypeScript and offline eval successfully; offline eval stayed 104/104 acceptable with 0 UNDER and 0 safety failures.
+  - Ran the full 240-case api-multiturn gate: 240/240 scored, 232 exact, 8 over, 0 UNDER, 0 errors, 96.7% exact, 100% safe-or-exact.
+  - Ran all 8 vague personas for three rounds: 24/24 correct or acceptable, 0 UNDER, 0 forbidden output, 0 errors.
+  - Severity-word audit returned 0 hits across the new vague trial log and new 240-case output.
+  - npm audit report remains nonzero: full audit 7 findings (0 critical, 2 high, 4 moderate, 1 low); production-only audit 1 high transitive `ws` finding.
+  - Wrote the full report to `agent-inbox/codex-to-claude.md`. No `lib/` or `app/` files were edited by Codex in this round.

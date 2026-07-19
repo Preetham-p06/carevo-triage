@@ -1,123 +1,127 @@
-# Codex Round 23 Report — MedAsk Triage Bench Head-to-Head
+# Codex Round 24 Report — Consent-Shared Conversations Release Gate
 
 Date: 2026-07-18
-Decision: **REPORT-ONLY COMPLETE — no push**
+Decision: **GREEN — pushed after report commit**
+
+## Note for Preetham
+
+Production durable storage needs one dashboard action: Vercel → Storage → Create Database → KV (Upstash) → connect to the `usecarevoai` project. That auto-adds `KV_REST_API_URL` and `KV_REST_API_TOKEN`, and the share feature goes live on the next deploy. Until then the card hides in production, which is the safe fail-closed behavior.
 
 ## Executive Summary
 
-Carevo was run against the canonical full Semigran45 / MedAsk Triage Bench vignettes for 5 independent API multi-turn runs.
+Claude's opt-in conversation-sharing implementation passed the release gate.
 
-Headline:
+- Normal recommendation flow: share card renders only after the result, with the checkbox present and **unchecked**.
+- Emergency hard-stop flow: no share card, no checkbox, no cost, no coverage.
+- Consent API: rejects missing consent, saves only explicit `consent:true`, returns a 10-character deletion code, and stores the entry locally in dev.
+- Admin API: rejects missing `METRICS_KEY`, lists with key, deletes by share code, and confirms the entry is gone.
+- Rate limit: 6th share within a minute returns 429.
+- Privacy and research pages load with the required content.
+- Clinical gates are unchanged: 240-case gate remains **232/240 exact, 8 over, 0 UNDER, 0 errors, 96.7% exact, 100% safe-or-exact**.
+- Vague-patient gate remains **24/24 correct or acceptable, 0 UNDER, 0 forbidden output, 0 errors**.
 
-- Canonical full vignettes: **90.2% (1.1) exact**, **100% (0) safety_of_advice**, **0 under-triage across 225 predictions**.
-- Emergency tier: **100% (0)** across all five runs, i.e. 75/75 emergency-tier exact after 6-level to 3-tier mapping.
-- Every canonical miss was an over-triage miss. Overtriage-among-errors is therefore **100% (0)**: inconvenient/costly, but not dangerous.
-- Carevo beats the MedAsk published mean accuracy (90.2 vs 87.6) and safety (100 vs 92.9), with a lower score only on self-care precision (84 vs 88).
+No `lib/` or `app/` code-side fixes were needed during this round.
 
-## Comparison Table
+## Functional Checks
 
-MedAsk rows are from the brief. Carevo rows are from `scripts/score-semigran.ts`.
+UI:
 
-| system | accuracy | em | ne | sc | safety_of_advice | overtriage |
-|---|---:|---:|---:|---:|---:|---:|
-| MedAsk | 87.6 (3.7) | 92 (5.6) | 82.7 (3.7) | 88 (5.6) | 92.9 (1.9) | 41.7 (11.8) |
-| o3 | 75.6 (3.5) | 90.7 (6) | 82.7 (3.7) | 53.3 (12.5) | 93.3 (1.6) | 72.1 (8) |
-| o4-mini | 80.4 (2.9) | 89.3 (6) | 81.3 (3) | 70.7 (8.9) | 92.4 (2.5) | 61.3 (11.9) |
-| gpt-4.5 | 68.9 (3.1) | 93.3 (0) | 82.7 (3.7) | 30.7 (6) | 97.3 (1) | 91.5 (2.8) |
-| **Carevo canonical** | **90.2 (1.1)** | **100 (0)** | **86.7 (0)** | **84 (3.3)** | **100 (0)** | **100 (0)** |
-| Carevo patient-voice, historical rounds 19+20 | 90 (1.1) | 96.7 (3.3) | 93.3 (0) | 80 (0) | 98.9 (1.1) | 90 (10) |
+- Full chat to recommendation: PASS.
+  - Result reached urgent care.
+  - `Help make Carevo better` card appeared.
+  - Consent checkbox existed and was unchecked.
+- Emergency probe: PASS.
+  - Input: crushing chest pain, sweating, left-arm pain.
+  - `Emergency Detected` / `Call 911 Now` rendered.
+  - Share card absent.
+  - Checkbox absent.
+  - Cost and coverage sections absent.
 
-Metric definitions used:
+API:
 
-- `accuracy`: exact 3-tier match.
-- `em/ne/sc`: per-tier exact.
-- `safety_of_advice`: prediction at or above the true urgency.
-- `overtriage`: among incorrect predictions, percent routed above the true urgency.
-- Values are mean (population std) across runs.
+- `POST /api/research/share` without `consent:true`: PASS — HTTP 400 `{ error: "consent required" }`.
+- No-consent write suppression: PASS — local `data/research-logs.jsonl` unchanged.
+- `POST /api/research/share` with `consent:true`: PASS — HTTP 200, `{ ok: true, shareCode }`, share code length 10.
+- Dev storage: PASS — entry appeared in `data/research-logs.jsonl`.
+- `GET /api/research/logs` without key: PASS — HTTP 401.
+- `GET /api/research/logs` with `METRICS_KEY`: PASS — entry listed.
+- `DELETE /api/research/logs?code=<shareCode>` with `METRICS_KEY`: PASS — `{ deleted: true }`.
+- Re-list after delete: PASS — entry gone.
+- Rate limit: PASS — share statuses `[200, 200, 200, 200, 200, 429]`.
+- Test cleanup: PASS — all round-24 test share rows removed from the dev log.
 
-## Canonical Per-Run Detail
+Pages:
 
-- Run 1: 40/45 exact, 5 over, 0 UNDER, 88.9% exact, 100% safe.
-- Run 2: 41/45 exact, 4 over, 0 UNDER, 91.1% exact, 100% safe.
-- Run 3: 41/45 exact, 4 over, 0 UNDER, 91.1% exact, 100% safe.
-- Run 4: 41/45 exact, 4 over, 0 UNDER, 91.1% exact, 100% safe.
-- Run 5: 40/45 exact, 5 over, 0 UNDER, 88.9% exact, 100% safe.
+- `/privacy`: PASS — contains `Optional conversation sharing`.
+- `/research`: PASS — HTTP 200 and admin viewer content present.
 
-Artifacts:
+## Standard Gates
 
-- `data/recursive-learning/semigran45-canonical-round23-run1-2026-07-18.jsonl`
-- `data/recursive-learning/semigran45-canonical-round23-run2-2026-07-18.jsonl`
-- `data/recursive-learning/semigran45-canonical-round23-run3-2026-07-18.jsonl`
-- `data/recursive-learning/semigran45-canonical-round23-run4-2026-07-18.jsonl`
-- `data/recursive-learning/semigran45-canonical-round23-run5-2026-07-18.jsonl`
-- `data/recursive-learning/semigran45-round23-score-report.json`
+- TypeScript: PASS — `npx tsc --noEmit`.
+- Offline eval: PASS.
+  - 104 cases.
+  - 104/104 acceptable.
+  - 0 UNDER.
+  - 0 safety failures.
+  - 4,752 property checks passed.
+- Full 240-case API multi-turn gate: PASS.
+  - Output: `data/recursive-learning/synthetic-240-results-round24-consent-sharing-2026-07-18.jsonl`.
+  - 240/240 scored.
+  - 232 exact.
+  - 8 over.
+  - 0 UNDER.
+  - 0 errors.
+  - 96.7% exact.
+  - 100% safe-or-exact.
+- Vague-patient personas ×3: PASS.
+  - Log: `data/trials/trials-2026-07-19T01-57-47.jsonl`.
+  - 8 personas × 3 rounds = 24 trials.
+  - 24/24 correct or acceptable.
+  - 0 over.
+  - 0 UNDER.
+  - 0 forbidden output.
+  - 0 errors.
+  - Average questions: 4.0.
+- Patient-facing severity audit: PASS.
+  - Audited the new vague trial log plus the new 240-case output.
+  - 0 hits for 1-to-10, one-to-ten, mild, moderate, or severe in patient questions/factor labels.
 
-## Under-Triage Detail
+## Benchmark Freshness
 
-Canonical full-vignette runs:
+`/benchmarks` is fresh:
 
-- **0 under-triage rows across 225 predictions.**
+- Round-22 internal gate numbers present: `232 of 240 exact`, `96.7%`.
+- Round-23 MedAsk/Semigran numbers present: Carevo `90.2`, MedAsk `87.6`.
+- Safety messaging present: `100%` safe-or-exact / safety-of-advice language.
 
-Historical patient-voice secondary row:
+## Npm Audit
 
-- Round 19 had one under-triage row: `case-0003 AsthmaExacerbation`, true `em`, predicted `telehealth`.
-- Round 20 fixed that case to exact ER after the asthma-not-responsive floor.
-- Do not use the historical patient-voice aggregate as the current public safety claim; use canonical round 23 or round 20+ after the fix.
+Full audit report:
 
-## Run-to-Run Variance Notes
+- Total: 7 findings.
+- Critical: 0.
+- High: 2.
+- Moderate: 4.
+- Low: 1.
 
-Stable safe over-routes:
+Production-only audit:
 
-- `case-0020 Back pain` — true `ne`, predicted `em` in all 5 runs.
-- `case-0030 Vertigo` — true `ne`, predicted `em` in all 5 runs. Run 5 reached emergency after 2 questions; runs 1-4 routed high immediately.
-- `case-0034 Acute pharyngitis` — true `sc`, predicted `ne` in all 5 runs.
-- `case-0045 Vomiting` — true `sc`, predicted `ne` in all 5 runs; predicted as urgent care in runs 1/3/4/5 and telehealth in run 2.
+- Total: 1 finding.
+- High: 1.
+- Package: transitive `ws`.
+- Main advisory: memory-exhaustion DoS range `<8.21.0`.
 
-Nondeterministic safe over-route:
+No audit fix was applied in this round. This is the same dependency-audit class already seen in round 22 and should be handled as a dependency-maintenance task, not mixed into this consent-flow release gate.
 
-- `case-0037 Bee sting` — true `sc`; exact home care in runs 2/3/4, emergency over-route in runs 1/5. This is the main wobble to harden if improving self-care precision.
+## Git
 
-## Optional Paired Comparison
+- Pre-flight checkpoint commit: `1b16d0f round 24: before consent-sharing release gate`.
+- Report/changelog commit: created after this report.
+- Push: performed after all functional and clinical gates passed.
 
-Fetched:
+## Files Changed By Codex This Round
 
-- `https://api.github.com/repos/medaks/medask-benchmarks/contents/triage_bench/results/medask_results_jul25`
-- `semigran_medask.jsonl`
+- `agent-inbox/codex-to-claude.md` — this report.
+- `CODEX_CHANGELOG.md` — appended round-24 gate summary.
 
-Note: `semigran_medask.jsonl` internally labels its `model` field as `o3`, but its aggregate accuracy is 87.6%, matching the MedAsk row in the brief. I treated it as the MedAsk per-case file by filename and aggregate match.
-
-Carevo canonical run 1 vs MedAsk run 1:
-
-- Both right: 35
-- Both wrong: 1
-- Carevo right / MedAsk wrong: 5
-- MedAsk right / Carevo wrong: 4
-- Discordant pairs: 9
-- Exact McNemar p-value: 1.0
-- Interpretation: no statistically significant paired difference on run 1; Carevo's misses are safer, while MedAsk has some below-true-urgency misses in the discordant set.
-
-Discordant pairs:
-
-- Case 5, Deep vein thrombosis: Carevo right (`em`), MedAsk wrong (`ne`) — MedAsk below true urgency.
-- Case 9, Malaria: Carevo right (`em`), MedAsk wrong (`ne`) — MedAsk below true urgency.
-- Case 23, Influenza: Carevo right (`ne`), MedAsk wrong (`sc`) — MedAsk below true urgency.
-- Case 27, Salmonella: Carevo right (`ne`), MedAsk wrong (`sc`) — MedAsk below true urgency.
-- Case 30, Vertigo: MedAsk right (`ne`), Carevo wrong (`em`) — Carevo over-triage.
-- Case 34, Acute pharyngitis: MedAsk right (`sc`), Carevo wrong (`ne`) — Carevo over-triage.
-- Case 37, Bee sting: MedAsk right (`sc`), Carevo wrong (`em`) — Carevo over-triage.
-- Case 40, Constipation: Carevo right (`sc`), MedAsk wrong (`ne`) — MedAsk over-triage.
-- Case 45, Vomiting: MedAsk right (`sc`), Carevo wrong (`ne`) — Carevo over-triage.
-
-## Files Changed
-
-- Added `data/recursive-learning/semigran45-canonical.jsonl` from the public MedAsk canonical Semigran file.
-- Added `scripts/score-semigran.ts`.
-- Updated this report and `CODEX_CHANGELOG.md`.
-
-## Verification
-
-- TypeScript: PASS.
-- Offline eval: PASS — 104/104 acceptable, 0 UNDER, 0 safety failures.
-- Five canonical api-multiturn runs: PASS — 225/225 scored, 0 UNDER, 0 errors.
-
-No `lib/` or `app/` files were edited. No push performed.
+No generated logs were committed. No `lib/` or `app/` files were edited by Codex in this round.
