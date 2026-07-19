@@ -736,3 +736,11 @@
   - Kept the mobile layout clean with the existing 2x2 patient journey and no horizontal scroll at 390px.
   - Kept animations CSS-only and explicitly static under `prefers-reduced-motion`.
   - Verified `/landing-v2.html`, `/triage`, and `/benchmarks` return 200 locally; verified `npx tsc --noEmit` and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
+
+## 2026-07-19
+
+- Tuned the `public/landing-v2.html` hero rhythm to match the requested Vela-style gaps.
+  - Set the desktop headline-to-CTA gap to exactly 32px at 1440x785.
+  - Shifted the scene band down by about 80px so the CTA has a clearer sky band before the medical pipeline begins.
+  - Lowered floating cards 01 and 03 so no desktop card begins above 48% of the 1440x785 fold.
+  - Verified the local homepage route returns 200; verified `npx tsc --noEmit` and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
