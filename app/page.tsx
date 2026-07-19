@@ -17,6 +17,7 @@ import {
 } from '@/components/Icons'
 
 type AppState = 'landing' | 'chatting' | 'thinking' | 'result' | 'emergency'
+type HomePagePresentation = 'full' | 'embed' | 'inline'
 
 const OPENING_PROMPT = 'What symptoms are you worried about, and how long have you had them?'
 
@@ -406,12 +407,22 @@ function CoverageOptionsCard() {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
-export function HomePage({ embedded = false }: { embedded?: boolean } = {}) {
+export function HomePage({
+  embedded = false,
+  presentation,
+}: {
+  embedded?: boolean
+  presentation?: HomePagePresentation
+} = {}) {
+  const mode: HomePagePresentation = presentation ?? (embedded ? 'embed' : 'full')
+  const isInline = mode === 'inline'
+  const isEmbed = mode === 'embed'
   const [appState, setAppState]             = useState<AppState>('landing')
   const [messages, setMessages]             = useState<Message[]>([])
   const [currentInput, setCurrentInput]     = useState('')
   const [questionNumber, setQuestionNumber] = useState(0)
   const [recommendation, setRecommendation] = useState<TriageRecommendation | null>(null)
+  const [resultOverlayOpen, setResultOverlayOpen] = useState(false)
   const [emergencyMsg, setEmergencyMsg]     = useState('')
   const [listening, setListening]           = useState(false)
   const [voiceSupported, setVoiceSupported] = useState(false)
@@ -420,6 +431,7 @@ export function HomePage({ embedded = false }: { embedded?: boolean } = {}) {
 
   const chatBottomRef   = useRef<HTMLDivElement>(null)
   const inputRef        = useRef<HTMLTextAreaElement>(null)
+  const resultModalRef  = useRef<HTMLDivElement>(null)
   const recogRef        = useRef<any>(null)
   const chatIdRef       = useRef<string>('')
   const askedTargetsRef = useRef<string[]>([])
@@ -432,6 +444,55 @@ export function HomePage({ embedded = false }: { embedded?: boolean } = {}) {
   }, [])
 
   useEffect(() => { chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages, appState])
+
+  useEffect(() => {
+    if (!isInline || appState !== 'result' || !resultOverlayOpen) return
+    const previousOverflow = document.body.style.overflow
+    const focusableSelector = [
+      'a[href]',
+      'button:not([disabled])',
+      'input:not([disabled])',
+      'textarea:not([disabled])',
+      'select:not([disabled])',
+      '[tabindex]:not([tabindex="-1"])',
+    ].join(',')
+
+    const focusFirst = () => {
+      const focusable = resultModalRef.current?.querySelectorAll<HTMLElement>(focusableSelector)
+      focusable?.[0]?.focus()
+    }
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        closeResultOverlay()
+        return
+      }
+      if (event.key !== 'Tab') return
+      const focusable = Array.from(resultModalRef.current?.querySelectorAll<HTMLElement>(focusableSelector) ?? [])
+        .filter(el => !el.hasAttribute('disabled') && el.offsetParent !== null)
+      if (!focusable.length) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
+    }
+
+    document.body.style.overflow = 'hidden'
+    document.addEventListener('keydown', onKeyDown)
+    window.setTimeout(focusFirst, 0)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  // closeResultOverlay is stable enough for this modal lifecycle; the branch is
+  // intentionally scoped to inline mode only.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isInline, appState, resultOverlayOpen])
 
   function toggleVoice() {
     const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
@@ -467,7 +528,7 @@ export function HomePage({ embedded = false }: { embedded?: boolean } = {}) {
         setAppState('chatting'); return
       }
       if (data.type === 'recommendation') {
-        setRecommendation(data); setAppState('result')
+        setRecommendation(data); setResultOverlayOpen(true); setAppState('result')
         track('triage_completed', { careLevel: data.careLevel })
         saveChat(msgs, data.careLevel, data.reasoning); return
       }
@@ -490,8 +551,10 @@ export function HomePage({ embedded = false }: { embedded?: boolean } = {}) {
     const cleanInput = sanitize(rawInput).slice(0, 1200)
     if (!cleanInput) return
     const userMsg: Message = { role: 'user', content: cleanInput }
-    if (appState === 'landing') {
+    if (appState === 'landing' || appState === 'result') {
       chatIdRef.current = uid(); track('chat_started')
+      askedTargetsRef.current = []
+      setQuestionNumber(0); setRecommendation(null); setResultOverlayOpen(false); setOutcome(null)
       const msgs: Message[] = [{ role: 'assistant', content: OPENING_PROMPT }, userMsg]
       setMessages(msgs); setCurrentInput(''); callTriage(msgs); return
     }
@@ -503,7 +566,13 @@ export function HomePage({ embedded = false }: { embedded?: boolean } = {}) {
     askedTargetsRef.current = []
     setAppState('landing'); setMessages([]); setCurrentInput('')
     setQuestionNumber(0); setRecommendation(null); setEmergencyMsg('')
-    setOutcome(null); chatIdRef.current = ''
+    setResultOverlayOpen(false); setOutcome(null); chatIdRef.current = ''
+    window.setTimeout(() => inputRef.current?.focus(), 0)
+  }
+
+  function closeResultOverlay() {
+    setResultOverlayOpen(false)
+    window.setTimeout(() => inputRef.current?.focus(), 0)
   }
 
   function sendOutcome(value: string) {
@@ -550,7 +619,7 @@ export function HomePage({ embedded = false }: { embedded?: boolean } = {}) {
   // ── EMERGENCY ─────────────────────────────────────────────────────────────
   if (appState === 'emergency') {
     return (
-      <div className={`${embedded ? 'min-h-[620px] rounded-[1rem]' : 'min-h-[calc(100dvh-3.5rem)]'} bg-red-600 flex flex-col items-center justify-center p-6 text-white`}>
+      <div className={`${isEmbed ? 'min-h-[620px] rounded-[1rem]' : isInline ? 'fixed inset-0 z-[90] min-h-screen triage-emergency-enter' : 'min-h-[calc(100dvh-3.5rem)]'} bg-red-600 flex flex-col items-center justify-center p-6 text-white`}>
         <div className="max-w-md w-full text-center space-y-6">
           <div className="w-20 h-20 mx-auto rounded-full bg-red-500 border-4 border-red-400 flex items-center justify-center" aria-hidden="true">
             <IconAlert className="w-10 h-10" />
@@ -565,13 +634,277 @@ export function HomePage({ embedded = false }: { embedded?: boolean } = {}) {
     )
   }
 
+  if (isInline) {
+    const canShowResults = appState === 'result' && recommendation
+    const cfg = recommendation ? CARE_LEVEL_CONFIG[recommendation.careLevel] : null
+    const hasFacilitySection = !!(recommendation && FACILITY_LABELS[recommendation.careLevel])
+
+    return (
+      <div className="relative">
+        <div className="space-y-4" aria-live="polite" aria-label="Carevo intake conversation">
+          {messages.length > 0 && (
+            <div className="space-y-3">
+              {messages.map((msg, i) => (
+                <div
+                  key={i}
+                  className={`triage-message-enter flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                  style={{ animationDelay: `${Math.min(i, 5) * 45}ms` }}
+                >
+                  {msg.role === 'assistant' && (
+                    <div className="mr-2 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-carevo-600 text-white shadow-sm" aria-hidden="true">
+                      <IconSparkle className="h-4 w-4" />
+                    </div>
+                  )}
+                  <div className={`max-w-[86%] rounded-2xl px-4 py-3 text-[15px] leading-relaxed shadow-sm sm:max-w-[78%] ${
+                    msg.role === 'user'
+                      ? 'rounded-br-sm bg-carevo-600 text-white'
+                      : 'rounded-bl-sm border border-slate-200 bg-white/90 text-ink backdrop-blur'
+                  }`}>
+                    {msg.content}
+                  </div>
+                </div>
+              ))}
+              {appState === 'thinking' && (
+                <div className="triage-message-enter flex justify-start">
+                  <div className="mr-2 mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-carevo-600 text-white shadow-sm" aria-hidden="true">
+                    <IconSparkle className="h-4 w-4" />
+                  </div>
+                  <div className="flex items-center gap-1.5 rounded-2xl rounded-bl-sm border border-slate-200 bg-white/90 px-4 py-3.5 shadow-sm backdrop-blur" role="status" aria-label="Carevo is thinking">
+                    <span className="h-2 w-2 animate-bounce rounded-full bg-slate-300" style={{ animationDelay: '0ms' }} />
+                    <span className="h-2 w-2 animate-bounce rounded-full bg-slate-300" style={{ animationDelay: '150ms' }} />
+                    <span className="h-2 w-2 animate-bounce rounded-full bg-slate-300" style={{ animationDelay: '300ms' }} />
+                  </div>
+                </div>
+              )}
+              <div ref={chatBottomRef} />
+            </div>
+          )}
+
+          <div className="rounded-[1.35rem] bg-white/70 p-2 shadow-xl shadow-slate-900/5 ring-1 ring-slate-200/80 backdrop-blur transition focus-within:ring-carevo-300 sm:rounded-[1.6rem] sm:p-3">
+            {inputBar}
+          </div>
+          <p className="text-sm font-semibold text-slate-400">
+            Not a medical label. Emergency? <a href="tel:911" className="font-bold text-red-600 hover:text-red-700">Call 911</a>.
+          </p>
+
+          {canShowResults && !resultOverlayOpen && (
+            <div className="triage-message-enter flex flex-wrap items-center gap-3 rounded-2xl border border-carevo-100 bg-carevo-50/80 p-4 backdrop-blur">
+              <p className="text-sm font-semibold text-carevo-900">Your recommendation is ready.</p>
+              <button
+                type="button"
+                onClick={() => setResultOverlayOpen(true)}
+                className="rounded-full bg-carevo-600 px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-carevo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-carevo-500"
+              >
+                See results again
+              </button>
+              <button
+                type="button"
+                onClick={reset}
+                className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-600 transition hover:border-carevo-200 hover:text-carevo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-carevo-500"
+              >
+                Start over
+              </button>
+            </div>
+          )}
+        </div>
+
+        {canShowResults && cfg && resultOverlayOpen && (
+          <div className="fixed inset-0 z-[80] flex items-end justify-center p-0 sm:items-center sm:p-6">
+            <button
+              type="button"
+              aria-label="Close results"
+              onClick={closeResultOverlay}
+              className="triage-result-backdrop absolute inset-0 bg-slate-950/40 backdrop-blur-sm"
+            />
+            <section
+              ref={resultModalRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="triage-results-title"
+              className="triage-result-panel relative z-10 max-h-[94dvh] w-full overflow-y-auto rounded-t-[2rem] bg-slate-50 p-4 shadow-2xl shadow-slate-950/30 outline-none sm:max-h-[90dvh] sm:max-w-2xl sm:rounded-[2rem] sm:p-5"
+            >
+              <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-slate-300 sm:hidden" aria-hidden="true" />
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-400">Your recommendation</p>
+                <button
+                  type="button"
+                  onClick={closeResultOverlay}
+                  aria-label="Close results"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-xl font-bold leading-none text-slate-500 transition hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-carevo-500"
+                >
+                  ×
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <article className={`triage-stagger rounded-2xl border-2 ${cfg.borderColor} bg-white shadow-sm`} style={{ animationDelay: '0ms' }}>
+                  <div className={`${cfg.bgColor} rounded-t-[0.85rem] px-5 py-4`}>
+                    <div className="flex items-center gap-3">
+                      <span className={cfg.color} aria-hidden="true"><CareLevelIcon level={recommendation.careLevel} className="h-8 w-8" /></span>
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-widest text-slate-500">{cfg.sublabel}</p>
+                        <h1 id="triage-results-title" className={`mt-0.5 font-display text-2xl font-bold leading-tight ${cfg.color}`}>{cfg.label}</h1>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="border-t border-slate-100 px-5 py-4">
+                    <p className="text-sm leading-relaxed text-slate-700">{recommendation.reasoning}</p>
+                  </div>
+                  {(recommendation.costEstimate || cfg.cost) && (
+                    <div className="px-5 pb-4">
+                      <div className="flex flex-wrap items-center gap-2.5">
+                        <IconDollar className="h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />
+                        <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">Est. cost</span>
+                        {recommendation.costEstimate ? (
+                          <>
+                            <span className={`text-sm font-bold ${cfg.color} tabular-nums`}>
+                              ${recommendation.costEstimate.insured.low.toLocaleString()}–${recommendation.costEstimate.insured.high.toLocaleString()}
+                              <span className="font-medium text-slate-400"> with insurance</span>
+                            </span>
+                            <span className="text-xs text-slate-400 tabular-nums">
+                              ${recommendation.costEstimate.cash.low.toLocaleString()}–${recommendation.costEstimate.cash.high.toLocaleString()} without
+                            </span>
+                          </>
+                        ) : (
+                          <span className={`text-sm font-bold ${cfg.color} tabular-nums`}>${cfg.cost!.min}–${cfg.cost!.max}</span>
+                        )}
+                      </div>
+                      {recommendation.costEstimate?.safetyNote && (
+                        <p className="mt-2 text-xs leading-relaxed text-slate-500">{recommendation.costEstimate.safetyNote}</p>
+                      )}
+                      {recommendation.costEstimate && (
+                        <p className="mt-1.5 text-[10px] leading-relaxed text-slate-400">{recommendation.costEstimate.disclaimer}</p>
+                      )}
+                    </div>
+                  )}
+                </article>
+
+                {recommendation.factors && recommendation.factors.length > 0 && (
+                  <section className="triage-stagger rounded-2xl border border-slate-200 bg-white p-4 shadow-sm" style={{ animationDelay: '60ms' }}>
+                    <div className="mb-3 flex items-center justify-between gap-2">
+                      <h2 className="font-display font-bold text-ink">Why this</h2>
+                      <span className="shrink-0 rounded-full border border-carevo-100 bg-carevo-50 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-carevo-700">{recommendation.engineVersion ?? 'Carevo Engine'}</span>
+                    </div>
+                    <ul className="space-y-2" aria-label="Decision factors">
+                      {recommendation.factors.map(f => (
+                        <li key={f} className="flex items-start gap-2.5 text-sm text-slate-600">
+                          <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${f.startsWith('Red flag') ? 'bg-red-500' : 'bg-carevo-400'}`} aria-hidden="true" />
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="mt-3 border-t border-slate-100 pt-3 text-[11px] leading-relaxed text-slate-400">Routing decisions are made by Carevo&apos;s clinical engine — the AI only gathers symptoms. It never names conditions.</p>
+                  </section>
+                )}
+
+                {hasFacilitySection && (
+                  <section className="triage-stagger rounded-2xl border border-slate-200 bg-white p-4 shadow-sm" style={{ animationDelay: '120ms' }}>
+                    <div className="mb-3">
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-carevo-700">Care near you</p>
+                      <h2 className="font-display text-lg font-bold leading-tight text-ink">Nearby places for this next step</h2>
+                      <p className="mt-1 text-xs leading-relaxed text-slate-500">Allow location access to see real places and a map, sorted by distance.</p>
+                    </div>
+                    <NearbyFacilities careLevel={recommendation.careLevel} />
+                  </section>
+                )}
+
+                <div className="triage-stagger" style={{ animationDelay: '180ms' }}>
+                  <CoverageOptionsCard />
+                </div>
+
+                {(recommendation.whatToExpect || recommendation.selfCare || recommendation.careLevel === 'telehealth') && (
+                  <section className="triage-stagger grid gap-3 sm:grid-cols-2" style={{ animationDelay: '240ms' }}>
+                    {recommendation.whatToExpect && (
+                      <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                        <h2 className="mb-2 font-display font-bold text-ink">What to expect</h2>
+                        <p className="text-sm leading-relaxed text-slate-600">{recommendation.whatToExpect}</p>
+                      </div>
+                    )}
+                    {recommendation.selfCare && (
+                      <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                        <h2 className="mb-2 font-display font-bold text-ink">In the meantime</h2>
+                        <p className="text-sm leading-relaxed text-slate-600">{recommendation.selfCare}</p>
+                      </div>
+                    )}
+                    {recommendation.careLevel === 'telehealth' && (
+                      <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:col-span-2">
+                        <h2 className="mb-3 font-display font-bold text-ink">Virtual visit options</h2>
+                        <ul className="space-y-2">
+                          {[
+                            { name: 'Teladoc', price: '$75', url: 'https://www.teladoc.com' },
+                            { name: 'MDLive', price: '$82', url: 'https://www.mdlive.com' },
+                            { name: 'Amazon Clinic', price: '$35', url: 'https://clinic.amazon.com' },
+                          ].map(opt => (
+                            <li key={opt.name}>
+                              <a href={opt.url} target="_blank" rel="noopener noreferrer"
+                                className="group flex min-h-[48px] items-center justify-between rounded-xl border border-transparent bg-slate-50 p-3 transition-colors hover:border-carevo-100 hover:bg-carevo-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-carevo-500">
+                                <span className="font-semibold text-ink transition-colors group-hover:text-carevo-700">{opt.name}</span>
+                                <span className="font-bold tabular-nums text-accent">{opt.price}</span>
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </section>
+                )}
+
+                <div className="triage-stagger" style={{ animationDelay: '300ms' }}>
+                  <ShareConversationCard messages={messages} recommendation={recommendation} />
+                </div>
+
+                <section className="triage-stagger rounded-2xl border border-slate-200 bg-white p-4 shadow-sm" style={{ animationDelay: '360ms' }}>
+                  <h2 className="mb-1 font-display font-bold text-ink">Help Carevo improve</h2>
+                  <p className="mb-3 text-sm text-slate-500">After your visit, tell us how it went.</p>
+                  {outcome ? (
+                    <p className="flex items-center gap-2 text-sm font-semibold text-accent"><IconCheck className="h-4 w-4" aria-hidden="true" />Thanks — this helps future recommendations.</p>
+                  ) : (
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        { value: 'right_place', Icon: IconThumbsUp,  label: 'Right place' },
+                        { value: 'wrong_place', Icon: IconThumbsDown, label: 'Wrong place' },
+                        { value: 'did_not_go',  Icon: IconHelpCircle, label: "Didn't go" },
+                      ].map(({ value, Icon, label }) => (
+                        <button key={value} onClick={() => sendOutcome(value)}
+                          className="flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:border-carevo-200 hover:bg-carevo-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-carevo-500">
+                          <Icon className="h-4 w-4" aria-hidden="true" /> {label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </section>
+
+                <div className="triage-stagger flex flex-wrap gap-3 pb-2" style={{ animationDelay: '420ms' }}>
+                  <button
+                    type="button"
+                    onClick={reset}
+                    className="rounded-full bg-carevo-600 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-carevo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-carevo-500"
+                  >
+                    Start over
+                  </button>
+                  <button
+                    type="button"
+                    onClick={closeResultOverlay}
+                    className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-600 transition hover:border-carevo-200 hover:text-carevo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-carevo-500"
+                  >
+                    Return to conversation
+                  </button>
+                </div>
+              </div>
+            </section>
+          </div>
+        )}
+      </div>
+    )
+  }
+
   // ── RESULT ────────────────────────────────────────────────────────────────
   if (appState === 'result' && recommendation) {
     const cfg = CARE_LEVEL_CONFIG[recommendation.careLevel]
     const hasFacilitySection = !!FACILITY_LABELS[recommendation.careLevel]
     return (
-      <div className={embedded ? 'min-h-[620px] bg-slate-50' : 'min-h-screen bg-slate-50'}>
-        <div className={`${embedded ? 'max-w-2xl' : 'max-w-lg'} mx-auto p-4 space-y-4 pb-16`}>
+      <div className={isEmbed ? 'min-h-[620px] bg-slate-50' : 'min-h-screen bg-slate-50'}>
+        <div className={`${isEmbed ? 'max-w-2xl' : 'max-w-lg'} mx-auto p-4 space-y-4 pb-16`}>
           <div className="flex items-center gap-3 pt-2">
             <button onClick={reset} aria-label="Back" className="text-slate-400 hover:text-slate-600 cursor-pointer w-11 h-11 -ml-2 flex items-center justify-center rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-carevo-500">
               <IconBack className="w-5 h-5" />
@@ -743,7 +1076,7 @@ export function HomePage({ embedded = false }: { embedded?: boolean } = {}) {
   // ── CHAT ─────────────────────────────────────────────────────────────────
   if (appState === 'chatting' || appState === 'thinking') {
     return (
-      <div className={`${embedded ? 'h-[min(760px,76dvh)] min-h-[620px]' : 'h-[calc(100dvh-3.5rem)]'} bg-slate-50 flex flex-col`}>
+      <div className={`${isEmbed ? 'h-[min(760px,76dvh)] min-h-[620px]' : 'h-[calc(100dvh-3.5rem)]'} bg-slate-50 flex flex-col`}>
         <div className="bg-white border-b border-slate-100 px-4 py-2 flex items-center gap-2 shrink-0" role="banner">
           <button onClick={reset} aria-label="Back" className="text-slate-400 hover:text-slate-600 w-11 h-11 flex items-center justify-center rounded-xl transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-carevo-500">
             <IconBack className="w-5 h-5" />
@@ -801,7 +1134,7 @@ export function HomePage({ embedded = false }: { embedded?: boolean } = {}) {
     { href: '/profile',         Icon: IconChat,        title: 'Recent chats',      desc: 'Past checks and results' },
   ]
 
-  if (embedded) {
+  if (isEmbed) {
     return (
       <div className="min-h-[620px] bg-white">
         <div className="relative overflow-hidden border-b border-slate-100 bg-white">

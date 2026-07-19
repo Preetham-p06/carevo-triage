@@ -673,3 +673,14 @@
   - Updated `app/privacy/page.tsx` with clearer opt-in sharing, deletion, security, and HIPAA-aware-but-not-yet-HIPAA-covered language.
   - Updated `public/landing-v2.html` privacy section to match the accurate data posture: private by default, shared only by consent.
   - Updated public legal/footer copy to describe Carevo as care navigation without condition-identification wording.
+
+## 2026-07-19
+
+- Ran round 25 `/triage` inline-flow redesign.
+  - Rebuilt `app/triage/page.tsx` as a single centered flow: hero copy, safeguard chips, and the symptom checker directly on the page background with no embedded product frame.
+  - Added an `inline` presentation mode to `HomePage` in `app/page.tsx` so `/triage` can show the conversation inline while preserving the existing full and embedded paths.
+  - Added an animated results overlay for completed recommendations with backdrop click, close button, Escape close, focus trap, focus return, "See results again", and "Start over".
+  - Kept emergency routing as a full-screen red hard-stop rather than placing it inside the overlay.
+  - Added reduced-motion-safe CSS keyframes in `app/globals.css` for message transitions, result overlay, bottom-sheet mobile entry, staggered sections, and emergency fade-in.
+  - Verified TypeScript and `npm run build` successfully. Direct page checks confirmed `/triage` loads inline with no old "Live product" chip and `/triage-embed` still loads.
+  - Browser automation was blocked by the browser safety policy after initial inspection, and `npm run eval` could not complete because this checkout lacks a local `tsx` binary and npm registry access returned `ENOTFOUND`. No push was performed because the full release gates were not all green.

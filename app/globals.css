@@ -58,6 +58,14 @@ html, body {
     animation-timeline: view();
     animation-range: entry 8% cover 28%;
   }
+
+  .triage-message-enter,
+  .triage-result-backdrop,
+  .triage-result-panel,
+  .triage-stagger,
+  .triage-emergency-enter {
+    animation: none;
+  }
 }
 
 @supports not (animation-timeline: view()) {
@@ -70,6 +78,83 @@ html, body {
   from {
     opacity: 0;
     transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .triage-message-enter {
+    animation: triage-message-enter 300ms ease-out both;
+  }
+
+  .triage-result-backdrop {
+    animation: triage-backdrop-in 200ms ease-out both;
+  }
+
+  .triage-result-panel {
+    animation: triage-sheet-in 350ms ease-out both;
+  }
+
+  .triage-stagger {
+    animation: triage-stagger-in 320ms ease-out both;
+  }
+
+  .triage-emergency-enter {
+    animation: triage-backdrop-in 220ms ease-out both;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 640px) {
+  .triage-result-panel {
+    animation-name: triage-modal-in;
+  }
+}
+
+@keyframes triage-message-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes triage-backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes triage-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes triage-sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes triage-stagger-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
   }
   to {
     opacity: 1;

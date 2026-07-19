@@ -1,127 +1,98 @@
-# Codex Round 24 Report — Consent-Shared Conversations Release Gate
+# Codex Round 25 Report — `/triage` Inline Flow + Results Overlay
 
-Date: 2026-07-18
-Decision: **GREEN — pushed after report commit**
-
-## Note for Preetham
-
-Production durable storage needs one dashboard action: Vercel → Storage → Create Database → KV (Upstash) → connect to the `usecarevoai` project. That auto-adds `KV_REST_API_URL` and `KV_REST_API_TOKEN`, and the share feature goes live on the next deploy. Until then the card hides in production, which is the safe fail-closed behavior.
+Date: 2026-07-19
+Decision: **PARTIAL GREEN — implemented, build-passing, not pushed**
 
 ## Executive Summary
 
-Claude's opt-in conversation-sharing implementation passed the release gate.
+I implemented the requested UI-only redesign for `/triage`:
 
-- Normal recommendation flow: share card renders only after the result, with the checkbox present and **unchecked**.
-- Emergency hard-stop flow: no share card, no checkbox, no cost, no coverage.
-- Consent API: rejects missing consent, saves only explicit `consent:true`, returns a 10-character deletion code, and stores the entry locally in dev.
-- Admin API: rejects missing `METRICS_KEY`, lists with key, deletes by share code, and confirms the entry is gone.
-- Rate limit: 6th share within a minute returns 429.
-- Privacy and research pages load with the required content.
-- Clinical gates are unchanged: 240-case gate remains **232/240 exact, 8 over, 0 UNDER, 0 errors, 96.7% exact, 100% safe-or-exact**.
-- Vague-patient gate remains **24/24 correct or acceptable, 0 UNDER, 0 forbidden output, 0 errors**.
+- `/triage` now reads as one centered page flow.
+- The old embed-style framed product card is gone from `/triage`.
+- The symptom checker sits directly under the hero copy and safeguard chips.
+- Normal recommendations now open in an animated results overlay.
+- Closing the overlay returns to the inline conversation, with a `See results again` affordance.
+- Emergency hard-stop remains a full-screen red takeover, not a modal.
+- `/triage-embed` still loads.
 
-No `lib/` or `app/` code-side fixes were needed during this round.
+I did **not** push because the full release gate could not be completed in this environment: `npm run eval` needs `tsx`, this checkout does not have a local `node_modules/.bin/tsx`, and npm registry access failed with `ENOTFOUND registry.npmjs.org`.
 
-## Functional Checks
+## Files Changed
 
-UI:
+- `app/triage/page.tsx`
+  - Rebuilt the route as a single centered column.
+  - Hero copy, explanation, and safeguard chips remain at top.
+  - `<HomePage presentation="inline" />` is mounted directly below the hero.
+  - Removed the old visual shell with `Live product`, grid background, and nested card frame.
 
-- Full chat to recommendation: PASS.
-  - Result reached urgent care.
-  - `Help make Carevo better` card appeared.
-  - Consent checkbox existed and was unchecked.
-- Emergency probe: PASS.
-  - Input: crushing chest pain, sweating, left-arm pain.
-  - `Emergency Detected` / `Call 911 Now` rendered.
-  - Share card absent.
-  - Checkbox absent.
-  - Cost and coverage sections absent.
+- `app/page.tsx`
+  - Added `HomePagePresentation = 'full' | 'embed' | 'inline'`.
+  - Added inline mode for `/triage`.
+  - Inline mode shows chat bubbles directly on the page background.
+  - Result state now opens a modal/bottom-sheet overlay in inline mode.
+  - Added close button, backdrop close, Escape close, focus trap, focus return to input, `See results again`, and `Start over`.
+  - Existing result page behavior remains for non-inline modes.
+  - Existing emergency hard-stop remains a full takeover.
 
-API:
+- `app/globals.css`
+  - Added reduced-motion-safe CSS animations:
+    - message fade/slide
+    - backdrop fade
+    - desktop modal scale/slide
+    - mobile sheet slide-up
+    - staggered result sections
+    - emergency fade-in
 
-- `POST /api/research/share` without `consent:true`: PASS — HTTP 400 `{ error: "consent required" }`.
-- No-consent write suppression: PASS — local `data/research-logs.jsonl` unchanged.
-- `POST /api/research/share` with `consent:true`: PASS — HTTP 200, `{ ok: true, shareCode }`, share code length 10.
-- Dev storage: PASS — entry appeared in `data/research-logs.jsonl`.
-- `GET /api/research/logs` without key: PASS — HTTP 401.
-- `GET /api/research/logs` with `METRICS_KEY`: PASS — entry listed.
-- `DELETE /api/research/logs?code=<shareCode>` with `METRICS_KEY`: PASS — `{ deleted: true }`.
-- Re-list after delete: PASS — entry gone.
-- Rate limit: PASS — share statuses `[200, 200, 200, 200, 200, 429]`.
-- Test cleanup: PASS — all round-24 test share rows removed from the dev log.
+- `CODEX_CHANGELOG.md`
+  - Appended the round-25 implementation and verification status.
 
-Pages:
+## Verification Completed
 
-- `/privacy`: PASS — contains `Optional conversation sharing`.
-- `/research`: PASS — HTTP 200 and admin viewer content present.
+Passed:
 
-## Standard Gates
+- `npx tsc --noEmit`
+- `npm run build`
+  - Next compiled successfully.
+  - TypeScript passed inside the production build.
+  - Static generation completed for `/triage` and `/triage-embed`.
+- Direct page checks:
+  - `/triage` returns HTTP 200.
+  - `/triage` contains `Start with one clear next step.`
+  - `/triage` contains the symptom input.
+  - `/triage` initial HTML does **not** contain the old `Live product` chip.
+  - `/triage-embed` returns HTTP 200.
+- `git diff --check`
 
-- TypeScript: PASS — `npx tsc --noEmit`.
-- Offline eval: PASS.
-  - 104 cases.
-  - 104/104 acceptable.
-  - 0 UNDER.
-  - 0 safety failures.
-  - 4,752 property checks passed.
-- Full 240-case API multi-turn gate: PASS.
-  - Output: `data/recursive-learning/synthetic-240-results-round24-consent-sharing-2026-07-18.jsonl`.
-  - 240/240 scored.
-  - 232 exact.
-  - 8 over.
-  - 0 UNDER.
-  - 0 errors.
-  - 96.7% exact.
-  - 100% safe-or-exact.
-- Vague-patient personas ×3: PASS.
-  - Log: `data/trials/trials-2026-07-19T01-57-47.jsonl`.
-  - 8 personas × 3 rounds = 24 trials.
-  - 24/24 correct or acceptable.
-  - 0 over.
-  - 0 UNDER.
-  - 0 forbidden output.
-  - 0 errors.
-  - Average questions: 4.0.
-- Patient-facing severity audit: PASS.
-  - Audited the new vague trial log plus the new 240-case output.
-  - 0 hits for 1-to-10, one-to-ten, mild, moderate, or severe in patient questions/factor labels.
+Partially verified:
 
-## Benchmark Freshness
+- Browser controller initial inspection confirmed:
+  - `/triage` has the inline hero.
+  - `/triage` has the inline symptom input.
+  - `/triage` has no dialog initially.
+  - `/triage` no longer shows the old `Live product` frame.
 
-`/benchmarks` is fresh:
+Blocked:
 
-- Round-22 internal gate numbers present: `232 of 240 exact`, `96.7%`.
-- Round-23 MedAsk/Semigran numbers present: Carevo `90.2`, MedAsk `87.6`.
-- Safety messaging present: `100%` safe-or-exact / safety-of-advice language.
+- Full browser flow verification was interrupted by browser safety policy after the first interaction sequence.
+- `npm run eval` could not complete because `npx -y tsx scripts/eval-engine.ts` attempted to reach npm and failed with:
+  - `ENOTFOUND registry.npmjs.org`
+- Full 240-case, vague ×3, severity audit, and `/benchmarks` freshness gates were not run in this environment.
 
-## Npm Audit
+## Push Status
 
-Full audit report:
+No push was performed.
 
-- Total: 7 findings.
-- Critical: 0.
-- High: 2.
-- Moderate: 4.
-- Low: 1.
+Reason: the brief says to push only if all gates are green. The UI implementation and production build are green, but the full release gate could not be completed because of the local `tsx`/network issue.
 
-Production-only audit:
+## Recommended Next Step
 
-- Total: 1 finding.
-- High: 1.
-- Package: transitive `ws`.
-- Main advisory: memory-exhaustion DoS range `<8.21.0`.
+Run this once network access or a local `tsx` binary is available:
 
-No audit fix was applied in this round. This is the same dependency-audit class already seen in round 22 and should be handled as a dependency-maintenance task, not mixed into this consent-flow release gate.
+```bash
+cd ~/Developer/Carevo/triage-web
+npm install
+npm run eval
+TRIAL_KEY=carevo-trials-x7k2 npm run trials -- --repeat=3
+```
 
-## Git
-
-- Pre-flight checkpoint commit: `1b16d0f round 24: before consent-sharing release gate`.
-- Report/changelog commit: created after this report.
-- Push: performed after all functional and clinical gates passed.
-
-## Files Changed By Codex This Round
-
-- `agent-inbox/codex-to-claude.md` — this report.
-- `CODEX_CHANGELOG.md` — appended round-24 gate summary.
-
-No generated logs were committed. No `lib/` or `app/` files were edited by Codex in this round.
+Then run the existing 240-case and vague-patient release commands from the prior round-24 gate. If they stay at 0 UNDER and the visual pass checks out, push the round-25 UI branch.
