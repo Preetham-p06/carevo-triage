@@ -1,47 +1,83 @@
-# Codex Round 27 Report — Illustration Band Patient Journey
+# Codex Round 27 v2 Report — Vela Layout Clone
 
 Date: 2026-07-19
 
 ## Summary
 
-Completed the UI-only hero illustration-band cleanup in `public/landing-v2.html`. No `lib/**`, `app/**`, `app/api/**`, `scripts/**`, or `data/**` files were changed.
+Completed the UI-only Vela-layout clone pass for `public/landing-v2.html`. No `lib/**`, `app/**`, `app/api/**`, `scripts/**`, or `data/**` files were changed.
+
+## Source Reference
+
+Fetched and reviewed Vela's live homepage and CSS:
+
+- Homepage markup: `https://www.velaenergy.ai/`
+- CSS chunk: `/_next/static/chunks/34wtxezoy07ug.css`
+
+Useful reference values observed:
+
+- Hero nav uses a fixed rounded island, height about 56px, max width about 1040px.
+- Hero scene uses a diagram-style `ec-*` SVG around `1100x520`.
+- Vela cards use small mono/uppercase labels, white cards, soft shadows, radius about 14px, and 150-160px widths.
+- Vela's scene animation is CSS-based with reduced-motion fallbacks.
 
 ## What Changed
 
-- Removed the floating white checklist cards from the hero illustration band entirely.
-- Rebuilt the band as one clean left-to-right patient journey:
-  - Patient seated with ankle pain.
-  - Carevo phone/app intake.
-  - Deterministic medical engine with hexagon, cross, EKG line, orbit nodes, and badge.
-  - Right-care destination cluster with ER, urgent care, primary care, and telehealth.
-- Added the requested caption row under the band:
-  `SCANS FOR LIFE THREATS · EXTRACTS SYMPTOMS · ROUTES DETERMINISTICALLY · MATCHES REAL FACILITIES`
-- Added CSS-only subtle animation:
-  - Engine hex pulse: 3s
-  - Orbit rotation: 24s
-  - EKG dash crawl: 2.5s
-  - Teal connector dot travel: 6s
-- Added explicit reduced-motion handling so those scene animations freeze for users who prefer reduced motion.
-- Added mobile layout for `<640px`: a clean 2x2 SVG grid with no connector and no horizontal overflow.
+- Reworked the hero rhythm toward the Vela fold:
+  - Centered benchmark pill.
+  - Two-line Carevo headline.
+  - Compact centered CTA button: 140px x 44px.
+  - Scene starts at `390px` on a 1440x785 viewport.
+- Rebuilt the desktop scene as the requested Vela-geometry care journey:
+  - Platform 01: patient self-report plate with seated ankle-pain patient and small home/box shapes.
+  - Two slim masts with wires and one highlighted blue signal segment.
+  - Unit 02: compact isometric Carevo engine with hex/EKG/cross motif.
+  - Box 03: large care-network campus with roof cross and dashed ghost duplicate.
+  - One blue connector line flowing left to right.
+- Restored exactly three floating cards:
+  - `01 · EMERGENCY NET`
+  - `03 · CARE ROUTE`
+  - `02 · TRIAGE ENGINE`
+- Kept the 390px mobile scene clean by using the 2x2 stop grid and hiding desktop cards.
+- Removed SVG `<animate>` usage from the desktop scene and kept animation CSS-only.
+- Added explicit reduced-motion handling for the scene animations.
 
-## Visual Verification
+## 1440x785 Measurements
 
-Desktop 1440px:
+Hero rhythm:
 
-- Floating cards in band: `0`
-- Stop centers: `152`, `548`, `909`, `1304`
-- Target grid positions: approximately 10%, 37%, 63%, 90% of 1440px
-- Stop widths: `211`, `169`, `184`, `236` px
-- Minimum horizontal gap between stops: `184px`
+- Nav: top `18px`, height `64px`
+- Announcement pill: top `110px`, height `40px`
+- Headline: top `176px`, font `74.4px`, line-height `85.56px`, two lines
+- CTA: top `383px`, size `140x44`
+- Scene: top `390px`, size `1120x405`
+
+Scene cards:
+
+- Card count: `3`
+- Card 01 Emergency Net: x `23.1%`, y `55.3%`, width `158px`
+- Card 03 Care Route: x `65.6%`, y `49.6%`, width `158px`
+- Card 02 Triage Engine: x `44.9%`, y `86.3%`, width `158px`, clipped low like Vela
+
+Scene objects:
+
+- Platform/patient: center x `31.8%`
+- Masts: center x `51.7%`
+- Carevo engine unit: center x `58.0%`
+- Care network campus: center x `71.9%`
+
+Page:
+
+- Desktop horizontal overflow: `false`
+
+## 390px Mobile Measurements
+
+- Headline: top `188px`, height `63px`, clean two-line layout
+- CTA: top `281px`, size `280x44`
+- Scene: top `369px`, size `390x374`
+- Desktop scene hidden: yes
+- Mobile 2x2 scene visible: yes
+- Desktop scene cards visible: `0`
 - Horizontal overflow: `false`
-
-Mobile 390px:
-
-- Floating cards in band: `0`
-- Desktop SVG hidden: yes
-- Mobile 2x2 SVG visible: yes
-- Horizontal overflow: `false`
-- Hero text opacity after animation settles: `1`
 
 ## Route Checks
 
@@ -64,5 +100,5 @@ All returned `200` locally on port 3000:
 
 ## Notes
 
-- This round was restricted to `public/landing-v2.html`, `CODEX_CHANGELOG.md`, and this report.
-- `agent-inbox/claude-to-codex.md` remains modified as the incoming task brief and should not be included in the commit.
+- This round only staged `public/landing-v2.html`, `CODEX_CHANGELOG.md`, and this outgoing report.
+- `agent-inbox/claude-to-codex.md` remains modified as the incoming task brief and was intentionally left uncommitted.

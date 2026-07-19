@@ -725,3 +725,14 @@
   - Added a mobile-specific 2x2 SVG layout with no connector and no horizontal scroll at 390px.
   - Made the engine and connector animations explicitly static under `prefers-reduced-motion`.
   - Verified `/landing-v2.html`, `/triage`, and `/benchmarks` return 200 locally; verified `npx tsc --noEmit` and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
+
+## 2026-07-19
+
+- Ran round 27 v2 Vela-layout clone for `public/landing-v2.html`.
+  - Fetched and reviewed Vela's live homepage markup and CSS values for the hero nav, button, and `ec-*` scene diagram.
+  - Reworked the Carevo hero rhythm to a Vela-style fold: fixed island nav, centered benchmark pill, two-line headline, compact CTA, and scene beginning at 390px on a 1440x785 viewport.
+  - Rebuilt the desktop illustration as a Vela-geometry care pipeline: patient self-report platform, two signal masts, compact Carevo engine unit, and large care-network campus with a dashed ghost duplicate.
+  - Restored exactly three floating scene cards: Emergency Net, Care Route, and Triage Engine, with Vela-like widths, radius, shadows, leader lines, labels, and check rows.
+  - Kept the mobile layout clean with the existing 2x2 patient journey and no horizontal scroll at 390px.
+  - Kept animations CSS-only and explicitly static under `prefers-reduced-motion`.
+  - Verified `/landing-v2.html`, `/triage`, and `/benchmarks` return 200 locally; verified `npx tsc --noEmit` and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
