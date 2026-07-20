@@ -754,3 +754,10 @@
   - Strengthened the blue cloud background and kept the faded healthcare-building backdrop behind the hero.
   - Matched the mobile SVG story to the same three-step flow.
   - Verified `/landing-v2.html` returns 200 locally; verified `npx tsc --noEmit` and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
+
+## 2026-07-20
+
+- Completed production deployment prep for Carevo.
+  - Ran TypeScript, the offline safety eval, and the Next.js production build successfully before deployment.
+  - Let the production build normalize `next-env.d.ts` from the development route-types path to the production route-types path.
+  - Deployed the linked Vercel production project and smoke-tested the public pages.
