@@ -192,19 +192,22 @@ nav {
 .hero-bg {
   position: absolute; inset: 0; z-index: 0;
   background:
-    linear-gradient(180deg, rgba(255,255,255,.28) 0%, rgba(255,255,255,.78) 63%, #fff 100%),
-    linear-gradient(165deg, #e6f4ff 0%, #f0f8ff 32%, #f8fcff 60%, #ffffff 78%);
+    linear-gradient(180deg, rgba(255,255,255,.14) 0%, rgba(255,255,255,.64) 56%, #fff 100%),
+    radial-gradient(ellipse 46% 28% at 8% 20%, rgba(186,230,253,.78) 0%, rgba(186,230,253,.24) 45%, transparent 72%),
+    radial-gradient(ellipse 42% 30% at 91% 18%, rgba(147,197,253,.58) 0%, rgba(219,234,254,.24) 48%, transparent 74%),
+    radial-gradient(ellipse 35% 22% at 22% 47%, rgba(224,242,254,.66) 0%, transparent 70%),
+    linear-gradient(165deg, #dff4ff 0%, #f2f9ff 38%, #ffffff 76%);
 }
 .hero-bg::before {
   content: '';
   position: absolute;
-  width: 110%; height: 70%;
-  top: -25%; left: -5%;
+  width: 112%; height: 78%;
+  top: -20%; left: -6%;
   background:
-    radial-gradient(ellipse 45% 55% at 8% 30%,  rgba(14,165,233,.26) 0%, transparent 65%),
-    radial-gradient(ellipse 40% 50% at 92% 20%,  rgba(37,99,235,.20) 0%, transparent 65%),
-    radial-gradient(ellipse 60% 45% at 50% -10%, rgba(186,230,253,.46) 0%, transparent 70%);
-  filter: blur(64px);
+    radial-gradient(ellipse 26% 18% at 12% 34%, rgba(125,211,252,.56) 0%, rgba(224,242,254,.30) 58%, transparent 78%),
+    radial-gradient(ellipse 28% 20% at 88% 28%, rgba(191,219,254,.64) 0%, rgba(219,234,254,.28) 58%, transparent 80%),
+    radial-gradient(ellipse 42% 30% at 51% 4%, rgba(186,230,253,.46) 0%, transparent 68%);
+  filter: blur(42px);
   pointer-events: none;
 }
 .hero-bg::after {
@@ -224,8 +227,8 @@ nav {
   pointer-events: none;
 }
 .hero-building {
-  position: absolute; top: 7%; left: 0; right: 0;
-  height: 78%; z-index: 0; pointer-events: none; opacity: 1.22;
+  position: absolute; top: 6%; left: 0; right: 0;
+  height: 78%; z-index: 0; pointer-events: none; opacity: .92;
 }
 .hero-fade {
   position: absolute; bottom: 0; left: 0; right: 0;
@@ -333,9 +336,9 @@ body.shine-done .hl {
   backdrop-filter: blur(14px);
   pointer-events: auto;
 }
-.scene-card-1 { left: 15.4%; top: 33%; }
-.scene-card-2 { left: 70%; top: 22%; }
-.scene-card-3 { left: 43.5%; top: 71%; }
+.scene-card-1 { left: 12%; top: 31%; }
+.scene-card-2 { left: 45%; top: 66%; }
+.scene-card-3 { left: 75%; top: 33%; }
 .scene-card::after {
   content: '';
   position: absolute;
@@ -345,8 +348,8 @@ body.shine-done .hl {
   transform: translateX(-50%);
 }
 .scene-card-1::after { top: 100%; height: 58px; }
-.scene-card-2::after { top: 100%; height: 76px; }
-.scene-card-3::after { bottom: 100%; height: 30px; }
+.scene-card-2::after { bottom: 100%; height: 38px; }
+.scene-card-3::after { top: 100%; height: 56px; }
 .scene-card-tag {
   display: flex;
   align-items: center;
@@ -394,7 +397,7 @@ body.shine-done .hl {
 .engine-pulse { animation: enginePulse 3s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
 .engine-ekg { stroke-dasharray: 72; stroke-dashoffset: 72; animation: ekgCrawl 2.5s linear infinite; }
 .flow-dot {
-  offset-path: path('M 180 282 C 255 252 330 222 404 194 C 478 166 558 160 630 182 L 760 250 L 880 210');
+  offset-path: path('M 180 318 C 300 258 430 250 535 296 C 640 342 718 286 846 236');
   animation: flowTravel 6s ease-in-out infinite;
 }
 .flow-comet {
@@ -1196,28 +1199,27 @@ tbody tr:hover td { background: #fafbfd; }
         </radialGradient>
       </defs>
 
-      <!-- faint medical scenery -->
-      <g opacity=".075" stroke="#64748b" stroke-width="1" fill="none">
-        <path d="M42 330h104v-96h60v96h104M174 202v160M126 250h96M78 292h192"/>
-        <path d="M920 245h120v-80h46v80h78M1017 144v128M970 197h94"/>
+      <!-- faint healthcare scenery -->
+      <g opacity=".045" stroke="#64748b" stroke-width="1" fill="none">
+        <path d="M34 322h102v-88h52v88h112M160 206v146M108 250h96M66 292h206"/>
+        <path d="M920 262h120v-92h46v92h82M1017 148v144M970 202h94"/>
+        <path d="M486 330h160v-80h40v80h112M608 236v116M544 282h104"/>
       </g>
 
       <!-- blue care-data connector -->
-      <path d="M 180 282 C 255 252 330 222 404 194 C 478 166 558 160 630 182 L 760 250 L 880 210" fill="none" stroke="#93c5fd" stroke-width="1.7" stroke-linecap="round"/>
-      <path class="flow-comet" d="M 180 282 C 255 252 330 222 404 194 C 478 166 558 160 630 182 L 760 250 L 880 210" fill="none" stroke="#2563eb" stroke-width="3.6" stroke-linecap="round" opacity=".34"/>
+      <path d="M 180 318 C 300 258 430 250 535 296 C 640 342 718 286 846 236" fill="none" stroke="#93c5fd" stroke-width="1.8" stroke-linecap="round"/>
+      <path class="flow-comet" d="M 180 318 C 300 258 430 250 535 296 C 640 342 718 286 846 236" fill="none" stroke="#2563eb" stroke-width="3.6" stroke-linecap="round" opacity=".34"/>
       <circle class="flow-dot" cx="0" cy="0" r="5" fill="#2563eb"/>
 
-      <!-- platform 01: patient self-report -->
+      <!-- stop 01: injury -->
       <g class="scene-stop" transform="translate(104,242)">
         <ellipse cx="118" cy="100" rx="96" ry="38" fill="url(#sceneShadow)"/>
         <path d="M72 22Q82 16 96 24L258 118Q272 126 262 132L146 199Q136 205 122 197L-40 104Q-54 96 -44 90Z" fill="#f8fafc" stroke="#dbe3ea" stroke-width="1"/>
         <text x="-18" y="104" class="scene-label" fill="#cbd5e1" font-size="16">01</text>
-        <text x="0" y="0" text-anchor="middle" class="scene-label" fill="#94a3b8" transform="matrix(.866 .5 -.866 .5 82 176)">PATIENT · SELF-REPORT</text>
-        <path d="M8 102 L52 78 L92 101 L50 128 Z" fill="#f1f5f9" stroke="#64748b" stroke-width="1"/>
-        <path d="M52 78 L76 92 L76 119 L50 128 L50 101 Z" fill="#e2e8f0" stroke="#64748b" stroke-width="1"/>
-        <path d="M8 102 L50 128 L50 101 Z" fill="#f8fafc" stroke="#64748b" stroke-width="1"/>
-        <rect x="92" y="138" width="26" height="26" fill="#f8fafc" stroke="#64748b" stroke-width="1" transform="skewY(30)"/>
-        <rect x="126" y="154" width="24" height="25" fill="#f8fafc" stroke="#64748b" stroke-width="1" transform="skewY(30)"/>
+        <text x="0" y="0" text-anchor="middle" class="scene-label" fill="#94a3b8" transform="matrix(.866 .5 -.866 .5 84 176)">INJURY · PATIENT INPUT</text>
+        <path d="M12 102 L54 78 L94 101 L52 128 Z" fill="#f1f5f9" stroke="#64748b" stroke-width="1"/>
+        <path d="M54 78 L78 92 L78 119 L52 128 L52 101 Z" fill="#e2e8f0" stroke="#64748b" stroke-width="1"/>
+        <path d="M12 102 L52 128 L52 101 Z" fill="#f8fafc" stroke="#64748b" stroke-width="1"/>
 
         <!-- seated ankle-pain patient -->
         <circle cx="116" cy="42" r="15" fill="#fff" stroke="#7dd3fc" stroke-width="1.3"/>
@@ -1230,43 +1232,42 @@ tbody tr:hover td { background: #fafbfd; }
         <path d="M225 118C234 110 244 111 251 119M225 147C234 155 244 154 251 146" fill="none" stroke="#f87171" stroke-width="1.1" stroke-linecap="round"/>
       </g>
 
-      <!-- signal / telehealth masts -->
-      <g class="scene-stop" transform="translate(412,86)" stroke="#475569" stroke-width="1.25" fill="none" stroke-linecap="round" stroke-linejoin="round">
-        <ellipse cx="80" cy="286" rx="28" ry="9" fill="url(#sceneShadow)" stroke="none"/>
-        <ellipse cx="260" cy="268" rx="28" ry="9" fill="url(#sceneShadow)" stroke="none"/>
-        <path d="M80 286L80 98M60 286L92 100M100 286L68 100M56 175H104M48 230H112M63 146L98 175M97 146L62 175M58 205L104 230M103 205L57 230"/>
-        <path d="M260 268L260 88M240 268L272 90M280 268L248 90M236 168H284M228 218H292M243 138L278 168M277 138L242 168M238 193L284 218M283 193L237 218"/>
-        <path d="M78 128C125 112 174 112 258 118" stroke="#94a3b8"/>
-        <path d="M82 174C134 154 188 154 260 164" stroke="#94a3b8"/>
-        <path d="M82 214C132 202 196 202 260 210" stroke="#93c5fd"/>
-        <path d="M96 210C130 204 164 202 198 204" stroke="#2563eb" stroke-width="3" opacity=".8"/>
-      </g>
-
-      <!-- unit 02: Carevo engine -->
-      <g class="scene-stop" transform="translate(682,334)">
-        <ellipse cx="72" cy="62" rx="62" ry="24" fill="url(#sceneShadow)"/>
-        <path d="M34 18Q43 13 55 20L142 70Q154 77 145 82L86 116Q77 121 65 114L-22 64Q-34 57 -25 52Z" fill="#f8fafc" stroke="#dbe3ea" stroke-width="1"/>
-        <text x="-6" y="66" class="scene-label" fill="#cbd5e1" font-size="16">02</text>
-        <text x="0" y="0" text-anchor="middle" class="scene-label" fill="#94a3b8" transform="matrix(.866 -.5 .866 .5 -62 118)">CAREVO ENGINE</text>
-        <g transform="translate(37,25)">
-          <path class="engine-pulse" d="M46 0L86 23V69L46 92L6 69V23Z" fill="#eff6ff" stroke="#0891b2" stroke-width="1.3"/>
-          <path class="engine-ekg" d="M20 47H34L40 34L51 62L58 47H72" fill="none" stroke="#0891b2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M39 54V44H31V34H39V24H49V34H58V44H49V54Z" fill="#dcfce7" stroke="#22c55e" stroke-width=".9"/>
+      <!-- stop 02: AI triage system -->
+      <g class="scene-stop" transform="translate(478,258)">
+        <ellipse cx="102" cy="104" rx="112" ry="40" fill="url(#sceneShadow)"/>
+        <path d="M50 18Q61 12 76 20L214 100Q228 108 216 115L120 170Q109 176 94 168L-44 88Q-58 80 -46 73Z" fill="#f8fafc" stroke="#dbe3ea" stroke-width="1"/>
+        <text x="-20" y="88" class="scene-label" fill="#cbd5e1" font-size="16">02</text>
+        <text x="0" y="0" text-anchor="middle" class="scene-label" fill="#0891b2" transform="matrix(.866 -.5 .866 .5 -44 162)">CAREVO AI TRIAGE</text>
+        <g transform="translate(38,28)">
+          <rect x="10" y="0" width="126" height="31" rx="15.5" fill="#0c4a6e"/>
+          <text x="73" y="21" text-anchor="middle" class="scene-label" fill="#fff" letter-spacing="2.3">TRIAGE ENGINE</text>
+          <path class="engine-pulse" d="M73 46L132 81V148L73 183L14 148V81Z" fill="rgba(240,249,255,.82)" stroke="#0891b2" stroke-width="1.7"/>
+          <circle cx="73" cy="114" r="46" fill="none" stroke="#bae6fd" stroke-width="1.1" stroke-dasharray="6 8"/>
+          <circle cx="73" cy="68" r="4.5" fill="#fff" stroke="#0891b2" stroke-width="1.2"/>
+          <circle cx="117" cy="106" r="4.5" fill="#fff" stroke="#0891b2" stroke-width="1.2"/>
+          <circle cx="98" cy="156" r="4.5" fill="#fff" stroke="#0891b2" stroke-width="1.2"/>
+          <circle cx="48" cy="156" r="4.5" fill="#fff" stroke="#0891b2" stroke-width="1.2"/>
+          <circle cx="29" cy="106" r="4.5" fill="#fff" stroke="#0891b2" stroke-width="1.2"/>
+          <path class="engine-ekg" d="M28 115H48L56 99L68 133L76 115H96L106 106L115 115H126" fill="none" stroke="#0891b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M64 129V118H53V106H64V95H76V106H87V118H76V129Z" fill="#dcfce7" stroke="#22c55e" stroke-width="1"/>
         </g>
       </g>
 
-      <!-- care network campus 03 -->
-      <g class="scene-stop" transform="translate(770,156)">
+      <!-- stop 03: care facilities -->
+      <g class="scene-stop" transform="translate(756,184)">
         <ellipse cx="164" cy="155" rx="116" ry="44" fill="url(#sceneShadow)"/>
         <path d="M118 22Q127 17 140 24L340 139Q353 147 344 152L210 229Q201 235 188 227L-12 112Q-25 105 -16 99Z" fill="#f8fafc" stroke="#dbe3ea" stroke-width="1"/>
         <text x="10" y="114" class="scene-label" fill="#cbd5e1" font-size="16">03</text>
-        <text x="0" y="0" text-anchor="middle" class="scene-label" fill="#94a3b8" transform="matrix(.866 -.5 .866 .5 262 224)">CARE NETWORK · ER / UC / PRIMARY</text>
+        <text x="0" y="0" text-anchor="middle" class="scene-label" fill="#94a3b8" transform="matrix(.866 -.5 .866 .5 262 224)">ER · URGENT CARE · PRIMARY</text>
         <g transform="translate(28,48)">
           <path d="M0 53L92 0L204 65L112 118Z" fill="#f8fafc" stroke="#64748b" stroke-width="1.4"/>
           <path d="M0 53L112 118V188L0 123Z" fill="#fff" stroke="#64748b" stroke-width="1.4"/>
           <path d="M112 118L204 65V135L112 188Z" fill="#e2e8f0" stroke="#64748b" stroke-width="1.4"/>
           <rect x="48" y="101" width="70" height="11" fill="#93c5fd" transform="skewY(30)"/>
           <path d="M94 28L116 41M105 21V49" stroke="#0891b2" stroke-width="2" stroke-linecap="round"/>
+          <rect x="20" y="136" width="32" height="28" rx="3" fill="#fee2e2" stroke="#fca5a5" stroke-width="1"/>
+          <rect x="68" y="158" width="36" height="26" rx="3" fill="#fffbeb" stroke="#fcd34d" stroke-width="1"/>
+          <rect x="218" y="102" width="34" height="30" rx="3" fill="#f0fdfa" stroke="#5eead4" stroke-width="1"/>
           <rect x="54" y="31" width="20" height="20" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1" transform="rotate(30 64 41)"/>
           <rect x="104" y="58" width="20" height="20" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1" transform="rotate(30 114 68)"/>
           <rect x="150" y="84" width="20" height="20" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1" transform="rotate(30 160 94)"/>
@@ -1280,27 +1281,27 @@ tbody tr:hover td { background: #fafbfd; }
     </svg>
 
     <div class="scene-card scene-card-1">
-      <div class="scene-card-tag"><span class="scene-card-dot"></span>01 · Emergency Net</div>
-      <div class="scene-card-title">Scans for life threats.</div>
+      <div class="scene-card-tag"><span class="scene-card-dot"></span>01 · Injury</div>
+      <div class="scene-card-title">Patient shares symptoms.</div>
       <div class="scene-card-row">
         <svg viewBox="0 0 16 16"><polyline points="2,8 6,12 14,4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg>
-        30+ patterns checked
+        Emergency scan first
       </div>
     </div>
     <div class="scene-card scene-card-2">
-      <div class="scene-card-tag"><span class="scene-card-dot"></span>03 · Care Route</div>
-      <div class="scene-card-title">Recommends care level.</div>
-      <div class="scene-card-row">
-        <svg viewBox="0 0 16 16"><polyline points="2,8 6,12 14,4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg>
-        Urgent care matched
-      </div>
-    </div>
-    <div class="scene-card scene-card-3">
-      <div class="scene-card-tag"><span class="scene-card-dot"></span>02 · Triage Engine</div>
+      <div class="scene-card-tag"><span class="scene-card-dot"></span>02 · AI Triage</div>
       <div class="scene-card-title">Routes deterministically.</div>
       <div class="scene-card-row">
         <svg viewBox="0 0 16 16"><polyline points="2,8 6,12 14,4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg>
-        Features extracted
+        Rules choose level
+      </div>
+    </div>
+    <div class="scene-card scene-card-3">
+      <div class="scene-card-tag"><span class="scene-card-dot"></span>03 · Facilities</div>
+      <div class="scene-card-title">Points to the right care.</div>
+      <div class="scene-card-row">
+        <svg viewBox="0 0 16 16"><polyline points="2,8 6,12 14,4" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg>
+        ER / UC / PCP
       </div>
     </div>
 
@@ -1316,17 +1317,9 @@ tbody tr:hover td { background: #fafbfd; }
         <path d="M 189,136 C 198,128 209,129 216,137" fill="none" stroke="#f87171" stroke-width="1.2" stroke-linecap="round"/>
         <text x="105" y="210" text-anchor="middle" class="scene-label" fill="#94a3b8">PATIENT</text>
       </g>
-      <g transform="translate(236,25) scale(.68)">
-        <rect x="60" y="20" width="72" height="126" rx="12" fill="white" stroke="#93c5fd" stroke-width="1.4"/>
-        <rect x="72" y="52" width="42" height="8" rx="4" fill="#dbeafe"/>
-        <rect x="72" y="70" width="32" height="8" rx="4" fill="#e0f2fe"/>
-        <rect x="72" y="88" width="46" height="8" rx="4" fill="#dbeafe"/>
-        <circle cx="82" cy="114" r="4" fill="#0891b2"/>
-        <circle cx="98" cy="114" r="4" fill="#0891b2" opacity=".75"/>
-        <circle cx="114" cy="114" r="4" fill="#0891b2" opacity=".55"/>
-        <text x="96" y="178" text-anchor="middle" class="scene-label" fill="#94a3b8">CAREVO APP</text>
-      </g>
-      <g transform="translate(44,206) scale(.72)">
+      <path d="M 144 110 C 184 92 218 96 250 126" fill="none" stroke="#93c5fd" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 284 176 C 262 214 224 238 182 256" fill="none" stroke="#93c5fd" stroke-width="1.5" stroke-linecap="round"/>
+      <g transform="translate(206,34) scale(.66)">
         <rect x="20" y="8" width="180" height="22" rx="11" fill="#0c4a6e"/>
         <text x="110" y="23" text-anchor="middle" class="scene-label" fill="#fff">DETERMINISTIC ENGINE</text>
         <path class="engine-hex" d="M 110 48 L 171 84 L 171 154 L 110 190 L 49 154 L 49 84 Z" fill="rgba(240,249,255,.64)" stroke="#0891b2" stroke-width="1.7"/>
@@ -1342,7 +1335,7 @@ tbody tr:hover td { background: #fafbfd; }
         <path class="engine-ekg" d="M 62 119 L 82 119 L 90 103 L 102 137 L 111 119 L 132 119 L 142 110 L 151 119 L 166 119" fill="none" stroke="#0891b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         <text x="110" y="218" text-anchor="middle" class="scene-label" fill="#0891b2">CAREVO ENGINE</text>
       </g>
-      <g transform="translate(218,212) scale(.62)">
+      <g transform="translate(58,224) scale(.78)">
         <g transform="translate(0,52)">
           <rect x="0" y="42" width="50" height="62" rx="4" fill="#fff1f2" stroke="#fca5a5" stroke-width="1.2"/>
           <rect x="9" y="64" width="32" height="9" rx="2" fill="#dc2626"/>

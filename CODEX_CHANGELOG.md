@@ -744,3 +744,13 @@
   - Shifted the scene band down by about 80px so the CTA has a clearer sky band before the medical pipeline begins.
   - Lowered floating cards 01 and 03 so no desktop card begins above 48% of the 1440x785 fold.
   - Verified the local homepage route returns 200; verified `npx tsc --noEmit` and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
+
+## 2026-07-20
+
+- Simplified the `public/landing-v2.html` hero illustration so the homepage reads as one clean three-step Carevo flow.
+  - Rebuilt the desktop scene around only three concepts: injury/patient input, the Carevo AI triage engine, and matched care facilities.
+  - Removed the extra signal-tower/mast layer that made the fold feel crowded.
+  - Updated the floating cards to label the three moments directly: Injury, AI Triage, and Facilities.
+  - Strengthened the blue cloud background and kept the faded healthcare-building backdrop behind the hero.
+  - Matched the mobile SVG story to the same three-step flow.
+  - Verified `/landing-v2.html` returns 200 locally; verified `npx tsc --noEmit` and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
