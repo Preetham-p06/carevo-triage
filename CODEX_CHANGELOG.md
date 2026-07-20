@@ -761,3 +761,10 @@
   - Ran TypeScript, the offline safety eval, and the Next.js production build successfully before deployment.
   - Let the production build normalize `next-env.d.ts` from the development route-types path to the production route-types path.
   - Deployed the linked Vercel production project and smoke-tested the public pages.
+
+## 2026-07-20
+
+- Added `README.md` for the OpenAI Build Week submission.
+  - Documented Carevo's product, architecture, safety model, local setup, live demo links, and checks.
+  - Added the required section describing how OpenAI Codex and GPT-5.6 were used.
+  - Avoided references to other assistants and preserved Carevo's safety wording constraints.
