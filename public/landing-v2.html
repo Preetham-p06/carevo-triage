@@ -1393,54 +1393,168 @@ tbody tr.case-row[aria-expanded="true"] td {
 
   <!-- SCENE -->
   <style>
-    /* Product mosaic hero — real UI cards instead of illustration */
-    .mosaic { position: relative; z-index: 2; width: min(1080px, 94vw); margin: clamp(96px, 13vh, 150px) auto 0; height: 360px; }
-    .mcard { position: absolute; background: #fff; border: 1px solid #e2e8f0; border-radius: 20px;
-      box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 12px 32px rgba(15,23,42,.10), 0 32px 64px rgba(15,23,42,.06);
-      font-family: 'Plus Jakarta Sans', system-ui, sans-serif; animation: mfade .8s ease both; }
-    .mcard-chat { left: 6%; top: 12px; width: 340px; padding: 18px; transform: rotate(-1.6deg); animation-delay: .1s; }
-    .mcard-rec  { right: 6%; top: 0; width: 360px; padding: 20px; transform: rotate(1.4deg); z-index: 3; animation-delay: .25s; }
-    .mcard-stats{ left: 50%; bottom: -6px; transform: translateX(-50%); padding: 12px 22px; display: flex; gap: 26px; z-index: 4; animation-delay: .4s; }
-    .mtag { font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #94a3b8; margin-bottom: 12px; display:flex; align-items:center; gap:7px; }
-    .mtag i { width: 7px; height: 7px; border-radius: 50%; background: #2563eb; display:inline-block; }
-    .bub { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: 13.5px; font-weight: 600; line-height: 1.45; margin-bottom: 9px; }
-    .bub-user { margin-left: auto; background: #0f172a; color: #f1f5f9; border-bottom-right-radius: 4px; }
-    .bub-ai { background: #f0f9ff; color: #0c4a6e; border: 1px solid #e0f2fe; border-bottom-left-radius: 4px; }
-    .bub-typing { display: inline-flex; gap: 4px; padding: 12px 16px; }
-    .bub-typing i { width: 6px; height: 6px; border-radius: 50%; background: #7dd3fc; animation: mdot 1.2s infinite; }
-    .bub-typing i:nth-child(2){ animation-delay: .18s } .bub-typing i:nth-child(3){ animation-delay: .36s }
-    .rec-pill { display:inline-flex; align-items:center; gap:8px; background:#fffbeb; border:1px solid #fde68a; color:#b45309; font-weight:800; font-size:15px; padding:8px 16px; border-radius:100px; margin-bottom:14px; }
-    .rec-row { display:flex; align-items:flex-start; gap:9px; font-size:13px; font-weight:600; color:#475569; margin-top:9px; line-height:1.45; }
-    .rec-row svg { width:15px; height:15px; stroke:#16a34a; flex:none; margin-top:1px; }
-    .rec-cost { margin-top:14px; padding-top:13px; border-top:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:baseline; }
-    .rec-cost b { font-size:19px; color:#0f172a; letter-spacing:-.02em; } .rec-cost span { font-size:11.5px; font-weight:700; color:#94a3b8; }
-    .stat { text-align:center; } .stat b { display:block; font-size:17px; font-weight:800; color:#0f766e; letter-spacing:-.02em; } .stat span { font-size:9.5px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#94a3b8; }
-    @keyframes mfade { from { opacity:0; translate:0 14px } to { opacity:1; translate:0 0 } }
-    @keyframes mdot { 0%,60%,100% { transform:none; opacity:.55 } 30% { transform:translateY(-3px); opacity:1 } }
-    @media (prefers-reduced-motion: reduce){ .mcard{ animation:none } .bub-typing i{ animation:none } }
-    @media (max-width: 900px){ .mosaic{ height:auto; display:flex; flex-direction:column; gap:16px; align-items:center; padding-bottom:8px } .mcard{ position:static; transform:none; width:min(360px,92vw) } .mcard-stats{ transform:none } }
+    /* Live routing animation — the engine decides */
+    .lr { position: relative; z-index: 2; width: min(1060px, 94vw); margin: clamp(88px, 12vh, 140px) auto 0; height: 330px;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+    .lr-card { position: absolute; background: #fff; border: 1px solid #e2e8f0; border-radius: 18px;
+      box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 12px 32px rgba(15,23,42,.09); padding: 16px 18px; }
+    .lr-tag { font-size: 10px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; color: #94a3b8;
+      display: flex; align-items: center; gap: 7px; margin-bottom: 12px; }
+    .lr-tag i { width: 7px; height: 7px; border-radius: 50%; background: #2563eb; }
+    .lr-input { left: 0; top: 66px; width: 305px; }
+    .lr-type { min-height: 44px; font-size: 13.5px; font-weight: 600; color: #0f172a; line-height: 1.5;
+      background: #f8fafc; border: 1px solid #eef2f7; border-radius: 12px; padding: 10px 12px; }
+    .lr-caret { display: inline-block; width: 2px; height: 14px; background: #2563eb; vertical-align: -2px;
+      animation: lrCaret 1s steps(1) infinite; }
+    .lr-engine { left: 50%; top: 24px; transform: translateX(-50%); width: 220px; text-align: center; transition: box-shadow .3s; }
+    .lr-engine.pulse { box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 16px 44px rgba(37,99,235,.22); }
+    .lr-gauge { width: 74px; height: 74px; border-radius: 50%; margin: 2px auto 10px; display: grid; place-items: center;
+      background: conic-gradient(var(--gc,#e2e8f0) calc(var(--gp,0)*1%), #eef2f7 0); transition: --gp .1s linear; }
+    .lr-gauge > div { width: 56px; height: 56px; border-radius: 50%; background: #fff; display: grid; place-items: center; }
+    .lr-gauge svg { width: 30px; height: 16px; }
+    .lr-steps { display: flex; justify-content: center; gap: 10px; }
+    .lr-steps span { font-family: ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 700; color: #cbd5e1;
+      letter-spacing: .04em; transition: color .25s; }
+    .lr-steps span.on { color: #2563eb; }
+    .lr-dests { right: 0; top: 26px; display: flex; flex-direction: column; gap: 12px; position: absolute; }
+    .lr-chip { display: flex; align-items: center; gap: 10px; background: #fff; border: 1.5px solid #e2e8f0;
+      border-radius: 14px; padding: 11px 16px; width: 235px; opacity: .45;
+      transition: opacity .35s, border-color .35s, box-shadow .35s; box-shadow: 0 1px 2px rgba(15,23,42,.05); }
+    .lr-chip b { font-size: 13px; font-weight: 800; letter-spacing: .06em; }
+    .lr-chip .lr-check { margin-left: auto; width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center;
+      transform: scale(0); transition: transform .3s cubic-bezier(.34,1.56,.64,1); }
+    .lr-chip .lr-mini { display: none; font-size: 8.5px; font-weight: 800; letter-spacing: .1em; color: #94a3b8; margin-left: auto; }
+    .lr-chip.active { opacity: 1; }
+    .lr-chip.active .lr-check { transform: scale(1); }
+    .lr-chip.active .lr-mini { display: inline; margin-left: 8px; }
+    .lr-er b { color: #b91c1c; } .lr-uc b { color: #b45309; } .lr-th b { color: #0f766e; }
+    .lr-er.active { border-color: #fca5a5; box-shadow: 0 6px 24px rgba(220,38,38,.16); }
+    .lr-uc.active { border-color: #fcd34d; box-shadow: 0 6px 24px rgba(217,119,6,.15); }
+    .lr-th.active { border-color: #5eead4; box-shadow: 0 6px 24px rgba(13,148,136,.15); }
+    .lr-er .lr-check { background: #fee2e2; color: #b91c1c; } .lr-uc .lr-check { background: #fef3c7; color: #b45309; }
+    .lr-th .lr-check { background: #ccfbf1; color: #0f766e; }
+    .lr-trails { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+    .lr-trails path { fill: none; stroke-width: 2.4; stroke-linecap: round; stroke: url(#lrGrad); opacity: 0;
+      stroke-dasharray: 340; stroke-dashoffset: 340; }
+    .lr-trails path.glow { stroke-width: 7; filter: blur(4px); opacity: 0; stroke: #93c5fd; }
+    .lr-trails path.fire { opacity: 1; animation: lrDash .8s ease-out forwards; }
+    .lr-trails path.glow.fire { opacity: .35; }
+    .lr-dot { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: #2563eb; opacity: 0;
+      left: 296px; top: 128px; }
+    .lr-dot.go { animation: lrDot .5s ease-in forwards; }
+    .lr-stats { position: absolute; left: 50%; bottom: -14px; transform: translateX(-50%); display: flex; gap: 26px;
+      background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:11px 22px;
+      box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 12px 32px rgba(15,23,42,.08); }
+    .lr-stats b { display:block; font-size:16px; font-weight:800; color:#0f766e; letter-spacing:-.02em; text-align:center; }
+    .lr-stats span { font-size:9px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#94a3b8; }
+    @keyframes lrCaret { 50% { opacity: 0 } }
+    @keyframes lrDash { to { stroke-dashoffset: 0 } }
+    @keyframes lrDot { from { opacity:1; transform: translateX(0) } to { opacity:0; transform: translateX(120px) } }
+    @media (max-width: 900px) {
+      .lr { height: auto; display: flex; flex-direction: column; gap: 14px; align-items: center; padding-bottom: 10px; }
+      .lr-card, .lr-dests, .lr-stats { position: static; transform: none; width: min(330px, 92vw); }
+      .lr-dests { display: flex; } .lr-trails, .lr-dot { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .lr * { animation: none !important; transition: none !important; }
+    }
   </style>
-  <div class="mosaic" aria-hidden="true">
-    <div class="mcard mcard-chat">
-      <div class="mtag"><i></i>Live triage</div>
-      <div class="bub bub-user">twisted my ankle at practice, it's swollen</div>
-      <div class="bub bub-ai">Can you put weight on it, and does it look deformed or wrongly shaped?</div>
-      <div class="bub bub-user">i can walk on it, just sore</div>
-      <div class="bub bub-ai bub-typing"><i></i><i></i><i></i></div>
+  <div class="lr" aria-hidden="true" id="lrScene">
+    <svg class="lr-trails" viewBox="0 0 1060 330" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="lrGrad" x1="530" y1="0" x2="830" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#93c5fd"/><stop offset="100%" stop-color="#2563eb"/>
+        </linearGradient>
+      </defs>
+      <path class="glow" data-t="er" d="M642 96 C710 76 760 62 822 56"/>
+      <path data-t="er" d="M642 96 C710 76 760 62 822 56"/>
+      <path class="glow" data-t="uc" d="M642 110 C710 110 760 112 822 114"/>
+      <path data-t="uc" d="M642 110 C710 110 760 112 822 114"/>
+      <path class="glow" data-t="th" d="M642 124 C710 144 760 160 822 172"/>
+      <path data-t="th" d="M642 124 C710 144 760 160 822 172"/>
+    </svg>
+    <div class="lr-card lr-input">
+      <div class="lr-tag"><i></i>01 · Patient input</div>
+      <div class="lr-type"><span id="lrText"></span><span class="lr-caret"></span></div>
     </div>
-    <div class="mcard mcard-rec">
-      <div class="mtag"><i style="background:#d97706"></i>Recommendation</div>
-      <div class="rec-pill">Urgent Care</div>
-      <div class="rec-row"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7" stroke="#16a34a"/></svg>No red flags — weight-bearing, no deformity</div>
-      <div class="rec-row"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7" stroke="#16a34a"/></svg>2 clinics within 3 mi — open now</div>
-      <div class="rec-cost"><b>$20–75</b><span>WITH INSURANCE · $120–260 WITHOUT</span></div>
+    <div class="lr-dot" id="lrDot"></div>
+    <div class="lr-card lr-engine" id="lrEngine">
+      <div class="lr-tag" style="justify-content:center"><i></i>02 · Carevo engine</div>
+      <div class="lr-gauge" id="lrGauge"><div>
+        <svg viewBox="0 0 40 20" fill="none"><path d="M2 12 L12 12 L16 4 L22 17 L26 12 L38 12" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div></div>
+      <div class="lr-steps"><span id="lrS0">extracting facts</span><span id="lrS1">clinical rules</span><span id="lrS2">scoring</span></div>
     </div>
-    <div class="mcard mcard-stats">
-      <div class="stat"><b>0</b><span>Under-triage ever</span></div>
-      <div class="stat"><b>96.7%</b><span>240-case gate</span></div>
-      <div class="stat"><b>91.1%</b><span>External benchmark</span></div>
+    <div class="lr-dests">
+      <div class="lr-chip lr-er" id="chipEr"><b>ER</b><span class="lr-mini">EMERGENCY NET</span><span class="lr-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+      <div class="lr-chip lr-uc" id="chipUc"><b>URGENT CARE</b><span class="lr-mini">2 CLINICS NEARBY</span><span class="lr-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+      <div class="lr-chip lr-th" id="chipTh"><b>TELEHEALTH</b><span class="lr-mini">SEEN FROM HOME</span><span class="lr-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+    </div>
+    <div class="lr-stats">
+      <div><b>0</b><span>Under-triage ever</span></div>
+      <div><b>96.7%</b><span>240-case gate</span></div>
+      <div><b>91.1%</b><span>External benchmark</span></div>
     </div>
   </div>
+  <script>
+  (function () {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.getElementById('lrText').textContent = 'twisted my ankle, swollen but I can walk';
+      var g = document.getElementById('lrGauge'); g.style.setProperty('--gp', 100); g.style.setProperty('--gc', '#16a34a');
+      document.getElementById('chipUc').classList.add('active');
+      return;
+    }
+    var SC = [
+      { text: 'chest feels tight… my left arm aches', chip: 'chipEr', trail: 'er', charge: ['#dc2626', '#dc2626', '#dc2626'], stepMs: 420, typeMs: 30 },
+      { text: 'twisted my ankle, swollen but I can walk', chip: 'chipUc', trail: 'uc', charge: ['#dc2626', '#d97706', '#16a34a'], stepMs: 700, typeMs: 36 },
+      { text: 'itchy rash on my arm, two days, no fever', chip: 'chipTh', trail: 'th', charge: ['#dc2626', '#d97706', '#16a34a'], stepMs: 700, typeMs: 36 }
+    ];
+    var i = 0, timers = [];
+    function at(ms, fn) { timers.push(setTimeout(fn, ms)); }
+    function loop() {
+      timers.forEach(clearTimeout); timers = [];
+      var s = SC[i]; i = (i + 1) % SC.length;
+      var txt = document.getElementById('lrText'), gauge = document.getElementById('lrGauge'),
+          engine = document.getElementById('lrEngine'), dot = document.getElementById('lrDot');
+      txt.textContent = ''; dot.classList.remove('go'); engine.classList.remove('pulse');
+      gauge.style.setProperty('--gp', 0);
+      ['lrS0','lrS1','lrS2'].forEach(function(id){ document.getElementById(id).classList.remove('on'); });
+      ['chipEr','chipUc','chipTh'].forEach(function(id){ document.getElementById(id).classList.remove('active'); });
+      document.querySelectorAll('.lr-trails path').forEach(function(p){ p.classList.remove('fire'); void p.getBoundingClientRect(); });
+      // 1. typing
+      var chars = s.text.split(''), t = 300;
+      chars.forEach(function (c, n) { at(t + n * s.typeMs, function(){ txt.textContent += c; }); });
+      var typeEnd = t + chars.length * s.typeMs;
+      // 2. handoff dot
+      at(typeEnd + 120, function(){ dot.classList.add('go'); });
+      // 3. gauge charge + steps
+      var chargeStart = typeEnd + 500, seg = s.stepMs;
+      [0,1,2].forEach(function (k) {
+        at(chargeStart + k * seg, function () {
+          document.getElementById('lrS' + k).classList.add('on');
+          gauge.style.setProperty('--gc', s.charge[k]);
+          var from = k * 33.4, to = (k + 1) * 33.4, st = Date.now();
+          (function step(){ var p = Math.min(1, (Date.now() - st) / seg);
+            gauge.style.setProperty('--gp', from + (to - from) * p);
+            if (p < 1) requestAnimationFrame(step); })();
+        });
+      });
+      var chargeEnd = chargeStart + 3 * seg;
+      // 4. engine pulse + trail + chip
+      at(chargeEnd + 100, function(){ engine.classList.add('pulse'); });
+      at(chargeEnd + 250, function(){
+        document.querySelectorAll('.lr-trails path[data-t="' + s.trail + '"]').forEach(function(p){ p.classList.add('fire'); });
+      });
+      at(chargeEnd + 850, function(){ document.getElementById(s.chip).classList.add('active'); });
+      // 5. hold, then next loop
+      at(chargeEnd + 3600, loop);
+    }
+    var seen = new IntersectionObserver(function (e) {
+      if (e[0].isIntersecting) { seen.disconnect(); loop(); }
+    }, { threshold: .25 });
+    seen.observe(document.getElementById('lrScene'));
+  })();
+  </script>
 </div><!-- /hero -->
 
 <!-- ═══════════════════════════════════════════
