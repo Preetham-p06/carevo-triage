@@ -768,3 +768,13 @@
   - Documented Carevo's product, architecture, safety model, local setup, live demo links, and checks.
   - Added the required section describing how OpenAI Codex and GPT-5.6 were used.
   - Avoided references to other assistants and preserved Carevo's safety wording constraints.
+
+## 2026-07-20
+
+- Added breathing room and clearer medical atmosphere to the `public/landing-v2.html` hero.
+  - Strengthened the blue cloud layer with more visible soft cloud puffs at the top of the fold.
+  - Lowered the faded healthcare-building backdrop so it sits under the cloud layer instead of crowding the headline.
+  - Increased the scene-to-marquee gap so the "reads directly from" band no longer presses into the engine illustration.
+  - Moved the AI triage card below the animated engine so the engine remains visible in the lower hero scene.
+  - Cleaned the mobile hero facility labels and confirmed the page stays at 390px width with no horizontal scroll.
+  - Verified `npx tsc --noEmit`, `npm run build`, and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
