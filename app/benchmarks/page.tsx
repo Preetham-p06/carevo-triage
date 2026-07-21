@@ -148,7 +148,10 @@ export default function BenchmarksPage() {
             <strong>Clinician-governed learning.</strong> The system’s only mechanism for becoming less
             cautious is a calibration layer in which every pattern traces to case rows approved by a named
             clinical reviewer — who has rejected proposals, and whose rejections became permanent
-            guardrails. Emergency (911) routing is untouchable by learning, by configuration, and by
+            guardrails. This loop — the Recursive Experience Engine (REE) — mines every reviewed
+            case for calibration patterns, so the engine only ever improves: each cycle must beat the
+            previous gate scores before it ships, and safety floors are never trainable. Emergency (911)
+            routing is untouchable by learning, by configuration, and by
             design. Kill switches can revert any learned behavior instantly.
           </p>
         </div>
