@@ -28,6 +28,7 @@ import { estimateCost } from '@/lib/cost/engine'
 import { countVagueAnswers, shouldSweep, applyThinInfoFloor, applyFeverLanguageFloor } from '@/lib/engine/thinInfo'
 import { applyHomeGuard } from '@/lib/engine/homeGuard'
 import { rawErSafetyFloor, rawUrgentCareSafetyFloor } from '@/lib/engine/rawFloors'
+import { pickRedFlagComboQuestion } from '@/lib/engine/redFlagCombos'
 
 // LLM provider — priority: OpenAI → Cerebras → Groq → NVIDIA Build → GitHub Models.
 // All five expose an OpenAI-compatible API; only the baseURL and key differ.
@@ -747,7 +748,7 @@ export async function POST(req: NextRequest) {
     const adjustments = await loadAdjustments()
 
     // ── The engine decides the interview: ask or decide (EVOI, evoi.ts) ─────
-    const plan = planInterview(features, known, checkedRedFlags, risk, adjustments, questionsAsked)
+    let plan = planInterview(features, known, checkedRedFlags, risk, adjustments, questionsAsked)
 
     // Thin-information state (round-13 fix, 2026-07-16): "thin" = almost
     // nothing established OR the patient hedged through the interview
@@ -865,6 +866,27 @@ export async function POST(req: NextRequest) {
 
     const askedSet = new Set(parsedBody.data.askedTargets ?? [])
 
+    // Red-flag combo framework (2026-07-21): symptom + dangerous modifier
+    // forces the focused safety question before routing, even if the base
+    // body system looked low-risk. Example found live: shoulder pain plus
+    // sweating should ask the cardiac screen before ending at urgent care.
+    // This never delays an ER/911 floor already found by the engine.
+    const comboAsk = pickRedFlagComboQuestion(allUserText, {
+      askedTargets: askedSet,
+      checkedRedFlags,
+    })
+    if (
+      comboAsk &&
+      questionsAsked < 5 &&
+      LEVEL_RANK[plan.topLevel] < LEVEL_RANK.er
+    ) {
+      plan = {
+        ...plan,
+        action: 'ask',
+        asks: [comboAsk, ...plan.asks.filter(a => a.target !== comboAsk.target)].slice(0, 3),
+      }
+    }
+
     // Red-flag-first ordering is protected for genuinely high-alert raw
     // openings. The extractor can treat bare "chest pain" as already-known
     // chest_pressure, which makes EVOI drift to duration; raw high-alert
@@ -891,7 +913,7 @@ export async function POST(req: NextRequest) {
     // bare "fever" was still getting the fainting screen because its top pick
     // IS a red flag).
     const clarifierMayOverride = emergencyClass !== 'high_alert'
-    if (plan.action === 'ask' && plan.asks.length > 0 && clarifierMayOverride) {
+    if (plan.action === 'ask' && plan.asks.length > 0 && clarifierMayOverride && !comboAsk) {
       for (const c of CLARIFY_FIRST) {
         if (askedSet.has(c.target) || known.has(c.target as any) || plan.asks[0].target === c.target) continue
         if (!c.mentioned.test(allUserText) || c.detailPresent.test(allUserText)) continue

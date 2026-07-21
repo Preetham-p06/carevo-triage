@@ -19,6 +19,7 @@ import { estimateCostFromTable } from '../lib/cost/engine'
 import { isVagueAnswer, countVagueAnswers, isThinInformation, shouldSweep, applyThinInfoFloor, applyFeverLanguageFloor } from '../lib/engine/thinInfo'
 import { applyHomeGuard, HOME_GUARDS } from '../lib/engine/homeGuard'
 import { rawErSafetyFloor, rawUrgentCareSafetyFloor } from '../lib/engine/rawFloors'
+import { pickRedFlagComboQuestion, RED_FLAG_COMBOS } from '../lib/engine/redFlagCombos'
 import * as fsSync from 'fs'
 import * as path from 'path'
 
@@ -568,6 +569,54 @@ const NO_RISK = { modifiers: [] as any }
   const bad = p16.filter(([, fn]) => { try { return !fn() } catch { return true } })
   if (bad.length) bad.forEach(([name]) => policyFailures.push(`P16: ${name}`))
   else console.log('  ✓ P16 raw floors vs real-world phrasing (NEJM45): abbreviations reach the nets, negations do not')
+}
+
+// P17: red-flag combo framework — base symptom + dangerous modifier must ask
+// the right focused safety question before final routing. This guards the live
+// shoulder-pain + sweatiness miss and generalizes it across major families.
+{
+  const cases: Array<[string, string, string]> = [
+    ['cardiac referred pain', 'Left shoulder pain started yesterday and kept bothering me. It just hurts. Little bit of sweatiness.', 'redFlag:chest_pressure'],
+    ['neuro headache', 'My headache came on suddenly and my vision feels weird.', 'redFlag:worst_headache_of_life'],
+    ['neuro deficit', 'My face feels droopy and my arm suddenly feels weak.', 'redFlag:one_sided_weakness'],
+    ['breathing distress', 'I have asthma, wheezing, and my rescue inhaler is not helping.', 'redFlag:breathing_difficulty'],
+    ['abdominal bleeding/collapse', 'My belly pain is sudden and I feel dizzy with black stool.', 'redFlag:uncontrolled_bleeding'],
+    ['abdominal dehydration', 'I keep vomiting and cannot keep water down.', 'redFlag:severe_dehydration'],
+    ['pregnancy', 'I am 10 weeks pregnant and having pelvic cramping and spotting.', 'redFlag:pregnancy_bleeding_or_pain'],
+    ['pediatric fever', 'My toddler has a fever and has not had a wet diaper all day.', 'redFlag:severe_dehydration'],
+    ['infection', 'I have a fever with a stiff neck and a bad headache.', 'redFlag:stiff_neck_with_fever'],
+    ['allergic reaction', 'I have hives after peanuts and my lips are swelling.', 'redFlag:allergic_swelling'],
+    ['trauma', 'I fell and hit my head, then passed out for a minute.', 'redFlag:fainting_or_confusion'],
+    ['back pain', 'Low back pain with new leg weakness and trouble peeing.', 'redFlag:one_sided_weakness'],
+    ['eye symptoms', 'My eye hurts and my vision suddenly got blurry.', 'redFlag:sudden_vision_loss'],
+    ['mental health mimic', 'I think it is panic but I am sweaty, dizzy, and my chest feels tight.', 'redFlag:chest_pressure'],
+  ]
+  const bad = cases.filter(([, text, want]) => pickRedFlagComboQuestion(text)?.target !== want)
+  if (bad.length) {
+    bad.forEach(([name, text, want]) => {
+      const got = pickRedFlagComboQuestion(text)?.target ?? 'none'
+      policyFailures.push(`P17: ${name} — expected ${want}, got ${got}`)
+    })
+  } else if (RED_FLAG_COMBOS.length < 12) {
+    policyFailures.push(`P17: expected broad combo coverage, got only ${RED_FLAG_COMBOS.length} combos`)
+  } else {
+    console.log(`  ✓ P17 red-flag combos: ${RED_FLAG_COMBOS.length} symptom+modifier guards ask focused safety questions`)
+  }
+
+  const asked = new Set<string>(['redFlag:chest_pressure'])
+  const checked = new Set<RedFlag>(['breathing_difficulty'])
+  const skipped = pickRedFlagComboQuestion('Left shoulder pain with a little sweatiness', { askedTargets: asked, checkedRedFlags: checked })
+  if (skipped) policyFailures.push(`P17: repeated cardiac combo should skip asked/checked flags, got ${skipped.target}`)
+
+  const benign = [
+    'My left shoulder hurts after lifting weights, no sweating and no trouble breathing.',
+    'I have a mild headache that slowly built up, no vision changes or weakness.',
+    'My eye is itchy with no pain and no vision change.',
+  ]
+  const falsePositive = benign.find(text => pickRedFlagComboQuestion(text))
+  if (falsePositive) {
+    policyFailures.push(`P17: benign/negated combo false-positive: "${falsePositive}" → ${pickRedFlagComboQuestion(falsePositive)?.target}`)
+  }
 }
 
 if (policyFailures.length) {

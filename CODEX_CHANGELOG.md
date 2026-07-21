@@ -795,3 +795,14 @@
   - Pulled the hero CTA closer to the headline so it no longer feels stranded in the fold.
   - Checked the desktop hero at 2048px wide and the mobile hero at 390px wide with no horizontal overflow.
   - Verified `npx tsc --noEmit`, `npm run build`, and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
+
+## 2026-07-21
+
+- Added a red-flag combo framework for major symptom families.
+  - Added `lib/engine/redFlagCombos.ts` to define symptom-plus-dangerous-modifier guards for cardiac, neuro, breathing, abdominal, pregnancy, pediatric fever, infection, allergic reaction, trauma, back pain, eye symptoms, and mental health cases.
+  - Wired `/api/triage` so a dangerous combo forces the focused red-flag follow-up before final routing, including one extra safety-question slot when a concerning modifier appears late in the interview.
+  - Protected combo follow-ups from being displaced by generic clarification questions.
+  - Added the P17 regression gate in `scripts/eval-engine.ts`, including the live shoulder-pain-plus-sweatiness case and benign false-positive checks.
+  - Verified the live local API asks `redFlag:chest_pressure` after shoulder pain plus sweatiness.
+  - Verified `npx tsc --noEmit`, `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
+  - Verified REE readiness and REE smoke-training checks still pass.
