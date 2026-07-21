@@ -332,18 +332,9 @@ body.shine-done .hl {
   text-transform: uppercase;
 }
 .scene-stop { transform-box: fill-box; transform-origin: center; }
-.engine-pulse { animation: enginePulse 3s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
-.engine-ekg { stroke-dasharray: 72; stroke-dashoffset: 72; animation: ekgCrawl 2.5s linear infinite; }
-.phone-scan { animation: phoneScan 3.4s ease-in-out infinite; }
-.facility-pulse { animation: facilityPulse 3.8s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
 .flow-dot {
   offset-path: path('M 170 276 C 322 192 430 188 540 230 C 650 272 740 256 882 192');
   animation: flowTravel 6s ease-in-out infinite;
-}
-.flow-comet {
-  stroke-dasharray: 32 440;
-  stroke-dashoffset: 472;
-  animation: flowLine 6s linear infinite;
 }
 
 /* ════════════════════════════════
@@ -997,13 +988,8 @@ tbody tr.case-row[aria-expanded="true"] td {
 @keyframes blink    { 0%,100%{opacity:1} 50%{opacity:.3} }
 @keyframes fadeUp   { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
 @keyframes islandFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
-@keyframes enginePulse { 0%,100%{transform:scale(1);opacity:.85} 50%{transform:scale(1.03);opacity:1} }
 @keyframes orbitSpin { to{transform:rotate(360deg)} }
-@keyframes ekgCrawl { to{stroke-dashoffset:-84} }
 @keyframes flowTravel { 0%{offset-distance:0%;opacity:0} 8%{opacity:1} 90%{opacity:1} 100%{offset-distance:100%;opacity:0} }
-@keyframes flowLine { to{stroke-dashoffset:0} }
-@keyframes phoneScan { 0%,100%{transform:translateY(0);opacity:.2} 50%{transform:translateY(52px);opacity:.75} }
-@keyframes facilityPulse { 0%,100%{opacity:.32;transform:scale(1)} 50%{opacity:.72;transform:scale(1.04)} }
 
 .hero-content > * { animation: fadeUp .7s ease both; }
 .hero-content > *:nth-child(2) { animation-delay: .08s; }
@@ -1232,11 +1218,6 @@ tbody tr.case-row[aria-expanded="true"] td {
     animation-duration: .01ms !important;
     transition-duration: .01ms !important;
   }
-  .engine-pulse,
-  .engine-ekg,
-  .phone-scan,
-  .facility-pulse,
-  .flow-comet,
   .flow-dot {
     animation: none !important;
   }
@@ -1347,8 +1328,8 @@ tbody tr.case-row[aria-expanded="true"] td {
     <rect x="760" y="278" width="42" height="28" rx="2" fill="none" stroke="#94a3b8" stroke-width="0.5" stroke-opacity="0.09"/>
     <rect x="814" y="278" width="42" height="28" rx="2" fill="none" stroke="#94a3b8" stroke-width="0.5" stroke-opacity="0.09"/>
     <!-- Medical cross -->
-    <rect x="697" y="44" width="46" height="120" rx="5" fill="none" stroke="#0891b2" stroke-width="0.7" stroke-opacity="0.14"/>
-    <rect x="670" y="71" width="100" height="46" rx="5" fill="none" stroke="#0891b2" stroke-width="0.7" stroke-opacity="0.14"/>
+    <rect x="697" y="44" width="46" height="120" rx="5" fill="none" stroke="#64748b" stroke-width="0.7" stroke-opacity="0.06"/>
+    <rect x="670" y="71" width="100" height="46" rx="5" fill="none" stroke="#64748b" stroke-width="0.7" stroke-opacity="0.06"/>
     <!-- Left wing -->
     <rect x="200" y="280" width="260" height="380" fill="url(#bldgFade)" stroke="#94a3b8" stroke-width="0.6" stroke-opacity="0.09"/>
     <rect x="224" y="305" width="38" height="26" rx="2" fill="none" stroke="#94a3b8" stroke-width="0.5" stroke-opacity="0.09"/>
@@ -1389,159 +1370,145 @@ tbody tr.case-row[aria-expanded="true"] td {
 
   <!-- SCENE -->
   <div class="scene-wrap">
-    <!-- Desktop three-island care path -->
+    <!-- Desktop three-island care path: one line-art style -->
     <svg class="scene-svg scene-desktop" viewBox="0 0 1100 520" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
         <radialGradient id="sceneShadow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#334155" stop-opacity=".12"/>
-          <stop offset="72%" stop-color="#334155" stop-opacity=".04"/>
-          <stop offset="100%" stop-color="#334155" stop-opacity="0"/>
+          <stop offset="0%" stop-color="#64748b" stop-opacity=".14"/>
+          <stop offset="72%" stop-color="#64748b" stop-opacity=".045"/>
+          <stop offset="100%" stop-color="#64748b" stop-opacity="0"/>
         </radialGradient>
-        <linearGradient id="phoneBody" x1="0" x2="1" y1="0" y2="1">
-          <stop offset="0%" stop-color="#ffffff"/>
-          <stop offset="100%" stop-color="#eff6ff"/>
-        </linearGradient>
       </defs>
 
       <!-- faint healthcare scenery -->
-      <g opacity=".055" stroke="#64748b" stroke-width="1" fill="none">
+      <g opacity=".045" stroke="#64748b" stroke-width="1" fill="none">
         <path d="M18 340h120v-86h54v86h126M164 226v142M104 272h110M54 314h242"/>
         <path d="M812 312h136v-98h48v98h94M927 190v150M866 244h118"/>
         <path d="M432 342h168v-76h44v76h118M560 244v122M498 292h112"/>
       </g>
 
       <!-- blue care-data connector -->
-      <path d="M 170 276 C 322 192 430 188 540 230 C 650 272 740 256 882 192" fill="none" stroke="#93c5fd" stroke-width="1.9" stroke-linecap="round"/>
-      <path class="flow-comet" d="M 170 276 C 322 192 430 188 540 230 C 650 272 740 256 882 192" fill="none" stroke="#2563eb" stroke-width="3.8" stroke-linecap="round" opacity=".34"/>
-      <circle class="flow-dot" cx="0" cy="0" r="5" fill="#2563eb"/>
+      <path d="M 170 276 C 322 192 430 188 540 230 C 650 272 740 256 882 192" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" opacity=".62"/>
+      <circle class="flow-dot" cx="0" cy="0" r="4.8" fill="#2563eb"/>
 
       <!-- island 01: patient -->
-      <g class="scene-stop scene-stop-1" transform="translate(84,194)">
-        <ellipse cx="138" cy="128" rx="126" ry="48" fill="url(#sceneShadow)"/>
-        <path d="M70 24Q82 18 98 27L304 146Q318 154 306 161L166 242Q154 249 138 240L-68 121Q-82 113 -70 106Z" fill="rgba(248,250,252,.92)" stroke="#dbe3ea" stroke-width="1.1"/>
-        <text x="118" y="238" text-anchor="middle" class="scene-label" fill="#94a3b8" transform="rotate(30 118 238)">PATIENT</text>
-        <text x="112" y="35" text-anchor="middle" class="scene-label" fill="#2563eb">01 · SYMPTOMS</text>
-        <path d="M-4 128 L42 102 L86 127 L40 154 Z" fill="#f1f5f9" stroke="#64748b" stroke-width="1"/>
-        <path d="M42 102 L70 118 L70 148 L40 154 L40 127 Z" fill="#e2e8f0" stroke="#64748b" stroke-width="1"/>
-        <path d="M-4 128 L40 154 L40 127 Z" fill="#f8fafc" stroke="#64748b" stroke-width="1"/>
-        <circle cx="142" cy="62" r="17" fill="#fff" stroke="#7dd3fc" stroke-width="1.4"/>
-        <path d="M124 92Q154 78 188 96L176 140Q150 149 118 134Z" fill="#fff" stroke="#7dd3fc" stroke-width="1.4"/>
-        <path d="M130 105C108 122 96 145 92 166" fill="none" stroke="#7dd3fc" stroke-width="1.8" stroke-linecap="round"/>
-        <path d="M178 106C201 126 213 142 224 164" fill="none" stroke="#7dd3fc" stroke-width="1.8" stroke-linecap="round"/>
-        <path d="M132 134C144 160 168 170 200 165" fill="none" stroke="#7dd3fc" stroke-width="2.2" stroke-linecap="round"/>
-        <path d="M176 140C203 158 233 164 262 156" fill="none" stroke="#7dd3fc" stroke-width="2.2" stroke-linecap="round"/>
-        <circle cx="274" cy="156" r="9" fill="#fee2e2" stroke="#ef4444" stroke-width="1.3"/>
-        <path d="M266 141C276 132 288 133 296 142M266 173C276 181 288 180 296 171" fill="none" stroke="#f87171" stroke-width="1.2" stroke-linecap="round"/>
+      <g class="scene-stop scene-stop-1" transform="translate(84,194)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="138" cy="128" rx="126" ry="48" fill="url(#sceneShadow)" stroke="none"/>
+        <path d="M70 24Q82 18 98 27L304 146Q318 154 306 161L166 242Q154 249 138 240L-68 121Q-82 113 -70 106Z" fill="rgba(248,250,252,.60)"/>
+        <text x="122" y="258" text-anchor="middle" class="scene-label" fill="#64748b" fill-opacity=".72">PATIENT</text>
+        <text x="112" y="35" text-anchor="middle" class="scene-label" fill="#64748b" fill-opacity=".72">01 · SYMPTOMS</text>
+        <ellipse cx="148" cy="150" rx="90" ry="25" fill="url(#sceneShadow)" stroke="none"/>
+        <circle cx="142" cy="68" r="13"/>
+        <path d="M142 81v15"/>
+        <path d="M122 96Q150 84 184 100L174 138Q148 147 118 132Z" fill="rgba(248,250,252,.60)"/>
+        <path d="M128 110C106 128 94 146 90 166"/>
+        <path d="M178 111C202 130 216 145 226 164"/>
+        <path d="M130 132C144 158 170 169 204 164"/>
+        <path d="M174 138C204 160 234 165 262 156"/>
+        <circle cx="274" cy="156" r="6" fill="#dc2626" stroke="none" opacity=".86"/>
+        <path d="M266 141C276 132 288 133 296 142"/>
       </g>
 
       <!-- island 02: Carevo phone -->
-      <g class="scene-stop scene-stop-2" transform="translate(418,122)">
-        <ellipse cx="160" cy="216" rx="146" ry="50" fill="url(#sceneShadow)"/>
-        <path d="M78 94Q92 86 110 96L348 233Q364 242 350 250L188 344Q174 352 156 342L-82 205Q-98 196 -84 188Z" fill="rgba(248,250,252,.94)" stroke="#dbe3ea" stroke-width="1.1"/>
-        <text x="154" y="336" text-anchor="middle" class="scene-label" fill="#0891b2" transform="rotate(-30 154 336)">CAREVO AI</text>
-        <text x="156" y="92" text-anchor="middle" class="scene-label" fill="#0891b2">02 · CAREVO AI</text>
-        <g transform="translate(104,50)">
-          <rect x="0" y="0" width="108" height="184" rx="22" fill="#07111e" opacity=".13"/>
-          <rect x="7" y="-8" width="108" height="184" rx="22" fill="#0f172a"/>
-          <rect x="15" y="8" width="92" height="152" rx="16" fill="url(#phoneBody)"/>
-          <rect x="44" y="2" width="34" height="5" rx="2.5" fill="#334155"/>
-          <circle cx="61" cy="34" r="16" fill="#dff7ff" stroke="#38bdf8" stroke-width="1.2"/>
-          <path d="M45 35h11l5-10 8 22 5-12h9" fill="none" stroke="#0891b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <rect x="28" y="68" width="64" height="10" rx="5" fill="#dbeafe"/>
-          <rect x="28" y="88" width="47" height="10" rx="5" fill="#e0f2fe"/>
-          <rect x="28" y="108" width="58" height="10" rx="5" fill="#dcfce7"/>
-          <rect class="phone-scan" x="20" y="56" width="82" height="4" rx="2" fill="#2563eb" opacity=".55"/>
-          <rect x="33" y="132" width="55" height="18" rx="9" fill="#2563eb"/>
-          <text x="60" y="145" text-anchor="middle" class="scene-label" fill="#fff" font-size="7">ROUTE</text>
+      <g class="scene-stop scene-stop-2" transform="translate(418,122)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="160" cy="216" rx="146" ry="50" fill="url(#sceneShadow)" stroke="none"/>
+        <path d="M78 94Q92 86 110 96L348 233Q364 242 350 250L188 344Q174 352 156 342L-82 205Q-98 196 -84 188Z" fill="rgba(248,250,252,.60)"/>
+        <text x="154" y="358" text-anchor="middle" class="scene-label" fill="#64748b" fill-opacity=".72">CAREVO AI</text>
+        <text x="156" y="92" text-anchor="middle" class="scene-label" fill="#64748b" fill-opacity=".72">02 · CAREVO AI</text>
+        <g transform="translate(122,126)">
+          <ellipse cx="38" cy="82" rx="48" ry="14" fill="url(#sceneShadow)" stroke="none"/>
+          <rect x="12" y="0" width="52" height="88" rx="12" fill="rgba(248,250,252,.60)"/>
+          <rect x="19" y="12" width="38" height="62" rx="7"/>
+          <path d="M30 7h16"/>
+          <path d="M27 30h8l4-8l7 17l4-9h8"/>
+          <path d="M27 48h25M27 58h20M27 68h28"/>
         </g>
       </g>
 
       <!-- island 03: care facilities -->
-      <g class="scene-stop scene-stop-3" transform="translate(746,134)">
-        <ellipse cx="180" cy="188" rx="148" ry="52" fill="url(#sceneShadow)"/>
-        <path d="M104 62Q117 55 134 64L372 202Q388 211 374 219L210 314Q197 322 180 312L-58 174Q-74 165 -60 157Z" fill="rgba(248,250,252,.94)" stroke="#dbe3ea" stroke-width="1.1"/>
-        <text x="174" y="310" text-anchor="middle" class="scene-label" fill="#94a3b8" transform="rotate(-30 174 310)">ER · URGENT CARE · PCP</text>
-        <text x="174" y="58" text-anchor="middle" class="scene-label" fill="#2563eb">03 · RIGHT CARE</text>
-        <g transform="translate(24,82)">
-          <path d="M0 65L88 14L178 66L90 117Z" fill="#fff1f2" stroke="#fca5a5" stroke-width="1.2"/>
-          <path d="M0 65L90 117V168L0 116Z" fill="#fff" stroke="#fca5a5" stroke-width="1.2"/>
-          <path d="M90 117L178 66V118L90 168Z" fill="#fee2e2" stroke="#fca5a5" stroke-width="1.2"/>
-          <rect x="42" y="104" width="52" height="9" fill="#ef4444" transform="skewY(30)"/>
-          <text x="94" y="188" text-anchor="middle" class="scene-label" fill="#dc2626">ER</text>
+      <g class="scene-stop scene-stop-3" transform="translate(746,134)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="180" cy="188" rx="148" ry="52" fill="url(#sceneShadow)" stroke="none"/>
+        <path d="M104 62Q117 55 134 64L372 202Q388 211 374 219L210 314Q197 322 180 312L-58 174Q-74 165 -60 157Z" fill="rgba(248,250,252,.60)"/>
+        <text x="174" y="336" text-anchor="middle" class="scene-label" fill="#64748b" fill-opacity=".72">CARE NETWORK</text>
+        <text x="174" y="58" text-anchor="middle" class="scene-label" fill="#64748b" fill-opacity=".72">03 · RIGHT CARE</text>
+        <g transform="translate(42,116)">
+          <path d="M0 44L54 12L110 44L56 76Z"/>
+          <path d="M0 44L56 76V126L0 94Z"/>
+          <path d="M56 76L110 44V94L56 126Z"/>
+          <path d="M18 75h28"/>
+          <text x="56" y="150" text-anchor="middle" class="scene-label" fill="#dc2626">ER</text>
         </g>
-        <g transform="translate(140,66)">
-          <path d="M0 76L96 20L196 78L100 134Z" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.2"/>
-          <path d="M0 76L100 134V190L0 132Z" fill="#fff" stroke="#fcd34d" stroke-width="1.2"/>
-          <path d="M100 134L196 78V134L100 190Z" fill="#fef3c7" stroke="#fcd34d" stroke-width="1.2"/>
-          <path class="facility-pulse" d="M100 34C76 58 76 82 100 106C124 82 124 58 100 34Z" fill="#dcfce7" stroke="#22c55e" stroke-width="1.3"/>
-          <path d="M88 72L97 81L116 62" fill="none" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-          <text x="100" y="212" text-anchor="middle" class="scene-label" fill="#92400e">URGENT CARE</text>
+        <g transform="translate(134,82)">
+          <path d="M0 54L70 14L142 56L72 96Z"/>
+          <path d="M0 54L72 96V160L0 118Z"/>
+          <path d="M72 96L142 56V120L72 160Z"/>
+          <circle cx="72" cy="38" r="13"/>
+          <path d="M64 38l6 6l12-13"/>
+          <text x="72" y="184" text-anchor="middle" class="scene-label" fill="#d97706">URGENT CARE</text>
         </g>
-        <g transform="translate(238,112)">
-          <path d="M0 46L62 10L124 46L124 106L0 106Z" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
-          <path d="M0 46L62 82L124 46" fill="none" stroke="#93c5fd" stroke-width="1.2"/>
-          <path d="M46 62C54 54 70 54 78 62M38 52C50 40 74 40 86 52" fill="none" stroke="#2563eb" stroke-width="1.3" stroke-linecap="round"/>
-          <text x="62" y="130" text-anchor="middle" class="scene-label" fill="#2563eb">PCP</text>
+        <g transform="translate(256,126)">
+          <path d="M0 42L50 14L100 42L50 72Z"/>
+          <path d="M0 42L50 72V116L0 86Z"/>
+          <path d="M50 72L100 42V86L50 116Z"/>
+          <path d="M36 58h28M50 44v28"/>
+          <text x="50" y="140" text-anchor="middle" class="scene-label" fill="#0f766e">PCP</text>
         </g>
       </g>
     </svg>
 
-    <!-- Mobile patient journey -->
+    <!-- Mobile line-art patient journey -->
     <svg class="scene-svg scene-mobile-grid" viewBox="0 0 390 382" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
-        <linearGradient id="phoneBodyMobile" x1="0" x2="1" y1="0" y2="1">
-          <stop offset="0%" stop-color="#ffffff"/>
-          <stop offset="100%" stop-color="#eff6ff"/>
-        </linearGradient>
+        <radialGradient id="sceneShadowMobile" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#64748b" stop-opacity=".14"/>
+          <stop offset="72%" stop-color="#64748b" stop-opacity=".045"/>
+          <stop offset="100%" stop-color="#64748b" stop-opacity="0"/>
+        </radialGradient>
       </defs>
-      <g transform="translate(28,20) scale(.62)">
-        <path d="M 10,176 L 190,176 L 210,152 L 30,152 Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="5,5"/>
-        <circle cx="76" cy="54" r="18" fill="white" stroke="#93c5fd" stroke-width="1.4"/>
-        <path d="M 58,82 Q 88,70 118,88 L 108,128 Q 82,136 56,122 Z" fill="white" stroke="#93c5fd" stroke-width="1.4"/>
-        <path d="M 65,122 C 75,148 95,158 120,156" fill="none" stroke="#93c5fd" stroke-width="2" stroke-linecap="round"/>
-        <path d="M 110,130 C 132,145 158,151 184,146" fill="none" stroke="#93c5fd" stroke-width="2" stroke-linecap="round"/>
-        <circle cx="196" cy="151" r="9" fill="#fee2e2" stroke="#ef4444" stroke-width="1.2"/>
-        <path d="M 189,136 C 198,128 209,129 216,137" fill="none" stroke="#f87171" stroke-width="1.2" stroke-linecap="round"/>
-        <text x="105" y="210" text-anchor="middle" class="scene-label" fill="#94a3b8">PATIENT</text>
+      <path d="M70 116 C126 74 188 82 220 132 C252 182 284 192 332 152" fill="none" stroke="#2563eb" stroke-width="1.6" stroke-linecap="round" opacity=".62"/>
+      <g transform="translate(18,38)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="82" cy="126" rx="72" ry="24" fill="url(#sceneShadowMobile)" stroke="none"/>
+        <path d="M36 58Q46 52 58 59L168 122Q178 128 168 134L92 178Q82 184 70 176L-40 114Q-50 108 -40 102Z" fill="rgba(248,250,252,.60)"/>
+        <circle cx="66" cy="54" r="11"/>
+        <path d="M66 65v12"/>
+        <path d="M50 78Q70 68 92 80L84 104Q66 112 46 100Z" fill="rgba(248,250,252,.60)"/>
+        <path d="M50 98Q64 120 92 118"/>
+        <path d="M84 104Q112 124 146 116"/>
+        <circle cx="154" cy="116" r="5" fill="#dc2626" stroke="none" opacity=".86"/>
+        <path d="M147 106Q156 99 166 106"/>
+        <text x="70" y="196" text-anchor="middle" class="scene-label" fill="#64748b" fill-opacity=".72">PATIENT</text>
       </g>
-      <path d="M 144 110 C 184 92 218 96 250 126" fill="none" stroke="#93c5fd" stroke-width="1.5" stroke-linecap="round"/>
-      <path d="M 284 176 C 262 214 224 238 182 256" fill="none" stroke="#93c5fd" stroke-width="1.5" stroke-linecap="round"/>
-      <g transform="translate(218,32) scale(.68)">
-        <path d="M 28 48 Q 41 40 58 49 L 192 126 Q 207 135 193 143 L 102 196 Q 88 204 72 194 L -62 117 Q -77 108 -63 100 Z" fill="#f8fafc" stroke="#dbe3ea" stroke-width="1.1"/>
-        <text x="68" y="205" text-anchor="middle" class="scene-label" fill="#0891b2">CAREVO AI</text>
-        <g transform="translate(28,0)">
-          <rect x="4" y="0" width="80" height="136" rx="18" fill="#0f172a"/>
-          <rect x="10" y="12" width="68" height="110" rx="13" fill="url(#phoneBodyMobile)"/>
-          <rect x="32" y="7" width="24" height="4" rx="2" fill="#334155"/>
-          <circle cx="44" cy="35" r="13" fill="#dff7ff" stroke="#38bdf8" stroke-width="1.1"/>
-          <path d="M 32 35 H 40 L 44 26 L 50 46 L 54 36 H 62" fill="none" stroke="#0891b2" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-          <rect x="20" y="62" width="48" height="8" rx="4" fill="#dbeafe"/>
-          <rect x="20" y="78" width="38" height="8" rx="4" fill="#e0f2fe"/>
-          <rect x="20" y="94" width="45" height="8" rx="4" fill="#dcfce7"/>
-          <rect class="phone-scan" x="16" y="54" width="56" height="3" rx="1.5" fill="#2563eb" opacity=".55"/>
-        </g>
+      <g transform="translate(196,52)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="68" cy="142" rx="72" ry="24" fill="url(#sceneShadowMobile)" stroke="none"/>
+        <path d="M28 58Q40 52 54 60L170 126Q182 133 170 140L90 186Q78 193 64 184L-52 118Q-64 111 -52 104Z" fill="rgba(248,250,252,.60)"/>
+        <rect x="48" y="78" width="38" height="64" rx="9" fill="rgba(248,250,252,.60)"/>
+        <rect x="54" y="88" width="26" height="42" rx="5"/>
+        <path d="M60 102h5l3-6l5 12l3-6h6"/>
+        <path d="M60 114h17M60 122h13M60 130h20"/>
+        <text x="70" y="204" text-anchor="middle" class="scene-label" fill="#64748b" fill-opacity=".72">CAREVO AI</text>
       </g>
-      <g transform="translate(58,224) scale(.78)">
-        <g transform="translate(0,52)">
-          <rect x="0" y="42" width="50" height="62" rx="4" fill="#fff1f2" stroke="#fca5a5" stroke-width="1.2"/>
-          <rect x="9" y="64" width="32" height="9" rx="2" fill="#dc2626"/>
-          <text x="25" y="121" text-anchor="middle" class="scene-label" fill="#dc2626">ER</text>
+      <g transform="translate(86,236)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="108" cy="88" rx="112" ry="28" fill="url(#sceneShadowMobile)" stroke="none"/>
+        <path d="M30 24Q42 18 56 26L212 116Q224 123 212 130L120 184Q108 191 94 182L-62 92Q-74 85 -62 78Z" fill="rgba(248,250,252,.60)"/>
+        <g transform="translate(8,54)">
+          <path d="M0 30L38 8L76 30L38 52Z"/>
+          <path d="M0 30L38 52V84L0 62Z"/>
+          <path d="M38 52L76 30V62L38 84Z"/>
+          <text x="38" y="104" text-anchor="middle" class="scene-label" fill="#dc2626">ER</text>
         </g>
-        <g transform="translate(61,62)">
-          <rect x="0" y="38" width="52" height="55" rx="4" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.2"/>
-          <path d="M 27 8 C 12 23 12 39 27 54 C 42 39 42 23 27 8 Z" fill="#dcfce7" stroke="#22c55e" stroke-width="1.2"/>
-          <path d="M 20 32 L 25 37 L 36 25" fill="none" stroke="#16a34a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          <text x="26" y="110" text-anchor="middle" class="scene-label" fill="#92400e">URGENT</text>
+        <g transform="translate(74,38)">
+          <path d="M0 38L50 10L102 40L52 68Z"/>
+          <path d="M0 38L52 68V110L0 80Z"/>
+          <path d="M52 68L102 40V82L52 110Z"/>
+          <circle cx="52" cy="22" r="10"/>
+          <path d="M46 22l5 5l9-11"/>
+          <text x="52" y="130" text-anchor="middle" class="scene-label" fill="#d97706">URGENT</text>
         </g>
-        <g transform="translate(120,58)">
-          <rect x="0" y="49" width="50" height="66" rx="4" fill="#f0fdfa" stroke="#5eead4" stroke-width="1.2"/>
-          <text x="25" y="132" text-anchor="middle" class="scene-label" fill="#0f766e">PRIMARY</text>
-        </g>
-        <g transform="translate(174,42)">
-          <path d="M 7 38 L 36 16 L 65 38 L 65 84 L 7 84 Z" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
-          <path d="M 27 51 C 32 46 40 46 45 51" fill="none" stroke="#2563eb" stroke-width="1.1" stroke-linecap="round"/>
-          <path d="M 22 44 C 30 36 42 36 50 44" fill="none" stroke="#2563eb" stroke-width="1.1" stroke-linecap="round"/>
-          <text x="36" y="101" text-anchor="middle" class="scene-label" fill="#2563eb">TELE</text>
+        <g transform="translate(160,66)">
+          <path d="M0 28L34 8L68 28L34 48Z"/>
+          <path d="M0 28L34 48V78L0 58Z"/>
+          <path d="M34 48L68 28V58L34 78Z"/>
+          <text x="34" y="98" text-anchor="middle" class="scene-label" fill="#0f766e">PCP</text>
         </g>
       </g>
     </svg>
