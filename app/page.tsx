@@ -443,7 +443,10 @@ export function HomePage({
     setVoiceSupported(!!SR)
   }, [])
 
-  useEffect(() => { chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [messages, appState])
+  useEffect(() => {
+    if (isInline) return
+    chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, appState, isInline])
 
   useEffect(() => {
     if (!isInline || appState !== 'result' || !resultOverlayOpen) return
