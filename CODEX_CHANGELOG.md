@@ -787,3 +787,11 @@
   - Kept one label per island so the flow reads clearly without crowding the Vela-style hero.
   - Matched the mobile scene to the same patient-to-phone-to-care story and confirmed it stays at 390px width with no horizontal scroll.
   - Verified `npx tsc --noEmit`, `npm run build`, and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
+
+## 2026-07-21
+
+- Tightened the `Try it` button sizing and hero CTA rhythm in `public/landing-v2.html`.
+  - Reduced the desktop nav and hero CTA pill width/padding so the button fits cleanly.
+  - Pulled the hero CTA closer to the headline so it no longer feels stranded in the fold.
+  - Checked the desktop hero at 2048px wide and the mobile hero at 390px wide with no horizontal overflow.
+  - Verified `npx tsc --noEmit`, `npm run build`, and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
