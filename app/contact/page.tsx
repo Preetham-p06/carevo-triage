@@ -1,6 +1,24 @@
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
 
+const CONTACT_EMAIL = 'usecarevoai@gmail.com'
+const CONTACT_MAILTO = `mailto:${CONTACT_EMAIL}?subject=Hello%20Carevo`
+
 export default function ContactPage() {
+  const [copied, setCopied] = useState(false)
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(CONTACT_EMAIL)
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 2000)
+    } catch {
+      setCopied(false)
+    }
+  }
+
   return (
     <main className="min-h-screen overflow-hidden bg-[radial-gradient(circle_at_50%_-10%,rgba(191,219,254,0.82),transparent_34%),linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)] px-4 pb-16 pt-28 text-slate-950 sm:px-6 sm:pb-20 sm:pt-36">
       <section className="marketing-reveal mx-auto max-w-6xl text-center">
@@ -12,7 +30,7 @@ export default function ContactPage() {
           Tell us where members get stuck - intake, routing, network handoffs, or follow-up - and we&apos;ll map where Carevo can help.
         </p>
         <a
-          href="mailto:usecarevoai@gmail.com?subject=Carevo%20inquiry"
+          href={CONTACT_MAILTO}
           className="mt-8 inline-flex w-full max-w-xs items-center justify-center rounded-xl bg-blue-600 px-8 py-4 text-base font-black text-white shadow-lg shadow-blue-600/25 transition hover:-translate-y-0.5 hover:bg-blue-700 sm:mt-10 sm:w-auto"
         >
           Email us
@@ -33,10 +51,20 @@ export default function ContactPage() {
             <p className="mt-5 text-base font-semibold leading-8 text-slate-600">
               Questions about the product, pilots, pricing, partnerships, or the Carevo roadmap.
             </p>
-            <a href="mailto:usecarevoai@gmail.com" className="mt-10 inline-flex max-w-full items-center break-all font-black text-blue-600 hover:text-blue-700 sm:mt-12">
-              usecarevoai@gmail.com
-              <span className="ml-3" aria-hidden="true">-&gt;</span>
-            </a>
+            <div className="mt-10 flex flex-wrap items-center gap-3 sm:mt-12">
+              <button
+                type="button"
+                onClick={copyEmail}
+                className="inline-flex max-w-full items-center rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-sm font-black text-blue-700 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:bg-blue-100 focus:outline-none focus:ring-4 focus:ring-blue-100"
+                aria-live="polite"
+              >
+                <span className="break-all">{copied ? 'Copied ✓' : CONTACT_EMAIL}</span>
+              </button>
+              <a href={CONTACT_MAILTO} className="inline-flex items-center font-black text-blue-600 hover:text-blue-700">
+                Email us
+                <span className="ml-3" aria-hidden="true">-&gt;</span>
+              </a>
+            </div>
           </article>
 
           <article className="rounded-[1.4rem] border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur sm:p-8">
