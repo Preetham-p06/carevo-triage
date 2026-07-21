@@ -33,9 +33,9 @@ const TABS = [
 
 const MARKETING_PATHS = new Set(['/triage', '/company', '/contact', '/privacy', '/terms', '/benchmarks'])
 
-function CarevoLogoMark() {
+function CarevoLogoMark({ compact = false }: { compact?: boolean }) {
   return (
-    <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-slate-950 shadow-lg shadow-carevo-500/20">
+    <span className={`flex items-center justify-center overflow-hidden bg-slate-950 shadow-lg shadow-carevo-500/20 ${compact ? 'h-7 w-7 rounded-[7px]' : 'h-10 w-10 rounded-xl'}`}>
       <img src="/brand/carevo-logo.png" alt="" className="h-full w-full object-cover" />
     </span>
   )
@@ -49,30 +49,31 @@ export default function Nav() {
   if (MARKETING_PATHS.has(pathname)) {
     return (
       <>
-        <nav className="fixed left-1/2 top-5 z-50 flex w-[min(1180px,calc(100vw-32px))] -translate-x-1/2 items-center gap-3 rounded-[2rem] border border-slate-200 bg-white/88 px-4 py-3 shadow-2xl shadow-slate-900/10 backdrop-blur-xl sm:rounded-full">
-          <Link href="/landing-v2.html" className="flex items-center gap-3 font-display text-xl font-black tracking-tight text-slate-950">
-            <CarevoLogoMark />
+        <nav className="fixed left-1/2 top-[18px] z-50 flex w-[min(1180px,94vw)] -translate-x-1/2 items-center justify-between rounded-full border border-black/[.08] bg-white/[.88] py-[11px] pl-[22px] pr-3 shadow-[0_18px_55px_rgba(15,23,42,.10)] backdrop-blur-[22px] backdrop-saturate-150">
+          <Link href="/landing-v2.html" className="flex shrink-0 items-center gap-[9px] font-display text-[17px] font-bold tracking-tight text-slate-950">
+            <CarevoLogoMark compact />
             carevo
           </Link>
-          <div className="ml-auto hidden items-center gap-2 whitespace-nowrap text-[15px] font-black text-slate-500 md:flex">
-            <Link href="/landing-v2.html#products" className="rounded-full px-4 py-2 transition hover:bg-slate-100 hover:text-slate-950">Products</Link>
-            <Link href="/triage" className={`rounded-full px-4 py-2 transition hover:bg-slate-100 hover:text-slate-950 ${pathname === '/triage' ? 'bg-slate-100 text-slate-950' : ''}`}>Triage</Link>
-            <Link href="/landing-v2.html#how-it-works" className="rounded-full px-4 py-2 transition hover:bg-slate-100 hover:text-slate-950">How it works</Link>
-            <Link href="/benchmarks" className={`rounded-full px-4 py-2 transition hover:bg-slate-100 hover:text-slate-950 ${pathname === '/benchmarks' ? 'bg-slate-100 text-slate-950' : ''}`}>Benchmarks</Link>
-            <Link href="/company" className={`rounded-full px-4 py-2 transition hover:bg-slate-100 hover:text-slate-950 ${pathname === '/company' ? 'bg-slate-100 text-slate-950' : ''}`}>Company</Link>
-            <Link href="/contact" className={`rounded-full px-4 py-2 transition hover:bg-slate-100 hover:text-slate-950 ${pathname === '/contact' ? 'bg-slate-100 text-slate-950' : ''}`}>Contact</Link>
+          <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-2 whitespace-nowrap text-[15px] font-extrabold text-slate-500 md:flex">
+            <Link href="/landing-v2.html#products" className="inline-flex items-center rounded-full px-[15px] py-2 transition hover:bg-slate-950/[.06] hover:text-slate-950">Products</Link>
+            <Link href="/triage" className={`inline-flex items-center rounded-full px-[15px] py-2 transition hover:bg-slate-950/[.06] hover:text-slate-950 ${pathname === '/triage' ? 'bg-slate-950/[.06] text-slate-950' : ''}`}>Triage</Link>
+            <Link href="/landing-v2.html#how-it-works" className="inline-flex items-center rounded-full px-[15px] py-2 transition hover:bg-slate-950/[.06] hover:text-slate-950">How it works</Link>
+            <Link href="/benchmarks" className={`inline-flex items-center rounded-full px-[15px] py-2 transition hover:bg-slate-950/[.06] hover:text-slate-950 ${pathname === '/benchmarks' ? 'bg-slate-950/[.06] text-slate-950' : ''}`}>Benchmarks</Link>
+            <Link href="/company" className={`inline-flex items-center rounded-full px-[15px] py-2 transition hover:bg-slate-950/[.06] hover:text-slate-950 ${pathname === '/company' ? 'bg-slate-950/[.06] text-slate-950' : ''}`}>Company</Link>
+            <Link href="/contact" className={`inline-flex items-center rounded-full px-[15px] py-2 transition hover:bg-slate-950/[.06] hover:text-slate-950 ${pathname === '/contact' ? 'bg-slate-950/[.06] text-slate-950' : ''}`}>Contact</Link>
           </div>
           <button
             type="button"
             onClick={() => setMenuOpen(true)}
-            className="ml-auto inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-3 text-sm font-black text-slate-700 shadow-sm transition hover:bg-slate-50 md:hidden"
+            className="ml-auto inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-[10px] text-[13px] font-extrabold text-slate-700 shadow-sm transition hover:bg-slate-50 md:hidden"
             aria-label="Open navigation menu"
             aria-expanded={menuOpen}
           >
             Menu
           </button>
-          <Link href="/triage" className="hidden items-center justify-center whitespace-nowrap rounded-full bg-blue-600 px-7 py-3 text-sm font-black text-white shadow-lg shadow-blue-600/25 transition hover:-translate-y-0.5 hover:bg-blue-700 md:ml-2 md:inline-flex">
+          <Link href="/triage" className="ml-auto hidden min-w-[122px] shrink-0 items-center justify-center gap-[7px] whitespace-nowrap rounded-full bg-blue-600 px-[22px] py-[10px] text-sm font-extrabold text-white shadow-[0_1px_3px_rgba(37,99,235,.35),0_8px_22px_rgba(37,99,235,.16)] transition hover:-translate-y-px hover:bg-blue-700 hover:shadow-[0_2px_5px_rgba(37,99,235,.38),0_10px_26px_rgba(37,99,235,.20)] md:inline-flex">
             Try it
+            <svg viewBox="0 0 16 16" className="h-[13px] w-[13px] fill-none stroke-white" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </Link>
         </nav>
 
