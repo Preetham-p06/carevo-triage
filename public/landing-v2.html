@@ -1392,149 +1392,54 @@ tbody tr.case-row[aria-expanded="true"] td {
   </div>
 
   <!-- SCENE -->
-  <div class="scene-wrap">
-    <!-- Desktop three-island care path: one line-art style -->
-    <svg class="scene-svg scene-desktop" viewBox="0 0 1100 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <linearGradient id="jl" x1="180" y1="0" x2="960" y2="0" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#cbd5e1"/><stop offset="55%" stop-color="#93c5fd"/><stop offset="100%" stop-color="#2563eb"/>
-        </linearGradient>
-        <marker id="ja" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto" markerUnits="strokeWidth">
-          <path d="M1.5 1.5L6.5 4L1.5 6.5" fill="none" stroke="#2563eb" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-        </marker>
-      </defs>
-
-      <!-- one journey line, behind the objects -->
-      <path d="M232 262 C330 216 420 200 496 214 M604 214 C690 226 730 244 776 250" fill="none" stroke="url(#jl)" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="1 9" opacity=".9" marker-end="url(#ja)"/>
-
-      <!-- transit chips -->
-      <g font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="700" fill="#64748b" text-anchor="middle">
-        <g opacity=".75"><rect x="292" y="166" width="118" height="24" rx="12" fill="#ffffff" fill-opacity=".7" stroke="#cbd5e1"/><text x="351" y="182">symptoms → facts</text></g>
-        <g opacity=".75"><rect x="612" y="252" width="112" height="24" rx="12" fill="#ffffff" fill-opacity=".7" stroke="#cbd5e1"/><text x="668" y="268">rules + scoring</text></g>
-      </g>
-
-      <!-- traveling dot -->
-      <circle r="4" fill="#2563eb">
-        <animateMotion dur="6s" repeatCount="indefinite" path="M232 262 C330 216 420 200 496 214 L604 214 C690 226 730 244 776 250"/>
-      </circle>
-
-      <!-- STOP 1 · patient, seated, hand to ankle -->
-      <g stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity=".9">
-        <ellipse cx="160" cy="300" rx="66" ry="9" fill="#94a3b8" fill-opacity=".12" stroke="none"/>
-        <rect x="108" y="252" width="74" height="12" rx="5"/>
-        <circle cx="138" cy="176" r="13"/>
-        <path d="M138 189 L138 200"/>
-        <path d="M138 200 C124 204 118 226 124 246 L152 252"/>
-        <path d="M152 252 C176 258 198 268 218 278"/>
-        <path d="M138 208 C158 224 190 252 216 274"/>
-        <path d="M128 252 L118 292 L136 292"/>
-        <circle cx="224" cy="282" r="5.5" fill="#dc2626" stroke="none"/>
-        <path d="M212 268 C218 262 230 262 236 268" stroke="#dc2626" stroke-width="1.6"/>
-      </g>
-      <text x="160" y="336" text-anchor="middle" font-family="'Plus Jakarta Sans',system-ui,sans-serif" font-size="12" font-weight="800" letter-spacing="2.5" fill="#94a3b8">01 · PATIENT</text>
-
-      <!-- STOP 2 · phone -->
-      <g stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity=".9">
-        <ellipse cx="550" cy="300" rx="52" ry="8" fill="#94a3b8" fill-opacity=".12" stroke="none"/>
-        <rect x="516" y="158" width="68" height="132" rx="15" fill="#ffffff" fill-opacity=".65"/>
-        <rect x="526" y="172" width="48" height="104" rx="8"/>
-        <path d="M532 200 L541 200 L546 190 L552 210 L557 200 L568 200" stroke="#2563eb" stroke-width="1.8"/>
-        <path d="M532 226 L568 226 M532 240 L560 240 M532 254 L566 254" stroke-width="1.6" opacity=".7"/>
-      </g>
-      <text x="550" y="336" text-anchor="middle" font-family="'Plus Jakarta Sans',system-ui,sans-serif" font-size="12" font-weight="800" letter-spacing="2.5" fill="#94a3b8">02 · CAREVO AI</text>
-
-      <!-- STOP 3 · care network, front elevation -->
-      <g stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity=".9">
-        <ellipse cx="905" cy="300" rx="128" ry="10" fill="#94a3b8" fill-opacity=".12" stroke="none"/>
-        <rect x="792" y="232" width="70" height="60" rx="8" fill="#ffffff" fill-opacity=".55"/>
-        <path d="M818 262 L836 262"/>
-        <rect x="872" y="204" width="86" height="88" rx="8" fill="#ffffff" fill-opacity=".55"/>
-        <circle cx="915" cy="186" r="12"/>
-        <path d="M909 186 L913 190 L921 181"/>
-        <rect x="968" y="240" width="62" height="52" rx="8" fill="#ffffff" fill-opacity=".55"/>
-        <path d="M999 258 L999 274 M991 266 L1007 266"/>
-      </g>
-      <g font-family="'Plus Jakarta Sans',system-ui,sans-serif" font-size="10" font-weight="800" letter-spacing="2" text-anchor="middle">
-        <text x="827" y="312" fill="#dc2626">ER</text>
-        <text x="915" y="312" fill="#d97706">URGENT CARE</text>
-        <text x="999" y="312" fill="#0d9488">PCP</text>
-      </g>
-      <text x="905" y="336" text-anchor="middle" font-family="'Plus Jakarta Sans',system-ui,sans-serif" font-size="12" font-weight="800" letter-spacing="2.5" fill="#94a3b8">03 · RIGHT CARE</text>
-    </svg>
-
-    <!-- Mobile line-art patient journey -->
-    <svg class="scene-svg scene-mobile-grid" viewBox="0 0 390 382" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <radialGradient id="sceneShadowMobile" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#64748b" stop-opacity=".14"/>
-          <stop offset="72%" stop-color="#64748b" stop-opacity=".045"/>
-          <stop offset="100%" stop-color="#64748b" stop-opacity="0"/>
-        </radialGradient>
-        <linearGradient id="journeyStrokeMobile" x1="48" y1="0" x2="350" y2="0" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#cbd5e1"/>
-          <stop offset="62%" stop-color="#93c5fd"/>
-          <stop offset="100%" stop-color="#2563eb"/>
-        </linearGradient>
-        <marker id="sceneArrowMobile" markerWidth="7" markerHeight="7" refX="5.8" refY="3.5" orient="auto" markerUnits="strokeWidth">
-          <path d="M1 1L6 3.5L1 6" fill="none" stroke="#2563eb" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-        </marker>
-      </defs>
-      <path class="flow-line" d="M70 120 C126 76 184 84 220 132 C256 180 290 192 336 148" fill="none" stroke="url(#journeyStrokeMobile)" stroke-width="1.9" stroke-linecap="round" opacity=".82"/>
-      <path d="M142 80 C176 86 202 106 220 132" fill="none" stroke="url(#journeyStrokeMobile)" stroke-width="1.9" stroke-linecap="round" marker-end="url(#sceneArrowMobile)" opacity=".82"/>
-      <path d="M260 180 C286 190 314 170 336 148" fill="none" stroke="url(#journeyStrokeMobile)" stroke-width="1.9" stroke-linecap="round" marker-end="url(#sceneArrowMobile)" opacity=".82"/>
-      <circle class="flow-dot-mobile" cx="0" cy="0" r="3.8" fill="#2563eb"/>
-      <g class="path-chip path-chip-1" transform="translate(106,68)">
-        <rect x="0" y="0" width="92" height="22" rx="11" fill="none" stroke="#94a3b8" stroke-opacity=".65"/>
-        <text x="46" y="15" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="9" font-weight="700" fill="#64748b">symptoms → facts</text>
-      </g>
-      <g class="path-chip path-chip-2" transform="translate(230,178)">
-        <rect x="0" y="0" width="88" height="22" rx="11" fill="none" stroke="#94a3b8" stroke-opacity=".65"/>
-        <text x="44" y="15" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="9" font-weight="700" fill="#64748b">rules + score</text>
-      </g>
-      <g transform="translate(20,38)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-        <ellipse cx="82" cy="126" rx="72" ry="24" fill="url(#sceneShadowMobile)" stroke="none"/>
-        <circle cx="66" cy="54" r="11"/>
-        <path d="M66 65v12"/>
-        <path d="M50 78Q70 68 92 80L84 104Q66 112 46 100Z" fill="rgba(248,250,252,.60)"/>
-        <path d="M50 98Q64 120 92 118"/>
-        <path d="M84 104Q112 124 146 116"/>
-        <circle cx="154" cy="116" r="5" fill="#dc2626" stroke="none" opacity=".86"/>
-        <path d="M147 106Q156 99 166 106"/>
-        <text x="82" y="162" text-anchor="middle" class="scene-label" fill="#94a3b8">01 · PATIENT</text>
-      </g>
-      <g transform="translate(204,66)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-        <ellipse cx="68" cy="142" rx="66" ry="22" fill="url(#sceneShadowMobile)" stroke="none"/>
-        <rect x="48" y="78" width="38" height="64" rx="9" fill="rgba(248,250,252,.60)"/>
-        <rect x="54" y="88" width="26" height="42" rx="5"/>
-        <path d="M60 102h5l3-6l5 12l3-6h6"/>
-        <path d="M60 114h17M60 122h13M60 130h20"/>
-        <text x="68" y="162" text-anchor="middle" class="scene-label" fill="#94a3b8">02 · CAREVO AI</text>
-      </g>
-      <g transform="translate(104,196) scale(.88)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-        <ellipse cx="108" cy="88" rx="112" ry="28" fill="url(#sceneShadowMobile)" stroke="none"/>
-        <g transform="translate(8,54)">
-          <path d="M0 30L38 8L76 30L38 52Z"/>
-          <path d="M0 30L38 52V84L0 62Z"/>
-          <path d="M38 52L76 30V62L38 84Z"/>
-          <text x="38" y="104" text-anchor="middle" class="scene-label" fill="#dc2626">ER</text>
-        </g>
-        <g transform="translate(74,38)">
-          <path d="M0 38L50 10L102 40L52 68Z"/>
-          <path d="M0 38L52 68V110L0 80Z"/>
-          <path d="M52 68L102 40V82L52 110Z"/>
-          <circle cx="52" cy="22" r="10"/>
-          <path d="M46 22l5 5l9-11"/>
-          <text x="52" y="130" text-anchor="middle" class="scene-label" fill="#d97706">URGENT</text>
-        </g>
-        <g transform="translate(160,66)">
-          <path d="M0 28L34 8L68 28L34 48Z"/>
-          <path d="M0 28L34 48V78L0 58Z"/>
-          <path d="M34 48L68 28V58L34 78Z"/>
-          <text x="34" y="98" text-anchor="middle" class="scene-label" fill="#0f766e">PCP</text>
-        </g>
-        <text x="108" y="180" text-anchor="middle" class="scene-label" fill="#94a3b8">03 · RIGHT CARE</text>
-      </g>
-    </svg>
+  <style>
+    /* Product mosaic hero — real UI cards instead of illustration */
+    .mosaic { position: relative; z-index: 2; width: min(1080px, 94vw); margin: clamp(96px, 13vh, 150px) auto 0; height: 360px; }
+    .mcard { position: absolute; background: #fff; border: 1px solid #e2e8f0; border-radius: 20px;
+      box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 12px 32px rgba(15,23,42,.10), 0 32px 64px rgba(15,23,42,.06);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif; animation: mfade .8s ease both; }
+    .mcard-chat { left: 6%; top: 12px; width: 340px; padding: 18px; transform: rotate(-1.6deg); animation-delay: .1s; }
+    .mcard-rec  { right: 6%; top: 0; width: 360px; padding: 20px; transform: rotate(1.4deg); z-index: 3; animation-delay: .25s; }
+    .mcard-stats{ left: 50%; bottom: -6px; transform: translateX(-50%); padding: 12px 22px; display: flex; gap: 26px; z-index: 4; animation-delay: .4s; }
+    .mtag { font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #94a3b8; margin-bottom: 12px; display:flex; align-items:center; gap:7px; }
+    .mtag i { width: 7px; height: 7px; border-radius: 50%; background: #2563eb; display:inline-block; }
+    .bub { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: 13.5px; font-weight: 600; line-height: 1.45; margin-bottom: 9px; }
+    .bub-user { margin-left: auto; background: #0f172a; color: #f1f5f9; border-bottom-right-radius: 4px; }
+    .bub-ai { background: #f0f9ff; color: #0c4a6e; border: 1px solid #e0f2fe; border-bottom-left-radius: 4px; }
+    .bub-typing { display: inline-flex; gap: 4px; padding: 12px 16px; }
+    .bub-typing i { width: 6px; height: 6px; border-radius: 50%; background: #7dd3fc; animation: mdot 1.2s infinite; }
+    .bub-typing i:nth-child(2){ animation-delay: .18s } .bub-typing i:nth-child(3){ animation-delay: .36s }
+    .rec-pill { display:inline-flex; align-items:center; gap:8px; background:#fffbeb; border:1px solid #fde68a; color:#b45309; font-weight:800; font-size:15px; padding:8px 16px; border-radius:100px; margin-bottom:14px; }
+    .rec-row { display:flex; align-items:flex-start; gap:9px; font-size:13px; font-weight:600; color:#475569; margin-top:9px; line-height:1.45; }
+    .rec-row svg { width:15px; height:15px; stroke:#16a34a; flex:none; margin-top:1px; }
+    .rec-cost { margin-top:14px; padding-top:13px; border-top:1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:baseline; }
+    .rec-cost b { font-size:19px; color:#0f172a; letter-spacing:-.02em; } .rec-cost span { font-size:11.5px; font-weight:700; color:#94a3b8; }
+    .stat { text-align:center; } .stat b { display:block; font-size:17px; font-weight:800; color:#0f766e; letter-spacing:-.02em; } .stat span { font-size:9.5px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#94a3b8; }
+    @keyframes mfade { from { opacity:0; translate:0 14px } to { opacity:1; translate:0 0 } }
+    @keyframes mdot { 0%,60%,100% { transform:none; opacity:.55 } 30% { transform:translateY(-3px); opacity:1 } }
+    @media (prefers-reduced-motion: reduce){ .mcard{ animation:none } .bub-typing i{ animation:none } }
+    @media (max-width: 900px){ .mosaic{ height:auto; display:flex; flex-direction:column; gap:16px; align-items:center; padding-bottom:8px } .mcard{ position:static; transform:none; width:min(360px,92vw) } .mcard-stats{ transform:none } }
+  </style>
+  <div class="mosaic" aria-hidden="true">
+    <div class="mcard mcard-chat">
+      <div class="mtag"><i></i>Live triage</div>
+      <div class="bub bub-user">twisted my ankle at practice, it's swollen</div>
+      <div class="bub bub-ai">Can you put weight on it, and does it look deformed or wrongly shaped?</div>
+      <div class="bub bub-user">i can walk on it, just sore</div>
+      <div class="bub bub-ai bub-typing"><i></i><i></i><i></i></div>
+    </div>
+    <div class="mcard mcard-rec">
+      <div class="mtag"><i style="background:#d97706"></i>Recommendation</div>
+      <div class="rec-pill">Urgent Care</div>
+      <div class="rec-row"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7" stroke="#16a34a"/></svg>No red flags — weight-bearing, no deformity</div>
+      <div class="rec-row"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7" stroke="#16a34a"/></svg>2 clinics within 3 mi — open now</div>
+      <div class="rec-cost"><b>$20–75</b><span>WITH INSURANCE · $120–260 WITHOUT</span></div>
+    </div>
+    <div class="mcard mcard-stats">
+      <div class="stat"><b>0</b><span>Under-triage ever</span></div>
+      <div class="stat"><b>96.7%</b><span>240-case gate</span></div>
+      <div class="stat"><b>91.1%</b><span>External benchmark</span></div>
+    </div>
   </div>
 </div><!-- /hero -->
 
