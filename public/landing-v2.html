@@ -311,7 +311,7 @@ body.shine-done .hl {
 .scene-wrap {
   position: relative; z-index: 2;
   width: min(1120px, 100vw);
-  height: 448px;
+  height: 382px;
   margin-top: 24px;
   margin-bottom: 116px;
   flex: 1;
@@ -319,7 +319,7 @@ body.shine-done .hl {
 }
 .scene-svg {
   width: 100%;
-  height: 448px;
+  height: 382px;
   display: block;
   overflow: visible;
 }
@@ -332,10 +332,23 @@ body.shine-done .hl {
   text-transform: uppercase;
 }
 .scene-stop { transform-box: fill-box; transform-origin: center; }
+.flow-line {
+  stroke-dasharray: 14 18;
+  animation: flowLine 6s linear infinite;
+}
 .flow-dot {
-  offset-path: path('M 170 276 C 322 192 430 188 540 230 C 650 272 740 256 882 192');
+  offset-path: path('M 188 260 C 312 176 430 170 548 222 C 660 272 760 238 900 154');
   animation: flowTravel 6s ease-in-out infinite;
 }
+.flow-dot-mobile {
+  offset-path: path('M 70 120 C 126 76 184 84 220 132 C 256 180 290 192 336 148');
+  animation: flowTravel 6s ease-in-out infinite;
+}
+.path-chip {
+  opacity: 0;
+  animation: chipPulse 6s ease-in-out infinite;
+}
+.path-chip-2 { animation-delay: 2.35s; }
 
 /* ════════════════════════════════
    MARQUEE — "Reads directly from"
@@ -989,7 +1002,9 @@ tbody tr.case-row[aria-expanded="true"] td {
 @keyframes fadeUp   { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
 @keyframes islandFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
 @keyframes orbitSpin { to{transform:rotate(360deg)} }
+@keyframes flowLine { to{stroke-dashoffset:-128} }
 @keyframes flowTravel { 0%{offset-distance:0%;opacity:0} 8%{opacity:1} 90%{opacity:1} 100%{offset-distance:100%;opacity:0} }
+@keyframes chipPulse { 0%,18%,100%{opacity:0} 28%,48%{opacity:.78} 58%{opacity:0} }
 
 .hero-content > * { animation: fadeUp .7s ease both; }
 .hero-content > *:nth-child(2) { animation-delay: .08s; }
@@ -1218,10 +1233,15 @@ tbody tr.case-row[aria-expanded="true"] td {
     animation-duration: .01ms !important;
     transition-duration: .01ms !important;
   }
-  .flow-dot {
+  .flow-line,
+  .flow-dot,
+  .flow-dot-mobile,
+  .path-chip {
     animation: none !important;
   }
+  .path-chip { opacity: .72; }
   .flow-dot { opacity: .75; offset-distance: 55%; }
+  .flow-dot-mobile { opacity: .75; offset-distance: 55%; }
   html { scroll-behavior: auto; }
 }
 </style>
@@ -1378,6 +1398,14 @@ tbody tr.case-row[aria-expanded="true"] td {
           <stop offset="72%" stop-color="#64748b" stop-opacity=".045"/>
           <stop offset="100%" stop-color="#64748b" stop-opacity="0"/>
         </radialGradient>
+        <linearGradient id="journeyStroke" x1="120" y1="0" x2="940" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#cbd5e1"/>
+          <stop offset="62%" stop-color="#93c5fd"/>
+          <stop offset="100%" stop-color="#2563eb"/>
+        </linearGradient>
+        <marker id="sceneArrow" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto" markerUnits="strokeWidth">
+          <path d="M1 1L7 4L1 7" fill="none" stroke="#2563eb" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
       </defs>
 
       <!-- faint healthcare scenery -->
@@ -1388,15 +1416,23 @@ tbody tr.case-row[aria-expanded="true"] td {
       </g>
 
       <!-- blue care-data connector -->
-      <path d="M 170 276 C 322 192 430 188 540 230 C 650 272 740 256 882 192" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" opacity=".62"/>
+      <path class="flow-line" d="M 188 260 C 312 176 430 170 548 222 C 660 272 760 238 900 154" fill="none" stroke="url(#journeyStroke)" stroke-width="2.5" stroke-linecap="round" opacity=".82"/>
+      <path d="M 360 178 C 428 170 493 188 548 222" fill="none" stroke="url(#journeyStroke)" stroke-width="2.5" stroke-linecap="round" marker-end="url(#sceneArrow)" opacity=".82"/>
+      <path d="M 704 260 C 762 234 822 196 900 154" fill="none" stroke="url(#journeyStroke)" stroke-width="2.5" stroke-linecap="round" marker-end="url(#sceneArrow)" opacity=".82"/>
       <circle class="flow-dot" cx="0" cy="0" r="4.8" fill="#2563eb"/>
+      <g class="path-chip path-chip-1" transform="translate(286,158)">
+        <rect x="0" y="0" width="108" height="24" rx="12" fill="none" stroke="#94a3b8" stroke-opacity=".65"/>
+        <text x="54" y="16" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="700" fill="#64748b">symptoms → facts</text>
+      </g>
+      <g class="path-chip path-chip-2" transform="translate(650,230)">
+        <rect x="0" y="0" width="100" height="24" rx="12" fill="none" stroke="#94a3b8" stroke-opacity=".65"/>
+        <text x="50" y="16" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="700" fill="#64748b">rules + scoring</text>
+      </g>
 
       <!-- island 01: patient -->
-      <g class="scene-stop scene-stop-1" transform="translate(84,194)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <g class="scene-stop scene-stop-1" transform="translate(110,170) scale(1.12)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <ellipse cx="138" cy="128" rx="126" ry="48" fill="url(#sceneShadow)" stroke="none"/>
-        <path d="M70 24Q82 18 98 27L304 146Q318 154 306 161L166 242Q154 249 138 240L-68 121Q-82 113 -70 106Z" fill="rgba(248,250,252,.60)"/>
-        <text x="122" y="258" text-anchor="middle" class="scene-label" fill="#64748b" fill-opacity=".72">PATIENT</text>
-        <text x="112" y="35" text-anchor="middle" class="scene-label" fill="#64748b" fill-opacity=".72">01 · SYMPTOMS</text>
+        <text x="138" y="190" text-anchor="middle" class="scene-label" fill="#94a3b8">01 · PATIENT</text>
         <ellipse cx="148" cy="150" rx="90" ry="25" fill="url(#sceneShadow)" stroke="none"/>
         <circle cx="142" cy="68" r="13"/>
         <path d="M142 81v15"/>
@@ -1410,12 +1446,10 @@ tbody tr.case-row[aria-expanded="true"] td {
       </g>
 
       <!-- island 02: Carevo phone -->
-      <g class="scene-stop scene-stop-2" transform="translate(418,122)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-        <ellipse cx="160" cy="216" rx="146" ry="50" fill="url(#sceneShadow)" stroke="none"/>
-        <path d="M78 94Q92 86 110 96L348 233Q364 242 350 250L188 344Q174 352 156 342L-82 205Q-98 196 -84 188Z" fill="rgba(248,250,252,.60)"/>
-        <text x="154" y="358" text-anchor="middle" class="scene-label" fill="#64748b" fill-opacity=".72">CAREVO AI</text>
-        <text x="156" y="92" text-anchor="middle" class="scene-label" fill="#64748b" fill-opacity=".72">02 · CAREVO AI</text>
-        <g transform="translate(122,126)">
+      <g class="scene-stop scene-stop-2" transform="translate(486,150) scale(1.18)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="38" cy="82" rx="62" ry="18" fill="url(#sceneShadow)" stroke="none"/>
+        <text x="38" y="118" text-anchor="middle" class="scene-label" fill="#94a3b8">02 · CAREVO AI</text>
+        <g>
           <ellipse cx="38" cy="82" rx="48" ry="14" fill="url(#sceneShadow)" stroke="none"/>
           <rect x="12" y="0" width="52" height="88" rx="12" fill="rgba(248,250,252,.60)"/>
           <rect x="19" y="12" width="38" height="62" rx="7"/>
@@ -1426,11 +1460,9 @@ tbody tr.case-row[aria-expanded="true"] td {
       </g>
 
       <!-- island 03: care facilities -->
-      <g class="scene-stop scene-stop-3" transform="translate(746,134)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <g class="scene-stop scene-stop-3" transform="translate(780,105) scale(1.08)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <ellipse cx="180" cy="188" rx="148" ry="52" fill="url(#sceneShadow)" stroke="none"/>
-        <path d="M104 62Q117 55 134 64L372 202Q388 211 374 219L210 314Q197 322 180 312L-58 174Q-74 165 -60 157Z" fill="rgba(248,250,252,.60)"/>
-        <text x="174" y="336" text-anchor="middle" class="scene-label" fill="#64748b" fill-opacity=".72">CARE NETWORK</text>
-        <text x="174" y="58" text-anchor="middle" class="scene-label" fill="#64748b" fill-opacity=".72">03 · RIGHT CARE</text>
+        <text x="180" y="268" text-anchor="middle" class="scene-label" fill="#94a3b8">03 · RIGHT CARE</text>
         <g transform="translate(42,116)">
           <path d="M0 44L54 12L110 44L56 76Z"/>
           <path d="M0 44L56 76V126L0 94Z"/>
@@ -1464,11 +1496,29 @@ tbody tr.case-row[aria-expanded="true"] td {
           <stop offset="72%" stop-color="#64748b" stop-opacity=".045"/>
           <stop offset="100%" stop-color="#64748b" stop-opacity="0"/>
         </radialGradient>
+        <linearGradient id="journeyStrokeMobile" x1="48" y1="0" x2="350" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#cbd5e1"/>
+          <stop offset="62%" stop-color="#93c5fd"/>
+          <stop offset="100%" stop-color="#2563eb"/>
+        </linearGradient>
+        <marker id="sceneArrowMobile" markerWidth="7" markerHeight="7" refX="5.8" refY="3.5" orient="auto" markerUnits="strokeWidth">
+          <path d="M1 1L6 3.5L1 6" fill="none" stroke="#2563eb" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
       </defs>
-      <path d="M70 116 C126 74 188 82 220 132 C252 182 284 192 332 152" fill="none" stroke="#2563eb" stroke-width="1.6" stroke-linecap="round" opacity=".62"/>
-      <g transform="translate(18,38)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path class="flow-line" d="M70 120 C126 76 184 84 220 132 C256 180 290 192 336 148" fill="none" stroke="url(#journeyStrokeMobile)" stroke-width="1.9" stroke-linecap="round" opacity=".82"/>
+      <path d="M142 80 C176 86 202 106 220 132" fill="none" stroke="url(#journeyStrokeMobile)" stroke-width="1.9" stroke-linecap="round" marker-end="url(#sceneArrowMobile)" opacity=".82"/>
+      <path d="M260 180 C286 190 314 170 336 148" fill="none" stroke="url(#journeyStrokeMobile)" stroke-width="1.9" stroke-linecap="round" marker-end="url(#sceneArrowMobile)" opacity=".82"/>
+      <circle class="flow-dot-mobile" cx="0" cy="0" r="3.8" fill="#2563eb"/>
+      <g class="path-chip path-chip-1" transform="translate(106,68)">
+        <rect x="0" y="0" width="92" height="22" rx="11" fill="none" stroke="#94a3b8" stroke-opacity=".65"/>
+        <text x="46" y="15" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="9" font-weight="700" fill="#64748b">symptoms → facts</text>
+      </g>
+      <g class="path-chip path-chip-2" transform="translate(230,178)">
+        <rect x="0" y="0" width="88" height="22" rx="11" fill="none" stroke="#94a3b8" stroke-opacity=".65"/>
+        <text x="44" y="15" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="9" font-weight="700" fill="#64748b">rules + score</text>
+      </g>
+      <g transform="translate(20,38)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <ellipse cx="82" cy="126" rx="72" ry="24" fill="url(#sceneShadowMobile)" stroke="none"/>
-        <path d="M36 58Q46 52 58 59L168 122Q178 128 168 134L92 178Q82 184 70 176L-40 114Q-50 108 -40 102Z" fill="rgba(248,250,252,.60)"/>
         <circle cx="66" cy="54" r="11"/>
         <path d="M66 65v12"/>
         <path d="M50 78Q70 68 92 80L84 104Q66 112 46 100Z" fill="rgba(248,250,252,.60)"/>
@@ -1476,20 +1526,18 @@ tbody tr.case-row[aria-expanded="true"] td {
         <path d="M84 104Q112 124 146 116"/>
         <circle cx="154" cy="116" r="5" fill="#dc2626" stroke="none" opacity=".86"/>
         <path d="M147 106Q156 99 166 106"/>
-        <text x="70" y="196" text-anchor="middle" class="scene-label" fill="#64748b" fill-opacity=".72">PATIENT</text>
+        <text x="82" y="162" text-anchor="middle" class="scene-label" fill="#94a3b8">01 · PATIENT</text>
       </g>
-      <g transform="translate(196,52)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-        <ellipse cx="68" cy="142" rx="72" ry="24" fill="url(#sceneShadowMobile)" stroke="none"/>
-        <path d="M28 58Q40 52 54 60L170 126Q182 133 170 140L90 186Q78 193 64 184L-52 118Q-64 111 -52 104Z" fill="rgba(248,250,252,.60)"/>
+      <g transform="translate(204,66)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="68" cy="142" rx="66" ry="22" fill="url(#sceneShadowMobile)" stroke="none"/>
         <rect x="48" y="78" width="38" height="64" rx="9" fill="rgba(248,250,252,.60)"/>
         <rect x="54" y="88" width="26" height="42" rx="5"/>
         <path d="M60 102h5l3-6l5 12l3-6h6"/>
         <path d="M60 114h17M60 122h13M60 130h20"/>
-        <text x="70" y="204" text-anchor="middle" class="scene-label" fill="#64748b" fill-opacity=".72">CAREVO AI</text>
+        <text x="68" y="176" text-anchor="middle" class="scene-label" fill="#94a3b8">02 · CAREVO AI</text>
       </g>
-      <g transform="translate(86,236)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <g transform="translate(92,224)" stroke="#64748b" stroke-opacity=".85" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <ellipse cx="108" cy="88" rx="112" ry="28" fill="url(#sceneShadowMobile)" stroke="none"/>
-        <path d="M30 24Q42 18 56 26L212 116Q224 123 212 130L120 184Q108 191 94 182L-62 92Q-74 85 -62 78Z" fill="rgba(248,250,252,.60)"/>
         <g transform="translate(8,54)">
           <path d="M0 30L38 8L76 30L38 52Z"/>
           <path d="M0 30L38 52V84L0 62Z"/>
@@ -1510,6 +1558,7 @@ tbody tr.case-row[aria-expanded="true"] td {
           <path d="M34 48L68 28V58L34 78Z"/>
           <text x="34" y="98" text-anchor="middle" class="scene-label" fill="#0f766e">PCP</text>
         </g>
+        <text x="108" y="180" text-anchor="middle" class="scene-label" fill="#94a3b8">03 · RIGHT CARE</text>
       </g>
     </svg>
   </div>
