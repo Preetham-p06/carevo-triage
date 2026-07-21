@@ -49,7 +49,7 @@ export default function CompanyPage() {
           <Link href="/contact" className="inline-flex items-center justify-center rounded-full bg-blue-600 px-8 py-4 text-sm font-black text-white shadow-lg shadow-blue-600/25 transition hover:-translate-y-0.5 hover:bg-blue-700">
             Book a call
           </Link>
-          <Link href="/landing-v2.html#products" className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white/70 px-8 py-4 text-sm font-black text-slate-700 transition hover:border-slate-300 hover:bg-white hover:text-slate-950">
+          <Link href="/#products" className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white/70 px-8 py-4 text-sm font-black text-slate-700 transition hover:border-slate-300 hover:bg-white hover:text-slate-950">
             Explore platform
           </Link>
         </div>

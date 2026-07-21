@@ -50,14 +50,14 @@ export default function Nav() {
     return (
       <>
         <nav className="fixed left-1/2 top-[18px] z-50 flex w-[min(1180px,94vw)] -translate-x-1/2 items-center justify-between rounded-[100px] border border-black/[.08] bg-white/[.88] py-[11px] pl-[22px] pr-3 [font-family:'Plus_Jakarta_Sans',system-ui,sans-serif] shadow-[0_18px_55px_rgba(15,23,42,.10)] backdrop-blur-[22px] backdrop-saturate-150">
-          <Link href="/landing-v2.html" className="flex shrink-0 items-center gap-[9px] text-[17px] font-bold leading-[normal] tracking-normal text-slate-950">
+          <Link href="/" className="flex shrink-0 items-center gap-[9px] text-[17px] font-bold leading-[normal] tracking-normal text-slate-950">
             <CarevoLogoMark compact />
             carevo
           </Link>
           <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-2 whitespace-nowrap text-[15px] font-extrabold leading-[normal] text-slate-500 md:flex">
-            <Link href="/landing-v2.html#products" className="inline-flex items-center rounded-full px-[15px] py-2 transition hover:bg-slate-950/[.06] hover:text-slate-950">Products</Link>
+            <Link href="/#products" className="inline-flex items-center rounded-full px-[15px] py-2 transition hover:bg-slate-950/[.06] hover:text-slate-950">Products</Link>
             <Link href="/triage" className="inline-flex items-center rounded-full px-[15px] py-2 transition hover:bg-slate-950/[.06] hover:text-slate-950">Triage</Link>
-            <Link href="/landing-v2.html#how-it-works" className="inline-flex items-center rounded-full px-[15px] py-2 transition hover:bg-slate-950/[.06] hover:text-slate-950">How it works</Link>
+            <Link href="/#how-it-works" className="inline-flex items-center rounded-full px-[15px] py-2 transition hover:bg-slate-950/[.06] hover:text-slate-950">How it works</Link>
             <Link href="/benchmarks" className="inline-flex items-center rounded-full px-[15px] py-2 transition hover:bg-slate-950/[.06] hover:text-slate-950">Benchmarks</Link>
             <Link href="/company" className="inline-flex items-center rounded-full px-[15px] py-2 transition hover:bg-slate-950/[.06] hover:text-slate-950">Company</Link>
             <Link href="/contact" className="inline-flex items-center rounded-full px-[15px] py-2 transition hover:bg-slate-950/[.06] hover:text-slate-950">Contact</Link>
@@ -86,7 +86,7 @@ export default function Nav() {
           />
           <aside className={`absolute right-3 top-3 w-[min(340px,calc(100vw-24px))] rounded-[1.6rem] border border-slate-200 bg-white p-5 shadow-2xl shadow-slate-900/20 transition-transform duration-200 ${menuOpen ? 'translate-x-0' : 'translate-x-[calc(100%+24px)]'}`}>
             <div className="mb-6 flex items-center justify-between gap-3">
-              <Link href="/landing-v2.html" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 font-display text-xl font-black tracking-tight text-slate-950">
+              <Link href="/" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 font-display text-xl font-black tracking-tight text-slate-950">
                 <CarevoLogoMark />
                 carevo
               </Link>
@@ -95,9 +95,9 @@ export default function Nav() {
               </button>
             </div>
             <div className="grid gap-2 text-lg font-black text-slate-900">
-              <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/landing-v2.html#products">Products</Link>
+              <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/#products">Products</Link>
               <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/triage">Triage</Link>
-              <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/landing-v2.html#how-it-works">How it works</Link>
+              <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/#how-it-works">How it works</Link>
               <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/benchmarks">Benchmarks</Link>
               <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/company">Company</Link>
               <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/contact">Contact</Link>
@@ -115,7 +115,7 @@ export default function Nav() {
     <>
       {/* Desktop: top bar */}
       <nav className="hidden sm:flex items-center gap-1 px-6 py-3 border-b border-slate-100 bg-white/90 backdrop-blur sticky top-0 z-40">
-        <Link href="/landing-v2.html" className="mr-6 flex items-center gap-2 font-display text-xl font-bold tracking-tight text-carevo-600">
+        <Link href="/" className="mr-6 flex items-center gap-2 font-display text-xl font-bold tracking-tight text-carevo-600">
           <CarevoLogoMark />
           carevo
         </Link>

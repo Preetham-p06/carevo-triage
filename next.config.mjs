@@ -11,6 +11,21 @@ const nextConfig = {
   outputFileTracingIncludes: {
     '/api/**': ['./data/knowledge/**', './data/calibration/**', './data/cost/**'],
   },
+  // Serve the static landing page AT the root URL — beforeFiles so it wins
+  // over the app router's / route. The URL stays clean: usecarevo.com, not
+  // usecarevo.com/landing-v2.html.
+  async rewrites() {
+    return {
+      beforeFiles: [{ source: '/', destination: '/landing-v2.html' }],
+      afterFiles: [],
+      fallback: [],
+    }
+  },
+  // Old direct links to the filename bounce to the clean root (no loop:
+  // the rewrite above is internal and never issues a new request).
+  async redirects() {
+    return [{ source: '/landing-v2.html', destination: '/', permanent: true }]
+  },
   async headers() {
     return [
       {
