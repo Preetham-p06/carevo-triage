@@ -778,3 +778,12 @@
   - Moved the AI triage card below the animated engine so the engine remains visible in the lower hero scene.
   - Cleaned the mobile hero facility labels and confirmed the page stays at 390px width with no horizontal scroll.
   - Verified `npx tsc --noEmit`, `npm run build`, and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
+
+## 2026-07-21
+
+- Reworked the `public/landing-v2.html` hero illustration into a clean three-island care path.
+  - Removed the extra floating overlay cards from the hero scene.
+  - Rebuilt the desktop scene as three soft isometric platforms: patient symptoms on the left, a Carevo AI phone in the middle, and care facilities on the right.
+  - Kept one label per island so the flow reads clearly without crowding the Vela-style hero.
+  - Matched the mobile scene to the same patient-to-phone-to-care story and confirmed it stays at 390px width with no horizontal scroll.
+  - Verified `npx tsc --noEmit`, `npm run build`, and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
