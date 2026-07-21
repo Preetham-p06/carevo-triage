@@ -5,6 +5,10 @@ import Link from 'next/link'
 
 const CONTACT_EMAIL = 'usecarevoai@gmail.com'
 const CONTACT_MAILTO = `mailto:${CONTACT_EMAIL}?subject=Hello%20Carevo`
+// mailto: silently does nothing when no desktop mail client is configured —
+// the big CTA opens a Gmail compose window in a new tab instead (always
+// visible); the small text link keeps mailto for people with mail apps.
+const GMAIL_COMPOSE = `https://mail.google.com/mail/?view=cm&fs=1&to=${CONTACT_EMAIL}&su=Hello%20Carevo`
 
 export default function ContactPage() {
   const [copied, setCopied] = useState(false)
@@ -30,7 +34,9 @@ export default function ContactPage() {
           Tell us where members get stuck - intake, routing, network handoffs, or follow-up - and we&apos;ll map where Carevo can help.
         </p>
         <a
-          href={CONTACT_MAILTO}
+          href={GMAIL_COMPOSE}
+          target="_blank"
+          rel="noopener noreferrer"
           className="mt-8 inline-flex w-full max-w-xs items-center justify-center rounded-xl bg-blue-600 px-8 py-4 text-base font-black text-white shadow-lg shadow-blue-600/25 transition hover:-translate-y-0.5 hover:bg-blue-700 sm:mt-10 sm:w-auto"
         >
           Email us
