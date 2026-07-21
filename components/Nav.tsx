@@ -135,7 +135,7 @@ export default function Nav() {
           )
         })}
         <span className="ml-auto text-[11px] font-medium text-slate-400 bg-slate-100 px-3 py-1.5 rounded-full">
-          Guest demo — data stays on this device
+          Guest mode — no account, nothing saved without your consent
         </span>
       </nav>
 

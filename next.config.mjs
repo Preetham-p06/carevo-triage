@@ -14,6 +14,16 @@ const nextConfig = {
   async headers() {
     return [
       {
+        // API responses carry health-adjacent content — never cache them
+        // anywhere (browser, CDN, shared proxies).
+        source: '/api/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate' },
+          { key: 'Pragma', value: 'no-cache' },
+          { key: 'X-XSS-Protection', value: '0' },
+        ],
+      },
+      {
         source: '/((?!triage-embed).*)',
         headers: [
           { key: 'X-Frame-Options', value: 'DENY' },
