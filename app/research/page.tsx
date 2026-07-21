@@ -14,9 +14,13 @@ interface Entry {
   engineVersion: string | null
 }
 
+interface Rev { id: string; createdAt: string; rating: number; text: string; name: string | null }
+
 export default function ResearchAdminPage() {
   const [key, setKey] = useState('')
   const [logs, setLogs] = useState<Entry[] | null>(null)
+  const [reviews, setReviews] = useState<Rev[]>([])
+  const [avg, setAvg] = useState<number | null>(null)
   const [err, setErr] = useState('')
 
   const load = async () => {
@@ -26,6 +30,8 @@ export default function ResearchAdminPage() {
       if (res.status === 401) { setErr('Wrong key.'); return }
       const data = await res.json()
       setLogs(data.logs ?? [])
+      const rr = await fetch('/api/reviews', { headers: { 'x-metrics-key': key } })
+      if (rr.ok) { const rd = await rr.json(); setReviews(rd.reviews ?? []); setAvg(rd.average ?? null) }
     } catch { setErr('Failed to load.') }
   }
 
@@ -83,6 +89,31 @@ export default function ResearchAdminPage() {
             </article>
           ))}
         </div>
+
+        {logs !== null && (
+          <section className="mt-10">
+            <div className="flex items-baseline justify-between">
+              <h2 className="text-xl font-black tracking-tight text-slate-950">Reviews</h2>
+              <p className="text-sm font-bold text-slate-500">
+                {reviews.length} total{avg != null && <> · <span className="text-amber-600">★ {avg}</span> average</>}
+              </p>
+            </div>
+            <div className="mt-3 space-y-3">
+              {reviews.length === 0 && <p className="text-sm text-slate-400">No reviews yet.</p>}
+              {reviews.map(r => (
+                <article key={r.id} className="rounded-2xl border border-slate-200 bg-white p-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
+                    <span className="font-bold text-amber-500" aria-label={`${r.rating} out of 5`}>
+                      {'★'.repeat(r.rating)}<span className="text-slate-200">{'★'.repeat(5 - r.rating)}</span>
+                    </span>
+                    <span>{r.name ?? 'Anonymous'} · {new Date(r.createdAt).toLocaleDateString()}</span>
+                  </div>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-700">{r.text}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </main>
   )

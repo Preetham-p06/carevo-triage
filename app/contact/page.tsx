@@ -10,6 +10,79 @@ const CONTACT_MAILTO = `mailto:${CONTACT_EMAIL}?subject=Hello%20Carevo`
 // visible); the small text link keeps mailto for people with mail apps.
 const GMAIL_COMPOSE = `https://mail.google.com/mail/?view=cm&fs=1&to=${CONTACT_EMAIL}&su=Hello%20Carevo`
 
+function ReviewCard() {
+  const [rating, setRating] = useState(0)
+  const [hover, setHover] = useState(0)
+  const [text, setText] = useState('')
+  const [name, setName] = useState('')
+  const [state, setState] = useState<'idle' | 'sending' | 'done' | 'error'>('idle')
+
+  const submit = async () => {
+    if (!rating || text.trim().length < 3 || state === 'sending') return
+    setState('sending')
+    try {
+      const res = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rating, text: text.trim(), name: name.trim() || null }),
+      })
+      const data = await res.json()
+      setState(data?.ok ? 'done' : 'error')
+    } catch { setState('error') }
+  }
+
+  if (state === 'done') return (
+    <article className="rounded-[1.4rem] border border-teal-200 bg-teal-50/60 p-8 text-center">
+      <p className="font-display text-2xl font-black tracking-[-0.04em] text-teal-800">Thank you — your review is in.</p>
+      <p className="mt-2 text-sm font-semibold text-teal-700/80">Feedback like yours is how Carevo gets better for the next person.</p>
+    </article>
+  )
+
+  return (
+    <article className="rounded-[1.4rem] border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur sm:p-8">
+      <p className="text-xs font-black uppercase tracking-[0.22em] text-carevo-600">Leave a review</p>
+      <h2 className="mt-4 font-display text-3xl font-black tracking-[-0.05em] sm:text-4xl">How did Carevo do?</h2>
+      <p className="mt-3 max-w-2xl text-sm font-semibold leading-7 text-slate-500">
+        A sentence or two helps us — and please don&apos;t include personal or medical details.
+      </p>
+      <div className="mt-6 flex items-center gap-1.5" role="radiogroup" aria-label="Rating out of 5 stars">
+        {[1, 2, 3, 4, 5].map(n => (
+          <button
+            key={n} type="button" role="radio" aria-checked={rating === n} aria-label={`${n} star${n > 1 ? 's' : ''}`}
+            onClick={() => setRating(n)} onMouseEnter={() => setHover(n)} onMouseLeave={() => setHover(0)}
+            className="p-1 transition-transform hover:scale-110 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-100 rounded-lg"
+          >
+            <svg width="30" height="30" viewBox="0 0 24 24"
+              fill={(hover || rating) >= n ? '#f59e0b' : 'none'}
+              stroke={(hover || rating) >= n ? '#f59e0b' : '#cbd5e1'} strokeWidth="1.8" strokeLinejoin="round">
+              <path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.5L12 17.3l-5.9 3.2 1.3-6.5-4.9-4.6 6.6-.8z" />
+            </svg>
+          </button>
+        ))}
+      </div>
+      <textarea
+        value={text} onChange={e => setText(e.target.value)} maxLength={600} rows={3}
+        placeholder="What worked? What should we improve?"
+        className="mt-5 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 placeholder:text-slate-400 focus:border-blue-300 focus:outline-none focus:ring-4 focus:ring-blue-50"
+      />
+      <div className="mt-3 flex flex-wrap items-center gap-3">
+        <input
+          value={name} onChange={e => setName(e.target.value)} maxLength={60}
+          placeholder="Name (optional)" aria-label="Name (optional)"
+          className="w-48 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold placeholder:text-slate-400 focus:border-blue-300 focus:outline-none focus:ring-4 focus:ring-blue-50"
+        />
+        <button
+          type="button" onClick={submit} disabled={!rating || text.trim().length < 3 || state === 'sending'}
+          className="rounded-full bg-blue-600 px-7 py-2.5 text-sm font-black text-white shadow-lg shadow-blue-600/25 transition hover:-translate-y-0.5 hover:bg-blue-700 disabled:opacity-40 disabled:hover:translate-y-0"
+        >
+          {state === 'sending' ? 'Sending…' : 'Submit review'}
+        </button>
+        {state === 'error' && <p className="text-xs font-bold text-red-600">Could not send right now — try again in a minute.</p>}
+      </div>
+    </article>
+  )
+}
+
 export default function ContactPage() {
   const [copied, setCopied] = useState(false)
 
@@ -90,6 +163,10 @@ export default function ContactPage() {
             </div>
           </article>
         </div>
+      </section>
+
+      <section className="mx-auto mt-16 max-w-7xl sm:mt-20">
+        <ReviewCard />
       </section>
 
       <section className="mx-auto mt-16 max-w-7xl rounded-[2rem] bg-slate-950 p-7 text-white sm:mt-20 sm:p-12">
