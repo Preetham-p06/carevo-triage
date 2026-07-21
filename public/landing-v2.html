@@ -570,6 +570,31 @@ body.shine-done .hl {
   box-shadow: 0 20px 60px rgba(15,23,42,.08);
   -webkit-overflow-scrolling: touch;
 }
+.dtable-meta {
+  display: flex;
+  justify-content: flex-end;
+  padding: 14px 18px 0;
+  background: #fff;
+}
+.demo-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 100px;
+  padding: 7px 11px;
+  color: #64748b;
+  background: #f8fafc;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.demo-tag::before {
+  content: '';
+  width: 7px; height: 7px;
+  border-radius: 999px;
+  background: #0891b2;
+  box-shadow: 0 0 0 4px rgba(8,145,178,.10);
+}
 table { width: 100%; border-collapse: collapse; }
 thead th {
   font-size: 9.5px; font-weight: 700;
@@ -586,6 +611,200 @@ tbody td {
 tbody tr:last-child td { border-bottom: none; }
 tbody tr { transition: background .12s; }
 tbody tr:hover td { background: #fafbfd; }
+tbody tr.case-row {
+  cursor: pointer;
+  outline: none;
+}
+tbody tr.case-row:focus-visible td {
+  background: #f0fdfa;
+  box-shadow: inset 0 0 0 2px rgba(8,145,178,.18);
+}
+tbody tr.case-row[aria-expanded="true"] td {
+  background: #f8fafc;
+}
+.case-ref {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.case-chevron {
+  display: inline-grid;
+  place-items: center;
+  width: 18px; height: 18px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #2563eb;
+  transition: transform .22s ease;
+}
+.case-chevron svg {
+  width: 10px; height: 10px;
+  stroke: currentColor;
+  fill: none;
+}
+.case-row[aria-expanded="true"] .case-chevron {
+  transform: rotate(90deg);
+}
+.trace-row .trace-cell {
+  padding: 0;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+.trace-row:last-child .trace-cell { border-bottom: 0; }
+.trace-panel {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height .3s ease-out, opacity .24s ease-out;
+}
+.trace-row.open .trace-panel {
+  max-height: 980px;
+  opacity: 1;
+}
+.trace-inner {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr 1fr;
+  gap: 18px;
+  padding: 22px;
+}
+.trace-col {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 20px;
+  min-width: 0;
+}
+.trace-col h3 {
+  font-size: 10px;
+  letter-spacing: .13em;
+  color: #94a3b8;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.chat-line {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+.chat-line.patient { align-items: flex-end; }
+.chat-line.carevo { align-items: flex-start; }
+.chat-time {
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 800;
+}
+.bubble {
+  max-width: 92%;
+  border-radius: 16px;
+  padding: 10px 12px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #334155;
+}
+.patient .bubble {
+  color: white;
+  background: #334155;
+  border-top-right-radius: 6px;
+}
+.carevo .bubble {
+  background: #ecfeff;
+  border: 1px solid #cffafe;
+  border-top-left-radius: 6px;
+}
+.feature-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.feature-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 999px;
+  border: 1px solid #dbeafe;
+  background: #eff6ff;
+  color: #1e40af;
+  padding: 6px 9px;
+  font-size: 11px;
+  font-weight: 800;
+}
+.feature-chip strong {
+  color: #64748b;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.rules-title {
+  color: #94a3b8;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.rule-row {
+  border-top: 1px solid #f1f5f9;
+  padding-top: 10px;
+  margin-top: 10px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #475569;
+}
+.rule-row code,
+.prov-block {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+.rule-row code {
+  display: inline-flex;
+  margin-right: 5px;
+  color: #0f172a;
+  font-size: 11px;
+  font-weight: 800;
+}
+.cite-tag {
+  display: inline-flex;
+  margin-left: 5px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #64748b;
+  padding: 2px 7px;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+.decision-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.decision-head .ds { flex-shrink: 0; }
+.confidence {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 800;
+}
+.prov-block {
+  background: #020617;
+  color: #dbeafe;
+  border-radius: 16px;
+  padding: 14px;
+  font-size: 11px;
+  line-height: 1.65;
+  white-space: normal;
+  margin-bottom: 14px;
+}
+.next-line {
+  border: 1px solid #ccfbf1;
+  background: #f0fdfa;
+  color: #0f766e;
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 12.5px;
+  font-weight: 800;
+  line-height: 1.45;
+}
 .ds {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 11px; font-weight: 700;
@@ -603,6 +822,13 @@ tbody tr:hover td { background: #fafbfd; }
 .dexp-md { color: #d97706; }
 .owner { font-size: 12px; color: #64748b; }
 .owner strong { color: #0f172a; font-weight: 600; }
+
+@media (prefers-reduced-motion: reduce) {
+  .trace-panel,
+  .case-chevron {
+    transition: none;
+  }
+}
 
 /* ════════════════════════════════
    PRIVACY AND CONTROL
@@ -924,10 +1150,14 @@ tbody tr:hover td { background: #fafbfd; }
     border: 0;
     box-shadow: none;
   }
+  .dtable-meta {
+    padding: 0 0 12px;
+    justify-content: flex-start;
+  }
   table, thead, tbody, tr, th, td { display: block; }
   thead { display: none; }
   tbody { display: grid; gap: 12px; }
-  tbody tr {
+  tbody tr.case-row {
     background: white;
     border: 1px solid #e2e8f0;
     border-radius: 18px;
@@ -935,7 +1165,7 @@ tbody tr:hover td { background: #fafbfd; }
     overflow: hidden;
   }
   tbody tr:hover td { background: white; }
-  tbody td {
+  tbody tr.case-row td {
     display: grid;
     grid-template-columns: 88px 1fr;
     gap: 12px;
@@ -943,8 +1173,8 @@ tbody tr:hover td { background: #fafbfd; }
     border-bottom: 1px solid #f1f5f9;
     align-items: center;
   }
-  tbody td:last-child { border-bottom: 0; }
-  tbody td::before {
+  tbody tr.case-row td:last-child { border-bottom: 0; }
+  tbody tr.case-row td::before {
     font-size: 9px;
     font-weight: 700;
     letter-spacing: .13em;
@@ -956,6 +1186,33 @@ tbody tr:hover td { background: #fafbfd; }
   tbody td:nth-child(3)::before { content: 'Reference'; }
   tbody td:nth-child(4)::before { content: 'Next'; }
   tbody td:nth-child(5)::before { content: 'Risk'; }
+  .trace-row {
+    margin-top: -12px;
+    border-radius: 0 0 18px 18px;
+    overflow: hidden;
+  }
+  .trace-row .trace-cell {
+    border: 0;
+    padding: 0;
+  }
+  .trace-row .trace-cell::before {
+    content: none;
+    display: none;
+  }
+  .trace-row.open .trace-panel {
+    max-height: 2400px;
+  }
+  .trace-inner {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 14px 0 0;
+  }
+  .trace-col {
+    border-radius: 18px;
+    padding: 18px;
+  }
+  .bubble { max-width: 100%; }
+  .decision-head { align-items: flex-start; flex-direction: column; }
   .cta2 { padding: 64px 22px 76px; }
   .cta2-card { border-radius: 24px; padding: 46px 24px; }
   .cta2-btn { width: 100%; justify-content: center; padding-left: 18px; padding-right: 18px; }
@@ -1473,6 +1730,7 @@ tbody tr:hover td { background: #fafbfd; }
       <p>Adjusters see the full routing trace — feature vector, rule match, and care level — before any authorization is issued.</p>
     </div>
     <div class="dtable-wrap">
+      <div class="dtable-meta"><span class="demo-tag">Simulated data — demo only</span></div>
       <table>
         <thead>
           <tr>
@@ -1484,45 +1742,182 @@ tbody tr:hover td { background: #fafbfd; }
           </tr>
         </thead>
         <tbody>
-          <tr>
+          <tr class="case-row" role="button" tabindex="0" aria-expanded="false" aria-controls="trace-p8821" data-trace-trigger="trace-p8821" aria-label="Open routing trace for Triage P8821">
             <td>
               <div style="font-weight:600;margin-bottom:4px;">Chest pressure — onset 3h</div>
               <span class="ds ds-er">Emergency</span>
             </td>
             <td><span class="owner"><strong>R. Patel</strong><br>UnitedHealth</span></td>
-            <td><a class="dref" href="#how-it-works">Triage #P8821</a></td>
+            <td><span class="case-ref"><span class="dref">Triage #P8821</span><span class="case-chevron" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M4.5 2.5L8 6l-3.5 3.5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span></td>
             <td><span class="dnxt">Awaiting ER triage handoff</span></td>
             <td><span class="dexp">High-acuity risk</span></td>
           </tr>
-          <tr>
+          <tr class="trace-row" id="trace-p8821" aria-hidden="true">
+            <td class="trace-cell" colspan="5">
+              <div class="trace-panel">
+                <div class="trace-inner">
+                  <div class="trace-col">
+                    <h3>Conversation</h3>
+                    <div class="chat-line patient"><span class="chat-time">t+0s Patient</span><span class="bubble">"chest feels really tight, started a few hours ago"</span></div>
+                    <div class="chat-line carevo"><span class="chat-time">t+2s Carevo</span><span class="bubble">"That can be serious. Is the tightness there right now, and does it spread to your arm, jaw, or back?"</span></div>
+                    <div class="chat-line patient"><span class="chat-time">t+31s Patient</span><span class="bubble">"yeah still there. kind of aches into my left arm"</span></div>
+                    <div class="chat-line carevo"><span class="chat-time">t+33s Carevo</span><span class="bubble">[EMERGENCY HARD-STOP] "Please call 911 now or have someone take you to the nearest ER. Do not drive yourself."</span></div>
+                  </div>
+                  <div class="trace-col">
+                    <h3>What the engine extracted</h3>
+                    <div class="feature-grid">
+                      <span class="feature-chip"><strong>System</strong> cardiac</span>
+                      <span class="feature-chip"><strong>Severity</strong> high</span>
+                      <span class="feature-chip"><strong>Onset</strong> 3h</span>
+                      <span class="feature-chip"><strong>Red flags</strong> chest_pressure, arm_radiation</span>
+                    </div>
+                    <div class="rules-title">Rules fired</div>
+                    <div class="rule-row"><code>net.emergency_tier1</code> Chest pressure + arm radiation triggers the pre-AI emergency net <span class="cite-tag">AHA</span></div>
+                  </div>
+                  <div class="trace-col">
+                    <h3>Decision & provenance</h3>
+                    <div class="decision-head"><span class="ds ds-er">911 / Emergency</span><span class="confidence">deterministic hard-stop (no scoring needed)</span></div>
+                    <div class="prov-block">engine carevo-engine-1.1<br>rules carevo-rules-2026.07.0<br>kb carevo-kb-2026.07.0+r1<br>audit #a3f2…9c1b<br>chain-verified ✓</div>
+                    <div class="next-line">NEXT STEP: Awaiting ER triage handoff — record shared ahead.</div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr class="case-row" role="button" tabindex="0" aria-expanded="false" aria-controls="trace-p8820" data-trace-trigger="trace-p8820" aria-label="Open routing trace for Triage P8820">
             <td>
               <div style="font-weight:600;margin-bottom:4px;">Persistent fever 103°F, 48h</div>
               <span class="ds ds-uc">Urgent Care</span>
             </td>
             <td><span class="owner"><strong>S. Torres</strong><br>Aetna</span></td>
-            <td><a class="dref" href="#how-it-works">Triage #P8820</a></td>
+            <td><span class="case-ref"><span class="dref">Triage #P8820</span><span class="case-chevron" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M4.5 2.5L8 6l-3.5 3.5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span></td>
             <td><span class="dnxt">2 in-network UCs within 3 mi</span></td>
             <td><span class="dexp dexp-md">Moderate</span></td>
           </tr>
-          <tr>
+          <tr class="trace-row" id="trace-p8820" aria-hidden="true">
+            <td class="trace-cell" colspan="5">
+              <div class="trace-panel">
+                <div class="trace-inner">
+                  <div class="trace-col">
+                    <h3>Conversation</h3>
+                    <div class="chat-line patient"><span class="chat-time">t+0s Patient</span><span class="bubble">"fever for two days, not going away"</span></div>
+                    <div class="chat-line carevo"><span class="chat-time">t+2s Carevo</span><span class="bubble">"What number does your thermometer say, or do you feel very hot to the touch?"</span></div>
+                    <div class="chat-line patient"><span class="chat-time">t+24s Patient</span><span class="bubble">"103.1 this morning"</span></div>
+                    <div class="chat-line carevo"><span class="chat-time">t+26s Carevo</span><span class="bubble">"With a fever like that — any stiff neck, or a rash anywhere?"</span></div>
+                    <div class="chat-line patient"><span class="chat-time">t+51s Patient</span><span class="bubble">"no rash, neck is fine. just exhausted"</span></div>
+                    <div class="chat-line carevo"><span class="chat-time">t+53s Carevo</span><span class="bubble">"Are you keeping fluids down okay?"</span></div>
+                    <div class="chat-line patient"><span class="chat-time">t+70s Patient</span><span class="bubble">"yes, drinking fine"</span></div>
+                  </div>
+                  <div class="trace-col">
+                    <h3>What the engine extracted</h3>
+                    <div class="feature-grid">
+                      <span class="feature-chip"><strong>System</strong> constitutional</span>
+                      <span class="feature-chip"><strong>Severity</strong> significant</span>
+                      <span class="feature-chip"><strong>Duration</strong> 48h</span>
+                      <span class="feature-chip"><strong>Fever</strong> 103.1°F</span>
+                      <span class="feature-chip"><strong>Red flags</strong> none (stiff neck, rash, dehydration each screened &amp; denied)</span>
+                    </div>
+                    <div class="rules-title">Rules fired</div>
+                    <div class="rule-row"><code>rf.high_fever_adult</code> Sustained ≥103°F floors at urgent care <span class="cite-tag">CDC</span></div>
+                  </div>
+                  <div class="trace-col">
+                    <h3>Decision & provenance</h3>
+                    <div class="decision-head"><span class="ds ds-uc">Urgent Care</span><span class="confidence">confidence 0.86</span></div>
+                    <div class="prov-block">engine carevo-engine-1.1<br>rules carevo-rules-2026.07.0<br>kb carevo-kb-2026.07.0+r1<br>audit #a3f2…9c1b<br>chain-verified ✓</div>
+                    <div class="next-line">NEXT STEP: 2 in-network UCs within 3 mi, open now.</div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr class="case-row" role="button" tabindex="0" aria-expanded="false" aria-controls="trace-p8819" data-trace-trigger="trace-p8819" aria-label="Open routing trace for Triage P8819">
             <td>
               <div style="font-weight:600;margin-bottom:4px;">Shortness of breath on exertion</div>
               <span class="ds ds-tc">Telehealth</span>
             </td>
             <td><span class="owner"><strong>D. Brown</strong><br>Cigna</span></td>
-            <td><a class="dref" href="#how-it-works">Triage #P8819</a></td>
+            <td><span class="case-ref"><span class="dref">Triage #P8819</span><span class="case-chevron" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M4.5 2.5L8 6l-3.5 3.5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span></td>
             <td><span class="dnxt">Telehealth slot queued — 20 min</span></td>
             <td><span class="dexp dexp-md">Moderate</span></td>
           </tr>
-          <tr>
+          <tr class="trace-row" id="trace-p8819" aria-hidden="true">
+            <td class="trace-cell" colspan="5">
+              <div class="trace-panel">
+                <div class="trace-inner">
+                  <div class="trace-col">
+                    <h3>Conversation</h3>
+                    <div class="chat-line patient"><span class="chat-time">t+0s Patient</span><span class="bubble">"getting winded walking up stairs lately"</span></div>
+                    <div class="chat-line carevo"><span class="chat-time">t+2s Carevo</span><span class="bubble">"Are you short of breath right now, sitting still?"</span></div>
+                    <div class="chat-line patient"><span class="chat-time">t+22s Patient</span><span class="bubble">"no, only when i push myself"</span></div>
+                    <div class="chat-line carevo"><span class="chat-time">t+24s Carevo</span><span class="bubble">"Any chest pain or pressure when it happens?"</span></div>
+                    <div class="chat-line patient"><span class="chat-time">t+47s Patient</span><span class="bubble">"no pain, just puffing. been gaining weight tbh"</span></div>
+                    <div class="chat-line carevo"><span class="chat-time">t+49s Carevo</span><span class="bubble">"How long has this been building?"</span></div>
+                    <div class="chat-line patient"><span class="chat-time">t+66s Patient</span><span class="bubble">"couple months maybe"</span></div>
+                  </div>
+                  <div class="trace-col">
+                    <h3>What the engine extracted</h3>
+                    <div class="feature-grid">
+                      <span class="feature-chip"><strong>System</strong> respiratory</span>
+                      <span class="feature-chip"><strong>Severity</strong> mild</span>
+                      <span class="feature-chip"><strong>Onset</strong> gradual, ~2 months</span>
+                      <span class="feature-chip"><strong>Red flags</strong> none (rest dyspnea denied, chest pain denied)</span>
+                    </div>
+                    <div class="rules-title">Rules fired</div>
+                    <div class="rule-row">none fired — engine scoring routed (no floors triggered)</div>
+                  </div>
+                  <div class="trace-col">
+                    <h3>Decision & provenance</h3>
+                    <div class="decision-head"><span class="ds ds-tc">Telehealth</span><span class="confidence">confidence 0.74</span></div>
+                    <div class="prov-block">engine carevo-engine-1.1<br>rules carevo-rules-2026.07.0<br>kb carevo-kb-2026.07.0+r1<br>audit #a3f2…9c1b<br>chain-verified ✓</div>
+                    <div class="next-line">NEXT STEP: telehealth slot queued — 20 min. Clinician can order in-person workup if needed.</div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr class="case-row" role="button" tabindex="0" aria-expanded="false" aria-controls="trace-p8818" data-trace-trigger="trace-p8818" aria-label="Open routing trace for Triage P8818">
             <td>
               <div style="font-weight:600;margin-bottom:4px;">Ankle sprain, no imaging yet</div>
               <span class="ds ds-hc">Home Care</span>
             </td>
             <td><span class="owner"><strong>K. Lee</strong><br>BCBS</span></td>
-            <td><a class="dref" href="#how-it-works">Triage #P8818</a></td>
+            <td><span class="case-ref"><span class="dref">Triage #P8818</span><span class="case-chevron" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M4.5 2.5L8 6l-3.5 3.5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span></td>
             <td><span class="dnxt">Home care + 48h follow-up</span></td>
             <td><span class="dexp dexp-lo">Low</span></td>
+          </tr>
+          <tr class="trace-row" id="trace-p8818" aria-hidden="true">
+            <td class="trace-cell" colspan="5">
+              <div class="trace-panel">
+                <div class="trace-inner">
+                  <div class="trace-col">
+                    <h3>Conversation</h3>
+                    <div class="chat-line patient"><span class="chat-time">t+0s Patient</span><span class="bubble">"rolled my ankle at practice yesterday, swollen"</span></div>
+                    <div class="chat-line carevo"><span class="chat-time">t+2s Carevo</span><span class="bubble">"Can you put weight on it, and does it look deformed or wrongly shaped?"</span></div>
+                    <div class="chat-line patient"><span class="chat-time">t+28s Patient</span><span class="bubble">"i can walk on it, just sore. looks normal, a little puffy"</span></div>
+                    <div class="chat-line carevo"><span class="chat-time">t+30s Carevo</span><span class="bubble">"Is the pain stopping you from sleeping or daily stuff?"</span></div>
+                    <div class="chat-line patient"><span class="chat-time">t+52s Patient</span><span class="bubble">"not really"</span></div>
+                  </div>
+                  <div class="trace-col">
+                    <h3>What the engine extracted</h3>
+                    <div class="feature-grid">
+                      <span class="feature-chip"><strong>System</strong> msk</span>
+                      <span class="feature-chip"><strong>Severity</strong> mild</span>
+                      <span class="feature-chip"><strong>Mechanism</strong> inversion injury, 24h</span>
+                      <span class="feature-chip"><strong>Weight-bearing</strong> yes</span>
+                      <span class="feature-chip"><strong>Red flags</strong> none (deformity denied, non-weight-bearing denied)</span>
+                    </div>
+                    <div class="rules-title">Rules fired</div>
+                    <div class="rule-row">none fired — Ottawa-style screens negative</div>
+                  </div>
+                  <div class="trace-col">
+                    <h3>Decision & provenance</h3>
+                    <div class="decision-head"><span class="ds ds-hc">Home Care (RICE + 48h re-check)</span><span class="confidence">confidence 0.81</span></div>
+                    <div class="prov-block">engine carevo-engine-1.1<br>rules carevo-rules-2026.07.0<br>kb carevo-kb-2026.07.0+r1<br>audit #a3f2…9c1b<br>chain-verified ✓</div>
+                    <div class="next-line">NEXT STEP: home care + 48h follow-up nudge; escalate if weight-bearing worsens.</div>
+                  </div>
+                </div>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -1686,6 +2081,48 @@ mobileCloseButtons.forEach(el => el.addEventListener('click', () => setMobileNav
 document.addEventListener('keydown', event => {
   if (event.key === 'Escape') setMobileNav(false);
 });
+
+const traceRows = Array.from(document.querySelectorAll('.trace-row'));
+const traceTriggers = Array.from(document.querySelectorAll('[data-trace-trigger]'));
+
+function setTrace(trigger, open) {
+  const traceId = trigger?.dataset?.traceTrigger;
+  const traceRow = traceId ? document.getElementById(traceId) : null;
+  if (!traceRow) return;
+
+  if (open) {
+    traceTriggers.forEach(otherTrigger => {
+      if (otherTrigger !== trigger) setTrace(otherTrigger, false);
+    });
+  }
+
+  trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  traceRow.classList.toggle('open', open);
+  traceRow.setAttribute('aria-hidden', open ? 'false' : 'true');
+}
+
+traceTriggers.forEach(trigger => {
+  trigger.addEventListener('click', () => {
+    const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+    setTrace(trigger, !isOpen);
+  });
+
+  trigger.addEventListener('keydown', event => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+      setTrace(trigger, !isOpen);
+    }
+  });
+});
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') {
+    traceTriggers.forEach(trigger => setTrace(trigger, false));
+  }
+});
+
+traceRows.forEach(row => row.setAttribute('aria-hidden', 'true'));
 
 // Scroll-reveal via IntersectionObserver
 const obs = new IntersectionObserver(entries => {
