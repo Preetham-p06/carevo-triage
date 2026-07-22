@@ -806,3 +806,11 @@
   - Verified the live local API asks `redFlag:chest_pressure` after shoulder pain plus sweatiness.
   - Verified `npx tsc --noEmit`, `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
   - Verified REE readiness and REE smoke-training checks still pass.
+
+## 2026-07-22
+
+- Verified tailored-question behavior against the local dev server.
+  - Ran the full 240-case multi-turn gate with `synthetic-240-benchmark.jsonl`: 240/240 scored, 230 exact, 10 safe over-triage, 0 UNDER, 0 errors, 95.8% exact, 100% safe-or-exact.
+  - Ran the vague-persona gate for eight vague/limited-English personas: 8/8 correct or acceptable, 0 UNDER, 0 forbidden outputs, 0 errors.
+  - Confirmed generic-field follow-up questions reference the patient's own words, such as "weird feeling in your chest," "stomach," "headache," "back," "fever," "facial pain," and "sore on your foot."
+  - Left generated trial and dataset result logs uncommitted per repo policy.
