@@ -126,6 +126,26 @@ RULES:
 - If patient asked whether you're an AI, answer honestly in one clause ("I'm Carevo's automated assistant"), then ask the question.
 - Output valid JSON only: {"type":"question","text":"..."}`
 
+// ── Tailored phraser (2026-07) ──────────────────────────────────────────────
+// When the engine falls back to a GENERIC field (severity, duration, etc.) the
+// question used to read like a form. This variant gets the patient's own words
+// and asks the same field IN THE PATIENT'S CONTEXT — "you said the burrito made
+// it start… can you keep fluids down?" — so it feels like a nurse who listened.
+// SAFETY: this only fires for generic fields. Red-flag screens keep the strict
+// single-purpose phraser above (precision matters there). Routing is unchanged:
+// the engine still chose the field, the extractor still reads the answer, and
+// the LLM never decides the care level. Worst case is a slightly-off wording.
+const GENERIC_TARGETS = new Set(['severity', 'duration', 'worsening', 'functionalImpact', 'suddenOnset'])
+const TAILORED_PROMPT = (hint: string) => `You are Carevo's intake interviewer — a calm triage nurse who actually listens. Below is what the patient has told you so far. Ask ONE short follow-up question that:
+- clearly refers to THEIR specific situation in their own words (not a generic template), and
+- helps you find out: ${hint}
+
+RULES:
+- One brief empathetic beat tied to what they actually said, then the question.
+- VERY simple English, short sentences, everyday 6th-grade words, no jargon, no idioms, no condition names, no claims of certainty.
+- NEVER ask them to rate on a 1-to-10 scale or pick mild/moderate/severe. Ask about concrete, observable effects.
+- Exactly ONE question. Output valid JSON only: {"type":"question","text":"..."}`
+
 /** Pull a JSON object out of a model reply that may include prose or fences. */
 function extractJson(raw: string): any | null {
   if (!raw) return null
@@ -940,7 +960,16 @@ export async function POST(req: NextRequest) {
       // askPhraser receives only the last patient message — not the full history.
       const target = plan.asks[0]
       const lastUser = messages.filter(m => m.role === 'user').pop()?.content ?? ''
-      const phrased = extractJson(await askPhraser(PHRASER_PROMPT(target.hint), lastUser))
+      // Generic fields → tailored phraser (sees the patient's own words, asks
+      // in their context). Red-flag screens + specific clarifiers → strict
+      // single-purpose phraser (only the last message, precise).
+      let phrased
+      if (GENERIC_TARGETS.has(target.target)) {
+        const patientSide = messages.filter(m => m.role === 'user').map(m => m.content).join('\n').slice(-1200)
+        phrased = extractJson(await askPhraser(TAILORED_PROMPT(target.hint), patientSide))
+      } else {
+        phrased = extractJson(await askPhraser(PHRASER_PROMPT(target.hint), lastUser))
+      }
       let text = typeof phrased?.text === 'string' && phrased.text.trim()
         ? phrased.text.slice(0, 500)
         : `Thanks — one more thing that would really help: could you tell me ${target.hint}?`   // deterministic fallback
