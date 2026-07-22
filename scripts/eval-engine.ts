@@ -20,6 +20,7 @@ import { isVagueAnswer, countVagueAnswers, isThinInformation, shouldSweep, apply
 import { applyHomeGuard, HOME_GUARDS } from '../lib/engine/homeGuard'
 import { rawErSafetyFloor, rawUrgentCareSafetyFloor } from '../lib/engine/rawFloors'
 import { pickRedFlagComboQuestion, RED_FLAG_COMBOS } from '../lib/engine/redFlagCombos'
+import { deterministicTailoredQuestion, hasPatientSubject, questionSubject, tailoredHint } from '../lib/engine/questionSubject'
 import * as fsSync from 'fs'
 import * as path from 'path'
 
@@ -617,6 +618,52 @@ const NO_RISK = { modifiers: [] as any }
   if (falsePositive) {
     policyFailures.push(`P17: benign/negated combo false-positive: "${falsePositive}" → ${pickRedFlagComboQuestion(falsePositive)?.target}`)
   }
+}
+
+// P18: universal tailored-question coverage — generic fields must anchor to
+// the patient's own words across common symptom families. This prevents the
+// interview from asking form-like questions such as "how severe is the symptom"
+// when the patient said "my ankle hurts" or "my kid has a fever."
+{
+  const cases: Array<{
+    name: string
+    text: string
+    features: ExtractedFeatures
+    target: string
+    expectedSubject: string
+    mustMention: RegExp
+  }> = [
+    { name: 'ankle injury', text: 'I twisted my ankle and it hurts', features: F({ system: 'msk', summary: 'twisted my ankle' }), target: 'severity', expectedSubject: 'your ankle pain', mustMention: /\bankle\b/i },
+    { name: 'shoulder pain', text: 'Left shoulder pain started yesterday', features: F({ system: 'cardiac', summary: 'left shoulder pain' }), target: 'duration', expectedSubject: 'your shoulder pain', mustMention: /\bshoulder\b/i },
+    { name: 'cough', text: 'I have been coughing all night', features: F({ system: 'respiratory', summary: 'coughing all night' }), target: 'functionalImpact', expectedSubject: 'your cough', mustMention: /\bcough/i },
+    { name: 'breathing', text: 'It is hard to breathe when I walk', features: F({ system: 'respiratory', summary: 'hard to breathe' }), target: 'severity', expectedSubject: 'your breathing', mustMention: /\bbreath/i },
+    { name: 'headache', text: 'My head hurts idk why', features: F({ system: 'neuro', summary: 'head hurts' }), target: 'duration', expectedSubject: 'your headache', mustMention: /\bhead/i },
+    { name: 'eye', text: 'My eye is blurry', features: F({ system: 'general', summary: 'eye is blurry' }), target: 'suddenOnset', expectedSubject: 'your eye symptoms', mustMention: /\beye\b|\bvision\b/i },
+    { name: 'stomach', text: 'My stomach feels weird', features: F({ system: 'gi', summary: 'stomach feels weird' }), target: 'worsening', expectedSubject: 'your stomach pain', mustMention: /\bstomach\b|\bbelly\b/i },
+    { name: 'vomiting', text: 'I keep throwing up', features: F({ system: 'gi', summary: 'throwing up' }), target: 'functionalImpact', expectedSubject: 'your vomiting', mustMention: /\bvomit|\bthrow/i },
+    { name: 'urinary', text: 'It burns when I pee', features: F({ system: 'urinary', summary: 'burns when I pee' }), target: 'duration', expectedSubject: 'the burning when you pee', mustMention: /\bburn|\bpee\b|\burin/i },
+    { name: 'sore throat', text: 'My throat hurts', features: F({ system: 'ent', summary: 'throat hurts' }), target: 'functionalImpact', expectedSubject: 'your sore throat', mustMention: /\bthroat\b|\bswallow\b/i },
+    { name: 'rash', text: 'Rash on my chest', features: F({ system: 'skin', summary: 'rash on chest' }), target: 'worsening', expectedSubject: 'your rash', mustMention: /\brash\b/i },
+    { name: 'cut', text: 'I cut my hand', features: F({ system: 'skin', summary: 'cut my hand' }), target: 'openWound', expectedSubject: 'your cut', mustMention: /\bcut\b|\bbleed/i },
+    { name: 'child fever', text: 'My kid has a fever', features: F({ system: 'general', summary: 'kid has fever' }), target: 'highFever', expectedSubject: "your child's fever", mustMention: /\bfever\b|\btemperature\b/i },
+    { name: 'anxiety', text: 'I feel anxious and overwhelmed', features: F({ system: 'mental', summary: 'anxious and overwhelmed' }), target: 'severity', expectedSubject: 'your anxiety', mustMention: /\banxiety|\banxious\b/i },
+    { name: 'negated chest ignored', text: 'No chest pain, just a cough', features: F({ system: 'respiratory', summary: 'just a cough' }), target: 'duration', expectedSubject: 'your cough', mustMention: /\bcough/i },
+  ]
+
+  const bad: string[] = []
+  for (const c of cases) {
+    const subject = questionSubject(c.text, c.features)
+    const question = deterministicTailoredQuestion(c.target, subject)
+    const hint = tailoredHint('the next detail', subject)
+    if (subject.text !== c.expectedSubject) bad.push(`${c.name}: expected subject "${c.expectedSubject}", got "${subject.text}"`)
+    if (!question) bad.push(`${c.name}: no deterministic question for ${c.target}`)
+    if (question && /\byour symptoms?\b|\bthe symptom\b/i.test(question)) bad.push(`${c.name}: generic wording leaked: "${question}"`)
+    if (question && !c.mustMention.test(question)) bad.push(`${c.name}: question does not mention patient context: "${question}"`)
+    if (question && !hasPatientSubject(question, subject)) bad.push(`${c.name}: subject validator rejected "${question}" for "${subject.text}"`)
+    if (!hint.includes(`"${subject.text}"`)) bad.push(`${c.name}: tailored prompt did not carry exact subject`)
+  }
+  if (bad.length) bad.forEach(name => policyFailures.push(`P18: ${name}`))
+  else console.log(`  ✓ P18 tailored questions: ${cases.length} symptom families keep patient-specific wording`)
 }
 
 if (policyFailures.length) {

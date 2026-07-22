@@ -29,6 +29,7 @@ import { countVagueAnswers, shouldSweep, applyThinInfoFloor, applyFeverLanguageF
 import { applyHomeGuard } from '@/lib/engine/homeGuard'
 import { rawErSafetyFloor, rawUrgentCareSafetyFloor } from '@/lib/engine/rawFloors'
 import { pickRedFlagComboQuestion } from '@/lib/engine/redFlagCombos'
+import { deterministicTailoredQuestion, hasPatientSubject, questionSubject, tailoredHint } from '@/lib/engine/questionSubject'
 
 // LLM provider — priority: OpenAI → Cerebras → Groq → NVIDIA Build → GitHub Models.
 // All five expose an OpenAI-compatible API; only the baseURL and key differ.
@@ -127,15 +128,14 @@ RULES:
 - Output valid JSON only: {"type":"question","text":"..."}`
 
 // ── Tailored phraser (2026-07) ──────────────────────────────────────────────
-// When the engine falls back to a GENERIC field (severity, duration, etc.) the
-// question used to read like a form. This variant gets the patient's own words
-// and asks the same field IN THE PATIENT'S CONTEXT — "you said the burrito made
-// it start… can you keep fluids down?" — so it feels like a nurse who listened.
-// SAFETY: this only fires for generic fields. Red-flag screens keep the strict
-// single-purpose phraser above (precision matters there). Routing is unchanged:
-// the engine still chose the field, the extractor still reads the answer, and
-// the LLM never decides the care level. Worst case is a slightly-off wording.
-const GENERIC_TARGETS = new Set(['severity', 'duration', 'worsening', 'functionalImpact', 'suddenOnset'])
+// Generic or field-like follow-ups (severity, duration, high fever, fracture,
+// wound depth) used to read like forms. This variant gets the patient's own
+// words and asks the same field IN THE PATIENT'S CONTEXT — "your ankle pain",
+// "your cough", "your child's fever" — so it feels like a nurse who listened.
+// SAFETY: routing is unchanged: the engine still chose the field, the extractor
+// still reads the answer, and the LLM never decides the care level. If the LLM
+// wording comes back generic, a deterministic patient-specific fallback wins.
+const TAILORED_TARGETS = new Set(['severity', 'duration', 'worsening', 'functionalImpact', 'suddenOnset', 'possibleFracture', 'openWound', 'highFever'])
 const TAILORED_PROMPT = (hint: string) => `You are Carevo's intake interviewer — a calm triage nurse who actually listens. Below is what the patient has told you so far. Ask ONE short follow-up question that:
 - clearly refers to THEIR specific situation in their own words (not a generic template), and
 - helps you find out: ${hint}
@@ -957,22 +957,28 @@ export async function POST(req: NextRequest) {
         }
       }
       // LLM role 2: phrase the engine's chosen question warmly.
-      // askPhraser receives only the last patient message — not the full history.
+      // askPhraser receives only the last patient message for strict screens,
+      // or patient-side text for tailored field questions.
       const target = plan.asks[0]
       const lastUser = messages.filter(m => m.role === 'user').pop()?.content ?? ''
-      // Generic fields → tailored phraser (sees the patient's own words, asks
-      // in their context). Red-flag screens + specific clarifiers → strict
-      // single-purpose phraser (only the last message, precise).
-      let phrased
-      if (GENERIC_TARGETS.has(target.target)) {
-        const patientSide = messages.filter(m => m.role === 'user').map(m => m.content).join('\n').slice(-1200)
-        phrased = extractJson(await askPhraser(TAILORED_PROMPT(target.hint), patientSide))
+      const patientSide = messages.filter(m => m.role === 'user').map(m => m.content).join('\n').slice(-1200)
+      let text: string
+      if (TAILORED_TARGETS.has(target.target)) {
+        const subject = questionSubject(patientSide, features)
+        const deterministicText = deterministicTailoredQuestion(target.target, subject)
+        const phrased = extractJson(await askPhraser(TAILORED_PROMPT(tailoredHint(target.hint, subject)), patientSide))
+        const candidate = typeof phrased?.text === 'string' && phrased.text.trim()
+          ? phrased.text.slice(0, 500)
+          : null
+        text = candidate && hasPatientSubject(candidate, subject)
+          ? candidate
+          : deterministicText ?? `Thanks — one more thing that would really help: could you tell me ${target.hint}?`
       } else {
-        phrased = extractJson(await askPhraser(PHRASER_PROMPT(target.hint), lastUser))
+        const phrased = extractJson(await askPhraser(PHRASER_PROMPT(target.hint), lastUser))
+        text = typeof phrased?.text === 'string' && phrased.text.trim()
+          ? phrased.text.slice(0, 500)
+          : `Thanks — one more thing that would really help: could you tell me ${target.hint}?`
       }
-      let text = typeof phrased?.text === 'string' && phrased.text.trim()
-        ? phrased.text.slice(0, 500)
-        : `Thanks — one more thing that would really help: could you tell me ${target.hint}?`   // deterministic fallback
 
       // AI disclosure is a legal requirement (e.g. CA AB 3030) — never leave
       // it to the LLM. If the patient just asked, answer deterministically.

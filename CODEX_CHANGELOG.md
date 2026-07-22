@@ -814,3 +814,13 @@
   - Ran the vague-persona gate for eight vague/limited-English personas: 8/8 correct or acceptable, 0 UNDER, 0 forbidden outputs, 0 errors.
   - Confirmed generic-field follow-up questions reference the patient's own words, such as "weird feeling in your chest," "stomach," "headache," "back," "fever," "facial pain," and "sore on your foot."
   - Left generated trial and dataset result logs uncommitted per repo policy.
+
+## 2026-07-22
+
+- Added universal tailored-question coverage for patient follow-ups.
+  - Added `lib/engine/questionSubject.ts` to map patient wording into a safe question subject across cardiac, breathing, neurologic, GI, urinary, ENT, skin, injury, pediatric fever, mental health, dental, and general symptom families.
+  - Wired `/api/triage` so field-like follow-ups carry the patient's own context into the phraser and fall back to deterministic patient-specific wording if the model returns a generic question.
+  - Extended tailored coverage to duration, concrete severity/impact, worsening, sudden onset, fracture screening, wound depth/bleeding, and high-fever clarification.
+  - Added the P18 eval gate in `scripts/eval-engine.ts`, including ankle, shoulder, cough, breathing, headache, eye, stomach, vomiting, urinary, throat, rash, cut, child fever, anxiety, and negated chest-pain/cough cases.
+  - Verified live local API examples for ankle pain, child fever, and "no chest pain, just cough."
+  - Verified `npx tsc --noEmit` and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
