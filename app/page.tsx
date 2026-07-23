@@ -1242,7 +1242,7 @@ export function HomePage({
           </h1>
 
           <p className="text-slate-500 text-[15px] leading-relaxed mb-6 max-w-[300px]">
-            Answer 3–4 questions. Get the right care level, nearby clinics, and real cost estimates in under a minute.
+            Answer a few questions — up to six when needed to rule out anything serious. Get the right care level, nearby clinics, and real cost estimates in under a minute.
           </p>
 
           {/* Input */}
@@ -1339,8 +1339,8 @@ export function HomePage({
                 },
                 {
                   n: '02', Icon: IconSparkle,
-                  title: 'Answer 3–4 targeted questions',
-                  desc: 'Severity, how long, any red-flag symptoms. Carevo only asks what changes the routing — nothing extra.',
+                  title: 'Answer a few targeted questions',
+                  desc: 'How long, any red-flag symptoms, and — like a nurse — a few more to rule out anything serious before it settles on a lower level of care (up to six when needed). Carevo only asks what changes the routing.',
                   last: false,
                 },
                 {
