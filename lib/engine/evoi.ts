@@ -333,7 +333,6 @@ export function planInterview(
   const maxEvoi = asks[0]?.evoi ?? 0
 
   // ── Decide-or-ask gate ─────────────────────────────────────────────────────
-  const budgetExhausted = questionsAsked >= maxQuestions
   const confident = confidence >= CONFIDENCE_TO_DECIDE && margin >= MARGIN_TO_DECIDE
   const nothingUseful = maxEvoi < MIN_USEFUL_EVOI
   // Safety: an unscreened red flag with meaningful escalation mass overrides
@@ -344,6 +343,21 @@ export function planInterview(
     !isTargetEstablished(target, known, checkedRedFlags, f) &&
     candidates.some(c => c.target === target),
   )
+
+  // ── Rule-out extension (Paul + Krish, 2026-07): process of elimination ─────
+  // A nurse rules out the dangerous possibilities BEFORE settling on a low
+  // answer. If we're about to route LOW-acuity but still have an unscreened
+  // danger for this presentation, allow up to +2 extra questions to finish the
+  // rule-out — hard-ceilinged so the interview never balloons (real vague /
+  // limited-English patients abandon long forms). Cases already heading to
+  // urgent care or above don't get the extension (they're routing safely up).
+  const RULE_OUT_CEILING = 6
+  const tentativeLow = now.decidedLevel === 'home_care' || now.decidedLevel === 'telehealth'
+  const ruleOutIncomplete = mustScreen || missingCriticalInfo
+  const effectiveMax = (tentativeLow && ruleOutIncomplete)
+    ? Math.min(RULE_OUT_CEILING, maxQuestions + 2)
+    : maxQuestions
+  const budgetExhausted = questionsAsked >= effectiveMax
 
   if ((!mustScreen && !missingCriticalInfo && (confident || nothingUseful)) || budgetExhausted) {
     // Abstention escalates (invariant I5): out of budget with an ambiguous
