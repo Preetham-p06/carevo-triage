@@ -21,6 +21,7 @@ import { applyCalibration } from '@/lib/engine/calibration'
 import { buildReasoning, WHAT_TO_EXPECT, SELF_CARE, urgencyFor, alternativeNoteFor } from '@/lib/engine/content'
 import { loadAdjustments } from '@/lib/engine/persistence'
 import { rateLimit, clientIp, TOO_MANY } from '@/lib/ratelimit'
+import { bump as metricBump } from '@/lib/research/metricsStore'
 import { triageRequestSchema, getFieldErrors } from '@/lib/validation'
 import { sanitize, sanitizeObject } from '@/lib/sanitize'
 import { recordReeTelemetry } from '@/lib/ree/telemetry'
@@ -571,6 +572,7 @@ export async function POST(req: NextRequest) {
         kbVersion: kbVersion(),
         metadata: { kind: 'self_harm' },
       })
+      await metricBump('emergency_stops').catch(() => {})
       const response: TriageResponse = {
         type: 'emergency',
         message: "Thank you for telling me — that took courage, and you deserve support right now. Please call or text 988 (the Suicide & Crisis Lifeline) to talk with someone immediately. If you're in immediate danger, call 911. You don't have to go through this alone.",
@@ -595,6 +597,7 @@ export async function POST(req: NextRequest) {
         kbVersion: kbVersion(),
         metadata: { kind: 'hard_stop' },
       })
+      await metricBump('emergency_stops').catch(() => {})
       const response: TriageResponse = {
         type: 'emergency',
         message: "Based on what you've described, you may be experiencing a medical emergency. Please call 911 immediately or have someone take you to the nearest emergency room right now. Don't drive yourself.",
@@ -678,6 +681,11 @@ export async function POST(req: NextRequest) {
 
     // Compute before the extraction-failure check so we can use it in that branch.
     const questionsAsked = messages.filter(m => m.role === 'assistant').length
+    // Metrics (durable KV counters) — awaited but never allowed to throw or
+    // meaningfully delay: each is one cheap INCR. Count a new session on the
+    // very first turn (no assistant messages yet).
+    const metric = (name: string, by = 1) => metricBump(name, by).catch(() => {})
+    if (questionsAsked === 0) await metric('triage_sessions')
 
     let parsed = extractJson(await askExtractor(false))
     if (!parsed?.features) parsed = extractJson(await askExtractor(true))   // one retry, stricter
@@ -1125,6 +1133,8 @@ export async function POST(req: NextRequest) {
         decision,
         metadata: { kind: 'engine_emergency', roundedUp },
       })
+      await metric('emergency_stops')
+      if (totalTokensUsed > 0) await metric('tokens', totalTokensUsed)
       return NextResponse.json({
         type: 'emergency',
         message: "Based on what you've described, this may be a medical emergency. Please call 911 immediately or have someone take you to the nearest emergency room right now. Don't drive yourself.",
@@ -1203,6 +1213,10 @@ export async function POST(req: NextRequest) {
     // the rates table is missing (fail closed — never invent a number). The
     // /api/cost endpoint refines this with user-entered benefits.
     const costEstimate = await estimateCost(decision.careLevel).catch(() => null)
+
+    // Metrics: a recommendation was reached; bank the tokens this turn used.
+    await metric('recommendations')
+    if (totalTokensUsed > 0) await metric('tokens', totalTokensUsed)
 
     return NextResponse.json({
       type: 'recommendation',

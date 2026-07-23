@@ -20,6 +20,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Nav />
         <div className="pb-20 sm:pb-0">{children}</div>
         <SiteFooter />
+        {/* Privacy-preserving presence beacon: a random per-tab id (no cookie,
+            no PII) so the admin dashboard can show live viewers + page views. */}
+        <script dangerouslySetInnerHTML={{ __html: `
+(function(){try{
+  var id = Math.random().toString(36).slice(2) + Date.now().toString(36);
+  var first = true;
+  function ping(){ try{ fetch('/api/beacon',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({id:id,firstView:first}),keepalive:true}); first=false; }catch(e){} }
+  ping(); setInterval(ping, 45000);
+  document.addEventListener('visibilitychange', function(){ if(document.visibilityState==='visible') ping(); });
+}catch(e){}})();
+` }} />
       </body>
     </html>
   )

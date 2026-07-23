@@ -5,6 +5,7 @@ export const runtime = 'nodejs'
 
 import { NextRequest, NextResponse } from 'next/server'
 import { listSharedConversations, deleteSharedConversation } from '@/lib/research/consentStore'
+import { metricsSummary } from '@/lib/research/metricsStore'
 import { rateLimit, clientIp, TOO_MANY } from '@/lib/ratelimit'
 
 function authorized(req: NextRequest): boolean {
@@ -17,8 +18,8 @@ function authorized(req: NextRequest): boolean {
 export async function GET(req: NextRequest) {
   if (!rateLimit(`research-admin:${clientIp(req)}`, 30, 60_000)) return NextResponse.json(TOO_MANY, { status: 429 })
   if (!authorized(req)) return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
-  const logs = await listSharedConversations(200)
-  return NextResponse.json({ count: logs.length, logs })
+  const [logs, metrics] = await Promise.all([listSharedConversations(200), metricsSummary()])
+  return NextResponse.json({ count: logs.length, logs, metrics })
 }
 
 export async function DELETE(req: NextRequest) {
