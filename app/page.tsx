@@ -1310,7 +1310,7 @@ export function HomePage({
       <div className="bg-ink text-white">
         <div className="max-w-xl mx-auto px-5 py-6 grid grid-cols-3 divide-x divide-carevo-800">
           {[
-            { n: '3–4',    label: 'questions asked' },
+            { n: '≤6',     label: 'questions asked' },
             { n: '6',      label: 'care levels mapped' },
             { n: '$2,900', label: 'avg. savings possible' },
           ].map(({ n, label }) => (
