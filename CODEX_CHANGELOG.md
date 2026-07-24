@@ -2,6 +2,10 @@
 
 ## 2026-07-24
 
+- Made the homepage and AuditOS product page easier to read and less visually crowded.
+  - Softened the homepage hero background, reduced headline pressure, and added more space between the CTA and routing animation.
+  - Relaxed product-card, stats, workflow, and privacy section density in `public/landing-v2.html`.
+  - Reworded and spaced `app/audit-os/page.tsx` so the Carevo AuditOS page feels more user-friendly for insurer and EHR operations buyers.
 - Refined `app/audit-os/page.tsx` into a more spacious Carevo AuditOS product page.
   - Centered the page around "Care-routing compliance operations." with shorter, cleaner enterprise copy.
   - Added larger vertical spacing, calmer card density, and scroll-reveal motion classes across the product and trace sections.
