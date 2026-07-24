@@ -15,6 +15,10 @@
   - Reframed the Products carousel around buyer-facing products and supporting routing intelligence.
   - Updated the static footer platform links to include Carevo AuditOS and the AuditOS demo.
 - Updated `components/SiteFooter.tsx` with AI Triage and Carevo AuditOS links for cross-site discoverability.
+- Reworked `app/audit-os/page.tsx` into a more professional enterprise/EHR-style product page.
+  - Replaced the previous glossy hero with a healthcare operations control-center layout.
+  - Added a route safety workbench, work queue table, release-control metrics, decision trace, and enterprise deployment sections.
+  - Tightened the copy around AuditOS as a real-time care-routing compliance layer for insurers and healthcare facilities.
 
 ## 2026-07-08
 

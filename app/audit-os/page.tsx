@@ -1,177 +1,238 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import type { ReactNode } from 'react'
 
 export const metadata: Metadata = {
-  title: 'Carevo AuditOS - AI-native care-routing compliance infrastructure',
+  title: 'Carevo AuditOS - Care-routing compliance operations',
   description:
-    'Carevo AuditOS gives insurers and healthcare facilities real-time monitoring, route traceability, safety metrics, consent status, and operational savings views for AI-assisted care navigation.',
+    'Carevo AuditOS is an AI-native care-routing compliance layer for insurers and healthcare facilities, with real-time monitoring, traceability, review queues, and safety metrics.',
 }
 
-const tabs = [
+const controlMetrics = [
+  ['Latest 240-case gate', '0 under-triage', 'Release blocker'],
+  ['Emergency capture', '100%', 'Safety control'],
+  ['Audit completeness', '100%', 'Trace coverage'],
+  ['Consent state', 'Opt-in only', 'Research logs'],
+] as const
+
+const workQueue = [
+  ['CV-2401', 'Chest pressure with arm radiation', 'Emergency', 'Hard stop issued', 'Complete'],
+  ['CV-2402', 'Fever 103.1 for two days', 'Urgent Care', 'Red flags screened', 'Complete'],
+  ['CV-2403', 'Rolled ankle, can bear weight', 'Home Care', 'Escalation instructions', 'Complete'],
+  ['CV-2404', 'Child fever with extremity rash', 'ER', 'Safety floor applied', 'Complete'],
+] as const
+
+const trace = [
+  ['01', 'Patient intake', 'Member describes symptoms in natural language.'],
+  ['02', 'Emergency screen', 'Immediate and high-alert safety nets run before routing.'],
+  ['03', 'Fact extraction', 'The AI structures facts but does not choose the care level.'],
+  ['04', 'Ruleset route', 'Versioned deterministic rules produce the route and provenance.'],
+  ['05', 'Audit record', 'AuditOS stores status, consent, rule evidence, and review state.'],
+] as const
+
+const modules = [
   {
     title: 'Live Triage Monitor',
-    text: 'Watch active intake cases by care level, red flags, confidence, questions asked, and route status before handoff.',
-    stat: '0',
-    label: 'under-triage target',
+    text: 'Operational queue for active cases, care level, red flags, questions asked, and review status.',
   },
   {
     title: 'Decision Trace',
-    text: 'Replay the path from patient words to extracted facts, emergency screen, deterministic rule, route, facility, and cost context.',
-    stat: '100%',
-    label: 'route provenance',
+    text: 'A replayable route record from patient message to extracted facts, safety checks, rule match, and handoff.',
   },
   {
     title: 'Compliance Dashboard',
-    text: 'Track emergency capture, unresolved cases, audit completeness, consent status, and review queues in one place.',
-    stat: 'Live',
-    label: 'safety posture',
+    text: 'Safety controls for under-triage, emergency capture, unresolved cases, consent, and audit completeness.',
   },
   {
     title: 'Savings + Operations',
-    text: 'Estimate avoidable ER savings, urgent-care redirects, network fit, and manual review hours saved across populations.',
-    stat: '$',
-    label: 'cost visibility',
+    text: 'Views for avoided ER utilization, urgent-care redirects, network movement, and manual review hours saved.',
   },
-]
+] as const
 
-const traceSteps = [
-  'Patient shares symptoms',
-  'Emergency screen runs first',
-  'Facts are extracted',
-  'Ruleset selects the care route',
-  'AuditOS records provenance',
-]
+const stakeholders = [
+  'Health plans monitoring AI-assisted care navigation before authorization workflows',
+  'Emergency departments and urgent-care groups reducing wrong-facility arrivals',
+  'Clinical operations teams moving review work out of spreadsheets',
+  'Compliance teams that need a defensible record for every routing decision',
+] as const
 
-const useCases = [
-  'Insurers monitoring care-navigation safety before authorization workflows',
-  'ER and urgent-care operators reducing avoidable wrong-facility arrivals',
-  'Clinical operations teams replacing spreadsheet review with a live queue',
-  'Compliance leaders proving why a route was recommended and who reviewed it',
-]
+function StatusBadge({ tone, children }: { tone: 'green' | 'blue' | 'slate'; children: ReactNode }) {
+  const classes = {
+    green: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+    blue: 'border-blue-200 bg-blue-50 text-blue-700',
+    slate: 'border-slate-200 bg-slate-50 text-slate-600',
+  }
+  return (
+    <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.12em] ${classes[tone]}`}>
+      {children}
+    </span>
+  )
+}
 
 export default function AuditOSPage() {
   return (
-    <main className="min-h-screen overflow-hidden bg-[radial-gradient(circle_at_50%_-18%,rgba(125,211,252,0.62),transparent_34%),linear-gradient(180deg,#f7fcff_0%,#ffffff_42%,#f8fbff_100%)] px-4 pb-16 pt-28 text-slate-950 sm:px-6 sm:pb-20 sm:pt-36">
-      <section className="marketing-reveal mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
-        <div>
-          <p className="inline-flex items-center gap-3 rounded-full border border-slate-200 bg-white/85 px-5 py-3 text-xs font-black uppercase tracking-[0.18em] text-slate-500 shadow-sm">
-            <span className="h-2 w-2 rounded-full bg-blue-500" />
-            Carevo AuditOS
-          </p>
-          <h1 className="mt-7 max-w-4xl font-display text-[clamp(3rem,12vw,6.9rem)] font-black leading-[0.94] tracking-[-0.075em]">
-            AI-native compliance infrastructure for care routing.
-          </h1>
-          <p className="mt-7 max-w-2xl text-base font-semibold leading-8 text-slate-600 sm:text-xl sm:leading-9">
-            AuditOS turns every Carevo intake into a monitored, replayable record: what the member said, what safety checks ran, which rule fired, what route was returned, and what operational handoff followed.
-          </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link href="/demo" className="inline-flex items-center justify-center rounded-full bg-blue-600 px-8 py-4 text-sm font-black text-white shadow-lg shadow-blue-600/25 transition hover:-translate-y-0.5 hover:bg-blue-700">
-              View live demo
-            </Link>
-            <Link href="/contact" className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white/80 px-8 py-4 text-sm font-black text-slate-700 transition hover:border-slate-300 hover:bg-white hover:text-slate-950">
-              Talk to us
-            </Link>
-          </div>
-        </div>
-
-        <div className="rounded-[2.2rem] border border-slate-200 bg-white/82 p-4 shadow-2xl shadow-slate-900/10 backdrop-blur sm:p-5">
-          <div className="rounded-[1.7rem] bg-slate-950 p-5 text-white sm:p-6">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-5">
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-blue-300">Live safety console</p>
-                <h2 className="mt-2 text-2xl font-black tracking-[-0.04em]">Route review queue</h2>
-              </div>
-              <span className="rounded-full bg-emerald-400/10 px-4 py-2 text-xs font-black text-emerald-200 ring-1 ring-emerald-300/20">
-                0 under-triage
-              </span>
+    <main className="min-h-screen bg-[#f6f8fb] px-4 pb-16 pt-28 text-slate-950 sm:px-6 sm:pb-20 sm:pt-36">
+      <section className="mx-auto max-w-7xl">
+        <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr] lg:items-stretch">
+          <div className="rounded-[1.25rem] border border-slate-200 bg-white p-7 shadow-sm sm:p-9">
+            <div className="flex flex-wrap items-center gap-2">
+              <StatusBadge tone="blue">Carevo AuditOS</StatusBadge>
+              <StatusBadge tone="slate">Healthcare operations</StatusBadge>
             </div>
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              {[
-                ['Emergency capture', '100%'],
-                ['Audit completeness', '100%'],
-                ['Avg questions', '4.2'],
-                ['Consent status', 'Opt-in'],
-              ].map(([label, value]) => (
-                <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.07] p-4">
-                  <p className="text-3xl font-black tracking-tight">{value}</p>
-                  <p className="mt-1 text-[10px] font-black uppercase tracking-[0.16em] text-slate-400">{label}</p>
+            <h1 className="mt-7 max-w-3xl font-display text-[clamp(2.7rem,8vw,5.8rem)] font-black leading-[0.98] tracking-[-0.065em]">
+              Care-routing compliance operations.
+            </h1>
+            <p className="mt-6 max-w-2xl text-base font-semibold leading-8 text-slate-600 sm:text-lg">
+              AI-native infrastructure for real-time monitoring, audit readiness, and safety review across insurer and healthcare-facility triage workflows.
+            </p>
+            <div className="mt-7 grid gap-3 sm:grid-cols-2">
+              {controlMetrics.map(([label, value, caption]) => (
+                <div key={label} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                  <p className="text-[11px] font-black uppercase tracking-[0.16em] text-slate-400">{label}</p>
+                  <p className="mt-2 text-2xl font-black tracking-[-0.04em] text-slate-950">{value}</p>
+                  <p className="mt-1 text-xs font-bold text-slate-500">{caption}</p>
                 </div>
               ))}
             </div>
-            <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.06] p-4">
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-400">Example trace</p>
-              <div className="mt-4 space-y-3">
-                {traceSteps.map((step, index) => (
-                  <div key={step} className="flex items-center gap-3 rounded-xl bg-white/[0.06] px-3 py-2 text-sm font-bold text-slate-200">
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-[10px] font-black text-white">{index + 1}</span>
-                    {step}
-                  </div>
-                ))}
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+              <Link href="/demo" className="inline-flex min-h-11 items-center justify-center rounded-md bg-blue-700 px-6 py-3 text-sm font-black text-white shadow-sm transition hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-100">
+                Open product demo
+              </Link>
+              <Link href="/contact" className="inline-flex min-h-11 items-center justify-center rounded-md border border-slate-300 bg-white px-6 py-3 text-sm font-black text-slate-700 transition hover:border-slate-400 hover:text-slate-950 focus:outline-none focus:ring-4 focus:ring-blue-100">
+                Talk to Carevo
+              </Link>
+            </div>
+          </div>
+
+          <div className="overflow-hidden rounded-[1.25rem] border border-slate-200 bg-white shadow-sm">
+            <div className="border-b border-slate-200 bg-slate-950 px-5 py-4 text-white">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-blue-200">Operational command center</p>
+                  <h2 className="mt-1 text-xl font-black tracking-[-0.03em]">Route safety workbench</h2>
+                </div>
+                <StatusBadge tone="green">All controls passing</StatusBadge>
               </div>
+            </div>
+            <div className="grid border-b border-slate-200 sm:grid-cols-4">
+              {[
+                ['Active cases', '124'],
+                ['Review needed', '7'],
+                ['Avg questions', '4.2'],
+                ['SLA risk', '0'],
+              ].map(([label, value]) => (
+                <div key={label} className="border-b border-slate-200 px-4 py-4 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0">
+                  <p className="text-2xl font-black tracking-tight text-slate-950">{value}</p>
+                  <p className="mt-1 text-[10px] font-black uppercase tracking-[0.14em] text-slate-400">{label}</p>
+                </div>
+              ))}
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[620px] text-left text-sm">
+                <thead className="bg-slate-50 text-[10px] font-black uppercase tracking-[0.16em] text-slate-400">
+                  <tr>
+                    <th className="px-4 py-3">Case</th>
+                    <th className="px-4 py-3">Presentation</th>
+                    <th className="px-4 py-3">Route</th>
+                    <th className="px-4 py-3">Control</th>
+                    <th className="px-4 py-3">Audit</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {workQueue.map(([id, presentation, route, control, audit]) => (
+                    <tr key={id} className="bg-white">
+                      <td className="px-4 py-4 font-mono text-xs font-bold text-slate-500">{id}</td>
+                      <td className="px-4 py-4 font-bold text-slate-900">{presentation}</td>
+                      <td className="px-4 py-4">
+                        <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-black text-slate-700">{route}</span>
+                      </td>
+                      <td className="px-4 py-4 text-xs font-semibold text-slate-600">{control}</td>
+                      <td className="px-4 py-4">
+                        <StatusBadge tone="green">{audit}</StatusBadge>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="scroll-reveal mx-auto mt-20 max-w-7xl sm:mt-24">
-        <div className="grid gap-4 md:grid-cols-4">
-          {tabs.map((item) => (
-            <article key={item.title} className="rounded-[1.5rem] border border-slate-200 bg-white/82 p-6 shadow-sm backdrop-blur transition hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-900/5">
-              <p className="text-3xl font-black tracking-[-0.04em] text-blue-600">{item.stat}</p>
-              <p className="mt-1 text-[10px] font-black uppercase tracking-[0.16em] text-slate-400">{item.label}</p>
-              <h2 className="mt-8 font-display text-2xl font-black tracking-[-0.05em]">{item.title}</h2>
-              <p className="mt-4 text-sm font-semibold leading-7 text-slate-600">{item.text}</p>
+      <section className="scroll-reveal mx-auto mt-8 max-w-7xl">
+        <div className="grid gap-4 lg:grid-cols-4">
+          {modules.map((module) => (
+            <article key={module.title} className="rounded-[1rem] border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="font-display text-xl font-black tracking-[-0.04em] text-slate-950">{module.title}</h2>
+              <p className="mt-3 text-sm font-semibold leading-6 text-slate-600">{module.text}</p>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="scroll-reveal mx-auto mt-20 grid max-w-7xl gap-10 border-t border-slate-200/80 pt-14 sm:mt-24 sm:pt-16 lg:grid-cols-[0.85fr_1.15fr]">
-        <div>
-          <p className="text-xs font-black uppercase tracking-[0.22em] text-carevo-600">Why it matters</p>
-          <h2 className="mt-5 font-display text-[clamp(2.4rem,10vw,4.8rem)] font-black leading-[0.98] tracking-[-0.065em]">
-            The compliance layer should move at the speed of the intake.
+      <section className="scroll-reveal mx-auto mt-8 grid max-w-7xl gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="rounded-[1.25rem] border border-slate-200 bg-white p-7 shadow-sm sm:p-8">
+          <p className="text-xs font-black uppercase tracking-[0.2em] text-blue-700">Decision trace</p>
+          <h2 className="mt-4 font-display text-4xl font-black leading-tight tracking-[-0.055em] text-slate-950">
+            Every route becomes a reviewable record.
           </h2>
-        </div>
-        <div className="space-y-5 text-base font-semibold leading-8 text-slate-600 sm:text-lg">
-          <p>
-            Healthcare routing creates operational risk when decisions live in chat logs, spreadsheets, screenshots, or memory. AuditOS gives insurers and healthcare facilities a live system of record for the routing workflow.
-          </p>
-          <p>
-            The goal is not to replace clinical judgment. The goal is to make every safety step visible: emergency checks, follow-up questions, rule evidence, care level, facility context, consent, and review status.
-          </p>
-          <p className="font-black text-slate-950">
-            The most suitable positioning for Carevo is Carevo Routing Intelligence Layer, with AuditOS as the compliance command center inside it.
+          <p className="mt-5 text-sm font-semibold leading-7 text-slate-600">
+            Carevo AuditOS is most useful as the control center for the broader Carevo Routing Intelligence Layer. The triage system handles intake and routing; AuditOS monitors the workflow, evidence, exceptions, and operations impact.
           </p>
         </div>
-      </section>
-
-      <section className="scroll-reveal mx-auto mt-20 max-w-7xl sm:mt-24">
-        <p className="mb-5 text-xs font-black uppercase tracking-[0.22em] text-carevo-600">Built for</p>
-        <div className="grid gap-5 md:grid-cols-2">
-          {useCases.map((item) => (
-            <div key={item} className="rounded-[1.4rem] border border-slate-200 bg-white/80 p-6 text-base font-black leading-7 text-slate-800 shadow-sm backdrop-blur">
-              <span className="mr-3 inline-block h-2.5 w-2.5 rounded-full bg-blue-500 align-middle" />
-              {item}
-            </div>
-          ))}
+        <div className="rounded-[1.25rem] border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="space-y-3">
+            {trace.map(([number, title, text]) => (
+              <div key={number} className="grid grid-cols-[44px_1fr] gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white font-mono text-xs font-black text-blue-700 shadow-sm">{number}</span>
+                <div>
+                  <h3 className="text-sm font-black text-slate-950">{title}</h3>
+                  <p className="mt-1 text-sm font-semibold leading-6 text-slate-600">{text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="scroll-reveal mx-auto mt-20 max-w-7xl rounded-[2rem] bg-slate-950 p-7 text-white shadow-2xl shadow-slate-900/20 sm:mt-24 sm:p-12">
-        <h2 className="max-w-4xl font-display text-[clamp(2.35rem,11vw,4.8rem)] font-black leading-[0.98] tracking-[-0.06em]">
-          Stop reviewing routes after the fact.
-        </h2>
-        <p className="mt-6 max-w-3xl text-base font-semibold leading-8 text-slate-300">
-          Carevo can give payers and care teams a real-time view of route safety, network movement, review queues, and cost impact before the workflow becomes another spreadsheet.
-        </p>
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <Link href="/demo" className="inline-flex items-center justify-center rounded-full bg-white px-8 py-4 text-sm font-black text-slate-950 transition hover:bg-slate-100">
-            Open the AuditOS demo
-          </Link>
-          <Link href="/triage" className="inline-flex items-center justify-center rounded-full border border-white/15 px-8 py-4 text-sm font-black text-white transition hover:bg-white/10">
-            Try AI triage
-          </Link>
+      <section className="scroll-reveal mx-auto mt-8 max-w-7xl rounded-[1.25rem] border border-slate-200 bg-white p-7 shadow-sm sm:p-8">
+        <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-blue-700">Built for enterprise deployment</p>
+            <h2 className="mt-4 font-display text-4xl font-black leading-tight tracking-[-0.055em] text-slate-950">
+              Replace spreadsheet-heavy monitoring with a live control plane.
+            </h2>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {stakeholders.map((item) => (
+              <div key={item} className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm font-bold leading-6 text-slate-700">
+                <span className="mr-2 inline-block h-2 w-2 rounded-full bg-blue-600 align-middle" />
+                {item}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="scroll-reveal mx-auto mt-8 max-w-7xl rounded-[1.25rem] border border-slate-900 bg-slate-950 p-7 text-white shadow-sm sm:p-8">
+        <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-blue-200">Carevo AuditOS</p>
+            <h2 className="mt-3 max-w-3xl font-display text-4xl font-black leading-tight tracking-[-0.055em]">
+              A compliance layer that works while routing is happening.
+            </h2>
+            <p className="mt-4 max-w-2xl text-sm font-semibold leading-7 text-slate-300">
+              Built for payers and care teams that need route safety, audit evidence, consent state, cost impact, and exception review in the same operational view.
+            </p>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+            <Link href="/demo" className="inline-flex min-h-11 items-center justify-center rounded-md bg-white px-6 py-3 text-sm font-black text-slate-950 transition hover:bg-slate-100">
+              Open AuditOS demo
+            </Link>
+            <Link href="/triage" className="inline-flex min-h-11 items-center justify-center rounded-md border border-white/20 px-6 py-3 text-sm font-black text-white transition hover:bg-white/10">
+              View AI triage
+            </Link>
+          </div>
         </div>
       </section>
     </main>
