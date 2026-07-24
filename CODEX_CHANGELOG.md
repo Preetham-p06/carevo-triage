@@ -2,6 +2,10 @@
 
 ## 2026-07-24
 
+- Rebuilt the `/audit-os` product page into a more visual enterprise operations page.
+  - Reduced long-form copy and replaced dense sections with a Carevo AuditOS command-center mockup, route safety queue, decision trace, operational metrics, and intake-to-care flow visual.
+  - Kept the positioning focused on AI-native care-routing compliance infrastructure for insurers and healthcare facilities.
+  - Preserved the existing `/AUDITOS` live demo and `/triage` links.
 - Added a security and compliance packet for partner diligence.
   - Created `SECURITY-COMPLIANCE-PACKET.md` with Carevo's current security posture, data flow, AI safety controls, HIPAA/SOC 2/ISO readiness, questionnaire answers, and open gaps.
   - Created `SECURITY-COMPLIANCE-ONE-PAGER.md` as a shorter version for emails, accelerator forms, and early buyer conversations.
