@@ -1,240 +1,412 @@
 'use client'
 
-// Carevo Partner Console — enterprise workspace demo (ServiceNow-style layout:
-// left nav rail + KPI strip + master case queue + detail record with tabs).
-// PUBLIC, fully SIMULATED data (labeled). Share URL directly: /demo
-import { useState } from 'react'
+// Carevo AuditOS / Routing Intelligence Layer demo.
+// Public, simulated enterprise console. No real patient data.
+import { useMemo, useState } from 'react'
 import Link from 'next/link'
 
+type View = 'audit' | 'routing'
+type Tab = 'monitor' | 'trace' | 'compliance' | 'savings'
 type Level = 'Emergency' | 'ER' | 'Urgent Care' | 'Primary Care' | 'Telehealth' | 'Home Care'
-interface Case {
-  id: string; who: string; age: string; payer: string; summary: string
-  level: Level; risk: 'High' | 'Moderate' | 'Low'; status: string; sla: string
-  next: string; saved: string | null
-  convo: [string, string, string][]        // [speaker, text, t]
-  facts: string[]; rules: string[]; conf: string
-  activity: [string, string][]             // [time, event]
+
+type CaseRow = {
+  id: string
+  member: string
+  symptom: string
+  level: Level
+  status: string
+  safe: boolean
+  confidence: string
+  questions: number
+  redFlags: string[]
+  payer: string
+  saved: number
+  trace: string[]
 }
 
-const LVL: Record<Level, string> = {
-  'Emergency': 'bg-red-100 text-red-700 ring-red-200', 'ER': 'bg-red-50 text-red-600 ring-red-100',
-  'Urgent Care': 'bg-amber-50 text-amber-700 ring-amber-100', 'Primary Care': 'bg-sky-50 text-sky-700 ring-sky-100',
-  'Telehealth': 'bg-blue-50 text-blue-700 ring-blue-100', 'Home Care': 'bg-emerald-50 text-emerald-700 ring-emerald-100',
+const CASES: CaseRow[] = [
+  {
+    id: 'CV-2401',
+    member: 'Fictional member, 58',
+    symptom: 'Chest pressure with left arm radiation',
+    level: 'Emergency',
+    status: '911 hard stop issued',
+    safe: true,
+    confidence: 'Hard stop',
+    questions: 1,
+    redFlags: ['chest pressure', 'arm radiation'],
+    payer: 'Commercial PPO',
+    saved: 0,
+    trace: [
+      'Patient message: chest feels tight and goes into my left arm',
+      'Emergency screen: cardiac warning pattern detected before AI routing',
+      'Extracted facts: chest pressure, radiation, acute onset',
+      'Rule matched: emergency cardiac floor',
+      'Care route: call 911 / emergency care',
+      'Audit result: replayable trace saved with rule provenance',
+    ],
+  },
+  {
+    id: 'CV-2402',
+    member: 'Fictional member, 34',
+    symptom: 'Fever 103.1 for two days, no stiff neck or rash',
+    level: 'Urgent Care',
+    status: 'Routed to in-network UC',
+    safe: true,
+    confidence: '0.86',
+    questions: 4,
+    redFlags: ['high fever'],
+    payer: 'Commercial HMO',
+    saved: 1850,
+    trace: [
+      'Patient message: fever for two days',
+      'Clarify-first question: thermometer number requested',
+      'Extracted facts: 103.1 F, 48 hours, fluids tolerated',
+      'Emergency screen: stiff neck, rash, dehydration screened negative',
+      'Rule matched: sustained adult fever floor',
+      'Care route: urgent care with nearby facility context',
+    ],
+  },
+  {
+    id: 'CV-2403',
+    member: 'Fictional member, 22',
+    symptom: 'Rolled ankle, swollen, can bear weight',
+    level: 'Home Care',
+    status: 'Closed with 48h check-in',
+    safe: true,
+    confidence: '0.81',
+    questions: 5,
+    redFlags: [],
+    payer: 'Student plan',
+    saved: 2900,
+    trace: [
+      'Patient message: rolled ankle at practice yesterday',
+      'Follow-up: weight-bearing and deformity screen',
+      'Extracted facts: ankle injury, swelling, can walk, no visible deformity',
+      'Emergency screen: no open fracture, numbness, or severe deformity',
+      'Rule matched: no higher-acuity floor fired',
+      'Care route: home care with escalation instructions',
+    ],
+  },
+  {
+    id: 'CV-2404',
+    member: 'Fictional guardian, child 8',
+    symptom: 'Child fever with wrist and ankle rash',
+    level: 'ER',
+    status: 'ER recommendation issued',
+    safe: true,
+    confidence: 'Floor enforced',
+    questions: 0,
+    redFlags: ['pediatric fever', 'extremity rash'],
+    payer: 'Medicaid',
+    saved: 0,
+    trace: [
+      'Patient message: child has fever and rash on wrists and ankles',
+      'Emergency screen: pediatric fever plus extremity rash pattern detected',
+      'Extracted facts: child, fever, rash distribution',
+      'Rule matched: pediatric fever-rash ER floor',
+      'Care route: ER',
+      'Audit result: high-risk route not delayed by more questions',
+    ],
+  },
+  {
+    id: 'CV-2405',
+    member: 'Fictional member, 61',
+    symptom: 'Gradual shortness of breath only on stairs',
+    level: 'Telehealth',
+    status: 'Virtual visit queued',
+    safe: true,
+    confidence: '0.74',
+    questions: 6,
+    redFlags: [],
+    payer: 'Medicare Advantage',
+    saved: 2400,
+    trace: [
+      'Patient message: getting winded walking up stairs',
+      'Follow-up: rest breathing screen',
+      'Follow-up: chest pain screen',
+      'Extracted facts: gradual onset, exertional only, no chest pain',
+      'Rule matched: no ER floor; low-acuity route held until danger screened',
+      'Care route: telehealth appointment',
+    ],
+  },
+]
+
+const LEVEL_STYLE: Record<Level, string> = {
+  Emergency: 'bg-red-500 text-white ring-red-200',
+  ER: 'bg-red-50 text-red-700 ring-red-200',
+  'Urgent Care': 'bg-amber-50 text-amber-800 ring-amber-200',
+  'Primary Care': 'bg-sky-50 text-sky-800 ring-sky-200',
+  Telehealth: 'bg-blue-50 text-blue-800 ring-blue-200',
+  'Home Care': 'bg-emerald-50 text-emerald-800 ring-emerald-200',
 }
-const RISKDOT: Record<string, string> = { High: 'bg-red-500', Moderate: 'bg-amber-500', Low: 'bg-emerald-500' }
 
-const CASES: Case[] = [
-  { id: 'CAS0008821', who: 'R. Patel', age: '58', payer: 'UnitedHealth', summary: 'Chest pressure — onset 3h, radiating to left arm', level: 'Emergency', risk: 'High', status: 'ED notified', sla: '2m ago', next: 'Awaiting ER triage handoff', saved: null,
-    convo: [['Patient', "chest feels really tight, started a few hours ago", 't+0s'], ['Carevo', 'That can be serious. Does it spread to your arm, jaw, or back?', 't+2s'], ['Patient', 'yeah, kind of aches into my left arm', 't+31s'], ['Carevo', '⚠ EMERGENCY — call 911 now or get to the nearest ER. Do not drive yourself.', 't+33s']],
-    facts: ['SYSTEM cardiac', 'SEVERITY high', 'ONSET 3h', 'RED FLAGS chest_pressure · arm_radiation'],
-    rules: ['net.emergency_tier1 — chest pressure + arm radiation trips the pre-AI emergency net (AHA)'], conf: 'deterministic hard-stop',
-    activity: [['t+0s', 'Case opened — patient began intake'], ['t+2s', 'Emergency net armed (cardiac terms)'], ['t+33s', '911 hard-stop issued'], ['t+41s', 'Trace forwarded to ED partner queue']] },
-  { id: 'CAS0008820', who: 'S. Torres', age: '34', payer: 'Aetna', summary: 'Persistent fever 103.1°F, 48h — screens negative', level: 'Urgent Care', risk: 'Moderate', status: 'Routed', sla: '9m ago', next: '2 in-network UCs within 3 mi', saved: '$1,850',
-    convo: [['Patient', 'fever for two days, not going away', 't+0s'], ['Carevo', 'What number does your thermometer say?', 't+2s'], ['Patient', '103.1 this morning', 't+24s'], ['Carevo', 'Any stiff neck, or a rash anywhere?', 't+26s'], ['Patient', 'no rash, neck is fine', 't+40s'], ['Carevo', 'Keeping fluids down okay?', 't+42s'], ['Patient', 'yes, drinking fine', 't+55s']],
-    facts: ['SYSTEM constitutional', 'FEVER 103.1°F', 'DURATION 48h', 'SCREENS stiff neck ✕ · rash ✕ · dehydration ✕'],
-    rules: ['rf.high_fever_adult — sustained ≥103°F floors at urgent care (CDC)'], conf: '0.86',
-    activity: [['t+0s', 'Case opened'], ['t+2s', 'Clarify-first: temperature requested'], ['t+42s', 'Meningitis + dehydration screens cleared'], ['t+56s', 'Routed · in-network UC list attached']] },
-  { id: 'CAS0008819', who: 'D. Brown', age: '61', payer: 'Cigna', summary: 'Dyspnea on exertion, gradual ~2 months', level: 'Telehealth', risk: 'Moderate', status: 'Queued', sla: '14m ago', next: 'Telehealth slot queued — 20 min', saved: '$2,400',
-    convo: [['Patient', 'getting winded walking up stairs lately', 't+0s'], ['Carevo', 'Are you short of breath right now, sitting still?', 't+2s'], ['Patient', 'no, only when i push myself', 't+22s'], ['Carevo', 'Any chest pain when it happens?', 't+24s'], ['Patient', 'no pain, just puffing', 't+40s'], ['Carevo', 'How long has this been building?', 't+42s'], ['Patient', 'couple months maybe', 't+58s']],
-    facts: ['SYSTEM respiratory', 'SEVERITY mild', 'ONSET gradual ~2mo', 'SCREENS rest dyspnea ✕ · chest pain ✕'],
-    rules: ['none fired — engine scoring routed (no floors)'], conf: '0.74',
-    activity: [['t+0s', 'Case opened'], ['t+24s', 'Cardiac red-flag screen cleared'], ['t+59s', 'Scoring model routed · telehealth slot held']] },
-  { id: 'CAS0008818', who: 'K. Lee', age: '22', payer: 'BCBS', summary: 'Ankle inversion injury, weight-bearing intact', level: 'Home Care', risk: 'Low', status: 'Closed', sla: '22m ago', next: 'RICE + 48h follow-up nudge', saved: '$2,900',
-    convo: [['Patient', 'rolled my ankle at practice yesterday, swollen', 't+0s'], ['Carevo', 'Can you put weight on it — does it look deformed?', 't+2s'], ['Patient', 'i can walk on it, just sore. looks normal', 't+28s'], ['Carevo', 'Is the pain stopping you from sleeping or daily stuff?', 't+30s'], ['Patient', 'not really', 't+52s']],
-    facts: ['SYSTEM msk', 'MECHANISM inversion, 24h', 'WEIGHT-BEARING yes', 'SCREENS deformity ✕ · non-weight-bearing ✕'],
-    rules: ['none fired — Ottawa-style screens negative'], conf: '0.81',
-    activity: [['t+0s', 'Case opened'], ['t+2s', 'Clarify-first: weight-bearing asked'], ['t+53s', 'Home care · 48h re-check scheduled']] },
-  { id: 'CAS0008817', who: 'M. Okafor', age: '41', payer: 'Medicaid (OH)', summary: 'Limited English: "head very hot two day"', level: 'Telehealth', risk: 'Moderate', status: 'Routed', sla: '31m ago', next: 'Interpreter-flagged telehealth referral', saved: '$2,100',
-    convo: [['Patient', 'head very hot two day', 't+0s'], ['Carevo', 'What number does your thermometer say, or do you feel very hot to the touch?', 't+2s'], ['Patient', 'not know, feel hot', 't+20s'], ['Carevo', 'Are you keeping water down okay?', 't+22s'], ['Patient', 'no can eat good', 't+38s']],
-    facts: ['SYSTEM constitutional', 'FEVER language (unmeasured)', 'HEDGED answers ×2', 'FLOOR fever-language: never home care'],
-    rules: ['floor.fever_language — fever phrasing + hedged interview ⇒ telehealth minimum'], conf: 'floor-enforced',
-    activity: [['t+0s', 'Case opened · limited-English detected'], ['t+22s', 'Hedge counter tripped (×2)'], ['t+39s', 'Safety floor held · interpreter flag set']] },
-  { id: 'CAS0008816', who: 'J. Nguyen', age: '8', payer: 'UnitedHealth', summary: 'Pediatric: fever + wrist/ankle rash', level: 'ER', risk: 'High', status: 'ED notified', sla: '44m ago', next: 'ER notified — pediatric fever+rash pattern', saved: null,
-    convo: [['Parent', 'my 8 y/o has a fever and a rash on his wrists and ankles', 't+0s'], ['Carevo', 'With that combination, he should be seen in the ER today. A doctor needs to look at that rash.', 't+3s']],
-    facts: ['SYSTEM pediatric', 'FEVER present', 'RASH wrists/ankles', 'PATTERN fever+rash+extremities'],
-    rules: ['raw.pediatric_fever_rash — deterministic ER floor, LLM-independent (RMSF pattern)'], conf: 'floor-enforced',
-    activity: [['t+0s', 'Case opened (guardian intake)'], ['t+3s', 'Pediatric fever+rash floor fired'], ['t+9s', 'ER partner notified with trace']] },
+const TABS: Array<{ id: Tab; title: string; description: string }> = [
+  { id: 'monitor', title: 'Live Triage Monitor', description: 'Active cases, care levels, red flags, confidence, and route safety.' },
+  { id: 'trace', title: 'Decision Trace', description: 'Patient words to extracted facts to rule match to facility and cost context.' },
+  { id: 'compliance', title: 'Compliance Dashboard', description: 'Safety metrics, consent status, unresolved cases, and audit completeness.' },
+  { id: 'savings', title: 'Savings + Operations', description: 'Avoidable ER savings, urgent care redirects, and manual review time saved.' },
 ]
 
-const NAV = [
-  ['Pre-arrival Queue', 'M4 6h16M4 12h16M4 18h10', true],
-  ['All Cases', 'M4 6h16M4 12h16M4 18h16', false],
-  ['Deflection Impact', 'M3 17l6-6 4 4 8-8', false],
-  ['Audit Log', 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2', false],
-  ['Analytics', 'M4 20V10M10 20V4M16 20v-8M22 20h-20', false],
-  ['Payers', 'M3 7h18v10H3zM3 11h18', false],
-]
-const KPIS = [
-  ['24', 'Cases today', ''], ['9', 'ER visits deflected', 'text-emerald-600'],
-  ['$21,400', 'Avoided cost', 'text-emerald-600'], ['1m 40s', 'Avg handoff time', ''],
-  ['0', 'Under-triage · all-time', 'text-slate-900'],
-]
+function formatCurrency(value: number) {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value)
+}
 
-export default function PartnerConsole() {
-  const [sel, setSel] = useState(CASES[0].id)
-  const [tab, setTab] = useState<'overview' | 'trace' | 'activity'>('overview')
-  const [q, setQ] = useState('')
-  const c = CASES.find(x => x.id === sel)!
-  const rows = CASES.filter(x => (x.summary + x.who + x.payer + x.id).toLowerCase().includes(q.toLowerCase()))
+function Pill({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+  return <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-black ring-1 ${className}`}>{children}</span>
+}
+
+export default function AuditOSDemo() {
+  const [view, setView] = useState<View>('audit')
+  const [tab, setTab] = useState<Tab>('monitor')
+  const [selectedId, setSelectedId] = useState(CASES[0].id)
+  const selected = CASES.find(c => c.id === selectedId) ?? CASES[0]
+  const metrics = useMemo(() => {
+    const erDeflected = CASES.filter(c => c.saved > 0).length
+    const savings = CASES.reduce((sum, c) => sum + c.saved, 0)
+    const avgQuestions = CASES.reduce((sum, c) => sum + c.questions, 0) / CASES.length
+    return {
+      active: CASES.length,
+      emergencyCapture: '100%',
+      underTriage: '0',
+      auditComplete: '100%',
+      erDeflected,
+      savings,
+      avgQuestions: avgQuestions.toFixed(1),
+      manualHours: 18,
+    }
+  }, [])
+
+  const title = view === 'audit' ? 'Carevo AuditOS' : 'Carevo Routing Intelligence Layer'
+  const subtitle = view === 'audit'
+    ? 'AI-native care-routing compliance infrastructure for real-time monitoring, audit readiness, and safety review.'
+    : 'The enterprise layer that turns each intake into a traceable route, cost signal, and operational handoff.'
 
   return (
-    <div className="fixed inset-0 flex bg-slate-100 text-slate-900 [font-family:'Plus_Jakarta_Sans',system-ui,sans-serif]">
-      {/* Left nav rail */}
-      <aside className="hidden w-56 shrink-0 flex-col border-r border-slate-800 bg-slate-900 md:flex">
-        <Link href="/" className="flex items-center gap-2 border-b border-slate-800 px-5 py-4">
-          <span className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-md bg-white/10"><img src="/brand/carevo-logo.png" alt="" className="h-full w-full object-cover" /></span>
-          <span className="text-[15px] font-black tracking-tight text-white">carevo</span>
-          <span className="ml-auto rounded bg-white/10 px-1.5 py-0.5 text-[8px] font-black uppercase tracking-wider text-slate-300">Partner</span>
-        </Link>
-        <nav className="flex-1 space-y-0.5 p-3">
-          {NAV.map(([label, path, active]) => (
-            <div key={label as string} className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-bold ${active ? 'bg-blue-600 text-white' : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'}`}>
-              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={path as string} /></svg>
-              {label}
-            </div>
-          ))}
-        </nav>
-        <div className="border-t border-slate-800 p-3 text-[10px] font-semibold leading-relaxed text-slate-500">
-          Simulated environment.<br />No real patient data.
-        </div>
-      </aside>
+    <main className="min-h-screen bg-[#06101f] text-white [font-family:'Plus_Jakarta_Sans',system-ui,sans-serif]">
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
+        <div className="absolute left-1/2 top-[-220px] h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-blue-500/20 blur-3xl" />
+        <div className="absolute right-[-180px] top-52 h-[460px] w-[460px] rounded-full bg-cyan-400/10 blur-3xl" />
+      </div>
 
-      {/* Main workspace */}
-      <div className="flex min-w-0 flex-1 flex-col">
-        {/* Top bar */}
-        <header className="flex h-14 shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-4">
-          <p className="text-sm font-semibold text-slate-400">Carevo <span className="text-slate-300">›</span> <span className="font-black text-slate-800">Pre-arrival Queue</span></p>
-          <div className="ml-auto flex items-center gap-3">
-            <div className="relative hidden sm:block">
-              <svg className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" strokeLinecap="round" /></svg>
-              <input value={q} onChange={e => setQ(e.target.value)} placeholder="Search cases…" className="w-56 rounded-lg border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm font-semibold placeholder:text-slate-400 focus:border-blue-300 focus:bg-white focus:outline-none" />
-            </div>
-            <span className="rounded-full border border-amber-300 bg-amber-50 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-amber-700">Simulated data</span>
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-900 text-xs font-black text-white">P</span>
+      <section className="relative mx-auto max-w-7xl px-5 pb-14 pt-8">
+        <header className="flex items-center justify-between gap-4 rounded-[28px] border border-white/10 bg-white/[0.06] px-5 py-4 shadow-2xl shadow-black/20 backdrop-blur">
+          <Link href="/" className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-slate-950">
+              <img src="/brand/carevo-logo.png" alt="" className="h-full w-full object-cover" />
+            </span>
+            <span className="text-lg font-black tracking-tight">carevo</span>
+          </Link>
+          <div className="hidden items-center gap-2 md:flex">
+            <Link href="/benchmarks" className="rounded-full px-4 py-2 text-sm font-bold text-slate-300 hover:bg-white/10 hover:text-white">Benchmarks</Link>
+            <Link href="/compliance" className="rounded-full px-4 py-2 text-sm font-bold text-slate-300 hover:bg-white/10 hover:text-white">Compliance Console</Link>
+            <Link href="/contact" className="rounded-full bg-white px-5 py-2 text-sm font-black text-slate-950">Request pilot</Link>
           </div>
         </header>
 
-        {/* KPI strip */}
-        <div className="grid shrink-0 grid-cols-2 gap-px border-b border-slate-200 bg-slate-200 sm:grid-cols-5">
-          {KPIS.map(([v, l, a]) => (
-            <div key={l as string} className="bg-white px-5 py-3">
-              <p className={`text-xl font-black tabular-nums tracking-tight ${a || 'text-slate-900'}`}>{v}</p>
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{l}</p>
+        <div className="mt-12 grid gap-8 lg:grid-cols-[0.9fr_1.45fr] lg:items-end">
+          <div>
+            <div className="inline-flex rounded-full border border-white/10 bg-white/5 p-1">
+              {(['audit', 'routing'] as const).map(mode => (
+                <button
+                  key={mode}
+                  onClick={() => setView(mode)}
+                  className={`rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.16em] transition ${view === mode ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/25' : 'text-slate-400 hover:text-white'}`}
+                >
+                  {mode === 'audit' ? 'AuditOS' : 'Routing Layer'}
+                </button>
+              ))}
             </div>
-          ))}
+            <h1 className="mt-7 max-w-xl text-5xl font-black leading-[0.95] tracking-[-0.05em] text-white sm:text-6xl">
+              {title}
+            </h1>
+            <p className="mt-5 max-w-xl text-lg font-semibold leading-8 text-slate-300">{subtitle}</p>
+            <div className="mt-6 flex flex-wrap gap-2">
+              <Pill className="bg-emerald-400/10 text-emerald-200 ring-emerald-300/20">0 under-triage in latest 240-case gate</Pill>
+              <Pill className="bg-blue-400/10 text-blue-100 ring-blue-300/20">Every route has provenance</Pill>
+              <Pill className="bg-white/10 text-slate-100 ring-white/15">Simulated demo data</Pill>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            {[
+              [metrics.active, 'active cases'],
+              [metrics.emergencyCapture, 'emergency capture'],
+              [metrics.underTriage, 'under-triage'],
+              [metrics.auditComplete, 'audit complete'],
+            ].map(([value, label]) => (
+              <div key={label} className="rounded-3xl border border-white/10 bg-white/[0.07] p-5 shadow-xl shadow-black/10 backdrop-blur">
+                <p className="text-3xl font-black tracking-tight text-white">{value}</p>
+                <p className="mt-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">{label}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Master + detail */}
-        <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
-          {/* Case list */}
-          <div className="w-full shrink-0 overflow-y-auto border-b border-slate-200 lg:w-[380px] lg:border-b-0 lg:border-r">
-            <div className="grid grid-cols-[16px_1fr_auto] items-center gap-2 border-b border-slate-100 bg-slate-50 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-slate-400">
-              <span></span><span>Case</span><span>Level</span>
-            </div>
-            {rows.map(x => (
-              <button key={x.id} onClick={() => { setSel(x.id); setTab('overview') }}
-                className={`grid w-full grid-cols-[16px_1fr_auto] items-center gap-2 border-b border-slate-100 px-4 py-3 text-left transition ${sel === x.id ? 'bg-blue-50' : 'hover:bg-slate-50'}`}>
-                <span className={`h-2.5 w-2.5 rounded-full ${RISKDOT[x.risk]}`} title={`${x.risk} risk`} />
-                <span className="min-w-0">
-                  <span className="block truncate text-sm font-bold text-slate-900">{x.summary}</span>
-                  <span className="mt-0.5 block text-[11px] font-semibold text-slate-400">{x.who}, {x.age} · {x.payer} · <span className="font-mono">{x.id}</span></span>
-                </span>
-                <span className={`rounded-full px-2 py-1 text-[10px] font-black ring-1 ${LVL[x.level]}`}>{x.level}</span>
+        <div className="mt-10 overflow-hidden rounded-[32px] border border-white/10 bg-white text-slate-950 shadow-2xl shadow-black/25">
+          <div className="grid border-b border-slate-200 bg-slate-50 md:grid-cols-4">
+            {TABS.map(item => (
+              <button
+                key={item.id}
+                onClick={() => setTab(item.id)}
+                className={`border-b border-slate-200 px-5 py-4 text-left transition md:border-b-0 md:border-r last:md:border-r-0 ${tab === item.id ? 'bg-white' : 'hover:bg-white/70'}`}
+              >
+                <p className={`text-sm font-black ${tab === item.id ? 'text-blue-700' : 'text-slate-700'}`}>{item.title}</p>
+                <p className="mt-1 line-clamp-2 text-xs font-semibold leading-5 text-slate-400">{item.description}</p>
               </button>
             ))}
           </div>
 
-          {/* Detail record */}
-          <div className="min-w-0 flex-1 overflow-y-auto bg-slate-50">
-            <div className="border-b border-slate-200 bg-white px-6 py-5">
-              <div className="flex flex-wrap items-center gap-3">
-                <span className={`rounded-full px-3 py-1 text-sm font-black ring-1 ${LVL[c.level]}`}>{c.level}</span>
-                <h1 className="text-lg font-black tracking-tight text-slate-900">{c.summary}</h1>
-                <span className="ml-auto flex items-center gap-1.5 text-xs font-bold text-slate-500"><span className={`h-2 w-2 rounded-full ${RISKDOT[c.risk]}`} />{c.risk} risk</span>
-              </div>
-              <div className="mt-3 flex flex-wrap gap-x-6 gap-y-1 text-xs font-semibold text-slate-500">
-                <span>Case <span className="font-mono text-slate-700">{c.id}</span></span>
-                <span>Member <span className="text-slate-700">{c.who}, {c.age}</span></span>
-                <span>Payer <span className="text-slate-700">{c.payer}</span></span>
-                <span>Status <span className="text-slate-700">{c.status}</span></span>
-                <span>Updated <span className="text-slate-700">{c.sla}</span></span>
-                {c.saved && <span className="rounded-full bg-emerald-50 px-2 py-0.5 font-black text-emerald-700">saved {c.saved}</span>}
-              </div>
-              <div className="mt-4 flex gap-1 border-b border-slate-100">
-                {([['overview', 'Overview'], ['trace', 'Routing trace'], ['activity', 'Activity']] as const).map(([k, l]) => (
-                  <button key={k} onClick={() => setTab(k)} className={`-mb-px border-b-2 px-4 py-2 text-sm font-bold transition ${tab === k ? 'border-blue-600 text-blue-700' : 'border-transparent text-slate-400 hover:text-slate-600'}`}>{l}</button>
+          {tab === 'monitor' && (
+            <div className="grid min-h-[560px] lg:grid-cols-[420px_1fr]">
+              <aside className="border-b border-slate-200 bg-slate-50 lg:border-b-0 lg:border-r">
+                <div className="border-b border-slate-200 px-5 py-4">
+                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Live Triage Monitor</p>
+                  <h2 className="mt-1 text-xl font-black tracking-tight">Pre-arrival queue</h2>
+                </div>
+                {CASES.map(c => (
+                  <button
+                    key={c.id}
+                    onClick={() => setSelectedId(c.id)}
+                    className={`grid w-full gap-2 border-b border-slate-200 px-5 py-4 text-left transition ${selectedId === c.id ? 'bg-blue-50' : 'hover:bg-white'}`}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <p className="text-sm font-black text-slate-950">{c.symptom}</p>
+                      <span className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-black ring-1 ${LEVEL_STYLE[c.level]}`}>{c.level}</span>
+                    </div>
+                    <p className="text-xs font-semibold text-slate-500">{c.member} · {c.payer}</p>
+                    <div className="flex flex-wrap gap-2 text-[10px] font-black uppercase tracking-wider text-slate-400">
+                      <span>{c.questions} questions</span>
+                      <span>{c.confidence}</span>
+                      <span className={c.safe ? 'text-emerald-600' : 'text-red-600'}>{c.safe ? 'safe to route' : 'review needed'}</span>
+                    </div>
+                  </button>
                 ))}
+              </aside>
+              <section className="p-6">
+                <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <p className="font-mono text-xs font-bold text-slate-400">{selected.id}</p>
+                      <h2 className="mt-1 text-2xl font-black tracking-tight">{selected.symptom}</h2>
+                      <p className="mt-2 text-sm font-semibold text-slate-500">{selected.status}</p>
+                    </div>
+                    <span className={`rounded-full px-4 py-2 text-sm font-black ring-1 ${LEVEL_STYLE[selected.level]}`}>{selected.level}</span>
+                  </div>
+                  <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                    <Metric label="confidence" value={selected.confidence} />
+                    <Metric label="questions asked" value={String(selected.questions)} />
+                    <Metric label="route status" value={selected.safe ? 'safe' : 'review'} good={selected.safe} />
+                  </div>
+                  <div className="mt-6">
+                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Red flags</p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {selected.redFlags.length ? selected.redFlags.map(flag => (
+                        <Pill key={flag} className="bg-red-50 text-red-700 ring-red-200">{flag}</Pill>
+                      )) : <Pill className="bg-emerald-50 text-emerald-700 ring-emerald-200">none established</Pill>}
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          )}
+
+          {tab === 'trace' && (
+            <div className="grid gap-6 p-6 lg:grid-cols-[0.8fr_1.2fr]">
+              <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Selected Case</p>
+                <h2 className="mt-2 text-2xl font-black tracking-tight">{selected.symptom}</h2>
+                <p className="mt-2 text-sm font-semibold leading-6 text-slate-500">{selected.member} · {selected.payer}</p>
+                <div className="mt-5 rounded-2xl bg-slate-950 p-4 font-mono text-[11px] leading-6 text-slate-300">
+                  engine: carevo-engine-1.1<br />
+                  ruleset: carevo-rules-2026.07.0<br />
+                  kb: carevo-kb-2026.07.0<br />
+                  audit: chain verified
+                </div>
+              </div>
+              <div className="rounded-3xl border border-slate-200 bg-white p-5">
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Decision Trace</p>
+                <ol className="mt-5 space-y-4">
+                  {selected.trace.map((step, index) => (
+                    <li key={step} className="grid grid-cols-[34px_1fr] gap-3">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-xs font-black text-white">{index + 1}</span>
+                      <p className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold leading-6 text-slate-700">{step}</p>
+                    </li>
+                  ))}
+                </ol>
               </div>
             </div>
+          )}
 
-            <div className="p-6">
-              {tab === 'overview' && (
-                <div className="grid gap-5 md:grid-cols-2">
-                  <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                    <p className="mb-3 text-[10px] font-black uppercase tracking-widest text-slate-400">Recommended next step</p>
-                    <p className="text-sm font-bold text-slate-900">{c.next}</p>
-                    <p className="mt-4 mb-2 text-[10px] font-black uppercase tracking-widest text-slate-400">Engine confidence</p>
-                    <p className="text-sm font-semibold text-slate-700">{c.conf}</p>
-                    {c.saved && <><p className="mt-4 mb-1 text-[10px] font-black uppercase tracking-widest text-slate-400">Estimated cost avoided</p><p className="text-2xl font-black tracking-tight text-emerald-600">{c.saved}</p></>}
-                  </div>
-                  <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                    <p className="mb-3 text-[10px] font-black uppercase tracking-widest text-slate-400">Extracted clinical facts</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {c.facts.map(f => <span key={f} className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 font-mono text-[10px] font-bold text-slate-600">{f}</span>)}
-                    </div>
-                  </div>
-                </div>
-              )}
-              {tab === 'trace' && (
-                <div className="grid gap-5 lg:grid-cols-[1.2fr_1fr]">
-                  <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                    <p className="mb-3 text-[10px] font-black uppercase tracking-widest text-slate-400">Patient conversation</p>
-                    <div className="space-y-2.5">
-                      {c.convo.map(([sp, tx, t], i) => (
-                        <div key={i} className={`flex flex-col ${sp === 'Carevo' ? 'items-start' : 'items-end'}`}>
-                          <div className={`max-w-[88%] rounded-2xl px-3.5 py-2 text-xs font-semibold leading-relaxed ${sp === 'Carevo' ? 'bg-sky-50 text-sky-900' : 'bg-slate-900 text-slate-50'}`}>{tx}</div>
-                          <span className="mt-0.5 font-mono text-[9px] text-slate-400">{sp} · {t}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="space-y-5">
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                      <p className="mb-2 text-[10px] font-black uppercase tracking-widest text-slate-400">Clinical rules fired</p>
-                      {c.rules.map(r => <p key={r} className="font-mono text-[11px] leading-relaxed text-slate-600">{r}</p>)}
-                    </div>
-                    <div className="rounded-2xl border border-slate-200 bg-slate-900 p-5">
-                      <p className="mb-2 text-[10px] font-black uppercase tracking-widest text-slate-400">Provenance · replayable</p>
-                      <p className="font-mono text-[10px] leading-relaxed text-slate-300">
-                        engine&nbsp;carevo-engine-1.1<br />rules&nbsp;carevo-rules-2026.07.0<br />kb&nbsp;carevo-kb-2026.07.0+r1<br />audit&nbsp;#a3f2…{c.id.slice(-2)}b<br /><span className="text-emerald-400">chain-verified ✓</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-              {tab === 'activity' && (
-                <div className="rounded-2xl border border-slate-200 bg-white p-6">
-                  <ol className="relative ml-2 border-l border-slate-200">
-                    {c.activity.map(([t, e], i) => (
-                      <li key={i} className="mb-5 ml-5 last:mb-0">
-                        <span className="absolute -left-[7px] mt-1 h-3 w-3 rounded-full border-2 border-white bg-blue-600" />
-                        <p className="font-mono text-[10px] font-bold text-slate-400">{t}</p>
-                        <p className="text-sm font-semibold text-slate-700">{e}</p>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              )}
+          {tab === 'compliance' && (
+            <div className="grid gap-6 p-6 lg:grid-cols-3">
+              <ComplianceCard title="Safety posture" value="100%" caption="Emergency capture in latest internal gate" status="Compliant" />
+              <ComplianceCard title="Under-triage rate" value="0" caption="Release-blocking metric monitored first" status="Passing" />
+              <ComplianceCard title="Consent status" value="Opt-in" caption="Research logs require explicit sharing consent" status="Active" />
+              <ComplianceCard title="Audit completeness" value="100%" caption="Every case stores route, ruleset, and provenance" status="Traceable" />
+              <ComplianceCard title="Unresolved cases" value="0" caption="Cases that need review before routing" status="Clear" />
+              <ComplianceCard title="Avg questions" value={metrics.avgQuestions} caption="More questions when serious paths remain" status="Monitored" />
             </div>
+          )}
 
-            <p className="px-6 pb-8 text-center text-xs font-semibold text-slate-400">
-              All patients and payers are fictional. Accuracy claims are real —{' '}
-              <Link href="/benchmarks" className="font-black text-blue-600 underline">published benchmarks</Link> ·{' '}
-              <Link href="/contact" className="font-black text-blue-600 underline">request a pilot</Link>
-            </p>
-          </div>
+          {tab === 'savings' && (
+            <div className="grid gap-6 p-6 lg:grid-cols-[1fr_1fr]">
+              <div className="rounded-3xl border border-slate-200 bg-slate-950 p-6 text-white">
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-blue-300">Savings + Operations</p>
+                <h2 className="mt-3 text-4xl font-black tracking-tight">{formatCurrency(metrics.savings)}</h2>
+                <p className="mt-2 text-sm font-semibold leading-6 text-slate-300">Estimated avoidable ER cost in this simulated queue.</p>
+                <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                  <Metric dark label="urgent care redirects" value={String(metrics.erDeflected)} />
+                  <Metric dark label="manual review hours saved" value={`${metrics.manualHours}h`} />
+                </div>
+              </div>
+              <div className="rounded-3xl border border-slate-200 bg-white p-6">
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Operating model</p>
+                <div className="mt-5 space-y-3">
+                  {[
+                    'Replace spreadsheet-based QA with a live route safety queue.',
+                    'Show insurers which cases were redirected, why, and with what rule evidence.',
+                    'Give clinical reviewers a replayable trace instead of raw chat logs.',
+                    'Surface unresolved or high-risk cases before they become blind spots.',
+                  ].map(item => (
+                    <div key={item} className="flex gap-3 rounded-2xl bg-slate-50 p-4 text-sm font-semibold leading-6 text-slate-700">
+                      <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-blue-600" />
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
+
+        <p className="mt-5 text-center text-xs font-semibold text-slate-500">
+          Demo uses fictional members and simulated operational data. Public benchmark details live on{' '}
+          <Link href="/benchmarks" className="font-black text-blue-300 underline">/benchmarks</Link>.
+        </p>
+      </section>
+    </main>
+  )
+}
+
+function Metric({ label, value, good, dark = false }: { label: string; value: string; good?: boolean; dark?: boolean }) {
+  return (
+    <div className={`rounded-2xl p-4 ${dark ? 'bg-white/10' : 'bg-slate-50'}`}>
+      <p className={`text-2xl font-black tracking-tight ${good ? 'text-emerald-600' : dark ? 'text-white' : 'text-slate-950'}`}>{value}</p>
+      <p className={`mt-1 text-[10px] font-black uppercase tracking-[0.16em] ${dark ? 'text-slate-400' : 'text-slate-400'}`}>{label}</p>
+    </div>
+  )
+}
+
+function ComplianceCard({ title, value, caption, status }: { title: string; value: string; caption: string; status: string }) {
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-sm font-black text-slate-900">{title}</p>
+        <Pill className="bg-emerald-50 text-emerald-700 ring-emerald-200">{status}</Pill>
       </div>
+      <p className="mt-5 text-4xl font-black tracking-tight text-slate-950">{value}</p>
+      <p className="mt-2 text-sm font-semibold leading-6 text-slate-500">{caption}</p>
     </div>
   )
 }

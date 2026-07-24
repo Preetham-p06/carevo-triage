@@ -825,6 +825,12 @@
   - Verified live local API examples for ankle pain, child fever, and "no chest pain, just cough."
   - Verified `npx tsc --noEmit` and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
 
+## 2026-07-24
+
+- Rebuilt the public `/demo` surface as a combined Carevo AuditOS and Routing Intelligence Layer demo.
+  - Added the requested four demo views: Live Triage Monitor, Decision Trace, Compliance Dashboard, and Savings + Operations.
+  - Kept the demo fully simulated with no real patient data, while showing route provenance, safety metrics, consent status, and operational savings framing for insurers and healthcare facilities.
+
 ## 2026-07-23
 
 - Aligned the 240-case dataset harness with the rule-out interview extension.
