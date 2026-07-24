@@ -2,6 +2,11 @@
 
 ## 2026-07-24
 
+- Added a security and compliance packet for partner diligence.
+  - Created `SECURITY-COMPLIANCE-PACKET.md` with Carevo's current security posture, data flow, AI safety controls, HIPAA/SOC 2/ISO readiness, questionnaire answers, and open gaps.
+  - Created `SECURITY-COMPLIANCE-ONE-PAGER.md` as a shorter version for emails, accelerator forms, and early buyer conversations.
+  - Created `output/pdf/carevo-security-compliance-packet.pdf` and `output/pdf/carevo-security-compliance-one-pager.pdf` as polished shareable PDFs.
+  - Kept the claims conservative: Carevo is HIPAA-aware and SOC 2-readying, but does not claim HIPAA, SOC 2, or ISO 27001 certification.
 - Scoped the red emergency footer banner to the `/triage` symptom intake page only.
   - Removed the banner from marketing, company, contact, benchmarks, AuditOS, privacy, and terms pages while preserving the patient-facing warning on the symptom workflow.
 - Rebranded and polished the AuditOS demo route.
