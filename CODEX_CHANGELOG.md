@@ -19,6 +19,10 @@
   - Replaced the previous glossy hero with a healthcare operations control-center layout.
   - Added a route safety workbench, work queue table, release-control metrics, decision trace, and enterprise deployment sections.
   - Tightened the copy around AuditOS as a real-time care-routing compliance layer for insurers and healthcare facilities.
+- Rebuilt `app/demo/page.tsx` as a cleaner insurer/EHR operations demo.
+  - Removed the old dark hero, AuditOS/Routing toggle, and Compliance Console link.
+  - Added a light enterprise command-center layout with a health-plan style header, work queue, case summary, safety controls, route trace, and cost operations views.
+  - Kept the demo explicitly fictional and simulated while making the workflow feel closer to enterprise healthcare operations software.
 
 ## 2026-07-08
 
