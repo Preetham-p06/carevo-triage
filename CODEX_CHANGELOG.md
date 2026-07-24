@@ -2,6 +2,9 @@
 
 ## 2026-07-24
 
+- Fixed the AuditOS product page logo usage.
+  - Replaced the drawn approximation of the Carevo mark with the official `/brand/carevo-logo.png` asset in the command center and flow visual.
+  - Kept the page styling intact while making the brand mark match the rest of the site.
 - Rebuilt the `/audit-os` product page into a more visual enterprise operations page.
   - Reduced long-form copy and replaced dense sections with a Carevo AuditOS command-center mockup, route safety queue, decision trace, operational metrics, and intake-to-care flow visual.
   - Kept the positioning focused on AI-native care-routing compliance infrastructure for insurers and healthcare facilities.

@@ -56,13 +56,11 @@ function RouteBadge({ route }: { route: string }) {
   return <Badge tone="blue">{route}</Badge>
 }
 
-function PulseIcon() {
+function CarevoMark({ className = 'h-10 w-10 rounded-2xl' }: { className?: string }) {
   return (
-    <svg aria-hidden="true" viewBox="0 0 64 64" className="h-8 w-8">
-      <path d="M45 8a24 24 0 1 0 0 48" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
-      <path d="M16 33h11l4-9 7 18 5-9h8" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx="55" cy="32" r="3.5" fill="currentColor" />
-    </svg>
+    <span className={`block overflow-hidden bg-slate-950 shadow-lg shadow-cyan-900/20 ${className}`}>
+      <img src="/brand/carevo-logo.png" alt="" className="h-full w-full object-cover" />
+    </span>
   )
 }
 
@@ -76,9 +74,7 @@ function CommandCenter() {
       <div className="relative border-b border-slate-200/80 px-5 py-4 sm:px-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300 shadow-lg shadow-cyan-900/20">
-              <PulseIcon />
-            </span>
+            <CarevoMark />
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Carevo AuditOS</p>
               <p className="text-sm font-black text-slate-950">Operations Command Center</p>
@@ -167,7 +163,7 @@ function FlowMap() {
                   <circle cx="32" cy="22" r="9" fill="none" stroke="currentColor" strokeWidth="4" />
                 </svg>
               ) : index === 1 ? (
-                <PulseIcon />
+                <CarevoMark className="h-12 w-12 rounded-2xl" />
               ) : (
                 <svg aria-hidden="true" viewBox="0 0 64 64" className="h-10 w-10">
                   <path d="M10 54h44V24L32 10 10 24v30Z" fill="none" stroke="currentColor" strokeWidth="4" strokeLinejoin="round" />
