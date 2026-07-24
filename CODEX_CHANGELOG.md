@@ -2,6 +2,11 @@
 
 ## 2026-07-24
 
+- Rebranded and polished the AuditOS demo route.
+  - Added `/AUDITOS` as the public enterprise demo URL and made `/demo` redirect there.
+  - Moved the reusable demo UI into `components/AuditOSDemo.tsx`.
+  - Added a calmer cyan/green/amber enterprise healthcare color direction to the AuditOS workbench.
+  - Hid the red emergency footer banner on the AuditOS demo while keeping the normal legal footer and preserving patient-facing emergency guidance elsewhere.
 - Completed a phone-first readability pass across the public site.
   - Simplified the mobile marketing nav shell and menu so the top island does not crowd small screens.
   - Reduced mobile hero height, headline pressure, card padding, and section density on the homepage, Company, Contact, Triage, Benchmarks, AuditOS, and Demo pages.

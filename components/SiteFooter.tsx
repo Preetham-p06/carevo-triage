@@ -1,17 +1,24 @@
+'use client'
+
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 /** Site-wide footer: persistent emergency protocol, medical disclaimer,
  *  legal links, nondiscrimination + language assistance notices. */
 export default function SiteFooter() {
+  const pathname = usePathname()
+  const hideEmergencyBanner = pathname === '/AUDITOS' || pathname === '/demo'
+
   return (
     <footer className="border-t border-slate-200 bg-slate-50">
-      {/* Persistent emergency escape — always visible, plain language */}
-      <div className="bg-red-600 px-4 py-2.5 text-center">
-        <p className="text-sm font-bold text-white">
-          Emergency? Do not use this website — call <a href="tel:911" className="underline underline-offset-2">911</a> or
-          go to the nearest emergency room now. Thoughts of self-harm? Call or text <a href="tel:988" className="underline underline-offset-2">988</a>.
-        </p>
-      </div>
+      {!hideEmergencyBanner && (
+        <div className="bg-red-600 px-4 py-2.5 text-center">
+          <p className="text-sm font-bold text-white">
+            Emergency? Do not use this website — call <a href="tel:911" className="underline underline-offset-2">911</a> or
+            go to the nearest emergency room now. Thoughts of self-harm? Call or text <a href="tel:988" className="underline underline-offset-2">988</a>.
+          </p>
+        </div>
+      )}
       <div className="mx-auto max-w-6xl px-5 py-8">
         <p className="text-xs leading-relaxed text-slate-500">
           <strong className="text-slate-600">Medical disclaimer:</strong> Carevo helps you decide where to seek care.
@@ -31,6 +38,7 @@ export default function SiteFooter() {
         <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-semibold text-slate-600">
           <Link href="/triage" className="hover:text-carevo-700">AI Triage</Link>
           <Link href="/audit-os" className="hover:text-carevo-700">Carevo AuditOS</Link>
+          <Link href="/AUDITOS" className="hover:text-carevo-700">AuditOS Demo</Link>
           <Link href="/benchmarks" className="hover:text-carevo-700">Benchmarks</Link>
           <Link href="/privacy" className="hover:text-carevo-700">Privacy Policy</Link>
           <Link href="/terms" className="hover:text-carevo-700">Terms of Use</Link>

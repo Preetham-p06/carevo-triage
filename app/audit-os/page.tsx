@@ -74,7 +74,7 @@ export default function AuditOSPage() {
             A cleaner way for payers and care teams to monitor routing safety, review exceptions, and keep every decision traceable.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:mt-11 sm:flex-row">
-            <Link href="/demo" className="inline-flex min-h-12 items-center justify-center rounded-full bg-blue-700 px-7 py-3 text-sm font-black text-white shadow-sm transition hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-100">
+            <Link href="/AUDITOS" className="inline-flex min-h-12 items-center justify-center rounded-full bg-blue-700 px-7 py-3 text-sm font-black text-white shadow-sm transition hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-100">
               Open product demo
             </Link>
             <Link href="/contact" className="inline-flex min-h-12 items-center justify-center rounded-full border border-slate-300 bg-white px-7 py-3 text-sm font-black text-slate-700 transition hover:border-slate-400 hover:text-slate-950 focus:outline-none focus:ring-4 focus:ring-blue-100">
@@ -187,7 +187,7 @@ export default function AuditOSPage() {
             </h2>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-            <Link href="/demo" className="inline-flex min-h-12 items-center justify-center rounded-md bg-white px-7 py-3 text-sm font-black text-slate-950 transition hover:bg-slate-100">
+            <Link href="/AUDITOS" className="inline-flex min-h-12 items-center justify-center rounded-md bg-white px-7 py-3 text-sm font-black text-slate-950 transition hover:bg-slate-100">
               Open AuditOS demo
             </Link>
             <Link href="/triage" className="inline-flex min-h-12 items-center justify-center rounded-md border border-white/20 px-7 py-3 text-sm font-black text-white transition hover:bg-white/10">

@@ -57,7 +57,7 @@ function CarevoLogoMark({ compact = false }: { compact?: boolean }) {
 export default function Nav() {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
-  if (pathname === '/metrics' || pathname === '/triage-embed' || pathname === '/demo' || pathname === '/compliance') return null
+  if (pathname === '/metrics' || pathname === '/triage-embed' || pathname === '/demo' || pathname === '/AUDITOS' || pathname === '/compliance') return null
 
   if (MARKETING_PATHS.has(pathname)) {
     return (
