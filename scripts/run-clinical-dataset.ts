@@ -47,7 +47,10 @@ const mode = (valueArg('--mode') ?? 'api') as Mode
 const base = valueArg('--base') ?? process.env.TRIAL_BASE_URL ?? 'http://127.0.0.1:3000'
 const output = valueArg('--output') ?? defaultOutputPath(mode)
 const limit = parseInt(valueArg('--limit') ?? '0', 10)
-const maxTurns = Math.min(parseInt(valueArg('--max-turns') ?? '5', 10), 5)
+// The live interview can ask up to six questions when a low-acuity route still
+// has serious possibilities to rule out. Keep the dataset harness aligned so
+// the safety gate does not produce artificial needs_more_info rows at turn 5.
+const maxTurns = Math.min(parseInt(valueArg('--max-turns') ?? '6', 10), 6)
 const answererModel = valueArg('--answerer-model') ?? process.env.DATASET_ANSWERER_MODEL ?? 'gpt-4o-mini'
 const answererKey = process.env.OPENAI_API_KEY
 const answerer = answererKey ? new OpenAI({ apiKey: answererKey, timeout: 25_000, maxRetries: 0 }) : null

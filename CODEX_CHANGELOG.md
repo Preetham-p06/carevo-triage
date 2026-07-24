@@ -824,3 +824,9 @@
   - Added the P18 eval gate in `scripts/eval-engine.ts`, including ankle, shoulder, cough, breathing, headache, eye, stomach, vomiting, urinary, throat, rash, cut, child fever, anxiety, and negated chest-pain/cough cases.
   - Verified live local API examples for ankle pain, child fever, and "no chest pain, just cough."
   - Verified `npx tsc --noEmit` and `node node_modules/sucrase/bin/sucrase-node scripts/eval-engine.ts`: 104/104 acceptable, 0 UNDER, 0 safety failures, 4,752 property checks passed.
+
+## 2026-07-23
+
+- Aligned the 240-case dataset harness with the rule-out interview extension.
+  - Updated `scripts/run-clinical-dataset.ts` so multi-turn dataset evals allow up to six turns, matching the production interview's hard ceiling when low-acuity cases still need serious possibilities ruled out.
+  - This prevents artificial `needs_more_info` rows at turn five during the process-of-elimination gate.
