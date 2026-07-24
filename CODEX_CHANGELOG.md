@@ -2,6 +2,8 @@
 
 ## 2026-07-24
 
+- Scoped the red emergency footer banner to the `/triage` symptom intake page only.
+  - Removed the banner from marketing, company, contact, benchmarks, AuditOS, privacy, and terms pages while preserving the patient-facing warning on the symptom workflow.
 - Rebranded and polished the AuditOS demo route.
   - Added `/AUDITOS` as the public enterprise demo URL and made `/demo` redirect there.
   - Moved the reusable demo UI into `components/AuditOSDemo.tsx`.

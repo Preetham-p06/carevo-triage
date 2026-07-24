@@ -3,15 +3,15 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-/** Site-wide footer: persistent emergency protocol, medical disclaimer,
- *  legal links, nondiscrimination + language assistance notices. */
+/** Site-wide footer: legal links, nondiscrimination + language assistance notices.
+ *  The emergency banner is shown only on the symptom intake page. */
 export default function SiteFooter() {
   const pathname = usePathname()
-  const hideEmergencyBanner = pathname === '/AUDITOS' || pathname === '/demo'
+  const showEmergencyBanner = pathname === '/triage'
 
   return (
     <footer className="border-t border-slate-200 bg-slate-50">
-      {!hideEmergencyBanner && (
+      {showEmergencyBanner && (
         <div className="bg-red-600 px-4 py-2.5 text-center">
           <p className="text-sm font-bold text-white">
             Emergency? Do not use this website — call <a href="tel:911" className="underline underline-offset-2">911</a> or
