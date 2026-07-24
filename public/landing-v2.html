@@ -58,14 +58,65 @@ nav {
   display: flex; gap: 8px;
   position: absolute; left: 50%; transform: translateX(-50%);
 }
-.nav-links a {
+.nav-links a,
+.nav-product-trigger {
   font-size: 15px; font-weight: 800; color: #64748b;
   text-decoration: none; padding: 8px 15px; border-radius: 100px;
   transition: background .14s, color .14s;
   display: inline-flex; align-items: center; gap: 6px;
   white-space: nowrap;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
 }
-.nav-links a:hover { background: rgba(15,23,42,.06); color: #0f172a; }
+.nav-links a:hover,
+.nav-product-trigger:hover,
+.nav-product:focus-within .nav-product-trigger { background: rgba(15,23,42,.06); color: #0f172a; }
+.nav-product { position: relative; }
+.nav-product-trigger svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+.nav-product-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  width: 360px;
+  transform: translateX(-50%) translateY(4px);
+  padding: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 22px;
+  background: rgba(255,255,255,.96);
+  box-shadow: 0 24px 70px rgba(15,23,42,.16);
+  backdrop-filter: blur(20px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .14s, transform .14s, visibility .14s;
+}
+.nav-product:hover .nav-product-menu,
+.nav-product:focus-within .nav-product-menu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+.nav-product-menu a {
+  display: block;
+  padding: 13px 15px;
+  border-radius: 16px;
+  white-space: normal;
+}
+.nav-product-menu strong {
+  display: block;
+  color: #0f172a;
+  font-size: 14px;
+}
+.nav-product-menu span {
+  display: block;
+  margin-top: 4px;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.55;
+}
 .nav-cta {
   background: #2563eb; color: white;
   font-size: 14px; font-weight: 800;
@@ -394,7 +445,7 @@ body.shine-done .hl {
   color: #334155; letter-spacing: -.015em;
   text-transform: uppercase; flex-shrink: 0;
   transition: color .2s;
-  cursor: default;
+  cursor: pointer;
 }
 .mq-item:hover { color: #0891b2; }
 .mq-sep {
@@ -1260,7 +1311,22 @@ tbody tr.case-row[aria-expanded="true"] td {
       carevo
     </a>
     <div class="nav-links">
-      <a href="#products">Products</a>
+      <div class="nav-product">
+        <button class="nav-product-trigger" type="button" aria-haspopup="true">
+          Products
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="nav-product-menu" role="menu" aria-label="Products">
+          <a href="/triage" role="menuitem">
+            <strong>AI Triage System</strong>
+            <span>Patient intake, safety questions, and care-level routing.</span>
+          </a>
+          <a href="/audit-os" role="menuitem">
+            <strong>Carevo AuditOS</strong>
+            <span>Real-time route monitoring, traceability, and compliance review.</span>
+          </a>
+        </div>
+      </div>
       <a href="/triage">Triage</a>
       <a href="#how-it-works">How it works</a>
       <a href="/benchmarks">Benchmarks</a>
@@ -1288,7 +1354,8 @@ tbody tr.case-row[aria-expanded="true"] td {
       <button class="mobile-nav-close" type="button" aria-label="Close navigation menu">×</button>
     </div>
     <div class="mobile-nav-links">
-      <a href="#products">Products</a>
+      <a href="/triage">AI Triage System</a>
+      <a href="/audit-os">Carevo AuditOS</a>
       <a href="/triage">Triage</a>
       <a href="#how-it-works">How it works</a>
       <a href="/benchmarks">Benchmarks</a>
@@ -1627,75 +1694,75 @@ tbody tr.case-row[aria-expanded="true"] td {
     <div class="pg-wrap">
       <div class="pg">
 
-        <!-- 01 Emergency Net -->
-        <div class="pa">
-          <div class="pa-num">
-            <span class="pa-icon" style="background:#fff1f2;">
-              <svg viewBox="0 0 24 24" stroke="#dc2626"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
-            </span>
-            Emergency
-          </div>
-          <h3>Emergency Net</h3>
-          <p>Scans for clear red flags before any AI request. A match hard-stops the session and points the member to 911.</p>
-          <span class="pa-link" style="color:#dc2626;">Explore →</span>
-        </div>
-
-        <!-- 02 Interview -->
-        <div class="pa">
+        <!-- 01 AI Triage System -->
+        <a class="pa" href="/triage">
           <div class="pa-num">
             <span class="pa-icon" style="background:#eff6ff;">
               <svg viewBox="0 0 24 24" stroke="#2563eb"><path d="M21 15a4 4 0 01-4 4H8l-5 3V7a4 4 0 014-4h10a4 4 0 014 4z"/></svg>
             </span>
-            Intake
+            Product 01
           </div>
-          <h3>Adaptive Interview</h3>
-          <p>Asks the next useful question, keeps the member moving, and turns messy symptom language into structured features.</p>
-          <span class="pa-link" style="color:#2563eb;">Explore →</span>
-        </div>
+          <h3>AI Triage System</h3>
+          <p>Patient-facing intake that screens emergency signals first, asks tailored follow-up questions, and routes through deterministic clinical rules.</p>
+          <span class="pa-link" style="color:#2563eb;">Open product →</span>
+        </a>
+
+        <!-- 02 Carevo AuditOS -->
+        <a class="pa" href="/audit-os">
+          <div class="pa-num">
+            <span class="pa-icon" style="background:#f0fdf4;">
+              <svg viewBox="0 0 24 24" stroke="#16a34a"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </span>
+            Product 02
+          </div>
+          <h3>Carevo AuditOS</h3>
+          <p>AI-native compliance infrastructure that monitors routes, consent, safety metrics, traceability, and cost impact in real time.</p>
+          <span class="pa-link" style="color:#16a34a;">Open product →</span>
+        </a>
 
         <!-- 03 Care Router -->
-        <div class="pa">
+        <a class="pa" href="/benchmarks">
           <div class="pa-num">
             <span class="pa-icon" style="background:#f0fdf4;">
               <svg viewBox="0 0 24 24" stroke="#16a34a"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6-10l6-3m0 13l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 10m0 10V10"/></svg>
             </span>
-            Routing
+            Evidence
           </div>
-          <h3>Care Router</h3>
-          <p>Maps extracted features to ER, urgent care, primary care, telehealth, or home care through versioned clinical floors.</p>
-          <span class="pa-link" style="color:#16a34a;">Explore →</span>
-        </div>
+          <h3>Routing Intelligence</h3>
+          <p>Versioned emergency checks, extracted facts, clinical floors, and benchmark gates make each routing decision explainable to operators.</p>
+          <span class="pa-link" style="color:#16a34a;">See numbers →</span>
+        </a>
 
         <!-- 04 Coverage Checker -->
-        <div class="pa">
+        <a class="pa" href="/contact">
           <div class="pa-num">
             <span class="pa-icon" style="background:#fdf4ff;">
               <svg viewBox="0 0 24 24" stroke="#9333ea"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
             </span>
-            Network
+            Operations
           </div>
-          <h3>Coverage Checker</h3>
-          <p>Shows care options against plan context so members are routed to the safest and most usable next step.</p>
-          <span class="pa-link" style="color:#9333ea;">Explore →</span>
-        </div>
+          <h3>Network Handoff</h3>
+          <p>Designed for insurer and facility workflows where routing, coverage context, facility fit, and review status need to stay connected.</p>
+          <span class="pa-link" style="color:#9333ea;">Talk to us →</span>
+        </a>
 
         <!-- duplicate for smooth cycling -->
-        <div class="pa" aria-hidden="true">
-          <div class="pa-num"><span class="pa-icon" style="background:#fff1f2;"><svg viewBox="0 0 24 24" stroke="#dc2626"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg></span>Emergency</div>
-          <h3>Emergency Net</h3><p>Scans for clear red flags before any AI request. A match hard-stops the session and points the member to 911.</p><span class="pa-link" style="color:#dc2626;">Explore →</span>
-        </div>
-        <div class="pa" aria-hidden="true">
-          <div class="pa-num"><span class="pa-icon" style="background:#eff6ff;"><svg viewBox="0 0 24 24" stroke="#2563eb"><path d="M21 15a4 4 0 01-4 4H8l-5 3V7a4 4 0 014-4h10a4 4 0 014 4z"/></svg></span>Intake</div>
-          <h3>Adaptive Interview</h3><p>Asks the next useful question, keeps the member moving, and turns messy symptom language into structured features.</p><span class="pa-link" style="color:#2563eb;">Explore →</span>
-        </div>
-        <div class="pa" aria-hidden="true">
-          <div class="pa-num"><span class="pa-icon" style="background:#f0fdf4;"><svg viewBox="0 0 24 24" stroke="#16a34a"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6-10l6-3m0 13l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 10m0 10V10"/></svg></span>Routing</div>
-          <h3>Care Router</h3><p>Maps extracted features to ER, urgent care, primary care, telehealth, or home care through versioned clinical floors.</p><span class="pa-link" style="color:#16a34a;">Explore →</span>
-        </div>
-        <div class="pa" aria-hidden="true">
-          <div class="pa-num"><span class="pa-icon" style="background:#fdf4ff;"><svg viewBox="0 0 24 24" stroke="#9333ea"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></span>Network</div>
-          <h3>Coverage Checker</h3><p>Shows care options against plan context so members are routed to the safest and most usable next step.</p><span class="pa-link" style="color:#9333ea;">Explore →</span>
-        </div>
+        <a class="pa" href="/triage" aria-hidden="true" tabindex="-1">
+          <div class="pa-num"><span class="pa-icon" style="background:#eff6ff;"><svg viewBox="0 0 24 24" stroke="#2563eb"><path d="M21 15a4 4 0 01-4 4H8l-5 3V7a4 4 0 014-4h10a4 4 0 014 4z"/></svg></span>Product 01</div>
+          <h3>AI Triage System</h3><p>Patient-facing intake that screens emergency signals first, asks tailored follow-up questions, and routes through deterministic clinical rules.</p><span class="pa-link" style="color:#2563eb;">Open product →</span>
+        </a>
+        <a class="pa" href="/audit-os" aria-hidden="true" tabindex="-1">
+          <div class="pa-num"><span class="pa-icon" style="background:#f0fdf4;"><svg viewBox="0 0 24 24" stroke="#16a34a"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></span>Product 02</div>
+          <h3>Carevo AuditOS</h3><p>AI-native compliance infrastructure that monitors routes, consent, safety metrics, traceability, and cost impact in real time.</p><span class="pa-link" style="color:#16a34a;">Open product →</span>
+        </a>
+        <a class="pa" href="/benchmarks" aria-hidden="true" tabindex="-1">
+          <div class="pa-num"><span class="pa-icon" style="background:#f0fdf4;"><svg viewBox="0 0 24 24" stroke="#16a34a"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6-10l6-3m0 13l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 10m0 10V10"/></svg></span>Evidence</div>
+          <h3>Routing Intelligence</h3><p>Versioned emergency checks, extracted facts, clinical floors, and benchmark gates make each routing decision explainable to operators.</p><span class="pa-link" style="color:#16a34a;">See numbers →</span>
+        </a>
+        <a class="pa" href="/contact" aria-hidden="true" tabindex="-1">
+          <div class="pa-num"><span class="pa-icon" style="background:#fdf4ff;"><svg viewBox="0 0 24 24" stroke="#9333ea"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></span>Operations</div>
+          <h3>Network Handoff</h3><p>Designed for insurer and facility workflows where routing, coverage context, facility fit, and review status need to stay connected.</p><span class="pa-link" style="color:#9333ea;">Talk to us →</span>
+        </a>
       </div>
       <div class="platform-controls" aria-hidden="true"><button>‹</button><button>›</button><span>Swipe to explore</span></div>
     </div>
@@ -2018,11 +2085,11 @@ tbody tr.case-row[aria-expanded="true"] td {
     <!-- Middle: Platform -->
     <div class="f2-col">
       <h4>Platform</h4>
-      <a href="/triage">Triage</a>
-      <a href="#how-it-works">Triage Workspace</a>
-      <a href="#products">Emergency Net</a>
-      <a href="#products">Feature Extractor</a>
-      <a href="#products">Care Router</a>
+      <a href="/triage">AI Triage System</a>
+      <a href="/audit-os">Carevo AuditOS</a>
+      <a href="/demo">AuditOS Demo</a>
+      <a href="/benchmarks">Benchmarks</a>
+      <a href="#how-it-works">How it works</a>
     </div>
 
     <!-- Right: Company -->

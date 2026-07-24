@@ -31,7 +31,20 @@ const TABS = [
   },
 ]
 
-const MARKETING_PATHS = new Set(['/triage', '/company', '/contact', '/privacy', '/terms', '/benchmarks'])
+const MARKETING_PATHS = new Set(['/triage', '/audit-os', '/company', '/contact', '/privacy', '/terms', '/benchmarks'])
+
+const PRODUCT_LINKS = [
+  {
+    href: '/triage',
+    title: 'AI Triage System',
+    description: 'Patient intake, safety questions, and care-level routing.',
+  },
+  {
+    href: '/audit-os',
+    title: 'Carevo AuditOS',
+    description: 'Real-time route monitoring, traceability, and compliance review.',
+  },
+]
 
 function CarevoLogoMark({ compact = false }: { compact?: boolean }) {
   return (
@@ -55,7 +68,30 @@ export default function Nav() {
             carevo
           </Link>
           <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-2 whitespace-nowrap text-[15px] font-extrabold leading-[normal] text-slate-500 md:flex">
-            <Link href="/#products" className="inline-flex items-center rounded-full px-[15px] py-2 transition hover:bg-slate-950/[.06] hover:text-slate-950">Products</Link>
+            <div className="group relative">
+              <button
+                type="button"
+                className="inline-flex items-center gap-1.5 rounded-full px-[15px] py-2 font-extrabold transition hover:bg-slate-950/[.06] hover:text-slate-950 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100"
+                aria-haspopup="true"
+              >
+                Products
+                <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 fill-none stroke-current" aria-hidden="true">
+                  <path d="M4 6l4 4 4-4" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+              <div className="pointer-events-none absolute left-1/2 top-[calc(100%+12px)] w-[360px] -translate-x-1/2 rounded-[1.35rem] border border-slate-200 bg-white/95 p-2 text-left opacity-0 shadow-2xl shadow-slate-900/10 backdrop-blur transition duration-150 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
+                {PRODUCT_LINKS.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="block rounded-[1rem] px-4 py-3 transition hover:bg-slate-50"
+                  >
+                    <span className="block text-sm font-black text-slate-950">{item.title}</span>
+                    <span className="mt-1 block whitespace-normal text-xs font-bold leading-5 text-slate-500">{item.description}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
             <Link href="/triage" className="inline-flex items-center rounded-full px-[15px] py-2 transition hover:bg-slate-950/[.06] hover:text-slate-950">Triage</Link>
             <Link href="/#how-it-works" className="inline-flex items-center rounded-full px-[15px] py-2 transition hover:bg-slate-950/[.06] hover:text-slate-950">How it works</Link>
             <Link href="/benchmarks" className="inline-flex items-center rounded-full px-[15px] py-2 transition hover:bg-slate-950/[.06] hover:text-slate-950">Benchmarks</Link>
@@ -95,7 +131,15 @@ export default function Nav() {
               </button>
             </div>
             <div className="grid gap-2 text-lg font-black text-slate-900">
-              <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/#products">Products</Link>
+              <div className="rounded-2xl bg-slate-50 p-2">
+                <p className="px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em] text-slate-400">Products</p>
+                {PRODUCT_LINKS.map((item) => (
+                  <Link key={item.href} onClick={() => setMenuOpen(false)} className="block rounded-xl px-3 py-3 hover:bg-white" href={item.href}>
+                    <span className="block text-base font-black text-slate-950">{item.title}</span>
+                    <span className="mt-1 block text-xs font-bold leading-5 text-slate-500">{item.description}</span>
+                  </Link>
+                ))}
+              </div>
               <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/triage">Triage</Link>
               <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/#how-it-works">How it works</Link>
               <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/benchmarks">Benchmarks</Link>

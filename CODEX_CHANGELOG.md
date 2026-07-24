@@ -1,5 +1,21 @@
 # CODEX Changelog
 
+## 2026-07-24
+
+- Added `app/audit-os/page.tsx` as a first-class Carevo AuditOS product page.
+  - Positions AuditOS as AI-native care-routing compliance infrastructure for insurers and healthcare facilities.
+  - Explains live triage monitoring, decision trace, compliance metrics, and savings/operations workflows.
+  - Links to the simulated AuditOS demo, contact page, and AI triage product.
+- Updated `components/Nav.tsx` with a Products dropdown.
+  - Added two product entries: AI Triage System and Carevo AuditOS.
+  - Added mobile menu product entries with short descriptions.
+  - Included `/audit-os` in the marketing navigation routes.
+- Updated `public/landing-v2.html` so the static homepage matches the product structure.
+  - Added a Products dropdown with AI Triage System and Carevo AuditOS.
+  - Reframed the Products carousel around buyer-facing products and supporting routing intelligence.
+  - Updated the static footer platform links to include Carevo AuditOS and the AuditOS demo.
+- Updated `components/SiteFooter.tsx` with AI Triage and Carevo AuditOS links for cross-site discoverability.
+
 ## 2026-07-08
 
 - Polished `public/landing-v2.html` mobile responsiveness without changing the section order or page structure.
