@@ -2,6 +2,10 @@
 
 ## 2026-07-24
 
+- Refined `app/audit-os/page.tsx` into a more spacious Carevo AuditOS product page.
+  - Centered the page around "Care-routing compliance operations." with shorter, cleaner enterprise copy.
+  - Added larger vertical spacing, calmer card density, and scroll-reveal motion classes across the product and trace sections.
+  - Kept the insurer/EHR operations positioning while making the product story feel less crowded and more production-ready.
 - Added `app/audit-os/page.tsx` as a first-class Carevo AuditOS product page.
   - Positions AuditOS as AI-native care-routing compliance infrastructure for insurers and healthcare facilities.
   - Explains live triage monitoring, decision trace, compliance metrics, and savings/operations workflows.
