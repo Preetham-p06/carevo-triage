@@ -32,20 +32,20 @@ const founders = [
 
 export default function CompanyPage() {
   return (
-    <main className="min-h-screen overflow-hidden bg-[radial-gradient(circle_at_50%_-8%,rgba(191,219,254,0.72),transparent_34%),linear-gradient(180deg,#ffffff_0%,#f8fbff_42%,#ffffff_78%,#f7fbff_100%)] px-4 pb-16 pt-28 text-slate-950 sm:px-6 sm:pb-20 sm:pt-40">
-      <section className="marketing-reveal mx-auto flex min-h-[560px] max-w-7xl flex-col items-center justify-center text-center sm:min-h-[620px]">
-        <p className="mb-8 inline-flex items-center gap-3 rounded-full border border-slate-200 bg-white/85 px-5 py-3 text-sm font-black text-slate-500 shadow-sm sm:mb-10">
+    <main className="min-h-screen overflow-hidden bg-[radial-gradient(circle_at_50%_-8%,rgba(191,219,254,0.62),transparent_34%),linear-gradient(180deg,#ffffff_0%,#f8fbff_42%,#ffffff_78%,#f7fbff_100%)] px-4 pb-14 pt-24 text-slate-950 sm:px-6 sm:pb-20 sm:pt-40">
+      <section className="marketing-reveal mx-auto flex min-h-[430px] max-w-7xl flex-col items-center justify-center text-center sm:min-h-[620px]">
+        <p className="mb-6 inline-flex items-center gap-3 rounded-full border border-slate-200 bg-white/85 px-4 py-2.5 text-xs font-black text-slate-500 shadow-sm sm:mb-10 sm:px-5 sm:py-3 sm:text-sm">
           <span className="h-2 w-2 rounded-full bg-sky-500" />
           Company
         </p>
-        <h1 className="mx-auto max-w-6xl font-display text-[clamp(2.75rem,13vw,4.75rem)] font-black leading-[1.02] tracking-[-0.065em] sm:text-7xl lg:text-8xl">
+        <h1 className="mx-auto max-w-6xl font-display text-[clamp(2.35rem,10.5vw,4.75rem)] font-black leading-[1.08] tracking-[-0.055em] sm:text-7xl sm:leading-[1.02] lg:text-8xl">
           Built by engineers and researchers
           <span className="block text-blue-500">who have seen healthcare from different angles.</span>
         </h1>
-        <p className="mx-auto mt-8 max-w-4xl text-base font-semibold leading-8 text-slate-600 sm:mt-10 sm:text-xl sm:leading-9">
+        <p className="mx-auto mt-6 max-w-3xl text-[15px] font-semibold leading-7 text-slate-600 sm:mt-10 sm:text-xl sm:leading-9">
           Carevo exists because nobody should have to guess whether to go to the ER, urgent care, primary care, telehealth, or home care. We are building the intelligence layer that helps members take the right first step while giving insurers a safer, auditable routing workflow.
         </p>
-        <div className="mt-8 flex w-full max-w-sm flex-col gap-3 sm:mt-10 sm:w-auto sm:max-w-none sm:flex-row">
+        <div className="mt-7 flex w-full max-w-sm flex-col gap-3 sm:mt-10 sm:w-auto sm:max-w-none sm:flex-row">
           <Link href="/contact" className="inline-flex items-center justify-center rounded-full bg-blue-600 px-8 py-4 text-sm font-black text-white shadow-lg shadow-blue-600/25 transition hover:-translate-y-0.5 hover:bg-blue-700">
             Book a call
           </Link>
@@ -53,16 +53,16 @@ export default function CompanyPage() {
             Explore platform
           </Link>
         </div>
-        <div className="mt-8 inline-flex rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-slate-500 shadow-sm">
+        <div className="mt-6 inline-flex rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-slate-500 shadow-sm sm:mt-8 sm:text-xs sm:tracking-[0.18em]">
           Regulated software
         </div>
       </section>
 
       <section className="scroll-reveal mx-auto mt-16 max-w-7xl sm:mt-20">
         <p className="mb-5 text-center text-xs font-black uppercase tracking-[0.24em] text-slate-400">Built by a team from</p>
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-3 sm:gap-4 md:grid-cols-3">
           {teamSignals.map((signal) => (
-            <div key={signal} className="rounded-[1.4rem] border border-slate-200 bg-white/78 px-5 py-7 text-center font-display text-xl font-black tracking-[-0.04em] text-slate-900 shadow-sm backdrop-blur sm:px-6 sm:py-8 sm:text-2xl">
+            <div key={signal} className="rounded-[1.25rem] border border-slate-200 bg-white/78 px-4 py-5 text-center font-display text-lg font-black tracking-[-0.035em] text-slate-900 shadow-sm backdrop-blur sm:rounded-[1.4rem] sm:px-6 sm:py-8 sm:text-2xl">
               {signal}
             </div>
           ))}
@@ -70,10 +70,10 @@ export default function CompanyPage() {
       </section>
 
       <section className="scroll-reveal mx-auto mt-20 grid max-w-7xl gap-10 border-t border-slate-200/80 pt-14 sm:mt-24 sm:gap-12 sm:pt-16 lg:grid-cols-[0.86fr_1.14fr] lg:items-start">
-        <h2 className="font-display text-[clamp(2.4rem,12vw,4.25rem)] font-black leading-[0.98] tracking-[-0.06em] sm:text-6xl">
+        <h2 className="font-display text-[clamp(2.15rem,10vw,4.25rem)] font-black leading-[1.07] tracking-[-0.052em] sm:text-6xl sm:leading-[0.98]">
           We came at this problem from three perspectives.
         </h2>
-        <div className="space-y-5 text-base font-semibold leading-8 text-slate-600 sm:space-y-6 sm:text-lg">
+        <div className="space-y-4 text-[15px] font-semibold leading-7 text-slate-600 sm:space-y-6 sm:text-lg sm:leading-8">
           <p>
             Paul saw how hard healthcare navigation is for real patients at the front desk. Some people waited, paid, and still had to be redirected because the facility did not have the right equipment or workflow for their situation.
           </p>
@@ -123,7 +123,7 @@ export default function CompanyPage() {
       </section>
 
       <section className="scroll-reveal mx-auto mt-20 max-w-7xl rounded-[2rem] bg-slate-950 p-7 text-white shadow-2xl shadow-slate-900/20 sm:mt-24 sm:p-12">
-        <h2 className="max-w-4xl font-display text-[clamp(2.35rem,12vw,4.3rem)] font-black leading-[0.98] tracking-[-0.06em] sm:text-6xl">
+        <h2 className="max-w-4xl font-display text-[clamp(2.15rem,10vw,4.3rem)] font-black leading-[1.07] tracking-[-0.052em] sm:text-6xl sm:leading-[0.98]">
           The right care decision should be easier to trust.
         </h2>
         <p className="mt-6 max-w-3xl text-base font-semibold leading-8 text-slate-300">

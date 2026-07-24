@@ -24,14 +24,14 @@ const h2hRows = [
 
 export default function BenchmarksPage() {
   return (
-    <main className="min-h-screen bg-white px-5 pt-28 pb-16 text-slate-950">
+    <main className="min-h-screen bg-white px-4 pt-24 pb-14 text-slate-950 sm:px-5 sm:pt-28 sm:pb-16">
       {/* Hero */}
       <section className="mx-auto max-w-4xl">
         <p className="mb-4 text-xs font-black uppercase tracking-[0.2em] text-carevo-600">Benchmarks</p>
-        <h1 className="text-4xl font-black leading-[1.02] tracking-[-0.05em] sm:text-6xl">
+        <h1 className="text-[clamp(2.25rem,10vw,3.75rem)] font-black leading-[1.08] tracking-[-0.052em] sm:text-6xl sm:leading-[1.02]">
           We publish our numbers. Ask our competitors for theirs.
         </h1>
-        <p className="mt-6 max-w-2xl text-lg font-semibold leading-8 text-slate-600">
+        <p className="mt-5 max-w-2xl text-[15px] font-semibold leading-7 text-slate-600 sm:mt-6 sm:text-lg sm:leading-8">
           Every figure on this page comes from versioned benchmark files, a scripted test harness, and
           verbatim transcripts committed to our repository. Any result can be re-run and reproduced.
           Last verification run: July 18, 2026.
@@ -39,10 +39,10 @@ export default function BenchmarksPage() {
       </section>
 
       {/* Headline stats */}
-      <section className="mx-auto mt-14 grid max-w-4xl gap-4 sm:grid-cols-2">
+      <section className="mx-auto mt-10 grid max-w-4xl gap-3 sm:mt-14 sm:grid-cols-2 sm:gap-4">
         {headline.map(([stat, label]) => (
-          <article key={label} className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
-            <p className="text-4xl font-black tabular-nums tracking-[-0.04em] text-carevo-700">{stat}</p>
+          <article key={label} className="rounded-2xl border border-slate-200 bg-slate-50 p-5 sm:p-6">
+            <p className="text-3xl font-black tabular-nums tracking-[-0.04em] text-carevo-700 sm:text-4xl">{stat}</p>
             <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">{label}</p>
           </article>
         ))}
@@ -72,7 +72,7 @@ export default function BenchmarksPage() {
           production code serving this website, scored with their metric definitions. Their rows below are
           their published results; ours were produced July 2026.
         </p>
-        <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200">
+        <div className="mt-6 hidden overflow-x-auto rounded-2xl border border-slate-200 sm:block">
           <table className="w-full min-w-[640px] text-left text-sm">
             <thead>
               <tr className="bg-slate-950 text-white">
@@ -96,6 +96,23 @@ export default function BenchmarksPage() {
               ))}
             </tbody>
           </table>
+        </div>
+        <div className="mt-6 grid gap-3 sm:hidden">
+          {h2hRows.map(([name, acc, em, ne, sc, safety, over, isUs]) => (
+            <article key={name as string} className={`rounded-2xl border p-4 ${isUs ? 'border-carevo-200 bg-carevo-50' : 'border-slate-200 bg-white'}`}>
+              <div className="flex items-center justify-between gap-3">
+                <h3 className={`text-base font-black ${isUs ? 'text-carevo-800' : 'text-slate-900'}`}>{name}</h3>
+                <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-slate-600 shadow-sm">{acc}</span>
+              </div>
+              <div className="mt-4 grid grid-cols-2 gap-2 text-xs font-bold text-slate-600">
+                <p className="rounded-xl bg-white/70 px-3 py-2">Emergency <strong className="block text-slate-950">{em}</strong></p>
+                <p className="rounded-xl bg-white/70 px-3 py-2">Non-emerg. <strong className="block text-slate-950">{ne}</strong></p>
+                <p className="rounded-xl bg-white/70 px-3 py-2">Self-care <strong className="block text-slate-950">{sc}</strong></p>
+                <p className="rounded-xl bg-white/70 px-3 py-2">Safety <strong className="block text-slate-950">{safety}</strong></p>
+                <p className="col-span-2 rounded-xl bg-white/70 px-3 py-2">Overtriage <strong className="block text-slate-950">{over}</strong></p>
+              </div>
+            </article>
+          ))}
         </div>
         <p className="mt-3 text-xs leading-relaxed text-slate-400">
           Values are mean (standard deviation) across runs; Carevo n=5 runs, 225 scored trials. *Overtriage
@@ -170,8 +187,8 @@ export default function BenchmarksPage() {
       </section>
 
       {/* CTA */}
-      <section className="mx-auto mt-16 max-w-4xl rounded-[2rem] bg-slate-950 p-8 text-white sm:p-10">
-        <h2 className="max-w-2xl text-3xl font-black leading-tight tracking-[-0.04em] sm:text-4xl">
+      <section className="mx-auto mt-14 max-w-4xl rounded-[1.5rem] bg-slate-950 p-6 text-white sm:mt-16 sm:rounded-[2rem] sm:p-10">
+        <h2 className="max-w-2xl text-[clamp(1.9rem,9vw,2.5rem)] font-black leading-[1.08] tracking-[-0.04em] sm:text-4xl sm:leading-tight">
           Want the raw transcripts, the rubric, or a live re-run?
         </h2>
         <p className="mt-4 max-w-2xl text-sm font-semibold leading-7 text-slate-300">
@@ -179,7 +196,7 @@ export default function BenchmarksPage() {
           clinician review records — with health systems, payers, and researchers under NDA. Or just try
           the product the benchmarks describe.
         </p>
-        <div className="mt-7 flex flex-wrap gap-3">
+        <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
           <Link href="/contact" className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-black text-slate-950 transition hover:bg-slate-100">
             Request the methodology
           </Link>

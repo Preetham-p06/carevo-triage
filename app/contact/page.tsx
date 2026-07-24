@@ -97,13 +97,13 @@ export default function ContactPage() {
   }
 
   return (
-    <main className="min-h-screen overflow-hidden bg-[radial-gradient(circle_at_50%_-10%,rgba(191,219,254,0.82),transparent_34%),linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)] px-4 pb-16 pt-28 text-slate-950 sm:px-6 sm:pb-20 sm:pt-36">
+    <main className="min-h-screen overflow-hidden bg-[radial-gradient(circle_at_50%_-10%,rgba(191,219,254,0.62),transparent_34%),linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)] px-4 pb-14 pt-24 text-slate-950 sm:px-6 sm:pb-20 sm:pt-36">
       <section className="marketing-reveal mx-auto max-w-6xl text-center">
-        <p className="mb-6 text-xs font-black uppercase tracking-[0.28em] text-slate-400">Contact</p>
-        <h1 className="mx-auto max-w-6xl font-display text-[clamp(2.75rem,13vw,4.75rem)] font-black leading-[1] tracking-[-0.065em] sm:text-7xl sm:leading-[0.98] lg:text-8xl">
+        <p className="mb-5 text-[10px] font-black uppercase tracking-[0.22em] text-slate-400 sm:text-xs sm:tracking-[0.28em]">Contact</p>
+        <h1 className="mx-auto max-w-6xl font-display text-[clamp(2.35rem,10.5vw,4.75rem)] font-black leading-[1.08] tracking-[-0.055em] sm:text-7xl sm:leading-[0.98] lg:text-8xl">
           Let&apos;s make care navigation clearer.
         </h1>
-        <p className="mx-auto mt-7 max-w-3xl text-base font-semibold leading-8 text-slate-600 sm:mt-8 sm:text-xl sm:leading-9">
+        <p className="mx-auto mt-6 max-w-2xl text-[15px] font-semibold leading-7 text-slate-600 sm:mt-8 sm:text-xl sm:leading-9">
           Tell us where members get stuck - intake, routing, network handoffs, or follow-up - and we&apos;ll map where Carevo can help.
         </p>
         <a
@@ -117,10 +117,10 @@ export default function ContactPage() {
         </a>
       </section>
 
-      <section className="marketing-reveal-delay-1 mx-auto mt-16 max-w-7xl border-t border-slate-200 pt-12 sm:mt-24 sm:pt-16">
+      <section className="marketing-reveal-delay-1 mx-auto mt-12 max-w-7xl border-t border-slate-200 pt-10 sm:mt-24 sm:pt-16">
         <div className="grid gap-6 md:grid-cols-[1fr_1.2fr]">
           <article className="rounded-[1.4rem] border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur sm:p-8">
-            <div className="mb-10 flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200 text-slate-950 sm:mb-16">
+            <div className="mb-8 flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200 text-slate-950 sm:mb-16">
               <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M4 6h16v12H4z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
                 <path d="m4 7 8 6 8-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -148,13 +148,13 @@ export default function ContactPage() {
 
           <article className="rounded-[1.4rem] border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur sm:p-8">
             <p className="text-xs font-black uppercase tracking-[0.22em] text-carevo-600">What to send</p>
-            <h2 className="mt-7 max-w-2xl font-display text-[clamp(2.15rem,11vw,3.3rem)] font-black leading-[1] tracking-[-0.06em] sm:mt-8 sm:text-5xl">
+            <h2 className="mt-6 max-w-2xl font-display text-[clamp(1.9rem,9.5vw,3.3rem)] font-black leading-[1.08] tracking-[-0.052em] sm:mt-8 sm:text-5xl sm:leading-[1]">
               A workflow where the first step is still too confusing.
             </h2>
             <p className="mt-6 max-w-2xl text-base font-semibold leading-8 text-slate-600">
               We can walk through how members enter the system, where unnecessary ER visits happen, which routing decisions need review, and what a clearer handoff could look like.
             </p>
-            <div className="mt-10 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap gap-2.5 sm:mt-10 sm:gap-3">
               {['Insurer pilots', 'Care navigation', 'Audit trail', 'Follow-up'].map((item) => (
                 <span key={item} className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-slate-500">
                   {item}
@@ -169,8 +169,8 @@ export default function ContactPage() {
         <ReviewCard />
       </section>
 
-      <section className="mx-auto mt-16 max-w-7xl rounded-[2rem] bg-slate-950 p-7 text-white sm:mt-20 sm:p-12">
-        <h2 className="max-w-3xl font-display text-[clamp(2.3rem,12vw,4.3rem)] font-black leading-[1] tracking-[-0.06em] sm:text-6xl">
+      <section className="mx-auto mt-14 max-w-7xl rounded-[1.5rem] bg-slate-950 p-6 text-white sm:mt-20 sm:rounded-[2rem] sm:p-12">
+        <h2 className="max-w-3xl font-display text-[clamp(2rem,9.5vw,4.3rem)] font-black leading-[1.08] tracking-[-0.052em] sm:text-6xl sm:leading-[1]">
           Want to see the product first?
         </h2>
         <p className="mt-6 max-w-2xl text-base font-semibold leading-8 text-slate-300">

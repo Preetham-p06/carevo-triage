@@ -61,19 +61,19 @@ function RouteBadge({ route }: { route: string }) {
 export default function AuditOSPage() {
   return (
     <main className="min-h-screen overflow-hidden bg-[linear-gradient(180deg,#f8fbff_0%,#f6f8fb_42%,#ffffff_100%)] px-4 pb-20 pt-28 text-slate-950 sm:px-6 sm:pt-36">
-      <section className="marketing-reveal mx-auto grid min-h-[660px] max-w-7xl gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+      <section className="marketing-reveal mx-auto grid max-w-7xl gap-12 lg:min-h-[660px] lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-14">
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <Badge tone="blue">Carevo AuditOS</Badge>
             <Badge>Insurer / EHR operations</Badge>
           </div>
-          <h1 className="mt-8 max-w-4xl font-display text-[clamp(3rem,8.5vw,6.35rem)] font-black leading-[1.01] tracking-[-0.065em]">
+          <h1 className="mt-7 max-w-4xl font-display text-[clamp(2.45rem,10.5vw,6.35rem)] font-black leading-[1.08] tracking-[-0.055em] sm:mt-8 sm:leading-[1.01] sm:tracking-[-0.065em]">
             Care-routing compliance operations.
           </h1>
-          <p className="mt-8 max-w-xl text-lg font-semibold leading-9 text-slate-600">
+          <p className="mt-6 max-w-xl text-[15px] font-semibold leading-7 text-slate-600 sm:mt-8 sm:text-lg sm:leading-9">
             A cleaner way for payers and care teams to monitor routing safety, review exceptions, and keep every decision traceable.
           </p>
-          <div className="mt-11 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-8 flex flex-col gap-3 sm:mt-11 sm:flex-row">
             <Link href="/demo" className="inline-flex min-h-12 items-center justify-center rounded-full bg-blue-700 px-7 py-3 text-sm font-black text-white shadow-sm transition hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-100">
               Open product demo
             </Link>
@@ -100,7 +100,7 @@ export default function AuditOSPage() {
               </div>
             ))}
           </div>
-          <div className="overflow-x-auto">
+          <div className="hidden overflow-x-auto sm:block">
             <table className="w-full min-w-[640px] text-left text-sm">
               <thead className="bg-slate-50 text-[10px] font-black uppercase tracking-[0.16em] text-slate-400">
                 <tr>
@@ -122,31 +122,43 @@ export default function AuditOSPage() {
               </tbody>
             </table>
           </div>
+          <div className="grid gap-3 p-4 sm:hidden">
+            {queueRows.map(([id, presentation, route, control]) => (
+              <article key={id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="font-mono text-xs font-black text-blue-700">{id}</p>
+                  <RouteBadge route={route} />
+                </div>
+                <p className="mt-3 text-sm font-black leading-5 text-slate-950">{presentation}</p>
+                <p className="mt-2 text-xs font-bold text-slate-500">{control}</p>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="scroll-reveal mx-auto mt-24 max-w-7xl sm:mt-32">
+      <section className="scroll-reveal mx-auto mt-20 max-w-7xl sm:mt-32">
         <div className="max-w-3xl">
           <p className="text-xs font-black uppercase tracking-[0.22em] text-blue-700">Product views</p>
-          <h2 className="mt-5 font-display text-4xl font-black leading-tight tracking-[-0.055em] text-slate-950 sm:text-6xl">
+          <h2 className="mt-5 font-display text-[clamp(2.25rem,10vw,3.75rem)] font-black leading-[1.08] tracking-[-0.052em] text-slate-950 sm:text-6xl sm:leading-tight">
             Four views. One source of truth.
           </h2>
         </div>
-        <div className="mt-14 grid gap-6 md:grid-cols-2">
+        <div className="mt-10 grid gap-4 sm:mt-14 sm:gap-6 md:grid-cols-2">
           {productViews.map(([title, text], index) => (
-            <article key={title} className="scroll-reveal rounded-[1.35rem] border border-slate-200 bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-900/5">
+            <article key={title} className="scroll-reveal rounded-[1.25rem] border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-900/5 sm:rounded-[1.35rem] sm:p-8">
               <p className="font-mono text-xs font-black text-blue-700">0{index + 1}</p>
-              <h3 className="mt-10 font-display text-3xl font-black tracking-[-0.05em] text-slate-950">{title}</h3>
-              <p className="mt-4 max-w-xl text-base font-semibold leading-8 text-slate-600">{text}</p>
+              <h3 className="mt-7 font-display text-2xl font-black tracking-[-0.05em] text-slate-950 sm:mt-10 sm:text-3xl">{title}</h3>
+              <p className="mt-3 max-w-xl text-sm font-semibold leading-7 text-slate-600 sm:mt-4 sm:text-base sm:leading-8">{text}</p>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="scroll-reveal mx-auto mt-28 grid max-w-7xl gap-12 rounded-[1.5rem] border border-slate-200 bg-white p-8 shadow-sm sm:mt-36 sm:p-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
+      <section className="scroll-reveal mx-auto mt-20 grid max-w-7xl gap-8 rounded-[1.35rem] border border-slate-200 bg-white p-6 shadow-sm sm:mt-36 sm:gap-12 sm:rounded-[1.5rem] sm:p-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
         <div>
           <p className="text-xs font-black uppercase tracking-[0.22em] text-blue-700">Decision trace</p>
-          <h2 className="mt-5 font-display text-4xl font-black leading-tight tracking-[-0.055em] text-slate-950 sm:text-6xl">
+          <h2 className="mt-5 font-display text-[clamp(2.25rem,10vw,3.75rem)] font-black leading-[1.08] tracking-[-0.052em] text-slate-950 sm:text-6xl sm:leading-tight">
             Every route is reviewable.
           </h2>
           <p className="mt-7 max-w-xl text-base font-semibold leading-8 text-slate-600">
@@ -166,11 +178,11 @@ export default function AuditOSPage() {
         </div>
       </section>
 
-      <section className="scroll-reveal mx-auto mt-28 max-w-7xl rounded-[1.5rem] bg-slate-950 p-8 text-white shadow-xl shadow-slate-900/12 sm:mt-36 sm:p-12">
+      <section className="scroll-reveal mx-auto mt-20 max-w-7xl rounded-[1.35rem] bg-slate-950 p-6 text-white shadow-xl shadow-slate-900/12 sm:mt-36 sm:rounded-[1.5rem] sm:p-12">
         <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.22em] text-blue-200">Carevo AuditOS</p>
-            <h2 className="mt-4 max-w-4xl font-display text-4xl font-black leading-tight tracking-[-0.055em] sm:text-6xl">
+            <h2 className="mt-4 max-w-4xl font-display text-[clamp(2.15rem,10vw,3.75rem)] font-black leading-[1.08] tracking-[-0.052em] sm:text-6xl sm:leading-tight">
               Compliance that runs with the workflow.
             </h2>
           </div>

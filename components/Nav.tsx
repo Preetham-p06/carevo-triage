@@ -62,7 +62,7 @@ export default function Nav() {
   if (MARKETING_PATHS.has(pathname)) {
     return (
       <>
-        <nav className="fixed left-1/2 top-[18px] z-50 flex w-[min(1180px,94vw)] -translate-x-1/2 items-center justify-between rounded-[100px] border border-black/[.08] bg-white/[.88] py-[11px] pl-[22px] pr-3 [font-family:'Plus_Jakarta_Sans',system-ui,sans-serif] shadow-[0_18px_55px_rgba(15,23,42,.10)] backdrop-blur-[22px] backdrop-saturate-150">
+        <nav className="fixed left-1/2 top-2.5 z-50 flex w-[calc(100vw-20px)] -translate-x-1/2 items-center justify-between rounded-[1.35rem] border border-black/[.08] bg-white/[.92] py-2 pl-3 pr-2 [font-family:'Plus_Jakarta_Sans',system-ui,sans-serif] shadow-[0_14px_42px_rgba(15,23,42,.10)] backdrop-blur-[22px] backdrop-saturate-150 md:top-[18px] md:w-[min(1180px,94vw)] md:rounded-[100px] md:py-[11px] md:pl-[22px] md:pr-3 md:shadow-[0_18px_55px_rgba(15,23,42,.10)]">
           <Link href="/" className="flex shrink-0 items-center gap-[9px] text-[17px] font-bold leading-[normal] tracking-normal text-slate-950">
             <CarevoLogoMark compact />
             carevo
@@ -120,7 +120,7 @@ export default function Nav() {
             onClick={() => setMenuOpen(false)}
             aria-label="Close navigation menu"
           />
-          <aside className={`absolute right-3 top-3 w-[min(340px,calc(100vw-24px))] rounded-[1.6rem] border border-slate-200 bg-white p-5 shadow-2xl shadow-slate-900/20 transition-transform duration-200 ${menuOpen ? 'translate-x-0' : 'translate-x-[calc(100%+24px)]'}`}>
+          <aside className={`absolute right-3 top-3 max-h-[calc(100dvh-24px)] w-[min(340px,calc(100vw-24px))] overflow-y-auto rounded-[1.6rem] border border-slate-200 bg-white p-5 shadow-2xl shadow-slate-900/20 transition-transform duration-200 ${menuOpen ? 'translate-x-0' : 'translate-x-[calc(100%+24px)]'}`}>
             <div className="mb-6 flex items-center justify-between gap-3">
               <Link href="/" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 font-display text-xl font-black tracking-tight text-slate-950">
                 <CarevoLogoMark />
@@ -140,11 +140,11 @@ export default function Nav() {
                   </Link>
                 ))}
               </div>
-              <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/triage">Triage</Link>
-              <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/#how-it-works">How it works</Link>
-              <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/benchmarks">Benchmarks</Link>
-              <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/company">Company</Link>
-              <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-4 hover:bg-slate-50" href="/contact">Contact</Link>
+              <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-3 hover:bg-slate-50" href="/triage">Triage</Link>
+              <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-3 hover:bg-slate-50" href="/#how-it-works">How it works</Link>
+              <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-3 hover:bg-slate-50" href="/benchmarks">Benchmarks</Link>
+              <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-3 hover:bg-slate-50" href="/company">Company</Link>
+              <Link onClick={() => setMenuOpen(false)} className="rounded-2xl px-4 py-3 hover:bg-slate-50" href="/contact">Contact</Link>
             </div>
             <Link onClick={() => setMenuOpen(false)} href="/triage" className="mt-5 flex w-full items-center justify-center rounded-full bg-blue-600 px-7 py-4 text-sm font-black text-white shadow-lg shadow-blue-600/25">
               Try it

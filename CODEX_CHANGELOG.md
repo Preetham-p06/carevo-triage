@@ -2,6 +2,10 @@
 
 ## 2026-07-24
 
+- Completed a phone-first readability pass across the public site.
+  - Simplified the mobile marketing nav shell and menu so the top island does not crowd small screens.
+  - Reduced mobile hero height, headline pressure, card padding, and section density on the homepage, Company, Contact, Triage, Benchmarks, AuditOS, and Demo pages.
+  - Replaced wide desktop tables with stacked mobile cards on Benchmarks, AuditOS, and the enterprise demo so phones do not need sideways scrolling.
 - Made the homepage and AuditOS product page easier to read and less visually crowded.
   - Softened the homepage hero background, reduced headline pressure, and added more space between the CTA and routing animation.
   - Relaxed product-card, stats, workflow, and privacy section density in `public/landing-v2.html`.
