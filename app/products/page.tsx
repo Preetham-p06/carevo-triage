@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import Reveal from '@/components/Reveal'
 
 export const metadata: Metadata = {
   title: 'Products - Carevo AI Triage & AuditOS',
@@ -67,6 +68,7 @@ export default function ProductsPage() {
       </section>
 
       {/* Product 1 — AI Triage */}
+      <Reveal>
       <section className="mx-auto mt-24 max-w-5xl">
         <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
           <div>
@@ -110,8 +112,10 @@ export default function ProductsPage() {
           </ol>
         </div>
       </section>
+      </Reveal>
 
       {/* "Feeds into" animation */}
+      <Reveal>
       <section className="mx-auto mt-20 max-w-4xl" aria-label="Every triage decision feeds into AuditOS">
         <div className="relative overflow-hidden rounded-[2rem] border border-cyan-100 bg-[linear-gradient(135deg,#f8fdff,#ffffff_45%,#ecfeff)] px-6 py-12 shadow-xl shadow-cyan-950/5 sm:px-10">
           <p className="text-center text-[11px] font-black uppercase tracking-[0.2em] text-cyan-700">Every decision feeds into</p>
@@ -156,8 +160,10 @@ export default function ProductsPage() {
           </p>
         </div>
       </section>
+      </Reveal>
 
       {/* Product 2 — AuditOS */}
+      <Reveal>
       <section className="mx-auto mt-20 max-w-5xl">
         <div className="rounded-[2rem] border border-slate-800 bg-slate-950 p-6 text-white shadow-2xl shadow-slate-950/20 sm:p-10">
           <div className="flex flex-wrap items-center justify-between gap-4">
@@ -210,8 +216,10 @@ export default function ProductsPage() {
           </div>
         </div>
       </section>
+      </Reveal>
 
       {/* Closing CTA */}
+      <Reveal>
       <section className="mx-auto mt-20 max-w-3xl text-center">
         <h2 className="text-[clamp(1.6rem,4vw,2.4rem)] font-black leading-tight tracking-[-0.04em]">
           Want it in front of your patients or your network?
@@ -228,6 +236,7 @@ export default function ProductsPage() {
           <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 fill-none stroke-white"><path d="M3 8h10M9 4l4 4-4 4" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
         </Link>
       </section>
+      </Reveal>
     </main>
   )
 }

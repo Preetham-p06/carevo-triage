@@ -195,3 +195,22 @@ html, body {
   from { background-color: rgba(16, 185, 129, 0.14); opacity: 0.4; }
   to { background-color: rgba(255, 255, 255, 0); opacity: 1; }
 }
+
+/* Scroll-reveal (Reveal component) */
+.carevo-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s cubic-bezier(0.16, 0.84, 0.44, 1), transform 0.7s cubic-bezier(0.16, 0.84, 0.44, 1);
+  will-change: opacity, transform;
+}
+.carevo-reveal-in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .carevo-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

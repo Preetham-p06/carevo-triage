@@ -203,8 +203,46 @@ const TABS: Array<{ id: Tab; title: string; subtitle: string }> = [
   { id: 'queue', title: 'Live Work Queue', subtitle: 'Cases streaming in real time with owners and controls.' },
   { id: 'trace', title: 'Decision Trace', subtitle: 'Replay a route from intake to rule match.' },
   { id: 'agents', title: 'AI Compliance Agents', subtitle: 'Autonomous controls running continuously.' },
-  { id: 'financials', title: 'Cost Operations', subtitle: 'Avoidable ER savings and routing mix.' },
+  { id: 'financials', title: 'Cost & Coverage', subtitle: 'Insurance cost-share and avoidable ER savings.' },
 ]
+
+// Illustrative average cost for each care level (USD).
+const CARE_COST: Record<Level, number> = {
+  Emergency: 2600,
+  ER: 2200,
+  'Urgent Care': 260,
+  'Primary Care': 170,
+  Telehealth: 75,
+  'Home Care': 0,
+}
+const ER_BASELINE = 2200
+
+// Illustrative plan cost-share by market (share the plan covers).
+const PLAN_COVERAGE: Record<string, number> = {
+  'Commercial PPO': 0.8,
+  'Commercial HMO': 0.85,
+  'Medicare Advantage': 0.9,
+  Medicaid: 0.98,
+  'Student plan': 0.7,
+  'Behavioral health': 0.85,
+}
+
+type CoverageBreakdown = {
+  estCost: number
+  covered: number
+  memberOwes: number
+  coverRate: number
+  avoided: number
+}
+
+function coverageFor(row: CaseRow): CoverageBreakdown {
+  const estCost = CARE_COST[row.level] ?? 0
+  const rate = PLAN_COVERAGE[row.market] ?? 0.8
+  const covered = Math.round(estCost * rate)
+  const memberOwes = estCost - covered
+  const avoided = row.level === 'Emergency' || row.level === 'ER' ? 0 : Math.max(0, ER_BASELINE - estCost)
+  return { estCost, covered, memberOwes, coverRate: rate, avoided }
+}
 
 type Agent = {
   name: string
@@ -367,12 +405,19 @@ export default function EnterpriseDemo() {
   }, [cases, levelFilter, query])
 
   const metrics = useMemo(() => {
-    const savings = cases.reduce((sum, row) => sum + row.saved, 0)
+    const covs = cases.map(coverageFor)
+    const savings = covs.reduce((sum, c) => sum + c.avoided, 0)
+    const memberTotal = covs.reduce((sum, c) => sum + c.memberOwes, 0)
+    const coveredTotal = covs.reduce((sum, c) => sum + c.covered, 0)
     const avgQuestions = cases.reduce((sum, row) => sum + row.questions, 0) / cases.length
-    const redirects = cases.filter(row => row.saved > 0).length
+    const redirects = covs.filter(c => c.avoided > 0).length
+    const avgMember = cases.length ? Math.round(memberTotal / cases.length) : 0
     return {
       active: cases.length,
       savings,
+      coveredTotal,
+      memberTotal,
+      avgMember,
       redirects,
       avgQuestions: avgQuestions.toFixed(1),
       reviewCount: cases.filter(row => row.status !== 'Complete').length,
@@ -667,44 +712,143 @@ export default function EnterpriseDemo() {
                 </div>
               )}
 
-              {/* FINANCIALS */}
+              {/* FINANCIALS — cost & insurance coverage */}
               {tab === 'financials' && (
-                <div className="grid gap-4 p-4 lg:grid-cols-[0.85fr_1.15fr]">
-                  <div className="rounded-xl border border-cyan-800 bg-[linear-gradient(135deg,#083344_0%,#0f172a_58%,#052e2b_100%)] p-5 text-white shadow-lg shadow-cyan-950/15">
-                    <p className="text-[10px] font-black uppercase tracking-[0.16em] text-blue-200">Estimated operations impact</p>
-                    <p className="mt-4 text-4xl font-black tracking-[-0.05em]">{formatCurrency(metrics.savings)}</p>
-                    <p className="mt-2 text-sm font-semibold leading-6 text-slate-300">
-                      Avoidable ER cost across the live queue sample.
-                    </p>
-                    <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                      <div className="rounded-lg bg-white/10 p-4">
-                        <p className="text-2xl font-black">{metrics.redirects}</p>
-                        <p className="mt-1 text-[10px] font-black uppercase tracking-[0.14em] text-slate-400">lower-acuity redirects</p>
-                      </div>
-                      <div className="rounded-lg bg-white/10 p-4">
-                        <p className="text-2xl font-black">18h</p>
-                        <p className="mt-1 text-[10px] font-black uppercase tracking-[0.14em] text-slate-400">manual review avoided</p>
-                      </div>
+                <div className="p-4">
+                  {/* Summary tiles */}
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                    <div className="rounded-xl border border-cyan-800 bg-[linear-gradient(135deg,#083344_0%,#0f172a_60%,#052e2b_100%)] p-4 text-white shadow-lg shadow-cyan-950/15">
+                      <p className="text-[10px] font-black uppercase tracking-[0.14em] text-blue-200">Avoidable ER cost</p>
+                      <p className="mt-2 text-3xl font-black tracking-[-0.05em]">{formatCurrency(metrics.savings)}</p>
+                      <p className="mt-1 text-xs font-semibold text-slate-300">Across the live queue</p>
+                    </div>
+                    <div className="rounded-xl border border-emerald-100 bg-[linear-gradient(180deg,#ffffff,#ecfdf5)] p-4 shadow-sm">
+                      <p className="text-[10px] font-black uppercase tracking-[0.14em] text-emerald-700">Plan covers</p>
+                      <p className="mt-2 text-3xl font-black tracking-[-0.05em] text-emerald-800">{formatCurrency(metrics.coveredTotal)}</p>
+                      <p className="mt-1 text-xs font-semibold text-slate-500">Insurer responsibility (est.)</p>
+                    </div>
+                    <div className="rounded-xl border border-amber-100 bg-[linear-gradient(180deg,#ffffff,#fffbeb)] p-4 shadow-sm">
+                      <p className="text-[10px] font-black uppercase tracking-[0.14em] text-amber-700">Member out-of-pocket</p>
+                      <p className="mt-2 text-3xl font-black tracking-[-0.05em] text-amber-800">{formatCurrency(metrics.avgMember)}</p>
+                      <p className="mt-1 text-xs font-semibold text-slate-500">Average per case (est.)</p>
+                    </div>
+                    <div className="rounded-xl border border-cyan-100 bg-[linear-gradient(180deg,#ffffff,#f0fdff)] p-4 shadow-sm">
+                      <p className="text-[10px] font-black uppercase tracking-[0.14em] text-cyan-700">Lower-acuity redirects</p>
+                      <p className="mt-2 text-3xl font-black tracking-[-0.05em] text-cyan-900">{metrics.redirects}</p>
+                      <p className="mt-1 text-xs font-semibold text-slate-500">Kept out of the ER</p>
                     </div>
                   </div>
-                  <div className="rounded-xl border border-cyan-100 bg-cyan-50/45 p-5">
-                    <p className="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-700">Routing mix (live)</p>
-                    <div className="mt-4 space-y-3">
-                      {(['Emergency', 'ER', 'Urgent Care', 'Telehealth', 'Home Care'] as Level[]).map(level => {
-                        const count = cases.filter(row => row.level === level).length
-                        const width = `${Math.max(6, (count / Math.max(1, cases.length)) * 100)}%`
+
+                  {/* Per-case cost & coverage table */}
+                  <div className="mt-4 overflow-hidden rounded-xl border border-cyan-100 bg-white">
+                    <div className="flex items-center justify-between border-b border-cyan-100 bg-cyan-50/50 px-4 py-2.5">
+                      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-700">Cost &amp; insurance breakdown</p>
+                      <span className="text-[10px] font-bold text-slate-400">Estimates · not a quote</span>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <table className="w-full min-w-[720px] text-left text-sm">
+                        <thead className="bg-slate-50 text-[10px] font-black uppercase tracking-[0.14em] text-slate-400">
+                          <tr>
+                            <th className="px-4 py-3">Case</th>
+                            <th className="px-4 py-3">Route</th>
+                            <th className="px-4 py-3">Plan</th>
+                            <th className="px-4 py-3 text-right">Est. cost</th>
+                            <th className="px-4 py-3">Plan covers</th>
+                            <th className="px-4 py-3 text-right">Member owes</th>
+                            <th className="px-4 py-3 text-right">ER avoided</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                          {cases.map(row => {
+                            const cov = coverageFor(row)
+                            return (
+                              <tr
+                                key={row.id}
+                                onClick={() => setSelectedId(row.id)}
+                                className={`cursor-pointer transition ${selectedId === row.id ? 'bg-cyan-50/70' : 'hover:bg-slate-50'}`}
+                              >
+                                <td className="px-4 py-3 font-mono text-xs font-black text-cyan-700">{row.id}</td>
+                                <td className="px-4 py-3"><Badge className={LEVEL_STYLE[row.level]}>{row.level}</Badge></td>
+                                <td className="px-4 py-3 text-xs font-bold text-slate-600">{row.market}</td>
+                                <td className="px-4 py-3 text-right font-black text-slate-800">{formatCurrency(cov.estCost)}</td>
+                                <td className="px-4 py-3">
+                                  <div className="flex items-center gap-2">
+                                    <div className="h-1.5 w-16 overflow-hidden rounded-full bg-slate-100">
+                                      <div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.round(cov.coverRate * 100)}%` }} />
+                                    </div>
+                                    <span className="text-xs font-bold text-emerald-700">{Math.round(cov.coverRate * 100)}%</span>
+                                  </div>
+                                </td>
+                                <td className="px-4 py-3 text-right font-black text-amber-700">{formatCurrency(cov.memberOwes)}</td>
+                                <td className="px-4 py-3 text-right font-black text-cyan-800">{cov.avoided > 0 ? formatCurrency(cov.avoided) : '—'}</td>
+                              </tr>
+                            )
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* Selected case coverage + routing mix */}
+                  <div className="mt-4 grid gap-4 lg:grid-cols-2">
+                    <div className="rounded-xl border border-cyan-100 bg-white p-5 shadow-sm">
+                      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-700">Coverage detail — {selected.id}</p>
+                      <h3 className="mt-2 text-lg font-black tracking-[-0.03em] text-slate-950">{selected.intake}</h3>
+                      <p className="mt-1 text-xs font-semibold text-slate-500">{selected.member} · {selected.market}</p>
+                      {(() => {
+                        const cov = coverageFor(selected)
+                        const coveredPct = cov.estCost ? Math.round((cov.covered / cov.estCost) * 100) : 0
                         return (
-                          <div key={level}>
-                            <div className="flex items-center justify-between text-xs font-black text-slate-600">
-                              <span>{level}</span>
-                              <span>{count}</span>
+                          <div className="mt-4">
+                            <div className="flex h-6 overflow-hidden rounded-lg border border-slate-200">
+                              <div className="flex items-center justify-center bg-emerald-500 text-[10px] font-black text-white" style={{ width: `${Math.max(8, coveredPct)}%` }}>{coveredPct}%</div>
+                              <div className="flex flex-1 items-center justify-center bg-amber-400 text-[10px] font-black text-amber-900">{100 - coveredPct}%</div>
                             </div>
-                            <div className="mt-1 h-2 overflow-hidden rounded-full bg-white">
-                              <div className="h-full rounded-full bg-cyan-600 transition-all duration-700" style={{ width }} />
+                            <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+                              <div className="rounded-lg bg-slate-50 p-3">
+                                <p className="text-[10px] font-black uppercase tracking-wide text-slate-400">Est. cost</p>
+                                <p className="mt-1 text-lg font-black text-slate-900">{formatCurrency(cov.estCost)}</p>
+                              </div>
+                              <div className="rounded-lg bg-emerald-50 p-3">
+                                <p className="text-[10px] font-black uppercase tracking-wide text-emerald-600">Plan pays</p>
+                                <p className="mt-1 text-lg font-black text-emerald-800">{formatCurrency(cov.covered)}</p>
+                              </div>
+                              <div className="rounded-lg bg-amber-50 p-3">
+                                <p className="text-[10px] font-black uppercase tracking-wide text-amber-600">You owe</p>
+                                <p className="mt-1 text-lg font-black text-amber-800">{formatCurrency(cov.memberOwes)}</p>
+                              </div>
                             </div>
+                            {cov.avoided > 0 && (
+                              <p className="mt-3 rounded-lg bg-cyan-50 px-3 py-2 text-xs font-bold text-cyan-800">
+                                Routing here instead of the ER avoids about {formatCurrency(cov.avoided)} in cost.
+                              </p>
+                            )}
                           </div>
                         )
-                      })}
+                      })()}
+                    </div>
+                    <div className="rounded-xl border border-cyan-100 bg-cyan-50/45 p-5">
+                      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-700">Routing mix (live)</p>
+                      <div className="mt-4 space-y-3">
+                        {(['Emergency', 'ER', 'Urgent Care', 'Telehealth', 'Home Care'] as Level[]).map(level => {
+                          const count = cases.filter(row => row.level === level).length
+                          const width = `${Math.max(6, (count / Math.max(1, cases.length)) * 100)}%`
+                          return (
+                            <div key={level}>
+                              <div className="flex items-center justify-between text-xs font-black text-slate-600">
+                                <span>{level}</span>
+                                <span>{count}</span>
+                              </div>
+                              <div className="mt-1 h-2 overflow-hidden rounded-full bg-white">
+                                <div className="h-full rounded-full bg-cyan-600 transition-all duration-700" style={{ width }} />
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                      <p className="mt-4 text-xs font-semibold leading-5 text-slate-500">
+                        Coverage figures are illustrative estimates based on plan type — not quotes or enrollment decisions.
+                      </p>
                     </div>
                   </div>
                 </div>
