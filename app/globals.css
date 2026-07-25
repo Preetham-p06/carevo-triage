@@ -161,3 +161,37 @@ html, body {
     transform: translateY(0);
   }
 }
+
+/* Products page: "feeds into" pipe animation */
+@keyframes carevo-flow-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
+
+@keyframes carevo-packet-travel {
+  0% { left: 0%; opacity: 0; transform: translateY(-50%) scale(0.6); }
+  12% { opacity: 1; transform: translateY(-50%) scale(1); }
+  88% { opacity: 1; transform: translateY(-50%) scale(1); }
+  100% { left: 100%; opacity: 0; transform: translateY(-50%) scale(0.6); }
+}
+
+.carevo-flow {
+  animation: carevo-flow-shimmer 2.4s linear infinite;
+}
+
+.carevo-packet {
+  animation: carevo-packet-travel 2.7s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carevo-flow, .carevo-packet {
+    animation: none;
+  }
+  .carevo-packet { left: 50%; opacity: 1; }
+}
+
+/* AuditOS live queue: new-row entrance */
+@keyframes carevo-row-in {
+  from { background-color: rgba(16, 185, 129, 0.14); opacity: 0.4; }
+  to { background-color: rgba(255, 255, 255, 0); opacity: 1; }
+}

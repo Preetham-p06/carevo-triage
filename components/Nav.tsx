@@ -31,7 +31,7 @@ const TABS = [
   },
 ]
 
-const MARKETING_PATHS = new Set(['/triage', '/audit-os', '/company', '/contact', '/privacy', '/terms', '/benchmarks'])
+const MARKETING_PATHS = new Set(['/products', '/triage', '/audit-os', '/company', '/contact', '/privacy', '/terms', '/benchmarks'])
 
 const PRODUCT_LINKS = [
   {
@@ -69,8 +69,8 @@ export default function Nav() {
           </Link>
           <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-2 whitespace-nowrap text-[15px] font-extrabold leading-[normal] text-slate-500 md:flex">
             <div className="group relative">
-              <button
-                type="button"
+              <Link
+                href="/products"
                 className="inline-flex items-center gap-1.5 rounded-full px-[15px] py-2 font-extrabold transition hover:bg-slate-950/[.06] hover:text-slate-950 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100"
                 aria-haspopup="true"
               >
@@ -78,7 +78,7 @@ export default function Nav() {
                 <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 fill-none stroke-current" aria-hidden="true">
                   <path d="M4 6l4 4 4-4" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-              </button>
+              </Link>
               <div className="pointer-events-none absolute left-1/2 top-[calc(100%+12px)] w-[360px] -translate-x-1/2 rounded-[1.35rem] border border-slate-200 bg-white/95 p-2 text-left opacity-0 shadow-2xl shadow-slate-900/10 backdrop-blur transition duration-150 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
                 {PRODUCT_LINKS.map((item) => (
                   <Link
@@ -132,7 +132,7 @@ export default function Nav() {
             </div>
             <div className="grid gap-2 text-lg font-black text-slate-900">
               <div className="rounded-2xl bg-slate-50 p-2">
-                <p className="px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em] text-slate-400">Products</p>
+                <Link onClick={() => setMenuOpen(false)} href="/products" className="block px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em] text-slate-400 hover:text-slate-600">Products</Link>
                 {PRODUCT_LINKS.map((item) => (
                   <Link key={item.href} onClick={() => setMenuOpen(false)} className="block rounded-xl px-3 py-3 hover:bg-white" href={item.href}>
                     <span className="block text-base font-black text-slate-950">{item.title}</span>
