@@ -160,6 +160,125 @@ const TABS: Array<{ id: Tab; title: string; subtitle: string }> = [
   { id: 'financials', title: 'Cost & Coverage', subtitle: 'Insurance cost-share' },
 ]
 
+// ═══ FACILITY (provider) side ═══════════════════════════════
+type View = 'payer' | 'facility'
+type Facility = 'Urgent Care' | 'Hospital ER' | 'Primary Care'
+type Arriving = 'En route' | 'Arriving' | 'Checked in'
+
+// ESI-style acuity: 1 (most urgent) … 5 (least). Color + label, never color alone.
+const ACUITY: Record<number, { label: string; cls: string; bar: string }> = {
+  1: { label: 'ESI 1 · Resuscitation', cls: 'border-red-300 bg-red-50 text-red-700', bar: 'bg-red-500' },
+  2: { label: 'ESI 2 · Emergent', cls: 'border-orange-300 bg-orange-50 text-orange-700', bar: 'bg-orange-500' },
+  3: { label: 'ESI 3 · Urgent', cls: 'border-amber-300 bg-amber-50 text-amber-800', bar: 'bg-amber-500' },
+  4: { label: 'ESI 4 · Less urgent', cls: 'border-emerald-300 bg-emerald-50 text-emerald-700', bar: 'bg-emerald-500' },
+  5: { label: 'ESI 5 · Non-urgent', cls: 'border-sky-300 bg-sky-50 text-sky-700', bar: 'bg-sky-500' },
+}
+const ARRIVING_STYLE: Record<Arriving, string> = {
+  'En route': 'border-blue-200 bg-blue-50 text-blue-700',
+  Arriving: 'border-amber-200 bg-amber-50 text-amber-800',
+  'Checked in': 'border-emerald-200 bg-emerald-50 text-emerald-700',
+}
+
+type Inbound = {
+  id: string
+  facility: Facility
+  patient: string
+  complaint: string
+  words: string
+  facts: string[]
+  redFlags: string[]
+  acuity: number
+  status: Arriving
+  eta: number // minutes; 0 = checked in
+  vitals: { hr: string; bp: string; temp: string; spo2: string } | null
+  plan: string
+  estCost: number
+  coverage: number // %
+  prep: string[]
+  intake: string[]
+}
+
+const INBOUND: Inbound[] = [
+  {
+    id: 'AR-7012', facility: 'Hospital ER', patient: 'Fictional patient · M, 58', complaint: 'Chest pressure radiating to left arm',
+    words: 'My chest feels tight and it goes down my left arm', facts: ['Acute onset ~40 min', 'Pressure + arm radiation', 'No prior cardiac history reported'],
+    redFlags: ['Possible ACS', 'Arm radiation'], acuity: 2, status: 'En route', eta: 6,
+    vitals: { hr: '104', bp: '158/96', temp: '98.7°F', spo2: '96%' }, plan: 'Commercial PPO', estCost: 2600, coverage: 80,
+    prep: ['Ready cardiac bay + monitor', 'Prep 12-lead ECG on arrival', 'Notify on-call cardiology', 'Draw troponin STAT'],
+    intake: ['Confirm onset time & symptom progression', 'Aspirin per protocol if not contraindicated', 'IV access + continuous telemetry'],
+  },
+  {
+    id: 'AR-7013', facility: 'Hospital ER', patient: 'Fictional guardian · child, 8', complaint: 'Fever with wrist & ankle rash',
+    words: 'My kid has a high fever and a rash on his wrists and ankles', facts: ['Pediatric fever', 'Extremity-distributed rash', 'Onset ~1 day'],
+    redFlags: ['Pediatric fever + rash'], acuity: 2, status: 'Arriving', eta: 2,
+    vitals: { hr: '138', bp: '—', temp: '103.1°F', spo2: '98%' }, plan: 'Medicaid', estCost: 2200, coverage: 98,
+    prep: ['Pediatric-ready room', 'Isolation until rash evaluated', 'Weight-based dosing chart ready'],
+    intake: ['Full skin exam + distribution photos', 'Assess for meningeal signs', 'Consider sepsis screen'],
+  },
+  {
+    id: 'AR-7014', facility: 'Hospital ER', patient: 'Fictional patient · M, 68', complaint: 'Fall with head strike, brief confusion',
+    words: 'I fell and was confused for a little while', facts: ['Elderly fall', 'Head strike', 'Transient confusion'],
+    redFlags: ['Head injury', 'Altered mental status'], acuity: 2, status: 'En route', eta: 11,
+    vitals: { hr: '88', bp: '146/84', temp: '98.2°F', spo2: '97%' }, plan: 'Medicare Advantage', estCost: 2600, coverage: 90,
+    prep: ['CT head availability', 'Check anticoagulant status', 'Neuro checks on arrival'],
+    intake: ['GCS + neuro exam', 'Medication reconciliation', 'C-spine precautions until cleared'],
+  },
+  {
+    id: 'AR-7020', facility: 'Urgent Care', patient: 'Fictional patient · F, 34', complaint: 'Fever 103.1°F for two days',
+    words: 'I’ve had a fever for two days and feel wiped out', facts: ['48h fever', 'Tolerating fluids', 'No stiff neck / rash'],
+    redFlags: [], acuity: 3, status: 'Arriving', eta: 3,
+    vitals: { hr: '96', bp: '124/78', temp: '103.1°F', spo2: '98%' }, plan: 'Commercial HMO', estCost: 260, coverage: 85,
+    prep: ['Standard exam room', 'Rapid flu/strep/COVID swabs ready'],
+    intake: ['Vitals + hydration status', 'Consider point-of-care testing', 'Antipyretic per protocol'],
+  },
+  {
+    id: 'AR-7021', facility: 'Urgent Care', patient: 'Fictional patient · M, 52', complaint: 'Hand laceration, bleeding controlled',
+    words: 'I cut my hand cooking, might need stitches', facts: ['Deep laceration', 'Bleeding controlled', 'Full range of motion'],
+    redFlags: [], acuity: 4, status: 'Checked in', eta: 0,
+    vitals: { hr: '78', bp: '128/80', temp: '98.4°F', spo2: '99%' }, plan: 'Medicare Advantage', estCost: 260, coverage: 90,
+    prep: ['Laceration tray + suture kit', 'Confirm tetanus status'],
+    intake: ['Irrigate + assess depth/tendon', 'Local anesthetic', 'Repair + wound-care instructions'],
+  },
+  {
+    id: 'AR-7022', facility: 'Urgent Care', patient: 'Fictional patient · F, 22', complaint: 'Rolled ankle, can bear weight',
+    words: 'I rolled my ankle at practice, it’s swollen', facts: ['Injury ~1 day', 'Swelling', 'Can walk'],
+    redFlags: [], acuity: 4, status: 'En route', eta: 14,
+    vitals: null, plan: 'Student plan', estCost: 260, coverage: 70,
+    prep: ['X-ray availability (Ottawa rules)', 'Bracing / crutches on hand'],
+    intake: ['Assess weight-bearing + deformity', 'Image if Ottawa positive', 'RICE + follow-up guidance'],
+  },
+  {
+    id: 'AR-7030', facility: 'Primary Care', patient: 'Fictional patient · F, 29', complaint: 'Sore throat, no fever, 2 days',
+    words: 'My throat hurts when I swallow', facts: ['Mild', 'No airway signs', 'No fever'],
+    redFlags: [], acuity: 5, status: 'En route', eta: 25,
+    vitals: null, plan: 'Commercial HMO', estCost: 170, coverage: 85,
+    prep: ['Standard visit slot', 'Rapid strep test optional'],
+    intake: ['Throat exam + Centor score', 'Symptomatic care guidance'],
+  },
+  {
+    id: 'AR-7031', facility: 'Primary Care', patient: 'Fictional patient · M, 41', complaint: 'Back pain after lifting, no leg weakness',
+    words: 'I hurt my back lifting boxes yesterday', facts: ['Mechanical onset', 'No numbness/weakness', 'No bladder issues'],
+    redFlags: [], acuity: 5, status: 'Checked in', eta: 0,
+    vitals: { hr: '74', bp: '122/79', temp: '98.6°F', spo2: '99%' }, plan: 'Commercial PPO', estCost: 170, coverage: 80,
+    prep: ['Standard exam room'],
+    intake: ['Red-flag back screen', 'Range-of-motion assessment', 'Conservative-care plan'],
+  },
+  {
+    id: 'AR-7032', facility: 'Primary Care', patient: 'Fictional patient · F, 37', complaint: 'Anxiety with chest tightness (cardiac screened)',
+    words: 'My chest feels tight and I feel panicky', facts: ['Stress-linked', 'No cardiac red flags', 'Cardiac screen ran first'],
+    redFlags: [], acuity: 4, status: 'En route', eta: 18,
+    vitals: { hr: '92', bp: '126/82', temp: '98.5°F', spo2: '99%' }, plan: 'Student plan', estCost: 170, coverage: 70,
+    prep: ['Quiet room', 'Behavioral-health warm handoff available'],
+    intake: ['Confirm cardiac screen negative', 'PHQ/GAD as appropriate', 'Behavioral-health referral'],
+  },
+]
+
+const FACILITIES: Array<{ id: Facility; label: string; sub: string; icon: ReactNode }> = [
+  { id: 'Hospital ER', label: 'Hospital ER', sub: 'Emergency department', icon: <><path d="M12 3 4 6v5c0 4.5 3 8.4 8 9.7 5-1.3 8-5.2 8-9.7V6l-8-3Z" /><path d="M12 9v6M9 12h6" /></> },
+  { id: 'Urgent Care', label: 'Urgent Care', sub: 'Walk-in clinic', icon: <><path d="M3 7h18v12H3z" /><path d="M12 11v4M10 13h4" /></> },
+  { id: 'Primary Care', label: 'Primary Care', sub: 'PCP office', icon: <><path d="M12 21s-7-4.35-9.5-8.5A5 5 0 0 1 12 6a5 5 0 0 1 9.5 6.5C19 16.65 12 21 12 21Z" /></> },
+]
+
 function formatCurrency(value: number) {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value)
 }
@@ -214,6 +333,9 @@ function complianceChecks(row: CaseRow) {
 }
 
 export default function EnterpriseDemo() {
+  const [view, setView] = useState<View>('payer')
+  const [facility, setFacility] = useState<Facility>('Hospital ER')
+  const [inboundId, setInboundId] = useState('AR-7012')
   const [tab, setTab] = useState<Tab>('queue')
   const [cases, setCases] = useState<CaseRow[]>(() => SEED_CASES.map((c, i) => ({ ...c, receivedAt: Date.now() - (i + 1) * 47000 })))
   const [selectedId, setSelectedId] = useState(SEED_CASES[0].id)
@@ -308,6 +430,22 @@ export default function EnterpriseDemo() {
   const totalChecks = useMemo(() => AGENTS.reduce((s, a) => s + a.base + a.perTick * tick, 0), [tick])
   const clock = new Date(now).toLocaleTimeString('en-US', { hour12: false })
 
+  // Facility (provider) side derived data
+  const facilityInbound = useMemo(() => {
+    return INBOUND.filter(i => i.facility === facility)
+      .sort((a, b) => (a.acuity - b.acuity) || (a.eta - b.eta))
+  }, [facility])
+  const selectedInbound = INBOUND.find(i => i.id === inboundId && i.facility === facility) ?? facilityInbound[0]
+  const facMetrics = useMemo(() => {
+    const list = facilityInbound
+    return {
+      inbound: list.filter(i => i.status !== 'Checked in').length,
+      highAcuity: list.filter(i => i.acuity <= 2).length,
+      checkedIn: list.filter(i => i.status === 'Checked in').length,
+      nextEta: list.filter(i => i.eta > 0).reduce((m, i) => Math.min(m, i.eta), 99),
+    }
+  }, [facilityInbound])
+
   function SortHead({ label, k, className = '' }: { label: string; k: SortKey; className?: string }) {
     const active = sortKey === k
     return (
@@ -340,41 +478,87 @@ export default function EnterpriseDemo() {
 
           {/* Tenant selector */}
           <div className="hidden px-3 pt-3 xl:block">
-            <button type="button" className="flex w-full items-center gap-2.5 rounded-md border border-white/10 bg-white/[0.04] px-3 py-2 text-left transition hover:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
-              <span className="flex h-6 w-6 items-center justify-center rounded bg-blue-500/25 text-[10px] font-bold text-blue-100">NH</span>
+            <div className="flex w-full items-center gap-2.5 rounded-md border border-white/10 bg-white/[0.04] px-3 py-2 text-left">
+              <span className="flex h-6 w-6 items-center justify-center rounded bg-blue-500/25 text-[10px] font-bold text-blue-100">{view === 'payer' ? 'NH' : 'MC'}</span>
               <span className="min-w-0 flex-1 leading-tight">
-                <span className="block truncate text-xs font-semibold text-white">Northstar Health Plan</span>
-                <span className="block text-[10px] text-blue-300/80">Payer workspace</span>
+                <span className="block truncate text-xs font-semibold text-white">{view === 'payer' ? 'Northstar Health Plan' : 'Meridian Care Network'}</span>
+                <span className="block text-[10px] text-blue-300/80">{view === 'payer' ? 'Payer workspace' : 'Provider workspace'}</span>
               </span>
-              <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 shrink-0 fill-none stroke-blue-300" strokeWidth="1.6"><path d="M5 7l3 3 3-3M5 11l3-3 3 3" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </button>
+            </div>
+          </div>
+
+          {/* View switch: Payer / Facility */}
+          <div className="hidden px-3 pt-3 xl:block">
+            <div className="grid grid-cols-2 gap-1 rounded-md border border-white/10 bg-white/[0.04] p-1">
+              {([['payer', 'Payer'], ['facility', 'Facility']] as [View, string][]).map(([v, lbl]) => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => setView(v)}
+                  aria-pressed={view === v}
+                  className={`rounded px-2 py-1.5 text-xs font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 ${
+                    view === v ? 'bg-blue-600 text-white shadow-sm' : 'text-blue-200 hover:bg-white/[0.06]'
+                  }`}
+                >
+                  {lbl}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Primary nav */}
-          <p className="hidden px-5 pb-1.5 pt-4 text-[10px] font-semibold uppercase tracking-[0.14em] text-blue-400/70 xl:block">Operations</p>
-          <nav className="flex gap-1 overflow-x-auto px-3 pb-3 xl:flex-col xl:overflow-visible xl:pb-0" aria-label="Sections">
-            {TABS.map(item => {
-              const active = tab === item.id
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => setTab(item.id)}
-                  aria-current={active ? 'page' : undefined}
-                  className={`group relative flex min-w-max items-center gap-3 rounded-md px-3 py-2.5 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 xl:min-w-0 ${
-                    active ? 'bg-white/12 text-white' : 'text-blue-200 hover:bg-white/[0.06] hover:text-white'
-                  }`}
-                >
-                  {active && <span className="absolute inset-y-1.5 left-0 hidden w-0.5 rounded-full bg-blue-400 xl:block" />}
-                  <span className={`${active ? 'text-white' : 'text-blue-300'}`}><Icon path={ICONS[item.id]} /></span>
-                  <span className="leading-tight">
-                    <span className="block text-sm font-semibold">{item.title}</span>
-                    <span className="hidden text-[11px] font-medium text-blue-300/80 xl:block">{item.subtitle}</span>
-                  </span>
-                </button>
-              )
-            })}
-          </nav>
+          <p className="hidden px-5 pb-1.5 pt-4 text-[10px] font-semibold uppercase tracking-[0.14em] text-blue-400/70 xl:block">{view === 'payer' ? 'Operations' : 'Facilities'}</p>
+          {view === 'payer' ? (
+            <nav className="flex gap-1 overflow-x-auto px-3 pb-3 xl:flex-col xl:overflow-visible xl:pb-0" aria-label="Sections">
+              {TABS.map(item => {
+                const active = tab === item.id
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setTab(item.id)}
+                    aria-current={active ? 'page' : undefined}
+                    className={`group relative flex min-w-max items-center gap-3 rounded-md px-3 py-2.5 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 xl:min-w-0 ${
+                      active ? 'bg-white/12 text-white' : 'text-blue-200 hover:bg-white/[0.06] hover:text-white'
+                    }`}
+                  >
+                    {active && <span className="absolute inset-y-1.5 left-0 hidden w-0.5 rounded-full bg-blue-400 xl:block" />}
+                    <span className={`${active ? 'text-white' : 'text-blue-300'}`}><Icon path={ICONS[item.id]} /></span>
+                    <span className="leading-tight">
+                      <span className="block text-sm font-semibold">{item.title}</span>
+                      <span className="hidden text-[11px] font-medium text-blue-300/80 xl:block">{item.subtitle}</span>
+                    </span>
+                  </button>
+                )
+              })}
+            </nav>
+          ) : (
+            <nav className="flex gap-1 overflow-x-auto px-3 pb-3 xl:flex-col xl:overflow-visible xl:pb-0" aria-label="Facilities">
+              {FACILITIES.map(item => {
+                const active = facility === item.id
+                const count = INBOUND.filter(i => i.facility === item.id && i.status !== 'Checked in').length
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => { setFacility(item.id); const first = INBOUND.find(i => i.facility === item.id); if (first) setInboundId(first.id) }}
+                    aria-current={active ? 'page' : undefined}
+                    className={`group relative flex min-w-max items-center gap-3 rounded-md px-3 py-2.5 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 xl:min-w-0 ${
+                      active ? 'bg-white/12 text-white' : 'text-blue-200 hover:bg-white/[0.06] hover:text-white'
+                    }`}
+                  >
+                    {active && <span className="absolute inset-y-1.5 left-0 hidden w-0.5 rounded-full bg-blue-400 xl:block" />}
+                    <span className={`${active ? 'text-white' : 'text-blue-300'}`}><Icon path={item.icon} /></span>
+                    <span className="min-w-0 flex-1 leading-tight">
+                      <span className="block text-sm font-semibold">{item.label}</span>
+                      <span className="hidden text-[11px] font-medium text-blue-300/80 xl:block">{item.sub}</span>
+                    </span>
+                    <span className="ml-1 rounded-full bg-white/10 px-1.5 py-0.5 text-[10px] font-bold text-white">{count}</span>
+                  </button>
+                )
+              })}
+            </nav>
+          )}
 
           {/* Governance status */}
           <div className="hidden px-3 pt-5 xl:block">
@@ -417,13 +601,20 @@ export default function EnterpriseDemo() {
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-3">
               <div className="min-w-0">
                 <p className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-400">
-                  Northstar Health Plan <span className="text-slate-300">/</span> Care Routing
+                  {view === 'payer' ? 'Northstar Health Plan' : 'Meridian Care Network'} <span className="text-slate-300">/</span> {view === 'payer' ? 'Care Routing' : facility}
                 </p>
-                <h1 className="truncate text-base font-bold tracking-tight text-slate-900">{TABS.find(t => t.id === tab)?.title}</h1>
+                <h1 className="truncate text-base font-bold tracking-tight text-slate-900">{view === 'payer' ? TABS.find(t => t.id === tab)?.title : 'Inbound patients'}</h1>
+              </div>
+              {/* Mobile view toggle */}
+              <div className="flex items-center gap-1 rounded-md border border-slate-200 bg-slate-50 p-0.5 xl:hidden">
+                {([['payer', 'Payer'], ['facility', 'Facility']] as [View, string][]).map(([v, lbl]) => (
+                  <button key={v} type="button" onClick={() => setView(v)} aria-pressed={view === v}
+                    className={`rounded px-2.5 py-1 text-xs font-semibold transition ${view === v ? 'bg-blue-800 text-white' : 'text-slate-600'}`}>{lbl}</button>
+                ))}
               </div>
               <div className="ml-auto flex flex-wrap items-center gap-2">
                 <Badge className="border-slate-200 bg-slate-50 text-slate-600">Sandbox · demo data</Badge>
-                <Badge className="border-slate-200 bg-white font-mono tabular-nums text-slate-600">{clock}</Badge>
+                <Badge className="hidden border-slate-200 bg-white font-mono tabular-nums text-slate-600 sm:inline-flex">{clock}</Badge>
                 <span className="inline-flex items-center gap-1.5 rounded-md border border-emerald-200 bg-emerald-50 px-2 py-1 text-[11px] font-semibold text-emerald-700">
                   <span className="relative flex h-1.5 w-1.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" /><span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" /></span>
                   Live
@@ -436,6 +627,17 @@ export default function EnterpriseDemo() {
           </header>
 
           <div className="space-y-5 p-5">
+            {view === 'facility' && (
+              <FacilityBoard
+                facility={facility}
+                inbound={facilityInbound}
+                selected={selectedInbound}
+                onSelect={setInboundId}
+                metrics={facMetrics}
+              />
+            )}
+
+            {view === 'payer' && <>
             {/* KPI row */}
             <section className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
               <Kpi label="Active cases" value={String(metrics.active)} sub="In live queue" />
@@ -736,6 +938,7 @@ export default function EnterpriseDemo() {
                 Request enterprise walkthrough
               </Link>
             </section>
+            </>}
           </div>
         </main>
       </div>
@@ -826,5 +1029,187 @@ function CaseSummary({ selected, now, onReplay, embedded = false }: { selected: 
         </button>
       </div>
     </aside>
+  )
+}
+
+// ═══ FACILITY BOARD (provider heads-up portal) ══════════════
+function FacilityBoard({
+  facility, inbound, selected, onSelect, metrics,
+}: {
+  facility: Facility
+  inbound: Inbound[]
+  selected: Inbound | undefined
+  onSelect: (id: string) => void
+  metrics: { inbound: number; highAcuity: number; checkedIn: number; nextEta: number }
+}) {
+  return (
+    <>
+      {/* Facility mobile selector handled by rail on desktop; heading here */}
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <h2 className="text-lg font-bold tracking-tight text-slate-900">{facility} · inbound heads-up</h2>
+          <p className="text-xs text-slate-500">Patients Carevo has routed here — with symptoms and prep guidance, before they arrive.</p>
+        </div>
+        <Badge className="border-blue-200 bg-blue-50 text-blue-700">Routed by Carevo</Badge>
+      </div>
+
+      {/* KPI row */}
+      <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <Kpi label="Inbound now" value={String(metrics.inbound)} sub="En route or arriving" />
+        <Kpi label="High acuity" value={String(metrics.highAcuity)} sub="ESI 1–2" tone="warn" />
+        <Kpi label="Next arrival" value={metrics.nextEta < 99 ? `${metrics.nextEta} min` : '—'} sub="Soonest ETA" />
+        <Kpi label="Checked in" value={String(metrics.checkedIn)} sub="On site now" tone="good" />
+      </section>
+
+      <div className="grid gap-4 lg:grid-cols-[380px_1fr]">
+        {/* Inbound queue */}
+        <section className="overflow-hidden rounded-lg border border-slate-200 bg-white">
+          <div className="flex items-center justify-between border-b border-slate-200 px-4 py-2.5">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">Inbound queue</p>
+            <span className="text-[11px] font-medium text-slate-400">Sorted by acuity</span>
+          </div>
+          <div className="divide-y divide-slate-100">
+            {inbound.map(pt => {
+              const ac = ACUITY[pt.acuity]
+              const active = selected?.id === pt.id
+              return (
+                <button
+                  key={pt.id}
+                  type="button"
+                  onClick={() => onSelect(pt.id)}
+                  className={`flex w-full gap-3 px-4 py-3 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-300 ${active ? 'bg-blue-50' : 'hover:bg-slate-50'}`}
+                >
+                  <span className={`mt-0.5 h-full w-1 shrink-0 rounded-full ${ac.bar}`} style={{ minHeight: '2.5rem' }} />
+                  <span className="min-w-0 flex-1">
+                    <span className="flex items-center justify-between gap-2">
+                      <span className="font-mono text-xs font-semibold text-blue-800">{pt.id}</span>
+                      <Badge className={ARRIVING_STYLE[pt.status]}>{pt.status === 'Checked in' ? 'Checked in' : `${pt.status} · ${pt.eta}m`}</Badge>
+                    </span>
+                    <span className="mt-1 block text-sm font-semibold text-slate-900">{pt.complaint}</span>
+                    <span className="mt-0.5 block text-xs text-slate-500">{pt.patient}</span>
+                    <span className="mt-2 flex flex-wrap items-center gap-1.5">
+                      <Badge className={ac.cls}>{ac.label}</Badge>
+                      {pt.redFlags.map(f => <Badge key={f} className="border-red-200 bg-red-50 text-red-700">{f}</Badge>)}
+                    </span>
+                  </span>
+                </button>
+              )
+            })}
+            {inbound.length === 0 && <p className="px-4 py-10 text-center text-sm font-semibold text-slate-400">No inbound patients right now.</p>}
+          </div>
+        </section>
+
+        {/* Patient detail */}
+        {selected && <FacilityDetail pt={selected} />}
+      </div>
+
+      {/* Footer note */}
+      <section className="rounded-lg border border-slate-200 bg-white p-5">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-blue-800">Why this matters</p>
+        <p className="mt-2 text-sm leading-6 text-slate-600">
+          Carevo hands your team a structured heads-up for every routed patient — chief complaint, safety flags, acuity, coverage, and prep steps — so the right room, staff, and equipment are ready before they walk in. All records shown are fictional demo data.
+        </p>
+      </section>
+    </>
+  )
+}
+
+function FacilityDetail({ pt }: { pt: Inbound }) {
+  const ac = ACUITY[pt.acuity]
+  const memberOwes = Math.round(pt.estCost * (1 - pt.coverage / 100))
+  return (
+    <section className="space-y-4 rounded-lg border border-slate-200 bg-white p-5">
+      {/* Header */}
+      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-slate-200 pb-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-xs font-semibold text-slate-400">{pt.id}</span>
+            <Badge className={ARRIVING_STYLE[pt.status]}>{pt.status === 'Checked in' ? 'Checked in' : `${pt.status} · ETA ${pt.eta} min`}</Badge>
+          </div>
+          <h3 className="mt-1.5 text-xl font-bold tracking-tight text-slate-900">{pt.complaint}</h3>
+          <p className="mt-0.5 text-sm text-slate-500">{pt.patient} · {pt.plan}</p>
+        </div>
+        <Badge className={`${ac.cls} text-xs`}>{ac.label}</Badge>
+      </div>
+
+      {/* Patient words + facts */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">In the patient’s words</p>
+          <blockquote className="mt-2 rounded-md border-l-2 border-blue-300 bg-slate-50 px-3 py-2 text-sm italic text-slate-700">“{pt.words}”</blockquote>
+          <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">Extracted facts</p>
+          <ul className="mt-2 space-y-1.5">
+            {pt.facts.map(f => (
+              <li key={f} className="flex items-start gap-2 text-sm text-slate-700">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-600" />{f}
+              </li>
+            ))}
+          </ul>
+          {pt.redFlags.length > 0 && (
+            <>
+              <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-red-600">Safety flags</p>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {pt.redFlags.map(f => <Badge key={f} className="border-red-200 bg-red-50 text-red-700">{f}</Badge>)}
+              </div>
+            </>
+          )}
+        </div>
+
+        <div>
+          {/* Vitals */}
+          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">Reported vitals</p>
+          {pt.vitals ? (
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              {([['HR', pt.vitals.hr], ['BP', pt.vitals.bp], ['Temp', pt.vitals.temp], ['SpO₂', pt.vitals.spo2]] as [string, string][]).map(([k, v]) => (
+                <div key={k} className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2">
+                  <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">{k}</p>
+                  <p className="mt-0.5 text-base font-bold tabular-nums text-slate-900">{v}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-500">Not captured at intake</p>
+          )}
+          {/* Coverage */}
+          <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">Coverage snapshot</p>
+          <div className="mt-2 grid grid-cols-3 gap-2 text-center">
+            <div className="rounded-md border border-slate-200 bg-slate-50 p-2.5"><p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">Est. cost</p><p className="mt-0.5 text-sm font-bold tabular-nums text-slate-900">{formatCurrency(pt.estCost)}</p></div>
+            <div className="rounded-md border border-emerald-200 bg-emerald-50 p-2.5"><p className="text-[10px] font-semibold uppercase tracking-wide text-emerald-600">Covered</p><p className="mt-0.5 text-sm font-bold tabular-nums text-emerald-800">{pt.coverage}%</p></div>
+            <div className="rounded-md border border-amber-200 bg-amber-50 p-2.5"><p className="text-[10px] font-semibold uppercase tracking-wide text-amber-600">Pt. owes</p><p className="mt-0.5 text-sm font-bold tabular-nums text-amber-800">{formatCurrency(memberOwes)}</p></div>
+          </div>
+        </div>
+      </div>
+
+      {/* Prep + intake */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="rounded-md border border-blue-100 bg-blue-50/60 p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-blue-800">Prep before arrival</p>
+          <ul className="mt-2 space-y-1.5">
+            {pt.prep.map(item => (
+              <li key={item} className="flex items-start gap-2 text-sm text-slate-700">
+                <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-blue-300 text-[9px] text-blue-600">✓</span>{item}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="rounded-md border border-slate-200 bg-white p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">Suggested intake steps</p>
+          <ol className="mt-2 space-y-1.5">
+            {pt.intake.map((item, i) => (
+              <li key={item} className="flex items-start gap-2 text-sm text-slate-700">
+                <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-slate-900 text-[9px] font-bold text-white">{i + 1}</span>{item}
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="flex flex-wrap gap-2 border-t border-slate-200 pt-4">
+        <button type="button" className="inline-flex items-center gap-1.5 rounded-md bg-blue-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300">Acknowledge & prep room</button>
+        <button type="button" className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300">Message care team</button>
+        <button type="button" className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300">View full route</button>
+      </div>
+    </section>
   )
 }
