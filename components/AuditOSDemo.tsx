@@ -324,8 +324,9 @@ export default function EnterpriseDemo() {
     <div className="min-h-screen bg-slate-100 text-slate-900 [font-family:'Plus_Jakarta_Sans',system-ui,sans-serif]">
       <div className="mx-auto flex max-w-[1500px] flex-col xl:flex-row">
         {/* ── Left nav rail ─────────────────────────────────────────────── */}
-        <aside className="shrink-0 border-b border-slate-200 bg-blue-950 text-slate-200 xl:min-h-screen xl:w-64 xl:border-b-0 xl:border-r">
-          <div className="flex items-center gap-2.5 px-5 py-4">
+        <aside className="shrink-0 border-b border-slate-200 bg-blue-950 text-slate-200 xl:flex xl:min-h-screen xl:w-64 xl:flex-col xl:border-b-0 xl:border-r">
+          {/* Brand */}
+          <div className="flex items-center gap-2.5 border-b border-white/[0.08] px-5 py-4">
             <Link href="/" className="flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
               <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-md bg-white/10 ring-1 ring-white/15">
                 <img src="/brand/carevo-logo.png" alt="Carevo" className="h-full w-full object-cover" />
@@ -337,7 +338,21 @@ export default function EnterpriseDemo() {
             </Link>
           </div>
 
-          <nav className="flex gap-1 overflow-x-auto px-3 pb-3 xl:mt-2 xl:flex-col xl:overflow-visible xl:pb-0" aria-label="Sections">
+          {/* Tenant selector */}
+          <div className="hidden px-3 pt-3 xl:block">
+            <button type="button" className="flex w-full items-center gap-2.5 rounded-md border border-white/10 bg-white/[0.04] px-3 py-2 text-left transition hover:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
+              <span className="flex h-6 w-6 items-center justify-center rounded bg-blue-500/25 text-[10px] font-bold text-blue-100">NH</span>
+              <span className="min-w-0 flex-1 leading-tight">
+                <span className="block truncate text-xs font-semibold text-white">Northstar Health Plan</span>
+                <span className="block text-[10px] text-blue-300/80">Payer workspace</span>
+              </span>
+              <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 shrink-0 fill-none stroke-blue-300" strokeWidth="1.6"><path d="M5 7l3 3 3-3M5 11l3-3 3 3" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </button>
+          </div>
+
+          {/* Primary nav */}
+          <p className="hidden px-5 pb-1.5 pt-4 text-[10px] font-semibold uppercase tracking-[0.14em] text-blue-400/70 xl:block">Operations</p>
+          <nav className="flex gap-1 overflow-x-auto px-3 pb-3 xl:flex-col xl:overflow-visible xl:pb-0" aria-label="Sections">
             {TABS.map(item => {
               const active = tab === item.id
               return (
@@ -346,10 +361,11 @@ export default function EnterpriseDemo() {
                   type="button"
                   onClick={() => setTab(item.id)}
                   aria-current={active ? 'page' : undefined}
-                  className={`group flex min-w-max items-center gap-3 rounded-md px-3 py-2.5 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 xl:min-w-0 ${
+                  className={`group relative flex min-w-max items-center gap-3 rounded-md px-3 py-2.5 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 xl:min-w-0 ${
                     active ? 'bg-white/12 text-white' : 'text-blue-200 hover:bg-white/[0.06] hover:text-white'
                   }`}
                 >
+                  {active && <span className="absolute inset-y-1.5 left-0 hidden w-0.5 rounded-full bg-blue-400 xl:block" />}
                   <span className={`${active ? 'text-white' : 'text-blue-300'}`}><Icon path={ICONS[item.id]} /></span>
                   <span className="leading-tight">
                     <span className="block text-sm font-semibold">{item.title}</span>
@@ -360,12 +376,36 @@ export default function EnterpriseDemo() {
             })}
           </nav>
 
-          <div className="hidden px-5 py-4 xl:mt-auto xl:block">
-            <div className="rounded-lg border border-white/10 bg-white/[0.04] p-3">
-              <p className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-300">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> All safety gates passing
-              </p>
-              <p className="mt-1.5 text-[11px] leading-4 text-blue-300/80">Engine {ENGINE} · 0 under-triage on the latest 240-case gate.</p>
+          {/* Governance status */}
+          <div className="hidden px-3 pt-5 xl:block">
+            <p className="px-2 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-blue-400/70">Governance</p>
+            <div className="space-y-2 rounded-lg border border-white/10 bg-white/[0.04] p-3">
+              <div className="flex items-center gap-2 text-[11px] font-semibold text-emerald-300">
+                <span className="relative flex h-1.5 w-1.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" /><span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" /></span>
+                All safety gates passing
+              </div>
+              {[
+                ['Engine', ENGINE],
+                ['Ruleset', RULESET],
+                ['Under-triage', '0 / 240 gate'],
+              ].map(([k, v]) => (
+                <div key={k} className="flex items-center justify-between gap-2 text-[11px]">
+                  <span className="text-blue-300/70">{k}</span>
+                  <span className="truncate font-mono text-blue-100/90">{v}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* User identity — pinned to bottom */}
+          <div className="hidden px-3 py-4 xl:mt-auto xl:block">
+            <div className="flex items-center gap-2.5 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2.5">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/25 text-xs font-bold text-blue-100">AR</span>
+              <span className="min-w-0 flex-1 leading-tight">
+                <span className="block truncate text-xs font-semibold text-white">Alex Rivera</span>
+                <span className="block text-[10px] text-blue-300/80">Utilization review · Demo</span>
+              </span>
+              <svg viewBox="0 0 16 16" className="h-4 w-4 shrink-0 fill-none stroke-blue-300" strokeWidth="1.6"><circle cx="8" cy="8" r="1" /><circle cx="8" cy="3" r="1" /><circle cx="8" cy="13" r="1" /></svg>
             </div>
           </div>
         </aside>
@@ -704,19 +744,37 @@ export default function EnterpriseDemo() {
 }
 
 function CaseSummary({ selected, now, onReplay, embedded = false }: { selected: CaseRow; now: number; onReplay?: () => void; embedded?: boolean }) {
+  const cov = coverageFor(selected)
+  const checks = complianceChecks(selected)
   return (
     <aside className={embedded ? 'p-4' : 'border-t border-slate-200 bg-slate-50/60 p-4 lg:border-l lg:border-t-0'}>
+      {/* Header */}
       <div className="flex items-center justify-between">
-        <p className="font-mono text-xs font-semibold text-slate-400">{selected.id}</p>
-        <p className="text-[11px] font-medium tabular-nums text-slate-400">{agoLabel(selected.receivedAt, now)}</p>
+        <span className="font-mono text-xs font-semibold text-slate-400">{selected.id}</span>
+        <Badge className={STATUS_STYLE[selected.status]}>{selected.status}</Badge>
       </div>
-      <h3 className="mt-2 text-base font-bold tracking-tight text-slate-900">{selected.intake}</h3>
+      <h3 className="mt-2 text-base font-bold leading-6 tracking-tight text-slate-900">{selected.intake}</h3>
       <p className="mt-1 text-xs text-slate-500">{selected.member} · {selected.market}</p>
-      <dl className="mt-4 grid gap-2">
+
+      {/* Owner + SLA */}
+      <div className="mt-4 grid grid-cols-2 gap-2">
+        <div className="rounded-md border border-slate-200 bg-white px-3 py-2">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-slate-400">Owner</p>
+          <p className="mt-1 truncate text-xs font-semibold text-slate-800">{selected.owner}</p>
+        </div>
+        <div className="rounded-md border border-slate-200 bg-white px-3 py-2">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-slate-400">Received</p>
+          <p className="mt-1 text-xs font-semibold tabular-nums text-slate-800">{agoLabel(selected.receivedAt, now)}</p>
+        </div>
+      </div>
+
+      {/* Route facts */}
+      <dl className="mt-3 grid gap-2">
         {([
           ['Route', <Badge key="r" className={LEVEL_STYLE[selected.level]}>{selected.level}</Badge>],
-          ['Questions', <span key="q" className="text-sm font-semibold tabular-nums text-slate-800">{selected.questions}</span>],
+          ['Questions asked', <span key="q" className="text-sm font-semibold tabular-nums text-slate-800">{selected.questions}</span>],
           ['Confidence', <span key="c" className="text-sm font-semibold text-slate-800">{selected.confidence}</span>],
+          ['Est. cost', <span key="e" className="text-sm font-semibold tabular-nums text-slate-800">{formatCurrency(cov.estCost)}</span>],
           ['Audit hash', <span key="h" className="font-mono text-xs font-semibold text-blue-800">{hashId(selected.id)}</span>],
         ] as [string, ReactNode][]).map(([label, val]) => (
           <div key={label} className="flex items-center justify-between rounded-md border border-slate-200 bg-white px-3 py-2">
@@ -725,6 +783,8 @@ function CaseSummary({ selected, now, onReplay, embedded = false }: { selected: 
           </div>
         ))}
       </dl>
+
+      {/* Red flags */}
       <div className="mt-4">
         <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-400">Red flags</p>
         <div className="mt-2 flex flex-wrap gap-2">
@@ -733,12 +793,38 @@ function CaseSummary({ selected, now, onReplay, embedded = false }: { selected: 
             : <Badge className="border-emerald-200 bg-emerald-50 text-emerald-700">none established</Badge>}
         </div>
       </div>
+
+      {/* Compliance evidence */}
+      <div className="mt-4">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-400">Compliance evidence</p>
+        <div className="mt-2 space-y-1.5 rounded-md border border-slate-200 bg-white p-3">
+          {checks.slice(0, 4).map(c => (
+            <div key={c.label} className="flex items-center gap-2 text-xs">
+              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[9px] text-white">✓</span>
+              <span className="flex-1 text-slate-500">{c.label}</span>
+              <span className="truncate font-mono text-[11px] text-slate-700">{c.value}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Actions */}
       {onReplay && (
-        <button type="button" onClick={onReplay} className="mt-5 inline-flex w-full items-center justify-center gap-1.5 rounded-md border border-blue-200 bg-blue-50 px-4 py-2.5 text-sm font-semibold text-blue-800 transition hover:bg-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300">
+        <button type="button" onClick={onReplay} className="mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-md bg-blue-800 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300">
           Replay decision trace
-          <svg viewBox="0 0 16 16" className="h-3 w-3 fill-blue-800"><path d="M4 3l9 5-9 5z" /></svg>
+          <svg viewBox="0 0 16 16" className="h-3 w-3 fill-white"><path d="M4 3l9 5-9 5z" /></svg>
         </button>
       )}
+      <div className="mt-2 grid grid-cols-2 gap-2">
+        <button type="button" className="inline-flex items-center justify-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300">
+          <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" /></svg>
+          Export evidence
+        </button>
+        <button type="button" className="inline-flex items-center justify-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300">
+          <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M16 11a4 4 0 1 0-8 0M4 20a6 6 0 0 1 16 0" /></svg>
+          Assign review
+        </button>
+      </div>
     </aside>
   )
 }
