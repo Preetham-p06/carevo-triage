@@ -161,7 +161,7 @@ const TABS: Array<{ id: Tab; title: string; subtitle: string }> = [
 ]
 
 // ═══ FACILITY (provider) side ═══════════════════════════════
-type View = 'payer' | 'facility'
+type View = 'payer' | 'facility' | 'clinic'
 type Facility = 'Urgent Care' | 'Hospital ER' | 'Primary Care'
 type Arriving = 'En route' | 'Arriving' | 'Checked in'
 
@@ -279,6 +279,72 @@ const FACILITIES: Array<{ id: Facility; label: string; sub: string; icon: ReactN
   { id: 'Primary Care', label: 'Primary Care', sub: 'PCP office', icon: <><path d="M12 21s-7-4.35-9.5-8.5A5 5 0 0 1 12 6a5 5 0 0 1 9.5 6.5C19 16.65 12 21 12 21Z" /></> },
 ]
 
+// ═══ CLINIC (small practice) side ═══════════════════════════
+// A right-sized view for an independent primary-care / urgent-care group.
+// Simple acuity words (no ESI jargon), patient-friendly cost, hands-off compliance.
+type Priority = 'Urgent' | 'Soon' | 'Routine'
+const PRIORITY: Record<Priority, { cls: string; bar: string }> = {
+  Urgent: { cls: 'border-orange-300 bg-orange-50 text-orange-700', bar: 'bg-orange-500' },
+  Soon: { cls: 'border-amber-300 bg-amber-50 text-amber-800', bar: 'bg-amber-500' },
+  Routine: { cls: 'border-emerald-300 bg-emerald-50 text-emerald-700', bar: 'bg-emerald-500' },
+}
+type ClinicPatient = {
+  id: string
+  name: string
+  complaint: string
+  words: string
+  priority: Priority
+  status: Arriving
+  eta: number
+  plan: string
+  estCost: number
+  coverage: number
+  redFlags: string[]
+  notes: string[]
+}
+const CLINIC_NAME = 'Riverside Family Care'
+const CLINIC_PATIENTS: ClinicPatient[] = [
+  {
+    id: 'RC-118', name: 'Fictional patient · F, 34', complaint: 'Fever 103°F, 2 days',
+    words: 'Fever for two days and I feel wiped out', priority: 'Urgent', status: 'Arriving', eta: 4,
+    plan: 'Commercial HMO', estCost: 175, coverage: 85, redFlags: [],
+    notes: ['Rapid flu / strep / COVID swab ready', 'Check hydration on arrival'],
+  },
+  {
+    id: 'RC-119', name: 'Fictional patient · M, 52', complaint: 'Hand cut, may need stitches',
+    words: 'Cut my hand cooking, bleeding has stopped', priority: 'Urgent', status: 'En route', eta: 12,
+    plan: 'Medicare Advantage', estCost: 190, coverage: 90, redFlags: [],
+    notes: ['Laceration tray + suture kit', 'Confirm tetanus status'],
+  },
+  {
+    id: 'RC-120', name: 'Fictional patient · F, 29', complaint: 'Sore throat, no fever',
+    words: 'Throat hurts when I swallow', priority: 'Routine', status: 'En route', eta: 22,
+    plan: 'Commercial PPO', estCost: 120, coverage: 80, redFlags: [],
+    notes: ['Standard visit slot', 'Rapid strep optional'],
+  },
+  {
+    id: 'RC-121', name: 'Fictional patient · M, 41', complaint: 'Back pain after lifting',
+    words: 'Hurt my back lifting boxes, no leg weakness', priority: 'Soon', status: 'Checked in', eta: 0,
+    plan: 'Commercial PPO', estCost: 145, coverage: 80, redFlags: [],
+    notes: ['Red-flag back screen cleared by Carevo', 'Conservative-care plan'],
+  },
+  {
+    id: 'RC-122', name: 'Fictional patient · F, 37', complaint: 'Anxiety, chest tightness',
+    words: 'Chest feels tight and I feel panicky', priority: 'Soon', status: 'En route', eta: 18,
+    plan: 'Student plan', estCost: 130, coverage: 70, redFlags: ['Cardiac screen ran first, negative'],
+    notes: ['Quiet room', 'Behavioral-health resources on hand'],
+  },
+]
+
+const CLINIC_CONTROLS: Array<{ title: string; detail: string }> = [
+  ['Consent on file', 'Every shared record has explicit patient opt-in before anything is stored.'],
+  ['PHI minimized', 'Identifiers are stripped at intake. Only what the visit needs is kept.'],
+  ['Safe-routing check', 'Emergency red flags are screened before a patient is ever sent to you.'],
+  ['Audit log written', 'Each routing decision is timestamped and recorded, automatically.'],
+  ['Care-navigation only', 'Output stays “where to go,” never a diagnosis, keeping you on the right side of the line.'],
+  ['Access logged', 'Who viewed what, and when, is tracked without anyone maintaining a sheet.'],
+].map(([title, detail]) => ({ title, detail }))
+
 function formatCurrency(value: number) {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value)
 }
@@ -336,6 +402,7 @@ export default function EnterpriseDemo() {
   const [view, setView] = useState<View>('payer')
   const [facility, setFacility] = useState<Facility>('Hospital ER')
   const [inboundId, setInboundId] = useState('AR-7012')
+  const [clinicId, setClinicId] = useState('RC-118')
   const [tab, setTab] = useState<Tab>('queue')
   const [cases, setCases] = useState<CaseRow[]>(() => SEED_CASES.map((c, i) => ({ ...c, receivedAt: Date.now() - (i + 1) * 47000 })))
   const [selectedId, setSelectedId] = useState(SEED_CASES[0].id)
@@ -446,6 +513,18 @@ export default function EnterpriseDemo() {
     }
   }, [facilityInbound])
 
+  // Clinic (small practice) derived data
+  const selectedClinic = CLINIC_PATIENTS.find(c => c.id === clinicId) ?? CLINIC_PATIENTS[0]
+  const clinicMetrics = useMemo(() => {
+    const inbound = CLINIC_PATIENTS.filter(c => c.status !== 'Checked in').length
+    const urgent = CLINIC_PATIENTS.filter(c => c.priority === 'Urgent').length
+    const avgOwe = Math.round(
+      CLINIC_PATIENTS.reduce((s, c) => s + Math.round(c.estCost * (1 - c.coverage / 100)), 0) / CLINIC_PATIENTS.length
+    )
+    const nextEta = CLINIC_PATIENTS.filter(c => c.eta > 0).reduce((m, c) => Math.min(m, c.eta), 99)
+    return { inbound, urgent, avgOwe, nextEta }
+  }, [])
+
   function SortHead({ label, k, className = '' }: { label: string; k: SortKey; className?: string }) {
     const active = sortKey === k
     return (
@@ -479,24 +558,24 @@ export default function EnterpriseDemo() {
           {/* Tenant selector */}
           <div className="hidden px-3 pt-3 xl:block">
             <div className="flex w-full items-center gap-2.5 rounded-md border border-white/10 bg-white/[0.04] px-3 py-2 text-left">
-              <span className="flex h-6 w-6 items-center justify-center rounded bg-blue-500/25 text-[10px] font-bold text-blue-100">{view === 'payer' ? 'NH' : 'MC'}</span>
+              <span className="flex h-6 w-6 items-center justify-center rounded bg-blue-500/25 text-[10px] font-bold text-blue-100">{view === 'payer' ? 'NH' : view === 'facility' ? 'MC' : 'RF'}</span>
               <span className="min-w-0 flex-1 leading-tight">
-                <span className="block truncate text-xs font-semibold text-white">{view === 'payer' ? 'Northstar Health Plan' : 'Meridian Care Network'}</span>
-                <span className="block text-[10px] text-blue-300/80">{view === 'payer' ? 'Payer workspace' : 'Provider workspace'}</span>
+                <span className="block truncate text-xs font-semibold text-white">{view === 'payer' ? 'Northstar Health Plan' : view === 'facility' ? 'Meridian Care Network' : CLINIC_NAME}</span>
+                <span className="block text-[10px] text-blue-300/80">{view === 'payer' ? 'Payer workspace' : view === 'facility' ? 'Provider workspace' : 'Small clinic'}</span>
               </span>
             </div>
           </div>
 
-          {/* View switch: Payer / Facility */}
+          {/* View switch: Payer / Facility / Clinic */}
           <div className="hidden px-3 pt-3 xl:block">
-            <div className="grid grid-cols-2 gap-1 rounded-md border border-white/10 bg-white/[0.04] p-1">
-              {([['payer', 'Payer'], ['facility', 'Facility']] as [View, string][]).map(([v, lbl]) => (
+            <div className="grid grid-cols-3 gap-1 rounded-md border border-white/10 bg-white/[0.04] p-1">
+              {([['payer', 'Payer'], ['facility', 'Facility'], ['clinic', 'Clinic']] as [View, string][]).map(([v, lbl]) => (
                 <button
                   key={v}
                   type="button"
                   onClick={() => setView(v)}
                   aria-pressed={view === v}
-                  className={`rounded px-2 py-1.5 text-xs font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 ${
+                  className={`rounded px-1.5 py-1.5 text-xs font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 ${
                     view === v ? 'bg-blue-600 text-white shadow-sm' : 'text-blue-200 hover:bg-white/[0.06]'
                   }`}
                 >
@@ -507,8 +586,21 @@ export default function EnterpriseDemo() {
           </div>
 
           {/* Primary nav */}
-          <p className="hidden px-5 pb-1.5 pt-4 text-[10px] font-semibold uppercase tracking-[0.14em] text-blue-400/70 xl:block">{view === 'payer' ? 'Operations' : 'Facilities'}</p>
-          {view === 'payer' ? (
+          <p className="hidden px-5 pb-1.5 pt-4 text-[10px] font-semibold uppercase tracking-[0.14em] text-blue-400/70 xl:block">{view === 'payer' ? 'Operations' : view === 'facility' ? 'Facilities' : 'Clinic'}</p>
+          {view === 'clinic' ? (
+            <nav className="flex gap-1 px-3 pb-3 xl:flex-col xl:pb-0" aria-label="Clinic">
+              {([['today', 'Today', 'inbound patients'], ['compliance', 'Compliance', 'handled for you']] as [string, string, string][]).map(([id, label, sub], i) => (
+                <div key={id} className={`group relative flex items-center gap-3 rounded-md px-3 py-2.5 ${i === 0 ? 'bg-white/12 text-white' : 'text-blue-200'}`}>
+                  {i === 0 && <span className="absolute inset-y-1.5 left-0 hidden w-0.5 rounded-full bg-blue-400 xl:block" />}
+                  <span className={i === 0 ? 'text-white' : 'text-blue-300'}><Icon path={i === 0 ? ICONS.queue : ICONS.agents} /></span>
+                  <span className="leading-tight">
+                    <span className="block text-sm font-semibold">{label}</span>
+                    <span className="hidden text-[11px] font-medium text-blue-300/80 xl:block">{sub}</span>
+                  </span>
+                </div>
+              ))}
+            </nav>
+          ) : view === 'payer' ? (
             <nav className="flex gap-1 overflow-x-auto px-3 pb-3 xl:flex-col xl:overflow-visible xl:pb-0" aria-label="Sections">
               {TABS.map(item => {
                 const active = tab === item.id
@@ -601,15 +693,15 @@ export default function EnterpriseDemo() {
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-3">
               <div className="min-w-0">
                 <p className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-400">
-                  {view === 'payer' ? 'Northstar Health Plan' : 'Meridian Care Network'} <span className="text-slate-300">/</span> {view === 'payer' ? 'Care Routing' : facility}
+                  {view === 'payer' ? 'Northstar Health Plan' : view === 'facility' ? 'Meridian Care Network' : CLINIC_NAME} <span className="text-slate-300">/</span> {view === 'payer' ? 'Care Routing' : view === 'facility' ? facility : 'Today'}
                 </p>
-                <h1 className="truncate text-base font-bold tracking-tight text-slate-900">{view === 'payer' ? TABS.find(t => t.id === tab)?.title : 'Inbound patients'}</h1>
+                <h1 className="truncate text-base font-bold tracking-tight text-slate-900">{view === 'payer' ? TABS.find(t => t.id === tab)?.title : view === 'facility' ? 'Inbound patients' : 'Your day at a glance'}</h1>
               </div>
               {/* Mobile view toggle */}
               <div className="flex items-center gap-1 rounded-md border border-slate-200 bg-slate-50 p-0.5 xl:hidden">
-                {([['payer', 'Payer'], ['facility', 'Facility']] as [View, string][]).map(([v, lbl]) => (
+                {([['payer', 'Payer'], ['facility', 'Facility'], ['clinic', 'Clinic']] as [View, string][]).map(([v, lbl]) => (
                   <button key={v} type="button" onClick={() => setView(v)} aria-pressed={view === v}
-                    className={`rounded px-2.5 py-1 text-xs font-semibold transition ${view === v ? 'bg-blue-800 text-white' : 'text-slate-600'}`}>{lbl}</button>
+                    className={`rounded px-2 py-1 text-xs font-semibold transition ${view === v ? 'bg-blue-800 text-white' : 'text-slate-600'}`}>{lbl}</button>
                 ))}
               </div>
               <div className="ml-auto flex flex-wrap items-center gap-2">
@@ -627,6 +719,17 @@ export default function EnterpriseDemo() {
           </header>
 
           <div className="space-y-5 p-5">
+            {view === 'clinic' && (
+              <ClinicBoard
+                patients={CLINIC_PATIENTS}
+                selected={selectedClinic}
+                onSelect={setClinicId}
+                metrics={clinicMetrics}
+                controls={CLINIC_CONTROLS}
+                clinicName={CLINIC_NAME}
+              />
+            )}
+
             {view === 'facility' && (
               <FacilityBoard
                 facility={facility}
@@ -1211,5 +1314,146 @@ function FacilityDetail({ pt }: { pt: Inbound }) {
         <button type="button" className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300">View full route</button>
       </div>
     </section>
+  )
+}
+
+// ═══ CLINIC BOARD (small practice, right-sized) ═════════════
+function ClinicBoard({
+  patients, selected, onSelect, metrics, controls, clinicName,
+}: {
+  patients: ClinicPatient[]
+  selected: ClinicPatient
+  onSelect: (id: string) => void
+  metrics: { inbound: number; urgent: number; avgOwe: number; nextEta: number }
+  controls: Array<{ title: string; detail: string }>
+  clinicName: string
+}) {
+  const owes = Math.round(selected.estCost * (1 - selected.coverage / 100))
+  const coveredPct = selected.coverage
+  return (
+    <>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <h2 className="text-lg font-bold tracking-tight text-slate-900">{clinicName}</h2>
+          <p className="text-xs text-slate-500">Carevo sends you the right patients with the info you need, and quietly keeps you compliant. No extra staff required.</p>
+        </div>
+        <Badge className="border-blue-200 bg-blue-50 text-blue-700">Routed by Carevo</Badge>
+      </div>
+
+      {/* KPIs */}
+      <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <Kpi label="Coming in today" value={String(metrics.inbound)} sub="On the way now" />
+        <Kpi label="Needs attention" value={String(metrics.urgent)} sub="Higher priority" tone="warn" />
+        <Kpi label="Next arrival" value={metrics.nextEta < 99 ? `${metrics.nextEta} min` : '—'} sub="Soonest ETA" />
+        <Kpi label="Avg patient owes" value={formatCurrency(metrics.avgOwe)} sub="After insurance (est.)" tone="good" />
+      </section>
+
+      <div className="grid gap-4 lg:grid-cols-[360px_1fr]">
+        {/* Inbound list */}
+        <section className="overflow-hidden rounded-lg border border-slate-200 bg-white">
+          <div className="flex items-center justify-between border-b border-slate-200 px-4 py-2.5">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">Patients coming in</p>
+            <span className="text-[11px] font-medium text-slate-400">Sorted by priority</span>
+          </div>
+          <div className="divide-y divide-slate-100">
+            {patients.map(pt => {
+              const active = selected.id === pt.id
+              return (
+                <button key={pt.id} type="button" onClick={() => onSelect(pt.id)}
+                  className={`flex w-full gap-3 px-4 py-3 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-300 ${active ? 'bg-blue-50' : 'hover:bg-slate-50'}`}>
+                  <span className={`mt-0.5 w-1 shrink-0 rounded-full ${PRIORITY[pt.priority].bar}`} style={{ minHeight: '2.25rem' }} />
+                  <span className="min-w-0 flex-1">
+                    <span className="flex items-center justify-between gap-2">
+                      <span className="font-mono text-xs font-semibold text-blue-800">{pt.id}</span>
+                      <Badge className={ARRIVING_STYLE[pt.status]}>{pt.status === 'Checked in' ? 'Here now' : `${pt.status} · ${pt.eta}m`}</Badge>
+                    </span>
+                    <span className="mt-1 block text-sm font-semibold text-slate-900">{pt.complaint}</span>
+                    <span className="mt-1 flex flex-wrap items-center gap-1.5">
+                      <Badge className={PRIORITY[pt.priority].cls}>{pt.priority}</Badge>
+                      <span className="text-[11px] text-slate-400">{pt.name}</span>
+                    </span>
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+        </section>
+
+        {/* Patient detail: heads-up + cost clarity */}
+        <section className="space-y-4 rounded-lg border border-slate-200 bg-white p-5">
+          <div className="flex flex-wrap items-start justify-between gap-3 border-b border-slate-200 pb-4">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-xs font-semibold text-slate-400">{selected.id}</span>
+                <Badge className={ARRIVING_STYLE[selected.status]}>{selected.status === 'Checked in' ? 'Here now' : `${selected.status} · ETA ${selected.eta} min`}</Badge>
+              </div>
+              <h3 className="mt-1.5 text-xl font-bold tracking-tight text-slate-900">{selected.complaint}</h3>
+              <p className="mt-0.5 text-sm text-slate-500">{selected.name} · {selected.plan}</p>
+            </div>
+            <Badge className={`${PRIORITY[selected.priority].cls} text-xs`}>{selected.priority}</Badge>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            {/* Heads-up */}
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">In the patient’s words</p>
+              <blockquote className="mt-2 rounded-md border-l-2 border-blue-300 bg-slate-50 px-3 py-2 text-sm italic text-slate-700">“{selected.words}”</blockquote>
+              <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">Notes for your team</p>
+              <ul className="mt-2 space-y-1.5">
+                {selected.notes.map(n => (
+                  <li key={n} className="flex items-start gap-2 text-sm text-slate-700"><span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-600" />{n}</li>
+                ))}
+              </ul>
+              {selected.redFlags.length > 0 && (
+                <p className="mt-3 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-medium text-emerald-800">{selected.redFlags.join(' · ')}</p>
+              )}
+            </div>
+
+            {/* Cost & coverage clarity */}
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">Cost & coverage (est.)</p>
+              <div className="mt-2 flex h-6 overflow-hidden rounded-md border border-slate-200">
+                <div className="flex items-center justify-center bg-emerald-600 text-[10px] font-bold text-white" style={{ width: `${Math.max(8, coveredPct)}%` }}>{coveredPct}%</div>
+                <div className="flex flex-1 items-center justify-center bg-amber-400 text-[10px] font-bold text-amber-900">{100 - coveredPct}%</div>
+              </div>
+              <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+                <div className="rounded-md border border-slate-200 bg-slate-50 p-3"><p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">Visit cost</p><p className="mt-0.5 text-lg font-bold tabular-nums text-slate-900">{formatCurrency(selected.estCost)}</p></div>
+                <div className="rounded-md border border-emerald-200 bg-emerald-50 p-3"><p className="text-[10px] font-semibold uppercase tracking-wide text-emerald-600">Insurance</p><p className="mt-0.5 text-lg font-bold tabular-nums text-emerald-800">{formatCurrency(selected.estCost - owes)}</p></div>
+                <div className="rounded-md border border-amber-200 bg-amber-50 p-3"><p className="text-[10px] font-semibold uppercase tracking-wide text-amber-600">Patient owes</p><p className="mt-0.5 text-lg font-bold tabular-nums text-amber-800">{formatCurrency(owes)}</p></div>
+              </div>
+              <p className="mt-3 rounded-md border border-blue-100 bg-blue-50 px-3 py-2 text-xs font-medium text-blue-800">Share this with the patient before the visit, so there are no billing surprises.</p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-2 border-t border-slate-200 pt-4">
+            <button type="button" className="inline-flex items-center gap-1.5 rounded-md bg-blue-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300">Confirm & add to schedule</button>
+            <button type="button" className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300">Text patient the estimate</button>
+          </div>
+        </section>
+      </div>
+
+      {/* Compliance, handled without a team */}
+      <section className="rounded-lg border border-slate-200 bg-white p-5">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-blue-800">Compliance, handled for you</p>
+            <h3 className="mt-1 text-lg font-bold tracking-tight text-slate-900">No spreadsheets. No compliance hire. Carevo runs the checks itself.</h3>
+          </div>
+          <Badge className="border-emerald-200 bg-emerald-50 text-emerald-700"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> All clear</Badge>
+        </div>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {controls.map(c => (
+            <div key={c.title} className="rounded-md border border-slate-200 bg-slate-50/60 p-3">
+              <div className="flex items-center gap-2">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] text-white">✓</span>
+                <p className="text-sm font-semibold text-slate-900">{c.title}</p>
+              </div>
+              <p className="mt-1.5 text-xs leading-5 text-slate-500">{c.detail}</p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-4 text-xs leading-5 text-slate-500">Every routing decision is logged automatically with a timestamp, so if you’re ever audited, the record is already there. All records shown are fictional demo data.</p>
+      </section>
+    </>
   )
 }
