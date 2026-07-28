@@ -30,7 +30,7 @@ const auditFeatures = [
 
 function CarevoMark({ className = 'h-10 w-10 rounded-2xl' }: { className?: string }) {
   return (
-    <span className={`block overflow-hidden bg-slate-950 shadow-lg shadow-cyan-900/20 ${className}`}>
+    <span className={`block overflow-hidden bg-slate-950 shadow-lg shadow-blue-900/20 ${className}`}>
       <img src="/brand/carevo-logo.png" alt="" className="h-full w-full object-cover" />
     </span>
   )
@@ -117,8 +117,8 @@ export default function ProductsPage() {
       {/* "Feeds into" animation */}
       <Reveal>
       <section className="mx-auto mt-20 max-w-4xl" aria-label="Every triage decision feeds into AuditOS">
-        <div className="relative overflow-hidden rounded-[2rem] border border-cyan-100 bg-[linear-gradient(135deg,#f8fdff,#ffffff_45%,#ecfeff)] px-6 py-12 shadow-xl shadow-cyan-950/5 sm:px-10">
-          <p className="text-center text-[11px] font-black uppercase tracking-[0.2em] text-cyan-700">Every decision feeds into</p>
+        <div className="relative overflow-hidden rounded-[2rem] border border-blue-100 bg-[linear-gradient(135deg,#f8fbff,#ffffff_45%,#eff6ff)] px-6 py-12 shadow-xl shadow-blue-950/5 sm:px-10">
+          <p className="text-center text-[11px] font-black uppercase tracking-[0.2em] text-blue-700">Every decision feeds into</p>
 
           <div className="relative mt-8 flex items-center justify-between gap-3">
             {/* Source: triage */}
@@ -132,13 +132,13 @@ export default function ProductsPage() {
 
             {/* Animated pipe */}
             <div className="relative mx-2 h-14 flex-1">
-              <div className="absolute left-0 right-0 top-1/2 h-1.5 -translate-y-1/2 overflow-hidden rounded-full bg-cyan-100">
+              <div className="absolute left-0 right-0 top-1/2 h-1.5 -translate-y-1/2 overflow-hidden rounded-full bg-blue-100">
                 <div className="carevo-flow h-full w-1/2 rounded-full bg-[linear-gradient(90deg,transparent,#22d3ee,#0ea5e9,transparent)]" />
               </div>
               {[0, 1, 2].map((i) => (
                 <span
                   key={i}
-                  className="carevo-packet absolute top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.9)]"
+                  className="carevo-packet absolute top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(34,211,238,0.9)]"
                   style={{ animationDelay: `${i * 0.9}s` }}
                 />
               ))}
@@ -146,7 +146,7 @@ export default function ProductsPage() {
 
             {/* Target: AuditOS */}
             <div className="relative z-10 flex flex-col items-center gap-2 text-center">
-              <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-950 text-cyan-200 shadow-lg shadow-slate-950/30 sm:h-20 sm:w-20">
+              <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-950 text-blue-200 shadow-lg shadow-slate-950/30 sm:h-20 sm:w-20">
                 <svg viewBox="0 0 24 24" className="h-8 w-8 fill-none stroke-current sm:h-9 sm:w-9"><path d="M12 3 4 6v5c0 4.5 3.2 8.4 8 9.7 4.8-1.3 8-5.2 8-9.7V6l-8-3Z" strokeWidth="1.6" strokeLinejoin="round" /><path d="m9 12 2 2 4-4" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
               </span>
               <p className="text-xs font-black text-slate-950">AuditOS</p>
@@ -170,7 +170,7 @@ export default function ProductsPage() {
             <div className="flex items-center gap-3">
               <CarevoMark />
               <div>
-                <span className="inline-flex items-center rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-cyan-200">
+                <span className="inline-flex items-center rounded-full border border-blue-400/30 bg-blue-400/10 px-3 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-blue-200">
                   Product 02
                 </span>
               </div>
@@ -202,7 +202,7 @@ export default function ProductsPage() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/AUDITOS"
-              className="inline-flex items-center gap-2 rounded-full bg-cyan-400 px-6 py-3 text-sm font-black text-slate-950 shadow-lg shadow-cyan-500/25 transition hover:-translate-y-px hover:bg-cyan-300"
+              className="inline-flex items-center gap-2 rounded-full bg-blue-400 px-6 py-3 text-sm font-black text-slate-950 shadow-lg shadow-blue-500/25 transition hover:-translate-y-px hover:bg-blue-300"
             >
               Open the AuditOS demo
               <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 fill-none stroke-slate-950"><path d="M3 8h10M9 4l4 4-4 4" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>

@@ -217,7 +217,7 @@ export default function AuditOSPage() {
             Sits in front of your stack, not on top of it.
           </h2>
           <p className="mt-4 max-w-2xl text-base font-semibold leading-7 text-slate-600">
-            Carevo runs the front-door triage and hands the decision, and its evidence, to the systems your teams already use.
+            Carevo runs the front-door triage and hands the decision, and its evidence, to the systems your teams already use. Pilots start with the embed and API today; deeper connectors are on our roadmap.
           </p>
 
           {/* Flow diagram */}
