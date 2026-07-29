@@ -404,7 +404,14 @@ export default function EnterpriseDemo() {
   const [inboundId, setInboundId] = useState('AR-7012')
   const [clinicId, setClinicId] = useState('RC-118')
   const [tab, setTab] = useState<Tab>('queue')
-  const [cases, setCases] = useState<CaseRow[]>(() => SEED_CASES.map((c, i) => ({ ...c, receivedAt: Date.now() - (i + 1) * 47000 })))
+  const [cases, setCases] = useState<CaseRow[]>(() => {
+    const seed = SEED_CASES.map((c, i) => ({ ...c, receivedAt: Date.now() - (i + 1) * 47000 }))
+    // Pre-populate a fuller queue so the board reads as busy on load (no empty void).
+    const pre = STREAM_POOL.slice(0, 5).map((t, i) => ({
+      ...t, id: `CV-${2406 + i}`, receivedAt: Date.now() - (SEED_CASES.length + i + 1) * 61000, isNew: false,
+    }))
+    return [...seed, ...pre]
+  })
   const [selectedId, setSelectedId] = useState(SEED_CASES[0].id)
   const [now, setNow] = useState(() => Date.now())
   const [streamOn, setStreamOn] = useState(true)
@@ -417,7 +424,7 @@ export default function EnterpriseDemo() {
   const [replayStep, setReplayStep] = useState<number>(-1)
   const [replaying, setReplaying] = useState(false)
   const replayRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const streamCounter = useRef(SEED_CASES.length)
+  const streamCounter = useRef(5) // 5 pool rows pre-populated above
 
   useEffect(() => {
     const t = setInterval(() => { setNow(Date.now()); setTick(v => v + 1) }, 1000)
@@ -429,10 +436,10 @@ export default function EnterpriseDemo() {
     const t = setInterval(() => {
       setCases(prev => {
         const template = STREAM_POOL[streamCounter.current % STREAM_POOL.length]
+        const nextNum = 2406 + streamCounter.current
         streamCounter.current += 1
-        const nextNum = 2406 + (streamCounter.current - SEED_CASES.length - 1)
         const fresh: CaseRow = { ...template, id: `CV-${nextNum}`, receivedAt: Date.now(), isNew: true }
-        return [fresh, ...prev.map(c => ({ ...c, isNew: false }))].slice(0, 14)
+        return [fresh, ...prev.map(c => ({ ...c, isNew: false }))].slice(0, 16)
       })
     }, 6500)
     return () => clearInterval(t)
@@ -673,8 +680,15 @@ export default function EnterpriseDemo() {
             </div>
           </div>
 
-          {/* User identity — pinned to bottom */}
-          <div className="hidden px-3 py-4 xl:mt-auto xl:block">
+          {/* Demo CTA + user identity — pinned to bottom */}
+          <div className="hidden space-y-3 px-3 py-4 xl:mt-auto xl:block">
+            <div className="rounded-lg border border-blue-400/25 bg-blue-500/10 p-3.5">
+              <p className="text-xs font-semibold text-white">Sandbox demo</p>
+              <p className="mt-1 text-[11px] leading-4 text-blue-200/80">Every record here is fictional. See it running on your own data in a short walkthrough.</p>
+              <Link href="/contact" className="mt-2.5 inline-flex w-full items-center justify-center gap-1 rounded-md bg-white px-3 py-1.5 text-[11px] font-bold text-blue-950 transition hover:bg-blue-50">
+                Request a walkthrough
+              </Link>
+            </div>
             <div className="flex items-center gap-2.5 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2.5">
               <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/25 text-xs font-bold text-blue-100">AR</span>
               <span className="min-w-0 flex-1 leading-tight">
