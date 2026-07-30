@@ -387,6 +387,20 @@ function Kpi({ label, value, sub, tone = 'default' }: { label: string; value: st
   )
 }
 
+function SidebarNavButton({ active, icon, title, sub, count, onClick }: { active: boolean; icon: ReactNode; title: string; sub: string; count?: number; onClick: () => void }) {
+  return (
+    <button type="button" onClick={onClick} aria-current={active ? 'page' : undefined}
+      className={`group flex w-full items-center gap-2.5 rounded-md px-3 py-2.5 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 ${active ? 'bg-[#17324a] text-white' : 'text-slate-600 hover:bg-white'}`}>
+      <span className={active ? 'text-white' : 'text-slate-400'}><Icon path={icon} /></span>
+      <span className="min-w-0 flex-1 leading-tight">
+        <span className="block text-sm font-bold">{title}</span>
+        <span className={`block text-[11px] font-medium ${active ? 'text-blue-100/80' : 'text-slate-400'}`}>{sub}</span>
+      </span>
+      {typeof count === 'number' && <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold ${active ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'}`}>{count}</span>}
+    </button>
+  )
+}
+
 function complianceChecks(row: CaseRow) {
   return [
     { label: 'PHI redaction', value: 'Applied at intake' },
@@ -545,194 +559,127 @@ export default function EnterpriseDemo() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-900 [font-family:'Plus_Jakarta_Sans',system-ui,sans-serif]">
-      <div className="mx-auto flex max-w-[1500px] flex-col xl:flex-row">
-        {/* ── Left nav rail ─────────────────────────────────────────────── */}
-        <aside className="shrink-0 border-b border-slate-200 bg-blue-950 text-slate-200 xl:flex xl:min-h-screen xl:w-64 xl:flex-col xl:border-b-0 xl:border-r">
-          {/* Brand */}
-          <div className="flex items-center gap-2.5 border-b border-white/[0.08] px-5 py-4">
-            <Link href="/" className="flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
-              <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-md bg-white/10 ring-1 ring-white/15">
-                <img src="/brand/carevo-logo.png" alt="Carevo" className="h-full w-full object-cover" />
-              </span>
-              <span className="leading-tight">
-                <span className="block text-sm font-bold text-white">Carevo AuditOS</span>
-                <span className="block text-[10px] font-medium uppercase tracking-[0.12em] text-blue-300">Operations Console</span>
-              </span>
-            </Link>
+    <main className="min-h-dvh bg-[#eef3f7] text-[#102033] [font-family:Inter,ui-sans-serif,system-ui,sans-serif]">
+      {/* Top header bar */}
+      <header className="sticky top-0 z-40 border-b border-slate-300 bg-white shadow-sm">
+        <div className="flex min-h-[56px] flex-wrap items-center gap-x-4 gap-y-1 px-3 sm:px-5">
+          <Link href="/" className="flex min-h-11 items-center gap-2 pr-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
+            <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-md bg-slate-950">
+              <img src="/brand/carevo-logo.png" alt="" className="h-full w-full object-cover" />
+            </span>
+            <span className="text-lg font-black tracking-tight text-[#102033]">AuditOS</span>
+          </Link>
+          <nav className="hidden h-[56px] items-stretch border-l border-slate-200 md:flex" aria-label="Audience mode">
+            {([['payer', 'Payer'], ['facility', 'Facility'], ['clinic', 'Clinic']] as [View, string][]).map(([v, lbl]) => (
+              <button key={v} type="button" onClick={() => setView(v)} aria-pressed={view === v}
+                className={`min-h-11 border-r border-slate-200 px-6 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 ${view === v ? 'bg-[#edf4fb] text-[#0f5e86]' : 'bg-white text-slate-600 hover:bg-slate-50'}`}>
+                {lbl}
+              </button>
+            ))}
+          </nav>
+          <div className="ml-auto flex min-h-11 items-center gap-3">
+            <span className="hidden items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800 sm:inline-flex">
+              <span className="relative flex h-1.5 w-1.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" /><span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" /></span>
+              Live · demo data
+            </span>
+            <span className="hidden font-mono text-sm font-bold tabular-nums text-slate-500 sm:inline">{clock}</span>
+            <span className="text-lg font-black tracking-tight text-[#102033]">Carevo</span>
           </div>
+        </div>
+        {/* Mobile audience mode */}
+        <div className="flex gap-1 overflow-x-auto border-t border-slate-200 bg-[#f7fafc] px-2 py-1 md:hidden" aria-label="Mobile audience mode">
+          {([['payer', 'Payer'], ['facility', 'Facility'], ['clinic', 'Clinic']] as [View, string][]).map(([v, lbl]) => (
+            <button key={v} type="button" onClick={() => setView(v)}
+              className={`min-h-11 shrink-0 rounded px-5 text-sm font-bold ${view === v ? 'bg-white text-[#0f5e86] shadow-sm' : 'text-slate-600'}`}>
+              {lbl}
+            </button>
+          ))}
+        </div>
+      </header>
 
-          {/* Tenant selector */}
-          <div className="hidden px-3 pt-3 xl:block">
-            <div className="flex w-full items-center gap-2.5 rounded-md border border-white/10 bg-white/[0.04] px-3 py-2 text-left">
-              <span className="flex h-6 w-6 items-center justify-center rounded bg-blue-500/25 text-[10px] font-bold text-blue-100">{view === 'payer' ? 'NH' : view === 'facility' ? 'MC' : 'RF'}</span>
-              <span className="min-w-0 flex-1 leading-tight">
-                <span className="block truncate text-xs font-semibold text-white">{view === 'payer' ? 'Northstar Health Plan' : view === 'facility' ? 'Meridian Care Network' : CLINIC_NAME}</span>
-                <span className="block text-[10px] text-blue-300/80">{view === 'payer' ? 'Payer workspace' : view === 'facility' ? 'Provider workspace' : 'Small clinic'}</span>
-              </span>
+      <div className="grid min-h-[calc(100dvh-56px)] lg:grid-cols-[248px_1fr]">
+        {/* ── Sidebar ───────────────────────────────────────────────────── */}
+        <aside className="hidden border-r border-slate-300 bg-[#f8fafc] lg:flex lg:flex-col">
+          <div className="border-b border-slate-200 p-3">
+            <div className="rounded-md border border-slate-200 bg-white px-3 py-2">
+              <p className="truncate text-[11px] font-black uppercase tracking-[0.12em] text-slate-500">{view === 'payer' ? 'Northstar Health Plan' : view === 'facility' ? 'Meridian Care Network' : CLINIC_NAME}</p>
+              <p className="mt-0.5 text-[11px] font-semibold text-slate-400">{view === 'payer' ? 'Payer workspace' : view === 'facility' ? 'Provider workspace' : 'Small clinic'}</p>
             </div>
+            <Link href="/contact" className="mt-2 flex min-h-10 items-center justify-center rounded-md bg-[#3f5870] px-3 text-sm font-bold text-white transition hover:bg-[#334b61] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">Request walkthrough</Link>
           </div>
 
-          {/* View switch: Payer / Facility / Clinic */}
-          <div className="hidden px-3 pt-3 xl:block">
-            <div className="grid grid-cols-3 gap-1 rounded-md border border-white/10 bg-white/[0.04] p-1">
-              {([['payer', 'Payer'], ['facility', 'Facility'], ['clinic', 'Clinic']] as [View, string][]).map(([v, lbl]) => (
-                <button
-                  key={v}
-                  type="button"
-                  onClick={() => setView(v)}
-                  aria-pressed={view === v}
-                  className={`rounded px-1.5 py-1.5 text-xs font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 ${
-                    view === v ? 'bg-blue-600 text-white shadow-sm' : 'text-blue-200 hover:bg-white/[0.06]'
-                  }`}
-                >
-                  {lbl}
-                </button>
+          {/* Workspace nav */}
+          <nav className="p-2" aria-label="Workspaces">
+            {view === 'payer' && (<>
+              <p className="px-3 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">Operations</p>
+              {TABS.map(item => (
+                <SidebarNavButton key={item.id} active={tab === item.id} icon={ICONS[item.id]} title={item.title} sub={item.subtitle} onClick={() => setTab(item.id)} />
               ))}
-            </div>
-          </div>
-
-          {/* Primary nav */}
-          <p className="hidden px-5 pb-1.5 pt-4 text-[10px] font-semibold uppercase tracking-[0.14em] text-blue-400/70 xl:block">{view === 'payer' ? 'Operations' : view === 'facility' ? 'Facilities' : 'Clinic'}</p>
-          {view === 'clinic' ? (
-            <nav className="flex gap-1 px-3 pb-3 xl:flex-col xl:pb-0" aria-label="Clinic">
-              {([['today', 'Today', 'inbound patients'], ['compliance', 'Compliance', 'handled for you']] as [string, string, string][]).map(([id, label, sub], i) => (
-                <div key={id} className={`group relative flex items-center gap-3 rounded-md px-3 py-2.5 ${i === 0 ? 'bg-white/12 text-white' : 'text-blue-200'}`}>
-                  {i === 0 && <span className="absolute inset-y-1.5 left-0 hidden w-0.5 rounded-full bg-blue-400 xl:block" />}
-                  <span className={i === 0 ? 'text-white' : 'text-blue-300'}><Icon path={i === 0 ? ICONS.queue : ICONS.agents} /></span>
-                  <span className="leading-tight">
-                    <span className="block text-sm font-semibold">{label}</span>
-                    <span className="hidden text-[11px] font-medium text-blue-300/80 xl:block">{sub}</span>
-                  </span>
-                </div>
-              ))}
-            </nav>
-          ) : view === 'payer' ? (
-            <nav className="flex gap-1 overflow-x-auto px-3 pb-3 xl:flex-col xl:overflow-visible xl:pb-0" aria-label="Sections">
-              {TABS.map(item => {
-                const active = tab === item.id
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => setTab(item.id)}
-                    aria-current={active ? 'page' : undefined}
-                    className={`group relative flex min-w-max items-center gap-3 rounded-md px-3 py-2.5 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 xl:min-w-0 ${
-                      active ? 'bg-white/12 text-white' : 'text-blue-200 hover:bg-white/[0.06] hover:text-white'
-                    }`}
-                  >
-                    {active && <span className="absolute inset-y-1.5 left-0 hidden w-0.5 rounded-full bg-blue-400 xl:block" />}
-                    <span className={`${active ? 'text-white' : 'text-blue-300'}`}><Icon path={ICONS[item.id]} /></span>
-                    <span className="leading-tight">
-                      <span className="block text-sm font-semibold">{item.title}</span>
-                      <span className="hidden text-[11px] font-medium text-blue-300/80 xl:block">{item.subtitle}</span>
-                    </span>
-                  </button>
-                )
-              })}
-            </nav>
-          ) : (
-            <nav className="flex gap-1 overflow-x-auto px-3 pb-3 xl:flex-col xl:overflow-visible xl:pb-0" aria-label="Facilities">
+            </>)}
+            {view === 'facility' && (<>
+              <p className="px-3 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">Facilities</p>
               {FACILITIES.map(item => {
-                const active = facility === item.id
                 const count = INBOUND.filter(i => i.facility === item.id && i.status !== 'Checked in').length
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => { setFacility(item.id); const first = INBOUND.find(i => i.facility === item.id); if (first) setInboundId(first.id) }}
-                    aria-current={active ? 'page' : undefined}
-                    className={`group relative flex min-w-max items-center gap-3 rounded-md px-3 py-2.5 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 xl:min-w-0 ${
-                      active ? 'bg-white/12 text-white' : 'text-blue-200 hover:bg-white/[0.06] hover:text-white'
-                    }`}
-                  >
-                    {active && <span className="absolute inset-y-1.5 left-0 hidden w-0.5 rounded-full bg-blue-400 xl:block" />}
-                    <span className={`${active ? 'text-white' : 'text-blue-300'}`}><Icon path={item.icon} /></span>
-                    <span className="min-w-0 flex-1 leading-tight">
-                      <span className="block text-sm font-semibold">{item.label}</span>
-                      <span className="hidden text-[11px] font-medium text-blue-300/80 xl:block">{item.sub}</span>
-                    </span>
-                    <span className="ml-1 rounded-full bg-white/10 px-1.5 py-0.5 text-[10px] font-bold text-white">{count}</span>
-                  </button>
-                )
+                return <SidebarNavButton key={item.id} active={facility === item.id} icon={item.icon} title={item.label} sub={item.sub} count={count} onClick={() => { setFacility(item.id); const f = INBOUND.find(i => i.facility === item.id); if (f) setInboundId(f.id) }} />
               })}
-            </nav>
-          )}
+            </>)}
+            {view === 'clinic' && (<>
+              <p className="px-3 py-2 text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">Clinic</p>
+              <SidebarNavButton active icon={ICONS.queue} title="Today" sub="inbound patients" onClick={() => {}} />
+              <SidebarNavButton active={false} icon={ICONS.agents} title="Compliance" sub="handled for you" onClick={() => {}} />
+              <SidebarNavButton active={false} icon={ICONS.financials} title="Cost & Coverage" sub="benefit context" onClick={() => {}} />
+            </>)}
+          </nav>
 
-          {/* Governance status */}
-          <div className="hidden px-3 pt-5 xl:block">
-            <p className="px-2 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-blue-400/70">Governance</p>
-            <div className="space-y-2 rounded-lg border border-white/10 bg-white/[0.04] p-3">
-              <div className="flex items-center gap-2 text-[11px] font-semibold text-emerald-300">
-                <span className="relative flex h-1.5 w-1.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" /><span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" /></span>
-                All safety gates passing
+          {/* Governance + identity, pinned bottom */}
+          <div className="mt-auto space-y-2 border-t border-slate-200 p-3">
+            <div className="rounded-md border border-slate-200 bg-white p-3">
+              <p className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-700"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> All safety gates passing</p>
+              <div className="mt-2 space-y-1 text-[11px]">
+                <div className="flex justify-between gap-2"><span className="text-slate-400">Engine</span><span className="truncate font-mono text-slate-600">{ENGINE}</span></div>
+                <div className="flex justify-between gap-2"><span className="text-slate-400">Ruleset</span><span className="truncate font-mono text-slate-600">{RULESET}</span></div>
+                <div className="flex justify-between gap-2"><span className="text-slate-400">Under-triage</span><span className="font-mono text-slate-600">0 / 240</span></div>
               </div>
-              {[
-                ['Engine', ENGINE],
-                ['Ruleset', RULESET],
-                ['Under-triage', '0 / 240 gate'],
-              ].map(([k, v]) => (
-                <div key={k} className="flex items-center justify-between gap-2 text-[11px]">
-                  <span className="text-blue-300/70">{k}</span>
-                  <span className="truncate font-mono text-blue-100/90">{v}</span>
-                </div>
-              ))}
             </div>
-          </div>
-
-          {/* Demo CTA + user identity — pinned to bottom */}
-          <div className="hidden space-y-3 px-3 py-4 xl:mt-auto xl:block">
-            <div className="rounded-lg border border-blue-400/25 bg-blue-500/10 p-3.5">
-              <p className="text-xs font-semibold text-white">Sandbox demo</p>
-              <p className="mt-1 text-[11px] leading-4 text-blue-200/80">Every record here is fictional. See it running on your own data in a short walkthrough.</p>
-              <Link href="/contact" className="mt-2.5 inline-flex w-full items-center justify-center gap-1 rounded-md bg-white px-3 py-1.5 text-[11px] font-bold text-blue-950 transition hover:bg-blue-50">
-                Request a walkthrough
-              </Link>
-            </div>
-            <div className="flex items-center gap-2.5 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2.5">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/25 text-xs font-bold text-blue-100">AR</span>
+            <div className="flex items-center gap-2.5 rounded-md border border-slate-200 bg-white px-3 py-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#e8f0f7] text-xs font-bold text-[#3f5870]">AR</span>
               <span className="min-w-0 flex-1 leading-tight">
-                <span className="block truncate text-xs font-semibold text-white">Alex Rivera</span>
-                <span className="block text-[10px] text-blue-300/80">Utilization review · Demo</span>
+                <span className="block truncate text-xs font-semibold text-slate-900">Alex Rivera</span>
+                <span className="block text-[10px] text-slate-500">Utilization review · Demo</span>
               </span>
-              <svg viewBox="0 0 16 16" className="h-4 w-4 shrink-0 fill-none stroke-blue-300" strokeWidth="1.6"><circle cx="8" cy="8" r="1" /><circle cx="8" cy="3" r="1" /><circle cx="8" cy="13" r="1" /></svg>
             </div>
           </div>
         </aside>
 
-        {/* ── Main ──────────────────────────────────────────────────────── */}
-        <main className="min-w-0 flex-1">
-          {/* Top bar */}
-          <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 backdrop-blur">
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-3">
-              <div className="min-w-0">
-                <p className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-400">
-                  {view === 'payer' ? 'Northstar Health Plan' : view === 'facility' ? 'Meridian Care Network' : CLINIC_NAME} <span className="text-slate-300">/</span> {view === 'payer' ? 'Care Routing' : view === 'facility' ? facility : 'Today'}
-                </p>
-                <h1 className="truncate text-base font-bold tracking-tight text-slate-900">{view === 'payer' ? TABS.find(t => t.id === tab)?.title : view === 'facility' ? 'Inbound patients' : 'Your day at a glance'}</h1>
-              </div>
-              {/* Mobile view toggle */}
-              <div className="flex items-center gap-1 rounded-md border border-slate-200 bg-slate-50 p-0.5 xl:hidden">
-                {([['payer', 'Payer'], ['facility', 'Facility'], ['clinic', 'Clinic']] as [View, string][]).map(([v, lbl]) => (
-                  <button key={v} type="button" onClick={() => setView(v)} aria-pressed={view === v}
-                    className={`rounded px-2 py-1 text-xs font-semibold transition ${view === v ? 'bg-blue-800 text-white' : 'text-slate-600'}`}>{lbl}</button>
-                ))}
-              </div>
-              <div className="ml-auto flex flex-wrap items-center gap-2">
-                <Badge className="border-slate-200 bg-slate-50 text-slate-600">Sandbox · demo data</Badge>
-                <Badge className="hidden border-slate-200 bg-white font-mono tabular-nums text-slate-600 sm:inline-flex">{clock}</Badge>
-                <span className="inline-flex items-center gap-1.5 rounded-md border border-emerald-200 bg-emerald-50 px-2 py-1 text-[11px] font-semibold text-emerald-700">
-                  <span className="relative flex h-1.5 w-1.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" /><span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" /></span>
-                  Live
-                </span>
-                <Link href="/contact" className="inline-flex items-center rounded-md bg-blue-800 px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300">
-                  Request pilot
-                </Link>
-              </div>
+        {/* ── Content ───────────────────────────────────────────────────── */}
+        <section id="workspace" className="min-w-0">
+          {/* Title strip */}
+          <div className="border-b border-slate-300 bg-white px-4 py-4 sm:px-6">
+            <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#0f7ea8]">{view === 'payer' ? 'Payer operations' : view === 'facility' ? facility : 'Clinic'}</p>
+            <h1 className="mt-1 text-xl font-black tracking-tight text-[#17324a] sm:text-2xl">{view === 'payer' ? TABS.find(t => t.id === tab)?.title : view === 'facility' ? 'Inbound patients' : 'Your day at a glance'}</h1>
+            <div className="mt-2 flex flex-wrap gap-x-6 gap-y-1 text-xs font-semibold text-slate-500">
+              <span>Ruleset: {RULESET}</span>
+              <span>Engine: {ENGINE}</span>
+              <span>Fictional demo records</span>
             </div>
-          </header>
+          </div>
 
-          <div className="space-y-5 p-5">
+          {/* Mobile workspace nav (sidebar is desktop-only) */}
+          <div className="flex gap-2 overflow-x-auto border-b border-slate-200 bg-[#f8fafc] px-3 py-2 lg:hidden">
+            {view === 'payer' && TABS.map(item => (
+              <button key={item.id} type="button" onClick={() => setTab(item.id)}
+                className={`min-h-9 shrink-0 rounded px-3 text-xs font-bold transition ${tab === item.id ? 'bg-[#17324a] text-white' : 'border border-slate-200 bg-white text-slate-600'}`}>{item.title}</button>
+            ))}
+            {view === 'facility' && FACILITIES.map(item => (
+              <button key={item.id} type="button" onClick={() => { setFacility(item.id); const f = INBOUND.find(i => i.facility === item.id); if (f) setInboundId(f.id) }}
+                className={`min-h-9 shrink-0 rounded px-3 text-xs font-bold transition ${facility === item.id ? 'bg-[#17324a] text-white' : 'border border-slate-200 bg-white text-slate-600'}`}>{item.label}</button>
+            ))}
+            {view === 'clinic' && ['Today', 'Compliance', 'Cost & Coverage'].map((l, i) => (
+              <button key={l} type="button" className={`min-h-9 shrink-0 rounded px-3 text-xs font-bold ${i === 0 ? 'bg-[#17324a] text-white' : 'border border-slate-200 bg-white text-slate-600'}`}>{l}</button>
+            ))}
+          </div>
+
+          <div className="space-y-5 p-4 sm:p-6">
             {view === 'clinic' && (
               <ClinicBoard
                 patients={CLINIC_PATIENTS}
@@ -1057,9 +1004,9 @@ export default function EnterpriseDemo() {
             </section>
             </>}
           </div>
-        </main>
+        </section>
       </div>
-    </div>
+    </main>
   )
 }
 
