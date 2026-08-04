@@ -129,6 +129,9 @@ export default function AuditOSPage() {
             <p className="mt-5 max-w-xl text-base font-semibold leading-8 text-slate-600 sm:text-lg">
               Autonomous agents capture every routing decision, run the controls, and keep an audit-ready trail. It replaces the spreadsheets and periodic sweeps, and plugs into the systems you already run.
             </p>
+            <p className="mt-3 max-w-xl text-xs font-medium text-slate-400">
+              AuditOS is in active development. Capabilities described reflect the product as designed; the interactive demo uses simulated data.
+            </p>
             <div className="mt-7 grid max-w-lg grid-cols-3 overflow-hidden rounded-xl border border-slate-200 bg-white">
               {[['0', 'under-triage', 'latest gate'], ['100%', 'emergency capture', 'safety control'], ['100%', 'traceable', 'audit-ready']].map(([v, l, c]) => (
                 <div key={l} className="border-r border-slate-200 p-4 last:border-r-0">
@@ -263,7 +266,7 @@ export default function AuditOSPage() {
         <section className="mx-auto mt-24 max-w-7xl grid gap-6 sm:mt-32 lg:grid-cols-3">
           {[
             ['Immutable & tamper-evident', 'Records are append-only and hash-chained, so any change is detectable. Auditors verify integrity themselves.'],
-            ['PHI-minimized by default', 'Identifiers are stripped at intake, data is encrypted, and access is scoped and logged.'],
+            ['PHI-minimized by design', 'Built to strip identifiers at intake, encrypt data in transit, and scope and log access.'],
             ['Exported in one click', 'Per case or per control, produce a JSON or PDF evidence bundle ready for review.'],
           ].map(([title, body]) => (
             <div key={title} className="rounded-2xl border border-slate-200 bg-white p-6">

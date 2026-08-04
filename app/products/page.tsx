@@ -23,7 +23,7 @@ const triageStats = [
 
 const auditFeatures = [
   ['Every route, traced', 'Patient words, extracted facts, the safety screen, the matched rule, and the final care level — captured as evidence for every single intake.'],
-  ['AI-native compliance', 'Continuous automated monitoring for HIPAA, data handling, and FDA-relevant controls. It replaces the spreadsheets and periodic audit sweeps.'],
+  ['AI-native compliance', 'Designed to continuously monitor HIPAA, data-handling, and FDA-relevant controls, so it can replace the spreadsheets and periodic audit sweeps. AuditOS is in active development.'],
   ['Care-routing oversight', 'Insurers and facilities see the decision before the patient arrives: what was asked, why the route was chosen, and where the network sent them.'],
   ['Live control checks', 'Security headers, consent gating, admin auth, and privacy posture are probed in real time — always-on, always audit-ready.'],
 ] as const

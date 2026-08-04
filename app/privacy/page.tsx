@@ -12,6 +12,7 @@ const SECTIONS: [string, string[]][] = [
   ]],
   ['AI processing', [
     'Carevo uses a language model (via the OpenAI API) for exactly two narrow jobs: reading your words into structured symptom facts, and phrasing questions in plain language. The routing decision itself is made by Carevo’s own deterministic clinical engine — never by the AI. Conversation text is processed by OpenAI under its API data-usage policy (not used to train their models; may be retained by OpenAI for up to 30 days for abuse monitoring).',
+    'When you use the symptom chat, your input is processed by OpenAI via its API. See OpenAI’s privacy policy (https://openai.com/policies/row-privacy-policy) for how they handle this data. Carevo has no control over OpenAI’s own data practices beyond the API settings described above.',
   ]],
   ['What our servers keep', [
     'Operational records: the engine writes technical decision-audit entries (the structured facts, rules fired, and software versions behind a recommendation) and anonymous usage counters. In our current hosting these live on short-lived serverless instances and are not maintained as a durable patient record. We keep no profiles and cannot link a conversation to you. The only conversations stored durably are the ones you explicitly choose to share (see above).',
@@ -25,6 +26,7 @@ const SECTIONS: [string, string[]][] = [
   ]],
   ['Third parties we use', [
     'Vercel (hosting), OpenAI (language processing), Google Maps Platform (nearby facilities and map images), and the CMS HealthCare.gov Marketplace API (coverage estimates). Each receives only the minimum described above. We never sell or share data for advertising.',
+    'When you use a feature that relies on one of these providers, the relevant input is processed by that provider via its API. See each provider’s privacy policy for how they handle that data: OpenAI (https://openai.com/policies/row-privacy-policy), Google (https://policies.google.com/privacy), Vercel (https://vercel.com/legal/privacy-policy), and CMS / HealthCare.gov (https://www.healthcare.gov/privacy).',
   ]],
   ['Children', [
     'Carevo is intended for adults. A parent or guardian may describe a child’s symptoms; do not let children under 13 use the site on their own.',
